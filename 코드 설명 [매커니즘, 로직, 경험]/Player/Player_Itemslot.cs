@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Player_Itemslot : MonoBehaviour
 {
-    // 아이템 슬롯
-    public static Item_Equip[] m_gary_Itemslot_Equip;
-    public static int[] m_nary_Itemslot_Equip_Count;
-    // 아이템 귀속 여부.
+    // 인벤토리
+    public static Item_Equip[] m_gary_Itemslot_Equip; // 장비아이템 데이터
+    public static int[] m_nary_Itemslot_Equip_Count; // 장비아이템 개수. 장비아이템의 경우 인벤토리 한칸당 1개만 
+    // 장비 아이템 귀속 여부 판단에 이용되는 변수
     // ㄴ 퀵슬롯 등록시 판매행위 불가.
     // ㄴ 퀵슬롯 등록시 퀘스트 클리어 불가능.
     public static bool[] m_bary_Itemslot_Equip_Belong;
