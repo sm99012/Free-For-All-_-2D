@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class PlayerCameraBox : MonoBehaviour
 {
-    int m_nLayer1;
-    //Z: -1.75f: m_fVerticalDistance = 1.05f, m_fHorizontalDistance = 1.375f
-    //z: -2.25f: m_fVerticalDistance = 1.325f, m_fHorizontalDistance = 1.75f
-    // 3.15
+    int m_nLayer1; // 카메라 박스의 충돌 레이어
+
     Vector3 m_vVerticalDistance = new Vector3(0, 1.575f, 0);//new Vector3(0, 1.05f, 0);
-    float m_fVerticalDistance = 1.575f;//1.05f;
-    // 5.65
+    float m_fVerticalDistance = 1.575f;
     Vector3 m_vHoriontalDistance = new Vector3(2.825f, 0, 0);//new Vector3(1.375f, 0, 0);
-    float m_fHorizontalDistance = 2.825f;//1.375f;
+    float m_fHorizontalDistance = 2.825f;
 
     public RaycastHit2D m_rHit_UP;
     public bool m_bHit_UP = false;
