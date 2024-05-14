@@ -4,26 +4,23 @@ using UnityEngine;
 
 public class Player_Equipment : MonoBehaviour
 {
-    public static Item_Equip m_gEquipment_Hat;
-    public static Item_Equip m_gEquipment_Top;
-    public static Item_Equip m_gEquipment_Bottoms;
-    public static Item_Equip m_gEquipment_Shose;
-    public static Item_Equip m_gEquipment_Gloves;
-    public static Item_Equip m_gEquipment_Mainweapon;
-    public static Item_Equip m_gEquipment_Subweapon;
+    // 플레이어가 착용중인 장비
+    public static Item_Equip m_gEquipment_Hat; // 모자
+    public static Item_Equip m_gEquipment_Top; // 상의
+    public static Item_Equip m_gEquipment_Bottoms; // 하의
+    public static Item_Equip m_gEquipment_Shose; // 신발
+    public static Item_Equip m_gEquipment_Gloves; // 장갑
+    public static Item_Equip m_gEquipment_Mainweapon; // 주무기
+    public static Item_Equip m_gEquipment_Subweapon; // 보조무기
 
-    public static bool m_bEquipment_Hat;
-    public static bool m_bEquipment_Top;
-    public static bool m_bEquipment_Bottoms;
-    public static bool m_bEquipment_Shose;
-    public static bool m_bEquipment_Gloves;
-    public static bool m_bEquipment_Mainweapon;
-    public static bool m_bEquipment_Subweapon;
-
-
-    STATUS m_sStatus_Effect;
-    SOC m_sSoc_Effect;
-
+    // 플레이어의 장비 착용 현황
+    public static bool m_bEquipment_Hat; // 모자
+    public static bool m_bEquipment_Top; // 상의
+    public static bool m_bEquipment_Bottoms; // 하의
+    public static bool m_bEquipment_Shose; // 신발
+    public static bool m_bEquipment_Gloves; // 장갑
+    public static bool m_bEquipment_Mainweapon; // 주무기
+    public static bool m_bEquipment_Subweapon; // 보조무기
 
     public void InitialSet()
     {
@@ -42,92 +39,9 @@ public class Player_Equipment : MonoBehaviour
         m_bEquipment_Gloves = false;
         m_bEquipment_Mainweapon = false;
         m_bEquipment_Subweapon = false;
-
-        m_sStatus_Effect = new STATUS();
-        m_sSoc_Effect = new SOC();
     }
-
-    //public STATUS UpdateEquipmentStatus()
-    //{
-    //    InitStatus();
-    //    if (m_bEquipment_Hat == true)
-    //    {
-    //        m_sStatus_Effect.P_OperatorSTATUS(m_gEquipment_Hat.m_sStatus_Effect);
-    //    }
-    //    if (m_bEquipment_Top == true)
-    //    {
-    //        m_sStatus_Effect.P_OperatorSTATUS(m_gEquipment_Top.m_sStatus_Effect);
-    //    }
-    //    if (m_bEquipment_Bottoms == true)
-    //    {
-    //        m_sStatus_Effect.P_OperatorSTATUS(m_gEquipment_Bottoms.m_sStatus_Effect);
-    //    }
-    //    if (m_bEquipment_Shose == true)
-    //    {
-    //        m_sStatus_Effect.P_OperatorSTATUS(m_gEquipment_Shose.m_sStatus_Effect);
-    //    }
-    //    if (m_bEquipment_Gloves == true)
-    //    {
-    //        m_sStatus_Effect.P_OperatorSTATUS(m_gEquipment_Gloves.m_sStatus_Effect);
-    //    }
-    //    if (m_bEquipment_Mainweapon == true)
-    //    {
-    //        m_sStatus_Effect.P_OperatorSTATUS(m_gEquipment_Mainweapon.m_sStatus_Effect);
-    //    }
-    //    if (m_bEquipment_Subweapon == true)
-    //    {
-    //        m_sStatus_Effect.P_OperatorSTATUS(m_gEquipment_Subweapon.m_sStatus_Effect);
-    //    }
-
-    //    return m_sStatus_Effect;
-    //}
-    //void InitStatus()
-    //{
-    //    m_sStatus_Effect.SetSTATUS_Zero();
-    //}
-
-    //public SOC UpdateEquipmentSoc()
-    //{
-    //    InitSoc();
-    //    if (m_bEquipment_Hat == true)
-    //    {
-    //        m_sSoc_Effect.P_OperatorSOC(m_gEquipment_Hat.m_sSoc_Effect);
-    //    }
-    //    if (m_bEquipment_Top == true)
-    //    {
-    //        m_sSoc_Effect.P_OperatorSOC(m_gEquipment_Top.m_sSoc_Effect);
-    //    }
-    //    if (m_bEquipment_Bottoms == true)
-    //    {
-    //        m_sSoc_Effect.P_OperatorSOC(m_gEquipment_Bottoms.m_sSoc_Effect);
-    //    }
-    //    if (m_bEquipment_Shose == true)
-    //    {
-    //        m_sSoc_Effect.P_OperatorSOC(m_gEquipment_Shose.m_sSoc_Effect);
-    //    }
-    //    if (m_bEquipment_Gloves == true)
-    //    {
-    //        m_sSoc_Effect.P_OperatorSOC(m_gEquipment_Gloves.m_sSoc_Effect);
-    //    }
-    //    if (m_bEquipment_Mainweapon == true)
-    //    {
-    //        m_sSoc_Effect.P_OperatorSOC(m_gEquipment_Mainweapon.m_sSoc_Effect);
-    //    }
-    //    if (m_bEquipment_Subweapon == true)
-    //    {
-    //        m_sSoc_Effect.P_OperatorSOC(m_gEquipment_Subweapon.m_sSoc_Effect);
-    //    }
-
-    //    return m_sSoc_Effect;
-    //}
-    //void InitSoc()
-    //{
-    //    m_sSoc_Effect.SetSOC_Zero();
-    //}
-
+    
     // 장비 착용
-
-    //
     public void Equip(Item_Equip item)
     {
         switch (item.m_eItemEquipType)
@@ -177,7 +91,7 @@ public class Player_Equipment : MonoBehaviour
         }
     }
 
-    // 장비착용 해제
+    // 장비 해제
     public void Remove_Equip(E_ITEM_EQUIP_TYPE miet)
     {
         switch(miet)
@@ -228,39 +142,13 @@ public class Player_Equipment : MonoBehaviour
         }
     }
 
-    // 착용 무기의 타입 반환
+    // 착용중인 주무기의 타입 { SWORD, AXE, KNIFE } 반환
     public E_ITEM_EQUIP_MAINWEAPON_TYPE Get_MainWeaponType()
     {
         return m_gEquipment_Mainweapon.m_eItemEquipMainWeaponType;
     }
 
-    //// 장비 착용 조건 체크
-    //public bool CheckCondition_Equip(Item_Equip item, STATUS playerstatus, SOC playersoc)
-    //{
-    //    if (playerstatus.CheckCondition_Max(item.m_sStatus_Limit_Max) == false)
-    //    {
-    //        Debug.Log("Status_Max");
-    //        return false;
-    //    }
-    //    if (playerstatus.CheckCondition_Min(item.m_sStatus_Limit_Min) == false)
-    //    {
-    //        Debug.Log("Status_Min");
-    //        return false;
-    //    }
-    //    if (playersoc.CheckCondition_Max(item.m_sSoc_Limit_Max) == false)
-    //    {
-    //        Debug.Log("Soc_Max");
-    //        return false;
-    //    }
-    //    if (playersoc.CheckCondition_Min(item.m_sSoc_Limit_Min) == false)
-    //    {
-    //        Debug.Log("Soc_Min");
-    //        return false;
-    //    }
-
-    //    return true;
-    //}
-
+    // 착용중인 장비의 아이템 세트 효과 코드 반환
     public int CheckSetItemEffect(E_ITEM_EQUIP_TYPE eiet)
     {
         switch (eiet)
@@ -333,8 +221,8 @@ public class Player_Equipment : MonoBehaviour
         return 0;
     }
 
-    // 리트라이 시 사라지는 아이템.
-    public bool ReTry_Lost_Item_Equip(Dictionary<int, int> dictionary)
+    // 리트라이(부활) 시 아이템을 잃어버리는 함수
+    public bool ReTry_Lost_Item_Equip(Dictionary<int, int> dictionary) // 매개변수 dictionary에 잃어버리는 아이템 정보가 존재.
     {
         foreach (KeyValuePair<int, int> item in dictionary)
         {
