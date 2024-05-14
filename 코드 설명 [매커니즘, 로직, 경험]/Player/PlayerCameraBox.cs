@@ -43,9 +43,9 @@ public class PlayerCameraBox : MonoBehaviour
 
     // 카메라 모드가 일반 모드일때 8개 방향의 카메라 박스의 충돌 상태를 판단하는 함수. 이를 기반으로 카메라의 중심점을 지정한다.
     // 플레이어의 위치를 기준으로 상, 하, 좌, 우 방향의 레이를 이용.
-    // ┌  ─  ┐
-    // │     │
-    // └  ─  ┘
+    // ↖ ↑ ↗
+    // ←     →
+    //   ─  ┘
     // 8개 방향의 카메라 박스의 충돌 상태
     public string JudgeCameraCenterPosition()
     {
