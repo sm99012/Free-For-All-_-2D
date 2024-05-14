@@ -151,17 +151,20 @@ public class PlayerCameraBox : MonoBehaviour
         return "NULL";
     }
 
-    Vector3 m_vCameraCenterPosition;
+    Vector3 m_vCameraCenterPosition; // 카메라 박스의 중심점
     public Vector3 GetCameraCenterPosition()
     {
         return m_vCameraCenterPosition;
     }
     public Vector3 SetCameraCenterPosition()
     {
+        // 카메라 박스가 충돌하지 않을때 카메라 박스의 중심점은 플레이어의 위치와 동일하다.
         if (m_eCP == E_CAMERA_POSITION.BLANK)
         {
             m_vCameraCenterPosition = Player_Total.Instance.gameObject.transform.position;
         }
+        // 카메라 박스가 윗방향 충돌할때 카메라 박스의 중심점은 x값은 플레이어의 위치와 동일하지만 고정된 특정 y값을 가진다.
+        // 고정된 특정 y값은 m_fVerticalDistance 만큼의 절대값을 가진다.
         else if (m_eCP == E_CAMERA_POSITION.UP)
         {
             m_fDistance_PG = m_vHitPos_UP.y - this.transform.position.y;
