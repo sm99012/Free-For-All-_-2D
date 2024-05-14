@@ -163,14 +163,17 @@ public class PlayerCameraBox : MonoBehaviour
         {
             m_vCameraCenterPosition = Player_Total.Instance.gameObject.transform.position;
         }
-        // 카메라 박스가 윗방향 충돌할때 카메라 박스의 중심점은 x값은 플레이어의 위치와 동일하지만 고정된 특정 y값을 가진다.
-        // 고정된 특정 y값은 m_fVerticalDistance 만큼의 절대값을 가진다.
+        // 카메라 박스가 ↑ 방향 충돌할때 카메라 박스의 중심점은 x값은 플레이어의 위치와 동일하지만 고정된 특정 y값을 가진다.
+        // 고정된 특정 y값은 카메라 박스의 ↑ 방향 충돌 지점에서 부터 m_fVerticalDistance 만큼의 절대값을 가진다.
         else if (m_eCP == E_CAMERA_POSITION.UP)
         {
             m_fDistance_PG = m_vHitPos_UP.y - this.transform.position.y;
             m_fDistance_Exceed = m_fVerticalDistance - m_fDistance_PG;
             m_vCameraCenterPosition = new Vector2(this.transform.position.x, this.transform.position.y - m_fDistance_Exceed);
         }
+        // 카메라 박스가 ↗ 방향 충돌할때 카메라 박스의 중심점은 고정된 특정 x, y값을 가진다.
+        // 고정된 특정 x값은 카메라 박스의 ↗ 방향 충돌 지점에서 부터 m_fHorizontalDistance 만큼의 절대값을 가진다.
+        // 고정된 특정 y값은 카메라 박스의 ↗ 방향 충돌 지점에서 부터 m_fVerticalDistance 만큼의 절대값을 가진다.
         else if (m_eCP == E_CAMERA_POSITION.UP_RIGHT)
         {
             m_fDistance_PG = m_vHitPos_UP.y - this.transform.position.y;
