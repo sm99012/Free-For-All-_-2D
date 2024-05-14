@@ -11,24 +11,26 @@ public class PlayerCameraBox : MonoBehaviour
     Vector3 m_vHoriontalDistance = new Vector3(2.825f, 0, 0);//new Vector3(1.375f, 0, 0); // 카메라 박스 크기(가로) _ Gizmo 전용 변수
     float m_fHorizontalDistance = 2.825f; // 카메라 박스 크기(가로)
 
+    // 카메라 박스의 영역을 레이를 이용해 제어. 아래는 해당 변수
     public RaycastHit2D m_rHit_UP; // ↑ 방향 레이
     public bool m_bHit_UP = false; // ↑ 방향 레이 충돌 결과
-    Vector2 m_vHitPos_UP; // ↑ 방향 레이의 충돌 지점
+    Vector2 m_vHitPos_UP = new Vector2(); // ↑ 방향 레이의 충돌 지점
     public RaycastHit2D m_rHit_DOWN; // ↓ 방향 레이
     public bool m_bHit_DOWN = false; // ↓ 방향 레이 충돌 결과
-    Vector2 m_vHitPos_DOWN; // ↓ 방향 레이의 충돌 지점
+    Vector2 m_vHitPos_DOWN = new Vector2(); // ↓ 방향 레이의 충돌 지점
     public RaycastHit2D m_rHit_RIGHT; // → 방향 레이
     public bool m_bHit_RIGHT = false; // → 방향 레이 충돌 결과
-    Vector2 m_vHitPos_RIGHT; // → 방향 레이의 충돌 지점
+    Vector2 m_vHitPos_RIGHT = new Vector2(); // → 방향 레이의 충돌 지점
     public RaycastHit2D m_rHit_LEFT; // ← 방향 레이
     public bool m_bHit_LEFT = false; // ← 방향 레이 충돌 결과
-    Vector2 m_vHitPos_LEFT; // ← 방향 레이의 충돌 지점
+    Vector2 m_vHitPos_LEFT = new Vector2(); // ← 방향 레이의 충돌 지점
 
-    public enum E_CAMERA_CATEGORY { NORMAL, FULL, ZOOMIN, SPECIAL}
+    public enum E_CAMERA_CATEGORY { NORMAL, FULL, ZOOMIN, SPECIAL} // 카메라 모드
     public E_CAMERA_CATEGORY m_eCC = E_CAMERA_CATEGORY.NORMAL;
-    public enum E_CAMERA_POSITION { NULL, BLANK, UP, UP_RIGHT, RIGHT, RIGHT_DOWN, DOWN, DOWN_LEFT, LEFT, LEFT_UP}
+    public enum E_CAMERA_POSITION { NULL, BLANK, UP, UP_RIGHT, RIGHT, RIGHT_DOWN, DOWN, DOWN_LEFT, LEFT, LEFT_UP} // 카메라 박스의 충돌 상태
     public E_CAMERA_POSITION m_eCP = E_CAMERA_POSITION.BLANK;
 
+    // 카메라 박스의 충돌에 따라 카메라 박스의 중심점을 지정할때 사용되는 변수
     float m_fDistance_PG;
     float m_fDistance_Exceed;
     float m_fDistance_PG2;
@@ -36,14 +38,15 @@ public class PlayerCameraBox : MonoBehaviour
 
     private void Awake()
     {
-        m_nLayer1 = 1 << LayerMask.NameToLayer("CameraWall");
-
-        m_vHitPos_UP = new Vector2();
-        m_vHitPos_DOWN = new Vector2();
-        m_vHitPos_RIGHT = new Vector2();
-        m_vHitPos_LEFT = new Vector2();
+        m_nLayer1 = 1 << LayerMask.NameToLayer("CameraWall"); // 카메라 박스의 충돌 레이어 설정
     }
 
+    // 카메라 모드가 일반 모드일때 8개 방향의 카메라 박스의 충돌 상태를 판단하는 함수. 이를 기반으로 카메라의 중심점을 지정한다.
+    // 플레이어의 위치를 기준으로 상, 하, 좌, 우 방향의 레이를 이용.
+    // ┌  ─  ┐
+    // │     │
+    // └  ─  ┘
+    // 8개 방향의 카메라 박스의 충돌 상태
     public string JudgeCameraCenterPosition()
     {
         if (m_eCC == E_CAMERA_CATEGORY.NORMAL)
@@ -138,24 +141,6 @@ public class PlayerCameraBox : MonoBehaviour
                 m_eCP = E_CAMERA_POSITION.LEFT_UP;
                 return "LEFT_UP";
             }
-            //else if (m_bHit_UP == true && m_bHit_DOWN == true &&
-            //    m_bHit_RIGHT == false && m_bHit_LEFT == false)
-            //{
-            //    m_eCP = E_CAMERA_POSITION.UP_DOWN;
-            //    return "UP_DOWN";
-            //}
-            //else if (m_bHit_UP == false && m_bHit_DOWN == false &&
-            //    m_bHit_RIGHT == true && m_bHit_LEFT == true)
-            //{
-            //    m_eCP = E_CAMERA_POSITION.RIGHT_LEFT;
-            //    return "RIGHT_LEFT";
-            //}
-            //else if (m_bHit_UP == true && m_bHit_DOWN == true &&
-            //    m_bHit_RIGHT == true && m_bHit_LEFT == true)
-            //{
-            //    m_eCP = E_CAMERA_POSITION.ALL_DIRECTION;
-            //    return "ALL_DIRECTION";
-            //}
             else
             {
                 m_eCP = E_CAMERA_POSITION.NULL;
