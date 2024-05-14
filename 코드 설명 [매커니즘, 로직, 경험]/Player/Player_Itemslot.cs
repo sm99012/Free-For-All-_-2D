@@ -17,7 +17,7 @@ public class Player_Itemslot : MonoBehaviour
 
     int m_nMaxCount = 10; // 아이템 보유 최대치
 
-    public int m_nGold;  // 보유 재화
+    public int m_nGold; // 보유 재화
 
 
     public void InitialSet()
