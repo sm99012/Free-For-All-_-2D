@@ -15,14 +15,12 @@ public class Player_Camera : MonoBehaviour
     PlayerCameraBox m_PlayerCameraBox;
 
 
-    // Camera 중심점.
+    // 카메라 중심점.
     [SerializeField]
     Vector3 m_vCameraCenterPosition;
     Vector3 m_vGetCameraCenterPosition;
-    // Z축 좌표.
-    float m_fFixZ;
-    // zoomin 시 최대 z축 좌표.
-    float m_fZommInZ;
+    float m_fFixZ; // 카메라의 고정된 z좌표.
+    float m_fZommInZ; // 카메라 줌인 최대 z좌표.
 
     public void InitialSet()
     {
@@ -75,18 +73,21 @@ public class Player_Camera : MonoBehaviour
         return true;
     }
 
+    // 카메라 모드 변경 _ 일반
     public void SetCamera_NORMAL()
     {
         m_PlayerCameraBox.m_eCC = PlayerCameraBox.E_CAMERA_CATEGORY.NORMAL;
     }
 
+    // 카메라 모드 변경 _ 풀
     public void SetCamera_FULL(Vector3 pos)
     {
         m_PlayerCameraBox.m_eCC = PlayerCameraBox.E_CAMERA_CATEGORY.FULL;
         m_vCameraCenterPosition = pos;
     }
 
-    PlayerCameraBox.E_CAMERA_CATEGORY m_CC_Before;
+    // 카메라 모드 변경 _ 줌인
+    PlayerCameraBox.E_CAMERA_CATEGORY m_CC_Before; // 카메라 줌인 이전의 카메라 박스 충돌 상태(줌인 해제시 카메라 시점 설정을 위해 존재) 
     public void SetCamera_ZOOMIN(Vector3 pos)
     {
         if (m_PlayerCameraBox.m_eCC != PlayerCameraBox.E_CAMERA_CATEGORY.ZOOMIN)
@@ -107,17 +108,17 @@ public class Player_Camera : MonoBehaviour
 
         m_cProcess_ZoomIn = StartCoroutine(ProcessZoomIn(pos));
     }
+    // 카메라 줌인
     Coroutine m_cProcess_ZoomIn;
     IEnumerator ProcessZoomIn(Vector3 pos)
     {
         Player_Total.Instance.m_pm_Move.m_bMove = false;
         Player_Total.Instance.m_pm_Move.Move(0, 0, 0);
         float RateOfChange = 0.02f;
-        //Vector2 m_vStartingPoint = m_PlayerCameraBox.GetCameraCenterPosition();
         Vector2 m_vStartingPoint = m_tCameraTransform.position;
         while (m_tCameraTransform.position.z < -1f)
         {
-            Vector2 LerpVector = Vector2.Lerp(m_vStartingPoint, pos, 0.01f);
+            Vector2 LerpVector = Vector2.Lerp(m_vStartingPoint, pos, 0.01f); // 선형 보간을 이용한 부드러운 줌인 제공
             m_tCameraTransform.position = new Vector3(LerpVector.x, LerpVector.y, m_tCameraTransform.position.z + RateOfChange);
             m_vStartingPoint = m_tCameraTransform.position;
             yield return new WaitForSeconds(0.01f);
@@ -126,6 +127,7 @@ public class Player_Camera : MonoBehaviour
             m_cProcess_ZoomIn = null;
     }
 
+    // 카메라 줌인 해제
     public void ZoomOut()
     {
         if (m_cProcess_ZoomIn != null)
@@ -145,12 +147,12 @@ public class Player_Camera : MonoBehaviour
         Vector2 m_vStartingPoint = pos;
         while (m_tCameraTransform.position.z > -2.25f)
         {
-            Vector2 LerpVector = Vector2.Lerp(m_vStartingPoint, m_PlayerCameraBox.GetCameraCenterPosition(), 0.01f);
+            Vector2 LerpVector = Vector2.Lerp(m_vStartingPoint, m_PlayerCameraBox.GetCameraCenterPosition(), 0.01f); // 선형 보간을 이용한 부드러운 줌인 해제 제공
             m_tCameraTransform.position = new Vector3(LerpVector.x, LerpVector.y, m_tCameraTransform.position.z - RateOfChange);
             m_vStartingPoint = m_tCameraTransform.position;
             yield return new WaitForSeconds(0.01f);
         }
-        m_PlayerCameraBox.m_eCC = m_CC_Before;
+        m_PlayerCameraBox.m_eCC = m_CC_Before; // 카메라 줌인 이전의 카메라 박스 충돌 상태로 회귀
         if (m_cProcess_ZoomOut != null)
             m_cProcess_ZoomOut = null;
 
