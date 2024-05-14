@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class PlayerCameraBox : MonoBehaviour
 {
-    bool m_bFixUP = false;
-    public Vector3 m_vFixedUP;
-
     int m_nLayer1;
     //Z: -1.75f: m_fVerticalDistance = 1.05f, m_fHorizontalDistance = 1.375f
     //z: -2.25f: m_fVerticalDistance = 1.325f, m_fHorizontalDistance = 1.75f
