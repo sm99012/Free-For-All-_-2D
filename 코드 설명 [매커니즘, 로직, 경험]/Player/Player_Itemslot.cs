@@ -5,15 +5,15 @@ using UnityEngine;
 public class Player_Itemslot : MonoBehaviour
 {
     // 인벤토리
-    public static Item_Equip[] m_gary_Itemslot_Equip; // 장비아이템 데이터. 60칸 제공
-    public static int[] m_nary_Itemslot_Equip_Count; // 장비아이템 개수. 최대 1개 아이템 소지 가능
+    public static Item_Equip[] m_gary_Itemslot_Equip;  // 장비아이템 데이터. 60칸 제공
+    public static int[] m_nary_Itemslot_Equip_Count;   // 장비아이템 개수. 최대 1개 아이템 소지 가능
     public static bool[] m_bary_Itemslot_Equip_Belong; // 퀵슬롯에 등록된 장비아이템의 각종 제한 판단
                                                        // 1. 해당 배열의 장비아이템을 퀵슬롯에 등록했다면 NPC와의 거래 불가
                                                        // 2. 해당 배열의 장비아이템을 퀵슬롯에 등록했다면 해당 배열의 장비아이템을 필요로 하는 퀘스트 클리어 불가(※ 단 퀵슬롯에 등록되지 않은 장비아이템이 존재하는 경우 퀘스트 클리어 가능)
-    public static Item_Use[] m_gary_Itemslot_Use; // 소비아이템 데이터. 60칸 제공
-    public static int[] m_nary_Itemslot_Use_Count; // 소비아이템 개수. 최대 10개 아이템 소지 가능
-    public static Item_Etc[] m_gary_Itemslot_Etc; // 기타아이템 데이터. 60칸 제공
-    public static int[] m_nary_Itemslot_Etc_Count; // 기타아이템 개수. 최대 10개 아이템 소지 가능
+    public static Item_Use[] m_gary_Itemslot_Use;      // 소비아이템 데이터. 60칸 제공
+    public static int[] m_nary_Itemslot_Use_Count;     // 소비아이템 개수. 최대 10개 아이템 소지 가능
+    public static Item_Etc[] m_gary_Itemslot_Etc;      // 기타아이템 데이터. 60칸 제공
+    public static int[] m_nary_Itemslot_Etc_Count;     // 기타아이템 개수. 최대 10개 아이템 소지 가능
 
     int m_nMaxCount = 10; // 아이템 보유 최대치
 
