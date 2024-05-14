@@ -6,23 +6,23 @@ public class PlayerCameraBox : MonoBehaviour
 {
     int m_nLayer1; // 카메라 박스의 충돌 레이어
 
-    Vector3 m_vVerticalDistance = new Vector3(0, 1.575f, 0);//new Vector3(0, 1.05f, 0);
-    float m_fVerticalDistance = 1.575f;
-    Vector3 m_vHoriontalDistance = new Vector3(2.825f, 0, 0);//new Vector3(1.375f, 0, 0);
-    float m_fHorizontalDistance = 2.825f;
+    Vector3 m_vVerticalDistance = new Vector3(0, 1.575f, 0);//new Vector3(0, 1.05f, 0); // 카메라 박스 크기(세로) _ Gizmo 전용 변수
+    float m_fVerticalDistance = 1.575f; // 카메라 박스 크기(세로)
+    Vector3 m_vHoriontalDistance = new Vector3(2.825f, 0, 0);//new Vector3(1.375f, 0, 0); // 카메라 박스 크기(가로) _ Gizmo 전용 변수
+    float m_fHorizontalDistance = 2.825f; // 카메라 박스 크기(가로)
 
-    public RaycastHit2D m_rHit_UP;
-    public bool m_bHit_UP = false;
-    Vector2 m_vHitPos_UP;
-    public RaycastHit2D m_rHit_DOWN;
-    public bool m_bHit_DOWN = false;
-    Vector2 m_vHitPos_DOWN;
-    public RaycastHit2D m_rHit_RIGHT;
-    public bool m_bHit_RIGHT = false;
-    Vector2 m_vHitPos_RIGHT;
-    public RaycastHit2D m_rHit_LEFT;
-    public bool m_bHit_LEFT = false;
-    Vector2 m_vHitPos_LEFT;
+    public RaycastHit2D m_rHit_UP; // ↑ 방향 레이
+    public bool m_bHit_UP = false; // ↑ 방향 레이 충돌 결과
+    Vector2 m_vHitPos_UP; // ↑ 방향 레이의 충돌 지점
+    public RaycastHit2D m_rHit_DOWN; // ↓ 방향 레이
+    public bool m_bHit_DOWN = false; // ↓ 방향 레이 충돌 결과
+    Vector2 m_vHitPos_DOWN; // ↓ 방향 레이의 충돌 지점
+    public RaycastHit2D m_rHit_RIGHT; // → 방향 레이
+    public bool m_bHit_RIGHT = false; // → 방향 레이 충돌 결과
+    Vector2 m_vHitPos_RIGHT; // → 방향 레이의 충돌 지점
+    public RaycastHit2D m_rHit_LEFT; // ← 방향 레이
+    public bool m_bHit_LEFT = false; // ← 방향 레이 충돌 결과
+    Vector2 m_vHitPos_LEFT; // ← 방향 레이의 충돌 지점
 
     public enum E_CAMERA_CATEGORY { NORMAL, FULL, ZOOMIN, SPECIAL}
     public E_CAMERA_CATEGORY m_eCC = E_CAMERA_CATEGORY.NORMAL;
