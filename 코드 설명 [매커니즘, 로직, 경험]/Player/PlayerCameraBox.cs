@@ -25,9 +25,9 @@ public class PlayerCameraBox : MonoBehaviour
     public bool m_bHit_LEFT = false; // ← 방향 레이 충돌 결과
     Vector2 m_vHitPos_LEFT = new Vector2(); // ← 방향 레이의 충돌 지점
 
-    public enum E_CAMERA_CATEGORY { NORMAL, FULL, ZOOMIN, SPECIAL} // 카메라 모드
+    public enum E_CAMERA_CATEGORY { NORMAL, FULL, ZOOMIN, SPECIAL} // 카메라 모드 FSM
     public E_CAMERA_CATEGORY m_eCC = E_CAMERA_CATEGORY.NORMAL;
-    public enum E_CAMERA_POSITION { NULL, BLANK, UP, UP_RIGHT, RIGHT, RIGHT_DOWN, DOWN, DOWN_LEFT, LEFT, LEFT_UP} // 카메라 박스의 충돌 상태
+    public enum E_CAMERA_POSITION { NULL, BLANK, UP, UP_RIGHT, RIGHT, RIGHT_DOWN, DOWN, DOWN_LEFT, LEFT, LEFT_UP} // 카메라 박스의 충돌 상태 FSM
     public E_CAMERA_POSITION m_eCP = E_CAMERA_POSITION.BLANK;
 
     // 카메라 박스의 충돌에 따라 카메라 박스의 중심점을 지정할때 사용되는 변수
