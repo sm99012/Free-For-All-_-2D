@@ -127,7 +127,7 @@ public class Player_Camera : MonoBehaviour
             m_cProcess_ZoomIn = null;
     }
 
-    // 카메라 줌인 해제
+    // 카메라 줌아웃(줌인 해제)
     public void ZoomOut()
     {
         if (m_cProcess_ZoomIn != null)
