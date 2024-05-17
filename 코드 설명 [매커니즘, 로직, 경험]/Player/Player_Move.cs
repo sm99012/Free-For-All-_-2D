@@ -53,6 +53,7 @@ public class Player_Move : MonoBehaviour
     Coroutine m_cProcess_Power = null;  // 플레이어 피격 가능 시간 계산 코루틴
     public bool m_bPower;               // 플레이어 피격 가능 여부 (m_bPower == true : 플레이어 피격 불가능 / m_bPower == false : 플레이어 피격 가능)
                                         // m_bPower 변수는 '피격 후 피격 불가 상태 계산', '구르기 지속 중 피격 불가 상태 계산'에 사용된다.
+                                        // 무적 상태가 되는것이 아니다. 스킬 및 디버프에 의한 해로운 효과는 계속해서 적용된다.
 
     // 놓아주기
     Coroutine m_cProcess_Goaway_Cooltime = null; // 놓아주기 쿨타임 계산 코루틴
@@ -86,10 +87,10 @@ public class Player_Move : MonoBehaviour
         m_bGoaway_Success = false;
     }
 
-    // 플레이어 이동 관련 함수
+    // 플레이어 이동 함수
     // Player_Total.cs에서 키입력을 통해 이 함수가 실행된다. 플레이어의 달리기 동작을 수행한다.
     // 플레이어 동작 FSM 정보를 반환
-    public E_PLAYER_MOVE_STATE Move(int h, int v, int fspeed) // h(수평 이동 값), v(수직 이동 값), fspeed(플레이어 이동속도)
+    public E_PLAYER_MOVE_STATE Move(int h, int v, int fspeed) // h : 수평 이동 값, v : 수직 이동 값, fspeed : 플레이어 이동속도
     {
         if (m_bMove == true)
         {
@@ -207,7 +208,7 @@ public class Player_Move : MonoBehaviour
 
     // Player_Move.cs 외부에서 호출되는 플레이어의 공격 속도를 알려주는 함수. 플레이어 공격 속도 계산에 사용된다.
     // ※ 추후 플레이어 공격 속도 계산을 매개변수를 이용한 방식으로 변경한다면 사용되지 않을 예정
-    public void SetAttackSpeed(float atkspd)
+    public void SetAttackSpeed(float atkspd) // atkspd : 플레이어 공격 속도
     {
           m_fAttackDelay_DurationTime = atkspd;
     }
@@ -267,8 +268,9 @@ public class Player_Move : MonoBehaviour
     // 공격 후 딜레이 계산 함수.
     // 기본 공격의 종류에 따라 각각 다른 딜레이를 가진다.('기본 공격1' : 0.4초 / '기본 공격2' : 0.4초 / '기본 공격3' : 0.6초)
     // 해당 딜레이 동안 플레이어는 구르기를 제외한 모든 능동적 동작을 수행할 수 없다.
-    // 해당 딜레이 동안 수행 가능한 동작 : { ATTACKED(피격), DEATH(사망), ROLL(구르기) } / 수행 불가능한 동작 : { IDLE(가만히 있기), RUN(달리기), ATTACK1_1(기본 공격1), ATTACK1_2(기본 공격2), ATTACK1_3(기본 공격3), GOAWAY(놓아주기), CONVERSATION(상호작용) }
-    IEnumerator ProcessAttackToIdle(float ftime)
+    // 해당 딜레이 동안 수행 가능한 동작 : { ATTACKED(피격), DEATH(사망), ROLL(구르기) }
+    // 해당 딜레이 동안 수행 불가능한 동작 : { IDLE(가만히 있기), RUN(달리기), ATTACK1_1(기본 공격1), ATTACK1_2(기본 공격2), ATTACK1_3(기본 공격3), GOAWAY(놓아주기), CONVERSATION(상호작용) }
+    IEnumerator ProcessAttackToIdle(float ftime) // ftime : 공격 후 딜레이
     {
         m_bMove = false; 
         yield return new WaitForSeconds(ftime);
@@ -292,63 +294,68 @@ public class Player_Move : MonoBehaviour
             m_cProcess_AttackDelay_Duration = null;
     }
 
-    // '기본 공격1' 동작 수행
+    // '기본 공격1' 동작 수행. 플레이어 동작 FSM에서 호출
     void Attack1_1()
     {
         m_cProcess_Attack_Duration = null;
-        m_cProcess_Attack_Duration = StartCoroutine(ProcessAttack1_1());
-        m_cProcess_AttackToIdle_Duration = StartCoroutine(ProcessAttackToIdle(0.4f));
+        m_cProcess_Attack_Duration = StartCoroutine(ProcessAttack1_1()); // 연계 공격 가능 시간(0.6초) 계산
+        m_cProcess_AttackToIdle_Duration = StartCoroutine(ProcessAttackToIdle(0.4f)); // 공격 후 딜레이(0.4초) 설정
     }
-    // '기본 공격2' 동작 수행
+    // '기본 공격2' 동작 수행. 플레이어 동작 FSM에서 호출
     void Attack1_2()
     {
         m_cProcess_Attack_Duration = null;
-        m_cProcess_Attack_Duration = StartCoroutine(ProcessAttack1_2());
-        m_cProcess_AttackToIdle_Duration = StartCoroutine(ProcessAttackToIdle(0.4f));
+        m_cProcess_Attack_Duration = StartCoroutine(ProcessAttack1_2()); // 연계 공격 가능 시간(0.4초) 계산
+        m_cProcess_AttackToIdle_Duration = StartCoroutine(ProcessAttackToIdle(0.4f)); // 공격 후 딜레이(0.4초) 설정
     }
-    // '기본 공격3' 동작 수행
+    // '기본 공격3' 동작 수행. 플레이어 동작 FSM에서 호출
     void Attack1_3()
     {
         m_cProcess_Attack_Duration = null;
-        m_cProcess_Attack_Duration = StartCoroutine(ProcessAttack1_3());
-        m_cProcess_AttackToIdle_Duration = StartCoroutine(ProcessAttackToIdle(0.6f));
+        m_cProcess_Attack_Duration = StartCoroutine(ProcessAttack1_3()); // 연계 공격 가능 시간(0초) 계산
+        m_cProcess_AttackToIdle_Duration = StartCoroutine(ProcessAttackToIdle(0.6f)); // 공격 후 딜레이(0.6초) 설정
     }
-    
-    public bool Attacked(float time, float speed, Vector3 dir)
+
+    // 플레이어 피격 함수
+    public bool Attacked(float time, float speed, Vector3 dir) // time : 넉백 지속 시간, speed : 플레이어 이동 속도, dir : 넉백 방향
     {
-        if (m_bPower == false)
+        if (m_bPower == false) // 플레이어 피격 가능할 때
         {
-            m_bMove = false;
-            // GOAWAY 기능 취소
+            m_bMove = false; // 플레이어 이동 불가
+
             if (m_cProcess_Goaway_Duration != null)
             {
-                StopCoroutine(m_cProcess_Goaway_Duration);
-                //m_bMove = true;
+                StopCoroutine(m_cProcess_Goaway_Duration); // 놓아주기 기능 취소
             }
-            m_cProcess_Power = StartCoroutine(ProcessPower());
+            
+            m_cProcess_Power = StartCoroutine(ProcessAttackedPower()); // 플레이어 피격 가능 시간 계산
+
+            // 피격 전 플레이어 동작 FSM의 상태에 따라 플레이어 피격 애니메이션이 실행된다.
+            // 피격 애니메이션 실행 가능 상태 : { IDLE(가만히 있기), RUN(달리기), GOAWAY(놓아주기), CONVERSATION(상호작용) }
+            // 피격 애니메이션 실행 불가능 상태 : { ATTACK1_1(기본 공격1), ATTACK1_2(기본 공격2), ATTACK1_3(기본 공격3), ATTACKED(피격), DEATH(사망), ROLL(구르기) }
             if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.IDLE || m_ePlayerMoveState == E_PLAYER_MOVE_STATE.RUN ||
-                m_ePlayerMoveState == E_PLAYER_MOVE_STATE.GOAWAY)
+                m_ePlayerMoveState == E_PLAYER_MOVE_STATE.GOAWAY || m_ePlayerMoveState == E_PLAYER_MOVE_STATE.CONVERSATION)
             {
                 m_cProcess_Attacked = StartCoroutine(ProcessAttackedToIdle());
                 m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.ATTACKED);
             }
-            KnockBack(time, speed, dir);
+            KnockBack(time, speed, dir); // 넉백
 
             return true;
         }
         return false;
     }
-
+    // 플레이어 넉백 계산 함수
     IEnumerator ProcessAttackedToIdle()
     {
         m_bMove = false;
-        yield return new WaitForSeconds(m_fAttackedToIdleTime);
+        yield return new WaitForSeconds(m_fAttackedToIdleTime); // 넉백이 지속되는 0.3초 동안 특정 동작을 제외하고 플레이어는 행동할 수 없다.
         m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.IDLE);
-        if (m_cProcess_KnockBack == null && m_cProcess_AttackToIdle_Duration == null)
+        if (m_cProcess_KnockBack == null && m_cProcess_AttackToIdle_Duration == null) // 만약 넉백이 종료될 시점에 플레이어가 여전히 피격된 상태일때는 해당하는 상태의 IEnumerator 함수에서 플레이어 움직임 관련 변수(m_bMove)가 처리된다.
             m_bMove = true;
         m_cProcess_Attacked = null;
     }
-    IEnumerator ProcessPower()
+    IEnumerator ProcessAttackedPower()
     {
         m_bPower = true;
         yield return new WaitForSeconds(1f);
