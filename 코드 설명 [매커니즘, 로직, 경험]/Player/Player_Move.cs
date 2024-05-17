@@ -330,14 +330,14 @@ public class Player_Move : MonoBehaviour
             
             m_cProcess_Power = StartCoroutine(ProcessAttackedPower()); // 플레이어 피격 가능 시간 계산
 
-            // 피격 전 플레이어 동작 FSM의 상태에 따라 플레이어 피격 애니메이션이 실행된다.
+            // 피격 전 플레이어 동작 FSM의 상태에 따라 피격 후 딜레이와 플레이어 피격 애니메이션이 실행된다.
             // 피격 애니메이션 실행 가능 상태 : { IDLE(가만히 있기), RUN(달리기), GOAWAY(놓아주기), CONVERSATION(상호작용) }
             // 피격 애니메이션 실행 불가능 상태 : { ATTACK1_1(기본 공격1), ATTACK1_2(기본 공격2), ATTACK1_3(기본 공격3), ATTACKED(피격), DEATH(사망), ROLL(구르기) }
             if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.IDLE || m_ePlayerMoveState == E_PLAYER_MOVE_STATE.RUN ||
                 m_ePlayerMoveState == E_PLAYER_MOVE_STATE.GOAWAY || m_ePlayerMoveState == E_PLAYER_MOVE_STATE.CONVERSATION)
             {
-                m_cProcess_Attacked = StartCoroutine(ProcessAttackedToIdle());
-                m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.ATTACKED);
+                m_cProcess_Attacked = StartCoroutine(ProcessAttackedToIdle()); // 플레이어 피격 후 딜레이
+                m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.ATTACKED); // 애니메이션 설정
             }
             KnockBack(time, speed, dir); // 넉백
 
@@ -345,7 +345,15 @@ public class Player_Move : MonoBehaviour
         }
         return false;
     }
-    // 플레이어 넉백 계산 함수
+    // 플레이어 피격 가능 시간 계산 함수. 플레이어 피격 후 1초간 플레이어 피격 불가 상태가 지속된다.
+    IEnumerator ProcessAttackedPower()
+    {
+        m_bPower = true;
+        yield return new WaitForSeconds(1f);
+        m_bPower = false;
+        m_cProcess_Power = null;
+    }
+    // 플레이어 피격 후 딜레이 계산 함수
     IEnumerator ProcessAttackedToIdle()
     {
         m_bMove = false;
@@ -355,21 +363,16 @@ public class Player_Move : MonoBehaviour
             m_bMove = true;
         m_cProcess_Attacked = null;
     }
-    IEnumerator ProcessAttackedPower()
+    
+    // 넉백 함수. 플레이어 동작 FSM의 상태에 관계 없이 넉백 실행
+    // 
+    public void KnockBack(float time, float fspeed, Vector3 dir) // time : 넉백 지속 시간, speed : 플레이어 이동 속도, dir : 넉백 방향
     {
-        m_bPower = true;
-        yield return new WaitForSeconds(1f);
-        m_bPower = false;
-        m_cProcess_Power = null;
-    }
-
-    // 넉백
-    public void KnockBack(float time, float fspeed, Vector3 dir)
-    {
-        if (m_cProcess_KnockBack == null)
+        if (m_cProcess_KnockBack == null) // 넉백 중첩 불가능
             m_cProcess_KnockBack = StartCoroutine(ProcessKnockBack(time, fspeed * 0.3f, dir));
     }
-    IEnumerator ProcessKnockBack(float time, float fspeed, Vector3 dir)
+    // 넉백 계산 함수
+    IEnumerator ProcessKnockBack(float time, float fspeed, Vector3 dir) // time : 넉백 지속 시간, speed : 플레이어 이동 속도, dir : 넉백 방향
     {
         float ftime = time;
         m_bMove = false;
@@ -380,8 +383,6 @@ public class Player_Move : MonoBehaviour
             m_rRigdbody.MovePosition(this.gameObject.transform.position + dir * fspeed * 0.016f * 0.01f * 1.5f);
             Player_Total.Instance.CameraMove(this.gameObject.transform.position + dir * fspeed * 0.05f * 0.01f);
         }
-        // if (m_cProcess_AttackToIdle_Duration == null && m_cProcess_Attacked == null)
-        //if (m_cProcess_AttackToIdle_Duration == null)
         m_bMove = true;
         m_cProcess_KnockBack = null;
     }
