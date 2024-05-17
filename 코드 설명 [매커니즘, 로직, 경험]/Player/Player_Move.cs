@@ -10,12 +10,12 @@ public class Player_Move : MonoBehaviour
     public Animator m_aAnimator;
     public Rigidbody2D m_rRigdbody;
 
-    Vector3 m_vScale;
-    Vector3 m_vRightPos;
+    Vector3 m_vScale;    // 플레이어 이동 방향
+    Vector3 m_vRightPos; 
     Vector3 m_vLeftPos;
-    Vector3 m_vInputDir;
+    Vector3 m_vInputDir; // 키보드로부터 입력된 수평ㆍ수직 이동에따른 방향 벡터
 
-    public bool m_bMove;
+    public bool m_bMove; // (true : 플레이어 이동 가능 / false : 플레이어 이동 불가능)
 
     public enum E_PLAYER_WEAPON_STATE { SWORD, AXE, KNIFE }
     public E_PLAYER_WEAPON_STATE m_ePlayerWeaponState;
