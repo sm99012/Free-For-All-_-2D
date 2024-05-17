@@ -15,16 +15,18 @@ public class Player_Move : MonoBehaviour
     Vector3 m_vLeftPos;
     Vector3 m_vInputDir; // 키보드로부터 입력된 수평ㆍ수직 이동에따른 방향 벡터
 
-    public bool m_bMove; // (true : 플레이어 이동 가능 / false : 플레이어 이동 불가능)
+    public bool m_bMove; // (m_bMove == true : 플레이어 이동 가능 / m_bMove == false : 플레이어 이동 불가능)
 
+    // 플레이어가 착용한 무기분류에 따라 상이한 플레이어 애니메이션을 적용하기 위한 FSM
     public enum E_PLAYER_WEAPON_STATE { SWORD, AXE, KNIFE }
     public E_PLAYER_WEAPON_STATE m_ePlayerWeaponState;
+    // 플레이어 동작 FSM
     public enum E_PLAYER_MOVE_STATE { IDLE, RUN, ATTACK1_1, ATTACK1_2, ATTACK1_3, ATTACKED, DEATH, ROLL, GOAWAY, CONVERSATION, NULL }
     public E_PLAYER_MOVE_STATE m_ePlayerMoveState = E_PLAYER_MOVE_STATE.IDLE;
 
-    public bool m_bAttack;
+    public bool m_bAttack;    // (m_bAttack == true : 플레이어 공격 가능 / m_bAttack == false : 플레이어 공격 불가능)
     // 연계 공격
-    public bool m_bAttack1_1;
+    public bool m_bAttack1_1; // (m_bAttack1_1 == true : 기본 공격 가능)
     public bool m_bAttack1_2;
     public bool m_bAttack1_3;
 
