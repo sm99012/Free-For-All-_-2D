@@ -19,10 +19,10 @@ public class Player_Move : MonoBehaviour
     float m_fMoveRate;   // 플레이어 이동 계수 (달리기 : m_fMoveRate = 1.0f / 구르기 : m_fMoveRate = 1.5f)
     
     // 플레이어가 착용한 무기분류에 따라 상이한 플레이어 애니메이션을 적용하기 위한 FSM
-    public enum E_PLAYER_WEAPON_STATE { SWORD, AXE, KNIFE }
+    public enum E_PLAYER_WEAPON_STATE { SWORD(검), AXE(도끼), KNIFE(단검) }
     public E_PLAYER_WEAPON_STATE m_ePlayerWeaponState;
     // 플레이어 동작 FSM
-    public enum E_PLAYER_MOVE_STATE { IDLE, RUN, ATTACK1_1, ATTACK1_2, ATTACK1_3, ATTACKED, DEATH, ROLL, GOAWAY, CONVERSATION, NULL }
+    public enum E_PLAYER_MOVE_STATE { IDLE(가만히 있기), RUN(달리기), ATTACK1_1(기본 공격1), ATTACK1_2(기본 공격2), ATTACK1_3(기본 공격3), ATTACKED(피격), DEATH(사망), ROLL(구르기), GOAWAY(놓아주기), CONVERSATION(상호작용), NULL(ETC) }
     public E_PLAYER_MOVE_STATE m_ePlayerMoveState = E_PLAYER_MOVE_STATE.IDLE;
 
     // 기본 공격(연계 공격)
@@ -88,8 +88,9 @@ public class Player_Move : MonoBehaviour
     }
 
     // 플레이어 이동 관련 함수
-    // Player_Total.cs에서 키입력을 받고 매개변수 h(horizontal move value), v(vertical move value), fspeed(플레이어 이동속도)
-    public E_PLAYER_MOVE_STATE Move(int h, int v, int fspeed)
+    // Player_Total.cs에서 키입력을 통해 이 함수가 실행된다. 플레이어의 달리기 동작을 수행한다.
+    // 플레이어 동작 FSM 정보를 반환
+    public E_PLAYER_MOVE_STATE Move(int h, int v, int fspeed) // h(수평 이동 값), v(수직 이동 값), fspeed(플레이어 이동속도)
     {
         if (m_bMove == true)
         {
@@ -101,29 +102,26 @@ public class Player_Move : MonoBehaviour
                 if (h == 0 && v == 0)
                     m_vInputDir = Vector3.zero;
                 else if (h != 0 && v != 0)
-                    m_vInputDir = new Vector3(h / 1.4f, v / 1.4f);
+                    m_vInputDir = new Vector3(h / 1.4f, v / 1.4f); // 플레이어의 대각선 이동 시 추가 보정값을 적용
                 else
                     m_vInputDir = new Vector3(h, v);
-
-                if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.IDLE || m_ePlayerMoveState == E_PLAYER_MOVE_STATE.RUN)
+                    
+                if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.IDLE || m_ePlayerMoveState == E_PLAYER_MOVE_STATE.RUN) // 달리기 상태
                 {
-                    m_fMoveRate = 1f;
-                    m_rRigdbody.MovePosition(this.gameObject.transform.position + (m_vInputDir * fspeed * 0.016f * 0.01f * m_fMoveRate)); // 0.015
-                    //Player_Total.Instance.CameraMove(this.gameObject.transform.position + (m_vInputDir * fspeed * 0.05f * 0.01f));
+                    m_fMoveRate = 1f;   // 기본 이동 계수
+                    m_rRigdbody.MovePosition(this.gameObject.transform.position + (m_vInputDir * fspeed * 0.016f * 0.01f * m_fMoveRate));
                 }
-                if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.ROLL)
+                if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.ROLL) // 구르기 상태
                 {
-                    m_fMoveRate = 1.5f;
+                    m_fMoveRate = 1.5f; // 달리기보다 빠른 이동이 가능한 구르기
                     m_rRigdbody.MovePosition(this.gameObject.transform.position + m_vInputDir * fspeed * 0.016f * 0.01f * m_fMoveRate);
-                    //Player_Total.Instance.CameraMove(this.gameObject.transform.position + m_vInputDir * fspeed * 0.05f * 0.01f * 1.5f);
                 }
             }
-            return m_ePlayerMoveState;
+            return m_ePlayerMoveState; // 플레이어 동작 FSM 정보를 반환 { IDEL(가만히 있기), RUN(달리기), ROLL(구르기) }
         }
         else
         {
-            return E_PLAYER_MOVE_STATE.NULL;
-            //Player_Total.Instance.CameraMove(this.gameObject.transform.position + (m_vInputDir * fspeed * 0.016f * 0.005f * m_fMoveRate));
+            return E_PLAYER_MOVE_STATE.NULL; // 플레이어 동작 FSM 정보를 반환 { NULL(플레이어 이동 불가 상태(기절, 속박 등의 상태이상)) }
         }
     }
     public Vector3 Get_MoveDir()
