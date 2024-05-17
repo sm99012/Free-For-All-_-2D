@@ -9,14 +9,6 @@ public class Player_Move : MonoBehaviour
     public Transform m_tTransform;
     public Animator m_aAnimator;
     public Rigidbody2D m_rRigdbody;
-
-    Vector3 m_vScale;    // 플레이어 이동 방향
-    Vector3 m_vRightPos = new Vector3(1, 1, 1);
-    Vector3 m_vLeftPos = new Vector3(-1, 1, 1);
-    Vector3 m_vInputDir; // 키보드로부터 입력된 수평ㆍ수직 이동에따른 방향 벡터
-
-    public bool m_bMove; // (m_bMove == true : 플레이어 이동 가능 / m_bMove == false : 플레이어 이동 불가능)
-    float m_fMoveRate;   // 플레이어 이동 계수 (달리기 : m_fMoveRate = 1.0f / 구르기 : m_fMoveRate = 1.5f)
     
     // 플레이어가 착용한 무기분류에 따라 상이한 플레이어 애니메이션을 적용하기 위한 FSM
     public enum E_PLAYER_WEAPON_STATE { SWORD(검), AXE(도끼), KNIFE(단검) }
@@ -24,6 +16,14 @@ public class Player_Move : MonoBehaviour
     // 플레이어 동작 FSM
     public enum E_PLAYER_MOVE_STATE { IDLE(가만히 있기), RUN(달리기), ATTACK1_1(기본 공격1), ATTACK1_2(기본 공격2), ATTACK1_3(기본 공격3), ATTACKED(피격), DEATH(사망), ROLL(구르기), GOAWAY(놓아주기), CONVERSATION(상호작용), NULL(ETC) }
     public E_PLAYER_MOVE_STATE m_ePlayerMoveState = E_PLAYER_MOVE_STATE.IDLE;
+
+    // 이동
+    Vector3 m_vScale;    // 플레이어가 바라보는 방향(2D 탑다운 게임이지만 플레이어는 우측과 좌측만 바라보고 게임을 진행한다.)
+    Vector3 m_vRightPos = new Vector3(1, 1, 1);
+    Vector3 m_vLeftPos = new Vector3(-1, 1, 1);
+    Vector3 m_vInputDir; // 키보드로부터 입력된 수평ㆍ수직 이동에따른 방향 벡터
+    public bool m_bMove; // (m_bMove == true : 플레이어 이동 가능 / m_bMove == false : 플레이어 이동 불가능)
+    float m_fMoveRate;   // 플레이어 이동 계수 (달리기 : m_fMoveRate = 1.0f / 구르기 : m_fMoveRate = 1.5f)
 
     // 기본 공격(연계 공격)
     public bool m_bAttack;    // (m_bAttack == true : 플레이어 공격 가능 / m_bAttack == false : 플레이어 공격 불가능)
@@ -97,7 +97,7 @@ public class Player_Move : MonoBehaviour
             if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.IDLE || m_ePlayerMoveState == E_PLAYER_MOVE_STATE.RUN ||
                m_ePlayerMoveState == E_PLAYER_MOVE_STATE.ROLL || m_ePlayerMoveState == E_PLAYER_MOVE_STATE.GOAWAY)
             {
-                SetScale(h, v);
+                SetScale(h, v); // 플레이어 동작 FSM 변경
 
                 if (h == 0 && v == 0)
                     m_vInputDir = Vector3.zero;
@@ -124,12 +124,12 @@ public class Player_Move : MonoBehaviour
             return E_PLAYER_MOVE_STATE.NULL; // 플레이어 동작 FSM 정보를 반환 { NULL(플레이어 이동 불가 상태(기절, 속박 등의 상태이상)) }
         }
     }
+    // 플레이어의 이동 방향 반환
     public Vector3 Get_MoveDir()
     {
         return m_vInputDir;
     }
-
-    // 플레이어 방향 설정, UML 적용
+    // 플레이어 방향 설정, 플레이어 동작 FSM 변경 함수
     void SetScale(int h, int v)
     {
         if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.IDLE || m_ePlayerMoveState == E_PLAYER_MOVE_STATE.RUN)
@@ -169,34 +169,35 @@ public class Player_Move : MonoBehaviour
             }
         }
 
-        m_tTransform.localScale = m_vScale;
+        m_tTransform.localScale = m_vScale; // 플레이어가 바라보는 방향 설정(좌 / 우)
     }
 
-    // 플레이어 위치 설정.
+    // 맵 변경 후 플레이어의 위치 설정(포탈로 이동 시)
     public void ChangeMap(Vector3 pos)
     {
         m_tTransform.position = pos;
     }
 
+    // 기본 공격 함수
     public int Attack()
     {
         if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.IDLE || m_ePlayerMoveState == E_PLAYER_MOVE_STATE.RUN)
         {
             if (m_bAttack == true)
             {
-                if (m_bAttack1_1 == true)
+                if (m_bAttack1_1 == true) // '기본 공격1' 동작 수행
                 {
                     m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.ATTACK1_1);
                     //Debug.Log("Player Attack1_1");
                     return 1;
                 }
-                else if (m_bAttack1_2 == true)
+                else if (m_bAttack1_2 == true) // '기본 공격2' 동작 수행
                 {
                     m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.ATTACK1_2);
                     //Debug.Log("Player Attack1_2");
                     return 2;
                 }
-                else if (m_bAttack1_3 == true)
+                else if (m_bAttack1_3 == true) // '기본 공격3' 동작 수행
                 {
                     m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.ATTACK1_3);
                     //Debug.Log("Player Attack1_3");
@@ -208,80 +209,66 @@ public class Player_Move : MonoBehaviour
         return 0;
     }
 
+    // Player_Move.cs 외부에서 호출되는 플레이어의 공격 속도를 알려주는 함수. 플레이어 공격 속도 계산에 사용된다.
+    // ※ 추후 플레이어 공격 속도 계산을 매개변수를 이용한 방식으로 변경한다면 사용되지 않을 예정
     public void SetAttackSpeed(float atkspd)
     {
-          m_fAttackDelay_DurationTime
+          m_fAttackDelay_DurationTime = atkspd;
     }
-
-    IEnumerator ProcessAttackDelay()
-    {
-        m_bAttack = false;
-        while (m_fAttackDelay_DurationTime > 0)
-        {
-            //m_fAttackDelay_DurationTime -= Time.deltaTime;
-            //yield return null;
-            m_fAttackDelay_DurationTime -= 0.1f;
-            yield return new WaitForSeconds(0.1f);
-        }
-        m_bAttack = true;
-        if (m_cProcess_AttackDelay_Duration != null)
-            m_cProcess_AttackDelay_Duration = null;
-    }
+    
+    // '기본 공격1' 이후 다음 공격이 '기본 공격2' 로 연계될 수 있는지 계산하는 함수
     IEnumerator ProcessAttack1_1()
     {
-        m_fAttack_DurationTime = m_fAttack1_1DurationTime; //Debug.Log(m_fAttack_DurationTime);
+        m_fAttack_DurationTime = m_fAttack1_1DurationTime; // 0.6초 동안 '기본 공격2' 가능
         m_bAttack1_1 = false;
         m_bAttack1_2 = true;
         m_bAttack1_3 = false;
         while (m_fAttack_DurationTime > 0)
         {
-            //m_fAttack_DurationTime -= Time.deltaTime;
-            //yield return null;
             m_fAttack_DurationTime -= 0.1f;
             yield return new WaitForSeconds(0.1f);
         }
-        m_cProcess_Attack_Duration = null;
+        m_cProcess_Attack_Duration = null; // 0.6초 이후 다시 '기본 공격1' 가능
         m_bAttack1_1 = true;
         m_bAttack1_2 = false;
         m_bAttack1_3 = false;
     }
+    // '기본 공격2' 이후 다음 공격이 '기본 공격3' 으로 연계될 수 있는지 계산하는 함수
     IEnumerator ProcessAttack1_2()
     {
-        m_fAttack_DurationTime = m_fAttack1_2DurationTime; //Debug.Log(m_fAttack_DurationTime);
+        m_fAttack_DurationTime = m_fAttack1_2DurationTime; // 0.4초 동안 '기본 공격3' 가능
         m_bAttack1_1 = false;
         m_bAttack1_2 = false;
         m_bAttack1_3 = true;
         while (m_fAttack_DurationTime > 0)
         {
-            //m_fAttack_DurationTime -= Time.deltaTime;
-            //yield return null;
             m_fAttack_DurationTime -= 0.1f;
             yield return new WaitForSeconds(0.1f);
         }
-        m_cProcess_Attack_Duration = null;
+        m_cProcess_Attack_Duration = null; // 0.4초 이후 다시 '기본 공격1' 가능
         m_bAttack1_1 = true;
         m_bAttack1_2 = false;
         m_bAttack1_3 = false;
     }
+    // '기본 공격3' 이후 다음 공격은 '기본 공격1'. 현재 '기본 공격3' 다음의 연계 공격이 없기에 해당 부분이 주석처리 되어있다.
     IEnumerator ProcessAttack1_3()
     {
-        m_fAttack_DurationTime = m_fAttack1_3DurationTime; //Debug.Log(m_fAttack_DurationTime);
+        //m_fAttack_DurationTime = m_fAttack1_3DurationTime;
         m_bAttack1_1 = true;
         m_bAttack1_2 = false;
         m_bAttack1_3 = false;
-        while (m_fAttack_DurationTime > 0)
-        {
-            //m_fAttack_DurationTime -= Time.deltaTime;
-            //yield return null;
-            m_fAttack_DurationTime -= 0.1f;
-            yield return new WaitForSeconds(0.1f);
-        }
+        //while (m_fAttack_DurationTime > 0)
+        //{
+        //    m_fAttack_DurationTime -= 0.1f;
+        //    yield return new WaitForSeconds(0.1f);
+        //}
         m_cProcess_Attack_Duration = null;
         m_bAttack1_1 = true;
         m_bAttack1_2 = false;
         m_bAttack1_3 = false;
     }
-    // 공격 후 딜레이타임 설정
+    
+    // 공격 후 딜레이 계산 함수
     IEnumerator ProcessAttackToIdle(float ftime)
     {
         m_bMove = false;
@@ -291,6 +278,21 @@ public class Player_Move : MonoBehaviour
             m_bMove = true;
         m_cProcess_AttackToIdle_Duration = null;
     }
+
+    // 플레이어 공격 속도 계산 함수. 플레이어의 공격 속도에 따라 다음 기본 공격까지 기다려야하는 시간을 계산한다.
+    IEnumerator ProcessAttackDelay()
+    {
+        m_bAttack = false; // 기본 공격 불가능
+        while (m_fAttackDelay_DurationTime > 0)
+        {
+            m_fAttackDelay_DurationTime -= 0.1f;
+            yield return new WaitForSeconds(0.1f);
+        }
+        m_bAttack = true; // 기본 공격 가능
+        if (m_cProcess_AttackDelay_Duration != null)
+            m_cProcess_AttackDelay_Duration = null;
+    }
+    
     void Attack1_1()
     {
         m_cProcess_Attack_Duration = null;
