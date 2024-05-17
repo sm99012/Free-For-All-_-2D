@@ -16,7 +16,8 @@ public class Player_Move : MonoBehaviour
     Vector3 m_vInputDir; // 키보드로부터 입력된 수평ㆍ수직 이동에따른 방향 벡터
 
     public bool m_bMove; // (m_bMove == true : 플레이어 이동 가능 / m_bMove == false : 플레이어 이동 불가능)
-
+    float m_fMoveRate;   // 플레이어 이동 계수 (달리기 : m_fMoveRate = 1.0f / 구르기 : m_fMoveRate = 1.5f)
+    
     // 플레이어가 착용한 무기분류에 따라 상이한 플레이어 애니메이션을 적용하기 위한 FSM
     public enum E_PLAYER_WEAPON_STATE { SWORD, AXE, KNIFE }
     public E_PLAYER_WEAPON_STATE m_ePlayerWeaponState;
@@ -33,20 +34,30 @@ public class Player_Move : MonoBehaviour
     Coroutine m_cProcess_Attack_Duration = null;       // 연계 공격 가능 시간 계산 코루틴
     Coroutine m_cProcess_AttackToIdle_Duration = null; // 공격 후 딜레이 계산 코루틴
     Coroutine m_cProcess_AttackDelay_Duration = null;  // 플레이어 공격속도 계산 코루틴(다음 공격까지 기다려야하는 시간 계산)
-    float m_fAttack_DurationTime;
-    float m_fAttackDelay_DurationTime;
-    public float m_fAttack1_1DurationTime = 0.6f;      // '기본 공격1' 이후 '기본 공격2' 동작이 가능한 시간
-    public float m_fAttack1_2DurationTime = 0.4f;      // '기본 공격2' 이후 '기본 공격3' 동작이 가능한 시간
-    public float m_fAttack1_3DurationTime = 1f;        // '기본 공격3' 이후의 공격은 '기본 공격1'로 되돌아간다. 이후 추가될 '기본 공격4' 등을 위해 설정해둔 임의의 값
+    float m_fAttack_DurationTime;                      // 연계 공격 가능 시간 계산 변수
+    float m_fAttackDelay_DurationTime;                 // 플레이어 가변 공격 속도
+    float m_fAttack1_1DurationTime = 0.6f;      // '기본 공격1' 이후 '기본 공격2' 동작이 가능한 시간
+    float m_fAttack1_2DurationTime = 0.4f;      // '기본 공격2' 이후 '기본 공격3' 동작이 가능한 시간
+    float m_fAttack1_3DurationTime = 1f;        // '기본 공격3' 이후의 공격은 '기본 공격1'로 되돌아간다. 이후 추가될 '기본 공격4' 등을 위해 설정해둔 임의의 값
+
+    Coroutine m_cProcess_Attacked;      // 플레이어 피격 계산 코루틴
+    Coroutine m_cProcess_KnockBack;     // 플레이어 넉백 계산 코루틴
+    float m_fAttackedToIdleTime = 0.3f; // 플레이어 피격 후 딜레이
     
-    public bool m_bRoll; // 구르기 가능 여부 (m_bRoll == true : 구르기 가능 / m_bRoll == false : 구르기 불가능)
+    public bool m_bRoll;                       // 구르기 가능 여부 (m_bRoll == true : 구르기 가능 / m_bRoll == false : 구르기 불가능)    
+    Coroutine m_cProcess_Roll_Cooltime = null; // 구르기 쿨타임 계산 코루틴
+    Coroutine m_cProcess_RollToIdle = null;    // 구르기 지속시간 계산 코루틴
+    float m_fCooltime_Roll = 3;                // 구르기 쿨타임
 
-    public bool m_bPower; // 플레이어 피격 가능 여부 (m_bPower == true : 플레이어 피격 불가능 / m_bPower == false : 플레이어 피격 가능)
+    Coroutine m_cProcess_Power = null; // 플레이어 피격 가능 시간 계산 코루틴
+    public bool m_bPower;              // 플레이어 피격 가능 여부 (m_bPower == true : 플레이어 피격 불가능 / m_bPower == false : 플레이어 피격 가능)
 
-    public bool m_bGoaway;               // 놓아주기 가능 여부 (m_bGoaway == true : 놓아주기 가능 / m_bGoaway == false : 놓아주기 불가능)
-    public bool m_bGoaway_Success;       // 놓아주기 성공 여부 (m_bGoaway_Success == true : 놓아주기 성공 / m_bGoaway_Success == false : 놓아주기 실패)
-    public float m_fGoaway_Cooltime;     // 놓아주기 쿨타임
-    public float m_fGoaway_Durationtime; // 놓아주기 시전 시간
+    Coroutine m_cProcess_Goaway_Cooltime = null; // 놓아주기 쿨타임 계산 코루틴
+    Coroutine m_cProcess_Goaway_Duration = null; // 놓아주기 시전시간 계산 코루틴
+    public bool m_bGoaway;                       // 놓아주기 가능 여부 (m_bGoaway == true : 놓아주기 가능 / m_bGoaway == false : 놓아주기 불가능)
+    public bool m_bGoaway_Success;               // 놓아주기 성공 여부 (m_bGoaway_Success == true : 놓아주기 성공 / m_bGoaway_Success == false : 놓아주기 실패)
+    public float m_fGoaway_Cooltime = 10f;       // 놓아주기 쿨타임
+    public float m_fGoaway_Durationtime = 3f;    // 놓아주기 시전시간
 
     
     public void InitialSet()
@@ -67,19 +78,13 @@ public class Player_Move : MonoBehaviour
         m_bMove = true;
 
         m_bRoll = true;
-        m_fCooltime_Roll = 3f; // 3
 
         m_bPower = false;
 
         m_bGoaway = true;
-        m_fGoaway_Cooltime = 10f; // 10
-        m_fGoaway_Durationtime = 3f; // 3
         m_bGoaway_Success = false;
+    }
 
-        m_fAttackedToIdleTime = 0.3f;
-}
-
-    float m_fMoveRate;
     // 플레이어 움직임 - FSM 내부로 옮길 필요.
     public E_PLAYER_MOVE_STATE Move(int h, int v, int fspeed)
     {
@@ -99,14 +104,14 @@ public class Player_Move : MonoBehaviour
 
                 if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.IDLE || m_ePlayerMoveState == E_PLAYER_MOVE_STATE.RUN)
                 {
-                    m_rRigdbody.MovePosition(this.gameObject.transform.position + (m_vInputDir * fspeed * 0.016f * 0.01f)); // 0.015
                     m_fMoveRate = 1f;
+                    m_rRigdbody.MovePosition(this.gameObject.transform.position + (m_vInputDir * fspeed * 0.016f * 0.01f * m_fMoveRate)); // 0.015
                     //Player_Total.Instance.CameraMove(this.gameObject.transform.position + (m_vInputDir * fspeed * 0.05f * 0.01f));
                 }
                 if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.ROLL)
                 {
-                    m_rRigdbody.MovePosition(this.gameObject.transform.position + m_vInputDir * fspeed * 0.016f * 0.01f * 1.5f);
                     m_fMoveRate = 1.5f;
+                    m_rRigdbody.MovePosition(this.gameObject.transform.position + m_vInputDir * fspeed * 0.016f * 0.01f * m_fMoveRate);
                     //Player_Total.Instance.CameraMove(this.gameObject.transform.position + m_vInputDir * fspeed * 0.05f * 0.01f * 1.5f);
                 }
             }
@@ -303,9 +308,7 @@ public class Player_Move : MonoBehaviour
         m_cProcess_Attack_Duration = StartCoroutine(ProcessAttack1_3());
         m_cProcess_AttackToIdle_Duration = StartCoroutine(ProcessAttackToIdle(0.6f));//0.6f
     }
-
-    Coroutine m_cProcess_Attacked = null;
-    Coroutine m_cProcess_Power = null;
+    
     public bool Attacked(float time, float speed, Vector3 dir)
     {
         if (m_bPower == false)
@@ -330,7 +333,7 @@ public class Player_Move : MonoBehaviour
         }
         return false;
     }
-    float m_fAttackedToIdleTime;
+
     IEnumerator ProcessAttackedToIdle()
     {
         m_bMove = false;
@@ -354,7 +357,6 @@ public class Player_Move : MonoBehaviour
         if (m_cProcess_KnockBack == null)
             m_cProcess_KnockBack = StartCoroutine(ProcessKnockBack(time, fspeed * 0.3f, dir));
     }
-    Coroutine m_cProcess_KnockBack;
     IEnumerator ProcessKnockBack(float time, float fspeed, Vector3 dir)
     {
         float ftime = time;
@@ -519,7 +521,6 @@ public class Player_Move : MonoBehaviour
             m_cProcess_Roll_Cooltime = null;
         m_bRoll = true;
     }
-    Coroutine m_cProcess_Roll_Cooltime = null;
     IEnumerator ProcessRollToIdle()
     {
         m_bPower = true;
@@ -529,8 +530,6 @@ public class Player_Move : MonoBehaviour
         m_bPower = false;
         m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.IDLE);
     }
-    Coroutine m_cProcess_RollToIdle = null;
-    public float m_fCooltime_Roll;
 
     // 플레이어 놓아주기  - FSM 내부로 옮길 필요.
     public void Goaway()
@@ -554,7 +553,7 @@ public class Player_Move : MonoBehaviour
             m_cProcess_Goaway_Cooltime = null;
         m_bGoaway = true;
     }
-    Coroutine m_cProcess_Goaway_Cooltime = null;
+
     IEnumerator ProcessGoawayToIdle()
     {
         m_bMove = false;
@@ -568,7 +567,6 @@ public class Player_Move : MonoBehaviour
         m_bGoaway_Success = false;
     }
     // Goaway 키다운 지속시간
-    Coroutine m_cProcess_Goaway_Duration = null;
     public void Cancel_Goaway()
     {
         // GOAWAY 기능 취소
