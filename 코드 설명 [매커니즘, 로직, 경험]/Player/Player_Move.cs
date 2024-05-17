@@ -359,7 +359,7 @@ public class Player_Move : MonoBehaviour
         m_bMove = false;
         yield return new WaitForSeconds(m_fAttackedToIdleTime); // 넉백이 지속되는 0.3초 동안 특정 동작을 제외하고 플레이어는 행동할 수 없다.
         m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.IDLE);
-        if (m_cProcess_KnockBack == null && m_cProcess_AttackToIdle_Duration == null) // 만약 넉백이 종료될 시점에 플레이어가 여전히 피격된 상태일때는 해당하는 상태의 IEnumerator 함수에서 플레이어 움직임 관련 변수(m_bMove)가 처리된다.
+        if (m_cProcess_KnockBack == null && m_cProcess_AttackToIdle_Duration == null) // 만약 피격 후 딜레이가 종료될 시점에 플레이어가 여전히 넉백된 상태일때는 해당하는 상태의 IEnumerator 함수에서 플레이어 움직임 관련 변수(m_bMove)가 처리된다.
             m_bMove = true;
         m_cProcess_Attacked = null;
     }
@@ -383,11 +383,15 @@ public class Player_Move : MonoBehaviour
             m_rRigdbody.MovePosition(this.gameObject.transform.position + dir * fspeed * 0.016f * 0.01f * 1.5f);
             Player_Total.Instance.CameraMove(this.gameObject.transform.position + dir * fspeed * 0.05f * 0.01f);
         }
-        m_bMove = true;
+        m_bMove = true; // 넉백 시간이 종료되면 공격 후 딜레이, 피격 후 딜레이는 취소되며 플레이어는 다른 동작을 수행할 수 있다.
         m_cProcess_KnockBack = null;
     }
 
-    // 플레이어 사망  - FSM 내부로 옮길 필요.
+    //
+    // 각종 딜레이의 종료 우선순위는 1. 넉백 후 딜레이 > 2. 구르기(딜레이 캔슬 기능) > 3. 피격 후 딜레이 < 4. 공격 후 딜레이 순이다. 우선순위가 높은 딜레이가 종료된다면 지속중인 하위 딜레이는 모두 취소된다.
+    //
+    
+    // 사망 함수. 모든 비동기 함수가 종료된다.
     public void Death()
     {
         if (m_cProcess_KnockBack != null)
@@ -444,7 +448,6 @@ public class Player_Move : MonoBehaviour
         m_bMove = false;
         m_bPower = true;
         m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.DEATH);
-        //StopAllCoroutines();
     } 
 
     public void ReTry()
