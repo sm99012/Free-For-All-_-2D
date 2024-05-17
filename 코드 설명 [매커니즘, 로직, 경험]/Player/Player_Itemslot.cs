@@ -64,7 +64,7 @@ public class Player_Itemslot : MonoBehaviour
     // return -1 : 인벤토리에 빈칸이 없어 아이템을 획득하지 못함.
     // 소비아이템 획득 매커니즘 : 중복 아이템 획득
     // 1. 획득할 소비아이템과 동일한 소비아이템이 이미 인벤토리에 존재 하는지 판단한다.
-    // 2. 아이템 보유 최대치(m_nMaxCount)보다 적게 가지고 있는지 판단한다. (Have = true / false)
+    // 2. 아이템 보유 최대치(m_nMaxCount)보다 적게 가지고 있는지 판단한다. (Have = true / Have = false)
     // Have == true : 인벤토리에 이미 존재하는 소비아이템의 배열 넘버의 개수에 +1을 해준다.
     // Have == false : 인벤토리의 빈칸에 소비아이템을 할당한다.
     public int Get_Item_Use(Item_Use item)
