@@ -70,14 +70,13 @@ public class Player_Move : MonoBehaviour
         m_rRigdbody = this.gameObject.GetComponent<Rigidbody2D>();
         
         m_vScale = m_vRightPos;
+        m_bMove = true;
 
         m_bAttack = true;
 
         m_bAttack1_1 = true;
         m_bAttack1_2 = false;
         m_bAttack1_3 = false;
-
-        m_bMove = true;
 
         m_bRoll = true;
 
@@ -185,22 +184,19 @@ public class Player_Move : MonoBehaviour
         {
             if (m_bAttack == true)
             {
-                if (m_bAttack1_1 == true) // '기본 공격1' 동작 수행
+                if (m_bAttack1_1 == true) // 플레이어 동작 FSM을 통해 '기본 공격1' 동작 수행
                 {
                     m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.ATTACK1_1);
-                    //Debug.Log("Player Attack1_1");
                     return 1;
                 }
-                else if (m_bAttack1_2 == true) // '기본 공격2' 동작 수행
+                else if (m_bAttack1_2 == true) // 플레이어 동작 FSM을 통해 '기본 공격2' 동작 수행
                 {
                     m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.ATTACK1_2);
-                    //Debug.Log("Player Attack1_2");
                     return 2;
                 }
-                else if (m_bAttack1_3 == true) // '기본 공격3' 동작 수행
+                else if (m_bAttack1_3 == true) // 플레이어 동작 FSM을 통해 '기본 공격3' 동작 수행
                 {
                     m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.ATTACK1_3);
-                    //Debug.Log("Player Attack1_3");
                     return 3;
                 }
             }
@@ -268,13 +264,16 @@ public class Player_Move : MonoBehaviour
         m_bAttack1_3 = false;
     }
     
-    // 공격 후 딜레이 계산 함수
+    // 공격 후 딜레이 계산 함수.
+    // 기본 공격의 종류에 따라 각각 다른 딜레이를 가진다.('기본 공격1' : 0.4초 / '기본 공격2' : 0.4초 / '기본 공격3' : 0.6초)
+    // 해당 딜레이 동안 플레이어는 구르기를 제외한 모든 능동적 동작을 수행할 수 없다.
+    // 해당 딜레이 동안 수행 가능한 동작 : { ATTACKED(피격), DEATH(사망), ROLL(구르기) } / 수행 불가능한 동작 : { IDLE(가만히 있기), RUN(달리기), ATTACK1_1(기본 공격1), ATTACK1_2(기본 공격2), ATTACK1_3(기본 공격3), GOAWAY(놓아주기), CONVERSATION(상호작용) }
     IEnumerator ProcessAttackToIdle(float ftime)
     {
-        m_bMove = false;
+        m_bMove = false; 
         yield return new WaitForSeconds(ftime);
         m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.IDLE);
-        if (m_cProcess_KnockBack == null && m_cProcess_Attacked == null)
+        if (m_cProcess_KnockBack == null && m_cProcess_Attacked == null) // 만약 공격 후 딜레이가 종료될 시점에 플레이어가 넉백 및 피격된 상태일때는 해당하는 상태의 IEnumerator 함수에서 플레이어 움직임 관련 변수(m_bMove)가 처리된다.
             m_bMove = true;
         m_cProcess_AttackToIdle_Duration = null;
     }
@@ -292,24 +291,27 @@ public class Player_Move : MonoBehaviour
         if (m_cProcess_AttackDelay_Duration != null)
             m_cProcess_AttackDelay_Duration = null;
     }
-    
+
+    // '기본 공격1' 동작 수행
     void Attack1_1()
     {
         m_cProcess_Attack_Duration = null;
         m_cProcess_Attack_Duration = StartCoroutine(ProcessAttack1_1());
-        m_cProcess_AttackToIdle_Duration = StartCoroutine(ProcessAttackToIdle(0.4f));//0.3f
+        m_cProcess_AttackToIdle_Duration = StartCoroutine(ProcessAttackToIdle(0.4f));
     }
+    // '기본 공격2' 동작 수행
     void Attack1_2()
     {
         m_cProcess_Attack_Duration = null;
         m_cProcess_Attack_Duration = StartCoroutine(ProcessAttack1_2());
-        m_cProcess_AttackToIdle_Duration = StartCoroutine(ProcessAttackToIdle(0.4f));//0.3f
+        m_cProcess_AttackToIdle_Duration = StartCoroutine(ProcessAttackToIdle(0.4f));
     }
+    // '기본 공격3' 동작 수행
     void Attack1_3()
     {
         m_cProcess_Attack_Duration = null;
         m_cProcess_Attack_Duration = StartCoroutine(ProcessAttack1_3());
-        m_cProcess_AttackToIdle_Duration = StartCoroutine(ProcessAttackToIdle(0.6f));//0.6f
+        m_cProcess_AttackToIdle_Duration = StartCoroutine(ProcessAttackToIdle(0.6f));
     }
     
     public bool Attacked(float time, float speed, Vector3 dir)
