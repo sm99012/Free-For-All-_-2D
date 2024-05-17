@@ -25,13 +25,12 @@ public class Player_Move : MonoBehaviour
     public E_PLAYER_MOVE_STATE m_ePlayerMoveState = E_PLAYER_MOVE_STATE.IDLE;
 
     public bool m_bAttack;    // (m_bAttack == true : 플레이어 공격 가능 / m_bAttack == false : 플레이어 공격 불가능)
-    // 연계 공격
-    public bool m_bAttack1_1; // (m_bAttack1_1 == true : 기본 공격 가능)
-    public bool m_bAttack1_2;
-    public bool m_bAttack1_3;
+    // 기본 공격(연계 공격)
+    public bool m_bAttack1_1; // (m_bAttack1_1 == true : 기본 공격1 가능)
+    public bool m_bAttack1_2; // (m_bAttack1_2 == true : 기본 공격2 가능)
+    public bool m_bAttack1_3; // (m_bAttack1_3 == true : 기본 공격3 가능)
 
-    // 구르기: 무적판정. 이동은 가능
-    public bool m_bRoll;
+    public bool m_bRoll; // 구르기 가능 여부 (m_bRoll == true : 구르기 가능 / m_bRoll == false : 구르기 불가능)
 
     // 무적
     public bool m_bPower;
