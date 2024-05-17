@@ -25,40 +25,42 @@ public class Player_Move : MonoBehaviour
     public enum E_PLAYER_MOVE_STATE { IDLE, RUN, ATTACK1_1, ATTACK1_2, ATTACK1_3, ATTACKED, DEATH, ROLL, GOAWAY, CONVERSATION, NULL }
     public E_PLAYER_MOVE_STATE m_ePlayerMoveState = E_PLAYER_MOVE_STATE.IDLE;
 
-    public bool m_bAttack;    // (m_bAttack == true : 플레이어 공격 가능 / m_bAttack == false : 플레이어 공격 불가능)
     // 기본 공격(연계 공격)
+    public bool m_bAttack;    // (m_bAttack == true : 플레이어 공격 가능 / m_bAttack == false : 플레이어 공격 불가능)
     public bool m_bAttack1_1; // (m_bAttack1_1 == true : '기본 공격1' 가능)
     public bool m_bAttack1_2; // (m_bAttack1_2 == true : '기본 공격2' 가능)
     public bool m_bAttack1_3; // (m_bAttack1_3 == true : '기본 공격3' 가능)
     // 연계 공격 허용 지속시간
     Coroutine m_cProcess_Attack_Duration = null;       // 연계 공격 가능 시간 계산 코루틴
     Coroutine m_cProcess_AttackToIdle_Duration = null; // 공격 후 딜레이 계산 코루틴
-    Coroutine m_cProcess_AttackDelay_Duration = null;  // 플레이어 공격속도 계산 코루틴(다음 공격까지 기다려야하는 시간 계산)
+    Coroutine m_cProcess_AttackDelay_Duration = null;  // 플레이어 공격 속도 계산 코루틴(다음 공격까지 기다려야하는 시간 계산)
     float m_fAttack_DurationTime;                      // 연계 공격 가능 시간 계산 변수
     float m_fAttackDelay_DurationTime;                 // 플레이어 가변 공격 속도
     float m_fAttack1_1DurationTime = 0.6f;      // '기본 공격1' 이후 '기본 공격2' 동작이 가능한 시간
     float m_fAttack1_2DurationTime = 0.4f;      // '기본 공격2' 이후 '기본 공격3' 동작이 가능한 시간
     float m_fAttack1_3DurationTime = 1f;        // '기본 공격3' 이후의 공격은 '기본 공격1'로 되돌아간다. 이후 추가될 '기본 공격4' 등을 위해 설정해둔 임의의 값
 
-    Coroutine m_cProcess_Attacked;      // 플레이어 피격 계산 코루틴
-    Coroutine m_cProcess_KnockBack;     // 플레이어 넉백 계산 코루틴
-    float m_fAttackedToIdleTime = 0.3f; // 플레이어 피격 후 딜레이
-    
+    // 구르기
     public bool m_bRoll;                       // 구르기 가능 여부 (m_bRoll == true : 구르기 가능 / m_bRoll == false : 구르기 불가능)    
     Coroutine m_cProcess_Roll_Cooltime = null; // 구르기 쿨타임 계산 코루틴
     Coroutine m_cProcess_RollToIdle = null;    // 구르기 지속시간 계산 코루틴
     float m_fCooltime_Roll = 3;                // 구르기 쿨타임
+    
+    // 피격
+    Coroutine m_cProcess_Attacked;      // 플레이어 피격 계산 코루틴
+    Coroutine m_cProcess_KnockBack;     // 플레이어 넉백 계산 코루틴
+    float m_fAttackedToIdleTime = 0.3f; // 플레이어 피격 후 딜레이
+    Coroutine m_cProcess_Power = null;  // 플레이어 피격 가능 시간 계산 코루틴
+    public bool m_bPower;               // 플레이어 피격 가능 여부 (m_bPower == true : 플레이어 피격 불가능 / m_bPower == false : 플레이어 피격 가능)
+                                        // m_bPower 변수는 '피격 후 피격 불가 상태 계산', '구르기 지속 중 피격 불가 상태 계산'에 사용된다.
 
-    Coroutine m_cProcess_Power = null; // 플레이어 피격 가능 시간 계산 코루틴
-    public bool m_bPower;              // 플레이어 피격 가능 여부 (m_bPower == true : 플레이어 피격 불가능 / m_bPower == false : 플레이어 피격 가능)
-
+    // 놓아주기
     Coroutine m_cProcess_Goaway_Cooltime = null; // 놓아주기 쿨타임 계산 코루틴
-    Coroutine m_cProcess_Goaway_Duration = null; // 놓아주기 시전시간 계산 코루틴
+    Coroutine m_cProcess_Goaway_Duration = null; // 놓아주기 시전 시간 계산 코루틴
     public bool m_bGoaway;                       // 놓아주기 가능 여부 (m_bGoaway == true : 놓아주기 가능 / m_bGoaway == false : 놓아주기 불가능)
     public bool m_bGoaway_Success;               // 놓아주기 성공 여부 (m_bGoaway_Success == true : 놓아주기 성공 / m_bGoaway_Success == false : 놓아주기 실패)
     public float m_fGoaway_Cooltime = 10f;       // 놓아주기 쿨타임
-    public float m_fGoaway_Durationtime = 3f;    // 놓아주기 시전시간
-
+    public float m_fGoaway_Durationtime = 3f;    // 놓아주기 시전 시간
     
     public void InitialSet()
     {
@@ -85,7 +87,8 @@ public class Player_Move : MonoBehaviour
         m_bGoaway_Success = false;
     }
 
-    // 플레이어 움직임 - FSM 내부로 옮길 필요.
+    // 플레이어 이동 관련 함수
+    // Player_Total.cs에서 키입력을 받고 매개변수 h(horizontal move value), v(vertical move value), fspeed(플레이어 이동속도)
     public E_PLAYER_MOVE_STATE Move(int h, int v, int fspeed)
     {
         if (m_bMove == true)
