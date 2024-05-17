@@ -11,8 +11,8 @@ public class Player_Move : MonoBehaviour
     public Rigidbody2D m_rRigdbody;
 
     Vector3 m_vScale;    // 플레이어 이동 방향
-    Vector3 m_vRightPos; 
-    Vector3 m_vLeftPos;
+    Vector3 m_vRightPos = new Vector3(1, 1, 1);
+    Vector3 m_vLeftPos = new Vector3(-1, 1, 1);
     Vector3 m_vInputDir; // 키보드로부터 입력된 수평ㆍ수직 이동에따른 방향 벡터
 
     public bool m_bMove; // (m_bMove == true : 플레이어 이동 가능 / m_bMove == false : 플레이어 이동 불가능)
@@ -26,20 +26,27 @@ public class Player_Move : MonoBehaviour
 
     public bool m_bAttack;    // (m_bAttack == true : 플레이어 공격 가능 / m_bAttack == false : 플레이어 공격 불가능)
     // 기본 공격(연계 공격)
-    public bool m_bAttack1_1; // (m_bAttack1_1 == true : 기본 공격1 가능)
-    public bool m_bAttack1_2; // (m_bAttack1_2 == true : 기본 공격2 가능)
-    public bool m_bAttack1_3; // (m_bAttack1_3 == true : 기본 공격3 가능)
-
+    public bool m_bAttack1_1; // (m_bAttack1_1 == true : '기본 공격1' 가능)
+    public bool m_bAttack1_2; // (m_bAttack1_2 == true : '기본 공격2' 가능)
+    public bool m_bAttack1_3; // (m_bAttack1_3 == true : '기본 공격3' 가능)
+    // 연계 공격 허용 지속시간
+    Coroutine m_cProcess_Attack_Duration = null;       // 연계 공격 가능 시간 계산 코루틴
+    Coroutine m_cProcess_AttackToIdle_Duration = null; // 공격 후 딜레이 계산 코루틴
+    Coroutine m_cProcess_AttackDelay_Duration = null;  // 플레이어 공격속도 계산 코루틴(다음 공격까지 기다려야하는 시간 계산)
+    float m_fAttack_DurationTime;
+    float m_fAttackDelay_DurationTime;
+    public float m_fAttack1_1DurationTime = 0.6f;      // '기본 공격1' 이후 '기본 공격2' 동작이 가능한 시간
+    public float m_fAttack1_2DurationTime = 0.4f;      // '기본 공격2' 이후 '기본 공격3' 동작이 가능한 시간
+    public float m_fAttack1_3DurationTime = 1f;        // '기본 공격3' 이후의 공격은 '기본 공격1'로 되돌아간다. 이후 추가될 '기본 공격4' 등을 위해 설정해둔 임의의 값
+    
     public bool m_bRoll; // 구르기 가능 여부 (m_bRoll == true : 구르기 가능 / m_bRoll == false : 구르기 불가능)
 
-    // 무적
-    public bool m_bPower;
+    public bool m_bPower; // 플레이어 피격 가능 여부 (m_bPower == true : 플레이어 피격 불가능 / m_bPower == false : 플레이어 피격 가능)
 
-    // Goaway
-    public bool m_bGoaway;
-    public bool m_bGoaway_Success;
-    public float m_fGoaway_Cooltime;
-    public float m_fGoaway_Durationtime;
+    public bool m_bGoaway;               // 놓아주기 가능 여부 (m_bGoaway == true : 놓아주기 가능 / m_bGoaway == false : 놓아주기 불가능)
+    public bool m_bGoaway_Success;       // 놓아주기 성공 여부 (m_bGoaway_Success == true : 놓아주기 성공 / m_bGoaway_Success == false : 놓아주기 실패)
+    public float m_fGoaway_Cooltime;     // 놓아주기 쿨타임
+    public float m_fGoaway_Durationtime; // 놓아주기 시전 시간
 
     
     public void InitialSet()
@@ -48,10 +55,7 @@ public class Player_Move : MonoBehaviour
         m_tTransform = this.gameObject.GetComponent<Transform>();
         m_aAnimator = this.gameObject.GetComponent<Animator>();
         m_rRigdbody = this.gameObject.GetComponent<Rigidbody2D>();
-
-        m_vRightPos = new Vector3(1, 1, 1);
-        m_vLeftPos = new Vector3(-1, 1, 1);
-
+        
         m_vScale = m_vRightPos;
 
         m_bAttack = true;
@@ -73,10 +77,6 @@ public class Player_Move : MonoBehaviour
         m_bGoaway_Success = false;
 
         m_fAttackedToIdleTime = 0.3f;
-
-        m_fAttack1_1DurationTime = 0.6f; // 0.6f 최소 0.4f
-        m_fAttack1_2DurationTime = 0.4f; // 0.4f
-        m_fAttack1_3DurationTime = 1f; // 1.0f
 }
 
     float m_fMoveRate;
@@ -201,26 +201,14 @@ public class Player_Move : MonoBehaviour
 
         return 0;
     }
-    // 연계공격 허용 지속시간
-    Coroutine m_cProcess_Attack_Duration = null;
-    Coroutine m_cProcess_AttackToIdle_Duration = null;
-    Coroutine m_cProcess_AttackDelay_Duration = null;
-    float m_fAttack_DurationTime;
-    float m_fAttackDelay_DurationTime;
-    public float m_fAttack1_1DurationTime;// = 0.4f; // 0.4f 최소 0.4f
-    public float m_fAttack1_2DurationTime;// = 0.4f; // 0.4f
-    public float m_fAttack1_3DurationTime;// = 1f; // 1.0f
-    // 플레이어 공격속도(딜레이)
-    public float m_fAttackDelayTime;
 
     public void SetAttackSpeed(float atkspd)
     {
-        m_fAttackDelayTime = atkspd;
+          m_fAttackDelay_DurationTime
     }
 
     IEnumerator ProcessAttackDelay()
     {
-        m_fAttackDelay_DurationTime = m_fAttackDelayTime;
         m_bAttack = false;
         while (m_fAttackDelay_DurationTime > 0)
         {
