@@ -10,7 +10,7 @@ public class Player_Move : MonoBehaviour
     public Animator m_aAnimator;
     public Rigidbody2D m_rRigdbody;
     
-    // 플레이어가 착용한 무기분류에 따라 상이한 플레이어 애니메이션을 적용하기 위한 FSM
+    // 플레이어 착용 무기별 애니메이션 FSM. 플레이어가 착용한 무기분류에 따라 상이한 플레이어 애니메이션을 적용하기 위한 FSM
     public enum E_PLAYER_WEAPON_STATE { SWORD(검), AXE(도끼), KNIFE(단검) }
     public E_PLAYER_WEAPON_STATE m_ePlayerWeaponState;
     // 플레이어 동작 FSM
@@ -478,6 +478,7 @@ public class Player_Move : MonoBehaviour
 
     // 플레이어 구르기(return true : 구르기 시전 성공 / return false : 구르기 시전 실패)
     // Player_Total.cs에서 키입력(S)을 통해 함수 실행. 플레이어의 구르기 동작 수행
+    // 각종 딜레이 캔슬, 회피, 빠른 이동 기능
     public bool Roll()
     {
         if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.IDLE || m_ePlayerMoveState == E_PLAYER_MOVE_STATE.RUN || 
@@ -553,9 +554,9 @@ public class Player_Move : MonoBehaviour
 
     // 플레이어 놓아주기
     // Player_Total.cs에서 키입력(D)을 통해 함수 실행. 플레이어의 놓아주기 동작 수행
-    // 놓아주기 시전 시간 동안 플레이어 행동 불가.
-    // 해당 딜레이 동안 수행 가능한 동작 : { ATTACKED(피격), DEATH(사망), ROLL(구르기) }
-    // 해당 딜레이 동안 수행 불가능한 동작 : { IDLE(가만히 있기), RUN(달리기), ATTACK1_1(기본 공격1), ATTACK1_2(기본 공격2), ATTACK1_3(기본 공격3), GOAWAY(놓아주기), CONVERSATION(상호작용) }
+    // 놓아주기 시전 시간(3초) 동안 특정 동작을 제외한 동작 불가. 3초 이후 플레이어 주변의 몬스터 퇴치
+    // 놓아주기 시전 시간 동안 수행 가능한 동작 : { ATTACKED(피격), DEATH(사망), ROLL(구르기) }
+    // 놓아주기 시전 시간 동안 수행 불가능한 동작 : { IDLE(가만히 있기), RUN(달리기), ATTACK1_1(기본 공격1), ATTACK1_2(기본 공격2), ATTACK1_3(기본 공격3), GOAWAY(놓아주기), CONVERSATION(상호작용) }
     public void Goaway()
     {
         if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.IDLE || m_ePlayerMoveState == E_PLAYER_MOVE_STATE.RUN)
@@ -589,10 +590,9 @@ public class Player_Move : MonoBehaviour
         yield return null;
         m_bGoaway_Success = false;
     }
-    // Goaway 키다운 지속 시간
+    // 놓아주기 취소
     public void Cancel_Goaway()
     {
-        // GOAWAY 기능 취소
         if (m_cProcess_Goaway_Duration != null)
         {
             StopCoroutine(m_cProcess_Goaway_Duration);
@@ -601,7 +601,7 @@ public class Player_Move : MonoBehaviour
         }
     }
 
-    // Conversation
+    // 플레이어와 NPC간의 상호작용(대화, 퀘스트, 거래)
     // Player_Total.cs에서 키입력(SPACE)을 통해 함수 실행. 플레이어와 NPC간의 상호작용 동작 수행
     public bool Conversation()
     {
@@ -614,7 +614,22 @@ public class Player_Move : MonoBehaviour
             return false;
     }
 
-    // 무기 타입별 Animation 적용
+    // 플레이어 장비 변경 시 연계 공격 초기화 함수
+    public void Equip()
+    {
+        if (m_cProcess_Attack_Duration != null)
+        {
+            StopCoroutine(m_cProcess_Attack_Duration);
+            m_cProcess_Attack_Duration = null;
+        }
+
+        m_bAttack1_1 = true;
+        m_bAttack1_2 = false;
+        m_bAttack1_3 = false;
+    }
+
+    // FSM 관리
+    // 플레이어 착용 무기별 애니메이션 FSM 변경 함수
     public void SetAnimation_Weapon(E_ITEM_EQUIP_MAINWEAPON_TYPE iemt)
     {
         switch (iemt)
@@ -637,23 +652,7 @@ public class Player_Move : MonoBehaviour
                 } break;
         }
     }
-
-    // 장비 변경 시 연계 공격 초기화.
-    public void Equip()
-    {
-        if (m_cProcess_Attack_Duration != null)
-        {
-            StopCoroutine(m_cProcess_Attack_Duration);
-            m_cProcess_Attack_Duration = null;
-        }
-
-        m_bAttack1_1 = true;
-        m_bAttack1_2 = false;
-        m_bAttack1_3 = false;
-    }
-
-    // FSM 관리
-    // PlayerWeaponState
+    // 애니메이션 관리
     public E_PLAYER_WEAPON_STATE SetPlayerWeaponState(E_PLAYER_WEAPON_STATE pws)
     {
         switch(pws)
@@ -684,21 +683,9 @@ public class Player_Move : MonoBehaviour
                 } break;
         }
 
+        // 플레이어 무기 변경 시 자연스러운 애니메이션 교체. 달리기를 하는 도중에 애니메이션이 바뀌면 오른발이 앞으로 나갈 차례인데 다시 왼발이 나가는등의 애니메이션이 부자연스러운 문제 해결
         if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.RUN)
         {
-            //Debug.Log(m_aAnimator.GetParameter(12).name);
-            //Debug.Log(m_aAnimator.GetParameter(12).defaultFloat);
-
-            //RuntimeAnimatorController rac = m_aAnimator.runtimeAnimatorController;
-            //Debug.Log(rac.animationClips.Length);
-            //for (int i = 0; i < rac.animationClips.Length; i++)
-            //{
-            //    Debug.Log(i + " / " + rac.animationClips[i].name + " / " + rac.animationClips[i].length);
-            //}
-
-            //Debug.Log(m_aAnimator.GetCurrentAnimatorStateInfo(1 << LayerMask.NameToLayer("Player Base")).length);
-            //Debug.Log(m_aAnimator.GetCurrentAnimatorStateInfo(0).length);
-
             float startingtime;
             RuntimeAnimatorController rac = m_aAnimator.runtimeAnimatorController;
 
@@ -732,24 +719,13 @@ public class Player_Move : MonoBehaviour
                     //Debug.Log(m_aAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + " / " + startingtime);
                 }
             }
-            //if (m_aAnimator.GetBool("Equip_Knife") && m_aAnimator.GetCurrentAnimatorStateInfo(0).IsName("Knife_Run"))
-            //{
-            //    startingtime = m_aAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
-            //    startingtime = startingtime % 1.3f;
-            //    m_aAnimator.Play("Knife_Run", 0, startingtime);
-            //}
-            //if (m_aAnimator.GetBool("Axe_Knife") && m_aAnimator.GetCurrentAnimatorStateInfo(0).IsName("Axe_Run"))
-            //{
-            //    startingtime = m_aAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
-            //    startingtime = startingtime % 1.3f;
-            //    m_aAnimator.Play("Axe_Run", 0, startingtime);
-            //}
         }
 
         return pws;
     }
 
-    // PlayerMoveState
+    // 플레이어 동작 FSM 변경 함수
+    // 플레이어 동작 FSM의 상태는 무조건 아래 FSM 상태 변경 함수를 통해서 변경된다. 상태 변경에 따른 적절한 조치(함수 실행, 애니메이션 변경)가 이루어 진다.
     public E_PLAYER_MOVE_STATE SetPlayerMoveState(E_PLAYER_MOVE_STATE pms)
     {
         switch (pms)
@@ -774,14 +750,16 @@ public class Player_Move : MonoBehaviour
                 {
                     if (m_ePlayerMoveState != pms)
                     {
+                        // 플레이어 공격 속도 계산 초기화
                         if (m_cProcess_AttackDelay_Duration != null)
-                        {
                             StopCoroutine(m_cProcess_AttackDelay_Duration);
-                        }
+                        // 플레이어 공격 속도 계산
                         m_cProcess_AttackDelay_Duration = StartCoroutine(ProcessAttackDelay());
+                        // 연계 공격 가능 시간 초기화
                         if (m_cProcess_Attack_Duration != null)
                             StopCoroutine(m_cProcess_Attack_Duration);
-                        SetAnimatorParameters("Attack1_1");
+                        SetAnimatorParameters("Attack1_1"); // 공격 판정에 관련된 처리는 해당 애니메이션의 특정 프레임에서 이벤트를 호출하여 처리
+                        // 공격 후 딜레이 계산, 연계 공격 가능 시간 계산
                         Attack1_1();
                     }
                 }
@@ -790,14 +768,16 @@ public class Player_Move : MonoBehaviour
                 {
                     if (m_ePlayerMoveState != pms)
                     {
+                        // 플레이어 공격 속도 계산 초기화
                         if (m_cProcess_AttackDelay_Duration != null)
-                        {
                             StopCoroutine(m_cProcess_AttackDelay_Duration);
-                        }
+                        // 플레이어 공격 속도 계산
                         m_cProcess_AttackDelay_Duration = StartCoroutine(ProcessAttackDelay());
+                        // 연계 공격 가능 시간 초기화
                         if (m_cProcess_Attack_Duration != null)
                             StopCoroutine(m_cProcess_Attack_Duration);
-                        SetAnimatorParameters("Attack1_2");
+                        SetAnimatorParameters("Attack1_2"); // 공격 판정에 관련된 처리는 해당 애니메이션의 특정 프레임에서 이벤트를 호출하여 처리
+                        // 공격 후 딜레이 계산, 연계 공격 가능 시간 계산
                         Attack1_2();
                     }
                 }
@@ -806,14 +786,16 @@ public class Player_Move : MonoBehaviour
                 {
                     if (m_ePlayerMoveState != pms)
                     {
+                        // 플레이어 공격 속도 계산 초기화
                         if (m_cProcess_AttackDelay_Duration != null)
-                        {
                             StopCoroutine(m_cProcess_AttackDelay_Duration);
-                        }
+                        // 플레이어 공격 속도 계산
                         m_cProcess_AttackDelay_Duration = StartCoroutine(ProcessAttackDelay());
+                        // 연계 공격 가능 시간 초기화
                         if (m_cProcess_Attack_Duration != null)
                             StopCoroutine(m_cProcess_Attack_Duration);
-                        SetAnimatorParameters("Attack1_3");
+                        SetAnimatorParameters("Attack1_3"); // 공격 판정에 관련된 처리는 해당 애니메이션의 특정 프레임에서 이벤트를 호출하여 처리
+                        // 공격 후 딜레이 계산, 연계 공격 가능 시간 계산
                         Attack1_3();
                     }
                 }
@@ -822,8 +804,6 @@ public class Player_Move : MonoBehaviour
                 {
                     if (m_ePlayerMoveState != pms)
                     {
-                        //if (m_cProcess_Attack_Duration != null)
-                        //    StopCoroutine(m_cProcess_Attack_Duration);
                         SetAnimatorParameters("Attacked");
                     }
                 }
@@ -865,7 +845,7 @@ public class Player_Move : MonoBehaviour
 
         return pms;
     }
-    // Animation 관리
+    // 애니메이션 관리
     public void SetAnimatorParameters(string str)
     {
         switch (str)
