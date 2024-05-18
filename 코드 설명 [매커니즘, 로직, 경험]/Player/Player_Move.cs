@@ -30,7 +30,7 @@ public class Player_Move : MonoBehaviour
     public bool m_bAttack1_1; // (m_bAttack1_1 == true : '기본 공격1' 가능)
     public bool m_bAttack1_2; // (m_bAttack1_2 == true : '기본 공격2' 가능)
     public bool m_bAttack1_3; // (m_bAttack1_3 == true : '기본 공격3' 가능)
-    // 연계 공격 허용 지속시간
+    // 연계 공격 허용 지속 시간
     Coroutine m_cProcess_Attack_Duration = null;       // 연계 공격 가능 시간 계산 코루틴
     Coroutine m_cProcess_AttackToIdle_Duration = null; // 공격 후 딜레이 계산 코루틴
     Coroutine m_cProcess_AttackDelay_Duration = null;  // 플레이어 공격 속도 계산 코루틴(다음 공격까지 기다려야하는 시간 계산)
@@ -43,7 +43,7 @@ public class Player_Move : MonoBehaviour
     // 구르기
     public bool m_bRoll;                       // 구르기 가능 여부 (m_bRoll == true : 구르기 가능 / m_bRoll == false : 구르기 불가능)    
     Coroutine m_cProcess_Roll_Cooltime = null; // 구르기 쿨타임 계산 코루틴
-    Coroutine m_cProcess_RollToIdle = null;    // 구르기 지속시간 계산 코루틴
+    Coroutine m_cProcess_RollToIdle = null;    // 구르기 지속 시간 계산 코루틴
     float m_fCooltime_Roll = 3;                // 구르기 쿨타임
     
     // 피격
@@ -88,7 +88,7 @@ public class Player_Move : MonoBehaviour
     }
 
     // 플레이어 이동 함수
-    // Player_Total.cs에서 키입력을 통해 이 함수가 실행된다. 플레이어의 달리기 동작을 수행한다.
+    // Player_Total.cs에서 키입력(↑, ↓, ←, →)을 통해 함수 실행. 플레이어의 달리기 동작 수행
     // 플레이어 동작 FSM 정보를 반환
     public E_PLAYER_MOVE_STATE Move(int h, int v, int fspeed) // h : 수평 이동 값, v : 수직 이동 값, fspeed : 플레이어 이동속도
     {
@@ -178,7 +178,8 @@ public class Player_Move : MonoBehaviour
         m_tTransform.position = pos;
     }
 
-    // 기본 공격 함수
+    // 기본 공격 함수(return 1: '기본 공격1' / return 2 : '기본 공격2' / return 3 : '기본 공격3' / return 0 : 공격 안됨)
+    // Player_Total.cs에서 키입력(A)을 통해 함수 실행. 플레이어의 공격 동작 수행
     public int Attack()
     {
         if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.IDLE || m_ePlayerMoveState == E_PLAYER_MOVE_STATE.RUN)
@@ -316,7 +317,8 @@ public class Player_Move : MonoBehaviour
         m_cProcess_AttackToIdle_Duration = StartCoroutine(ProcessAttackToIdle(0.6f)); // 공격 후 딜레이(0.6초) 설정
     }
 
-    // 플레이어 피격 함수
+    // 플레이어 피격 함수(return true : 피격됨 / return false : 피격안됨)
+    // Monster_Total.cs에서 Player_Total.cs의 함수를 호출해 실행. 플레이어의 피격 동작 수행
     public bool Attacked(float time, float speed, Vector3 dir) // time : 넉백 지속 시간, speed : 플레이어 이동 속도, dir : 넉백 방향
     {
         if (m_bPower == false) // 플레이어 피격 가능할 때
@@ -365,7 +367,6 @@ public class Player_Move : MonoBehaviour
     }
     
     // 넉백 함수. 플레이어 동작 FSM의 상태에 관계 없이 넉백 실행
-    // 
     public void KnockBack(float time, float fspeed, Vector3 dir) // time : 넉백 지속 시간, speed : 플레이어 이동 속도, dir : 넉백 방향
     {
         if (m_cProcess_KnockBack == null) // 넉백 중첩 불가능
@@ -388,10 +389,11 @@ public class Player_Move : MonoBehaviour
     }
 
     //
-    // 각종 딜레이의 종료 우선순위는 1. 넉백 후 딜레이 > 2. 구르기(딜레이 캔슬 기능) > 3. 피격 후 딜레이 < 4. 공격 후 딜레이 순이다. 우선순위가 높은 딜레이가 종료된다면 지속중인 하위 딜레이는 모두 취소된다.
+    // 각종 딜레이의 종료 우선순위는 1. 구르기(딜레이 캔슬 기능) > 2. 넉백 중 딜레이 > 3. 피격 후 딜레이 < 4. 공격 후 딜레이 순이다. 우선순위가 높은 딜레이가 종료된다면 지속중인 하위 딜레이는 모두 취소된다.
     //
     
-    // 사망 함수. 모든 비동기 함수가 종료된다.
+    // 사망 함수. 모든 비동기 함수가 종료
+    // Monster_Total.cs에서 Player_Total.cs의 함수를 호출해 실행. 플레이어의 사망 동작 수행
     public void Death()
     {
         if (m_cProcess_KnockBack != null)
@@ -450,6 +452,7 @@ public class Player_Move : MonoBehaviour
         m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.DEATH);
     } 
 
+    // 리트라이(부활) 함수. 플레이어 상태 초기화
     public void ReTry()
     {
         m_bAttack = true;
@@ -466,7 +469,6 @@ public class Player_Move : MonoBehaviour
 
         m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.IDLE);
     }
-
     IEnumerator Process_ReTry()
     {
         m_bPower = true;
@@ -474,7 +476,8 @@ public class Player_Move : MonoBehaviour
         m_bPower = false;
     }
 
-    // 플레이어 구르기  - FSM 내부로 옮길 필요.
+    // 플레이어 구르기(return true : 구르기 시전 성공 / return false : 구르기 시전 실패)
+    // Player_Total.cs에서 키입력(S)을 통해 함수 실행. 플레이어의 구르기 동작 수행
     public bool Roll()
     {
         if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.IDLE || m_ePlayerMoveState == E_PLAYER_MOVE_STATE.RUN || 
@@ -483,44 +486,46 @@ public class Player_Move : MonoBehaviour
         {
             if (m_bRoll == true)
             {
-                // 공격 모션(후딜) 캔슬
+                // 공격 후 딜레이 캔슬
                 if (m_cProcess_AttackToIdle_Duration != null)
                 {
                     StopCoroutine(m_cProcess_AttackToIdle_Duration);
                     m_cProcess_AttackToIdle_Duration = null;
                 }
-                // GOAWAY 기능 취소
-                if (m_cProcess_Goaway_Duration != null)
+                // 피격 후 딜레이 캔슬
+                if (m_cProcess_Attacked != null)
                 {
-                    StopCoroutine(m_cProcess_Goaway_Duration);
-                    m_cProcess_Goaway_Duration = null;
-                    m_bGoaway_Success = false;
-                    //m_bMove = true;
+                    StopCoroutine(m_cProcess_Attacked);
+                    m_cProcess_Attacked = null;
                 }
-                // ATTACKED 캔슬
-                //if (m_cProcess_Attacked != null)
-                //    StopCoroutine(m_cProcess_Attacked);
+                // 넉백 중 딜레이 캔슬
                 if (m_cProcess_KnockBack != null)
                 {
                     StopCoroutine(m_cProcess_KnockBack);
                     m_cProcess_KnockBack = null;
-                    m_bMove = true;
-                    m_cProcess_KnockBack = null;
                 }
 
-                m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.ROLL);
+                m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.ROLL); // 플레이어 동작 FSM 변경
 
-                if (m_cProcess_Power != null)
+                if (m_cProcess_Power != null) // 구르기 이전에 이미 플레이어 피격 불가능 상태(m_bPower == true)라면 해당 비동기 함수는 종료하고 구르기로 인한 플레이어 피격 불가능 상태를 다시 적용한다. 
                 {
                     StopCoroutine(m_cProcess_Power);
                     m_cProcess_Power = null;
                     m_bPower = false;
                 }
 
+                // 놓아주기 시전 취소
+                if (m_cProcess_Goaway_Duration != null)
+                {
+                    StopCoroutine(m_cProcess_Goaway_Duration);
+                    m_cProcess_Goaway_Duration = null;
+                    m_bGoaway_Success = false;
+                }
+
                 m_bMove = true;
 
-                m_cProcess_Roll_Cooltime = StartCoroutine(ProcessRoll_Cooltime());
-                m_cProcess_RollToIdle = StartCoroutine(ProcessRollToIdle());
+                m_cProcess_Roll_Cooltime = StartCoroutine(ProcessRoll_Cooltime()); // 구르기 쿨타임 계산
+                m_cProcess_RollToIdle = StartCoroutine(ProcessRollToIdle());       // 구르기 지속 시간 계산
 
                 return true;
             }
@@ -530,9 +535,8 @@ public class Player_Move : MonoBehaviour
     }
     IEnumerator ProcessRoll_Cooltime()
     {
-        //m_bMove = true;
         m_bRoll = false;
-        yield return new WaitForSeconds(m_fCooltime_Roll);
+        yield return new WaitForSeconds(m_fCooltime_Roll); // 구르기 쿨타임 3초
         if (m_cProcess_Roll_Cooltime != null)
             m_cProcess_Roll_Cooltime = null;
         m_bRoll = true;
@@ -540,14 +544,18 @@ public class Player_Move : MonoBehaviour
     IEnumerator ProcessRollToIdle()
     {
         m_bPower = true;
-        yield return new WaitForSeconds(0.7f);
+        yield return new WaitForSeconds(0.7f); // 구르기 지속 시간 0.7초. 시전 중 플레이어 피격 불가능
         if (m_cProcess_RollToIdle != null)
             m_cProcess_RollToIdle = null;
         m_bPower = false;
         m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.IDLE);
     }
 
-    // 플레이어 놓아주기  - FSM 내부로 옮길 필요.
+    // 플레이어 놓아주기
+    // Player_Total.cs에서 키입력(D)을 통해 함수 실행. 플레이어의 놓아주기 동작 수행
+    // 놓아주기 시전 시간 동안 플레이어 행동 불가.
+    // 해당 딜레이 동안 수행 가능한 동작 : { ATTACKED(피격), DEATH(사망), ROLL(구르기) }
+    // 해당 딜레이 동안 수행 불가능한 동작 : { IDLE(가만히 있기), RUN(달리기), ATTACK1_1(기본 공격1), ATTACK1_2(기본 공격2), ATTACK1_3(기본 공격3), GOAWAY(놓아주기), CONVERSATION(상호작용) }
     public void Goaway()
     {
         if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.IDLE || m_ePlayerMoveState == E_PLAYER_MOVE_STATE.RUN)
@@ -556,24 +564,23 @@ public class Player_Move : MonoBehaviour
             {
                 m_bGoaway_Success = false;
                 m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.GOAWAY);
-                m_cProcess_Goaway_Cooltime = StartCoroutine(ProcessGoaway_Cooltime());
-                m_cProcess_Goaway_Duration = StartCoroutine(ProcessGoawayToIdle());
+                m_cProcess_Goaway_Cooltime = StartCoroutine(ProcessGoaway_Cooltime()); // 놓아주기 쿨타임 계산
+                m_cProcess_Goaway_Duration = StartCoroutine(ProcessGoawayToIdle());    // 놓아주기 시전 시간 계산
             }
         }
     }
     IEnumerator ProcessGoaway_Cooltime()
     {
         m_bGoaway = false;
-        yield return new WaitForSeconds(m_fGoaway_Cooltime);
+        yield return new WaitForSeconds(m_fGoaway_Cooltime); // 놓아주기 쿨타임 10초
         if (m_cProcess_Goaway_Cooltime != null)
             m_cProcess_Goaway_Cooltime = null;
         m_bGoaway = true;
     }
-
     IEnumerator ProcessGoawayToIdle()
     {
         m_bMove = false;
-        yield return new WaitForSeconds(m_fGoaway_Durationtime);
+        yield return new WaitForSeconds(m_fGoaway_Durationtime); // 놓아주기 시전 시간 3초.
         m_bMove = true;
         m_bGoaway_Success = true;
         if (m_cProcess_Goaway_Duration != null)
@@ -582,7 +589,7 @@ public class Player_Move : MonoBehaviour
         yield return null;
         m_bGoaway_Success = false;
     }
-    // Goaway 키다운 지속시간
+    // Goaway 키다운 지속 시간
     public void Cancel_Goaway()
     {
         // GOAWAY 기능 취소
@@ -595,6 +602,7 @@ public class Player_Move : MonoBehaviour
     }
 
     // Conversation
+    // Player_Total.cs에서 키입력(SPACE)을 통해 함수 실행. 플레이어와 NPC간의 상호작용 동작 수행
     public bool Conversation()
     {
         if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.IDLE || m_ePlayerMoveState == E_PLAYER_MOVE_STATE.RUN)
