@@ -57,13 +57,13 @@ public class Player_Quest : MonoBehaviour
         for (int i = 0; i < m_lQuestList_Progress_KILL_MONSTER.Count; i++) // 해당하는 퀘스트 타입의 진행중인 모든 퀘스트를 조사
         {
             var item = m_lQuestList_Progress_KILL_MONSTER[i].m_sQuest_Title.Split('\n'); // 퀘스트의 정보(분류, 제목, 난이도)
-            if (m_lQuestList_Progress_KILL_MONSTER[i].m_bCondition == false) // 퀘스트가 클리어 가능하지 않을때(퀘스트 클리어 조건 미충족)
+            if (m_lQuestList_Progress_KILL_MONSTER[i].m_bCondition == false) // 퀘스트가 클리어 가능하지 않을때(퀘스트 완료 조건 미충족)
             {
                 if (m_lQuestList_Progress_KILL_MONSTER[i].Check_KILL_MONSTER(code) == true) // 1. 몬스터 코드(code)가 퀘스트와 관련 있는지 판단(return true : 관련있음 / return false : 관련없음)
-                                                                                            // 2. 퀘스트 클리어 조건 판단
+                                                                                            // 2. 퀘스트 완료 조건 판단
                 {
                     // 로그GUI에 퀘스트 현황 업데이트 정보 출력
-                    for (int j = 0; j < m_lQuestList_Progress_KILL_MONSTER[i].m_nl_Count_Current.Count; j++) // 모든 퀘스트 클리어 조건 조사
+                    for (int j = 0; j < m_lQuestList_Progress_KILL_MONSTER[i].m_nl_Count_Current.Count; j++) // 모든 퀘스트 완료 조건 조사
                     {
                         if (m_lQuestList_Progress_KILL_MONSTER[i].m_nl_MonsterCode[j] == code)
                             if (m_lQuestList_Progress_KILL_MONSTER[i].m_nl_Count_Max[j] >= m_lQuestList_Progress_KILL_MONSTER[i].m_nl_Count_Current[j])
@@ -72,26 +72,26 @@ public class Player_Quest : MonoBehaviour
                             }
                     }
                 }
-                // 로그GUI에 퀘스트 클리어 가능 정보 출력(퀘스트 클리어 조건 충족)
+                // 로그GUI에 퀘스트 완료 가능 정보 출력(퀘스트 완료 조건 충족)
                 if (m_lQuestList_Progress_KILL_MONSTER[i].m_bCondition == true)
                 {
                     GUIManager_Total.Instance.UpdateLog("[" + item[1] + "] 완료");
-                    GUIManager_Total.Instance.Display_GUI_QuestStateInfo(m_lQuestList_Progress_KILL_MONSTER[i]); // 퀘스트 클리어 가능 알림
+                    GUIManager_Total.Instance.Display_GUI_QuestStateInfo(m_lQuestList_Progress_KILL_MONSTER[i]); // 퀘스트 완료 가능 알림
                 }
             }
-            // 퀘스트와 관련된 NPC(퀘스트 발행 NPC, 퀘스트 클리어 NPC)의 퀘스트 아이콘 업데이트
+            // 퀘스트와 관련된 NPC(퀘스트 발행 NPC, 퀘스트 완료 NPC)의 퀘스트 아이콘 업데이트
             if (NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_KILL_MONSTER[i].m_nNPC] != null)
             {
-                // 퀘스트 발행 NPC == 퀘스트 클리어 NPC
+                // 퀘스트 발행 NPC == 퀘스트 완료 NPC
                 if (m_lQuestList_Progress_KILL_MONSTER[i].m_nNPC == m_lQuestList_Progress_KILL_MONSTER[i].m_nNPC_Clear)
                 {
-                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_KILL_MONSTER[i].m_nNPC].UpdateIcon(); // NPC의 퀘스트 아이콘 : 퀘스트 클리어 가능
+                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_KILL_MONSTER[i].m_nNPC].UpdateIcon(); // NPC의 퀘스트 아이콘 : 퀘스트 완료 가능
                 }
-                // 퀘스트 발행 NPC != 퀘스트 클리어 NPC
+                // 퀘스트 발행 NPC != 퀘스트 완료 NPC
                 else
                 {
-                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_KILL_MONSTER[i].m_nNPC].UpdateIcon(); // 퀘스트 발행 NPC의 퀘스트 아이콘 : 퀘스트 진행중(해당 NPC를 통해 퀘스트 클리어 불가능)
-                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_KILL_MONSTER[i].m_nNPC_Clear].UpdateIcon(); // 퀘스트 클리어 NPC의 퀘스트 아이콘 : 퀘스트 클리어 가능
+                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_KILL_MONSTER[i].m_nNPC].UpdateIcon(); // 퀘스트 발행 NPC의 퀘스트 아이콘 : 퀘스트 진행중(해당 NPC를 통해 퀘스트 완료 불가능)
+                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_KILL_MONSTER[i].m_nNPC_Clear].UpdateIcon(); // 퀘스트 완료 NPC의 퀘스트 아이콘 : 퀘스트 완료 가능
                 }
             }
 
@@ -101,38 +101,38 @@ public class Player_Quest : MonoBehaviour
         for (int i = 0; i < m_lQuestList_Progress_KILL_TYPE.Count; i++) // 해당하는 타입의 진행중인 모든 퀘스트를 조사
         {
             var item = m_lQuestList_Progress_KILL_TYPE[i].m_sQuest_Title.Split('\n'); // 퀘스트의 정보(분류, 제목, 난이도)
-            if (m_lQuestList_Progress_KILL_TYPE[i].m_bCondition == false) // 퀘스트가 클리어 가능하지 않을때(퀘스트 클리어 조건 미충족)
+            if (m_lQuestList_Progress_KILL_TYPE[i].m_bCondition == false) // 퀘스트가 클리어 가능하지 않을때(퀘스트 완료 조건 미충족)
             {
                 if (m_lQuestList_Progress_KILL_TYPE[i].Check_KILL_TYPE(mk) == true) // 1. 몬스터 코드(code)가 퀘스트와 관련 있는지 판단(return true : 관련있음 / return false : 관련없음)
-                                                                                    // 2. 퀘스트 클리어 조건 판단
+                                                                                    // 2. 퀘스트 완료 조건 판단
                 {
                     // 로그GUI에 퀘스트 현황 업데이트 정보 출력
-                    // 퀘스트 클리어 조건이 한가지만 존재
+                    // 퀘스트 완료 조건이 한가지만 존재
                     if (m_lQuestList_Progress_KILL_TYPE[i].m_nCount_Max != m_lQuestList_Progress_KILL_TYPE[i].m_nCount_Current)
                     {
                         GUIManager_Total.Instance.UpdateLog("[" + item[1] + "] " + "[" + m_lQuestList_Progress_KILL_TYPE[i].m_eMonsterType + "] "+ m_lQuestList_Progress_KILL_TYPE[i].m_nCount_Current + " / " + m_lQuestList_Progress_KILL_TYPE[i].m_nCount_Max);
                     }
                 }
-                // 로그GUI에 퀘스트 클리어 가능 정보 출력(퀘스트 클리어 조건 충족)
+                // 로그GUI에 퀘스트 완료 가능 정보 출력(퀘스트 완료 조건 충족)
                 if (m_lQuestList_Progress_KILL_TYPE[i].m_bCondition == true)
                 {
                     GUIManager_Total.Instance.UpdateLog("[" + item[1] + "] 완료");
-                    GUIManager_Total.Instance.Display_GUI_QuestStateInfo(m_lQuestList_Progress_KILL_TYPE[i]); // 퀘스트 클리어 가능 알림
+                    GUIManager_Total.Instance.Display_GUI_QuestStateInfo(m_lQuestList_Progress_KILL_TYPE[i]); // 퀘스트 완료 가능 알림
                 }
             }
-            // 퀘스트와 관련된 NPC(퀘스트 발행 NPC, 퀘스트 클리어 NPC)의 퀘스트 아이콘 업데이트
+            // 퀘스트와 관련된 NPC(퀘스트 발행 NPC, 퀘스트 완료 NPC)의 퀘스트 아이콘 업데이트
             if (NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_KILL_TYPE[i].m_nNPC] != null)
             {
-                // 퀘스트 발행 NPC == 퀘스트 클리어 NPC
+                // 퀘스트 발행 NPC == 퀘스트 완료 NPC
                 if (m_lQuestList_Progress_KILL_TYPE[i].m_nNPC == m_lQuestList_Progress_KILL_TYPE[i].m_nNPC_Clear)
                 {
-                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_KILL_TYPE[i].m_nNPC].UpdateIcon(); // NPC의 퀘스트 아이콘 : 퀘스트 클리어 가능
+                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_KILL_TYPE[i].m_nNPC].UpdateIcon(); // NPC의 퀘스트 아이콘 : 퀘스트 완료 가능
                 }
-                // 퀘스트 발행 NPC != 퀘스트 클리어 NPC
+                // 퀘스트 발행 NPC != 퀘스트 완료 NPC
                 else
                 {
-                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_KILL_TYPE[i].m_nNPC].UpdateIcon(); // 퀘스트 발행 NPC의 퀘스트 아이콘 : 퀘스트 진행중(해당 NPC를 통해 퀘스트 클리어 불가능)
-                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_KILL_TYPE[i].m_nNPC_Clear].UpdateIcon(); // 퀘스트 클리어 NPC의 퀘스트 아이콘 : 퀘스트 클리어 가능
+                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_KILL_TYPE[i].m_nNPC].UpdateIcon(); // 퀘스트 발행 NPC의 퀘스트 아이콘 : 퀘스트 진행중(해당 NPC를 통해 퀘스트 완료 불가능)
+                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_KILL_TYPE[i].m_nNPC_Clear].UpdateIcon(); // 퀘스트 완료 NPC의 퀘스트 아이콘 : 퀘스트 완료 가능
                 }
             }
 
@@ -147,13 +147,13 @@ public class Player_Quest : MonoBehaviour
         for (int i = 0; i < m_lQuestList_Progress_GOAWAY_MONSTER.Count; i++) // 해당하는 퀘스트 타입의 진행중인 모든 퀘스트를 조사
         {
             var item = m_lQuestList_Progress_GOAWAY_MONSTER[i].m_sQuest_Title.Split('\n'); // 퀘스트의 정보(분류, 제목, 난이도)
-            if (m_lQuestList_Progress_GOAWAY_MONSTER[i].m_bCondition == false) // 퀘스트가 클리어 가능하지 않을때(퀘스트 클리어 조건 미충족)
+            if (m_lQuestList_Progress_GOAWAY_MONSTER[i].m_bCondition == false) // 퀘스트가 클리어 가능하지 않을때(퀘스트 완료 조건 미충족)
             {
                 if (m_lQuestList_Progress_GOAWAY_MONSTER[i].Check_GOAWAY_MONSTER(code) == true) // 1. 몬스터 코드(code)가 퀘스트와 관련 있는지 판단(return true : 관련있음 / return false : 관련없음)
-                                                                                                // 2. 퀘스트 클리어 조건 판단
+                                                                                                // 2. 퀘스트 완료 조건 판단
                 {
                     // 로그GUI에 퀘스트 현황 업데이트 정보 출력
-                    for (int j = 0; j < m_lQuestList_Progress_GOAWAY_MONSTER[i].m_nl_Count_Current.Count; j++) // 모든 퀘스트 클리어 조건 조사
+                    for (int j = 0; j < m_lQuestList_Progress_GOAWAY_MONSTER[i].m_nl_Count_Current.Count; j++) // 모든 퀘스트 완료 조건 조사
                     {
                         if (m_lQuestList_Progress_GOAWAY_MONSTER[i].m_nl_MonsterCode[j] == code)
                             if (m_lQuestList_Progress_GOAWAY_MONSTER[i].m_nl_Count_Max[j] >= m_lQuestList_Progress_GOAWAY_MONSTER[i].m_nl_Count_Current[j])
@@ -162,27 +162,27 @@ public class Player_Quest : MonoBehaviour
                             }
                     }
                 }
-                // 로그GUI에 퀘스트 클리어 가능 정보 출력(퀘스트 클리어 조건 충족)
+                // 로그GUI에 퀘스트 완료 가능 정보 출력(퀘스트 완료 조건 충족)
                 if (m_lQuestList_Progress_GOAWAY_MONSTER[i].m_bCondition == true)
                 {
                     GUIManager_Total.Instance.UpdateLog("[" + item[1] + "] 완료");
-                    GUIManager_Total.Instance.Display_GUI_QuestStateInfo(m_lQuestList_Progress_GOAWAY_MONSTER[i]); // 퀘스트 클리어 가능 알림
+                    GUIManager_Total.Instance.Display_GUI_QuestStateInfo(m_lQuestList_Progress_GOAWAY_MONSTER[i]); // 퀘스트 완료 가능 알림
 
                 }
             }
-            // 퀘스트와 관련된 NPC(퀘스트 발행 NPC, 퀘스트 클리어 NPC)의 퀘스트 아이콘 업데이트
+            // 퀘스트와 관련된 NPC(퀘스트 발행 NPC, 퀘스트 완료 NPC)의 퀘스트 아이콘 업데이트
             if (NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_GOAWAY_MONSTER[i].m_nNPC] != null)
             {
-                // 퀘스트 발행 NPC == 퀘스트 클리어 NPC
+                // 퀘스트 발행 NPC == 퀘스트 완료 NPC
                 if (m_lQuestList_Progress_GOAWAY_MONSTER[i].m_nNPC == m_lQuestList_Progress_GOAWAY_MONSTER[i].m_nNPC_Clear)
                 {
-                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_GOAWAY_MONSTER[i].m_nNPC].UpdateIcon(); // NPC의 퀘스트 아이콘 : 퀘스트 클리어 가능
+                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_GOAWAY_MONSTER[i].m_nNPC].UpdateIcon(); // NPC의 퀘스트 아이콘 : 퀘스트 완료 가능
                 }
-                // 퀘스트 발행 NPC != 퀘스트 클리어 NPC
+                // 퀘스트 발행 NPC != 퀘스트 완료 NPC
                 else
                 {
-                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_GOAWAY_MONSTER[i].m_nNPC].UpdateIcon(); // 퀘스트 발행 NPC의 퀘스트 아이콘 : 퀘스트 진행중(해당 NPC를 통해 퀘스트 클리어 불가능)
-                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_GOAWAY_MONSTER[i].m_nNPC_Clear].UpdateIcon(); // 퀘스트 클리어 NPC의 퀘스트 아이콘 : 퀘스트 클리어 가능
+                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_GOAWAY_MONSTER[i].m_nNPC].UpdateIcon(); // 퀘스트 발행 NPC의 퀘스트 아이콘 : 퀘스트 진행중(해당 NPC를 통해 퀘스트 완료 불가능)
+                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_GOAWAY_MONSTER[i].m_nNPC_Clear].UpdateIcon(); // 퀘스트 완료 NPC의 퀘스트 아이콘 : 퀘스트 완료 가능
                 }
             }
 
@@ -192,38 +192,38 @@ public class Player_Quest : MonoBehaviour
         for (int i = 0; i < m_lQuestList_Progress_GOAWAY_TYPE.Count; i++) // 해당하는 타입의 진행중인 모든 퀘스트를 조사
         {
             var item = m_lQuestList_Progress_GOAWAY_TYPE[i].m_sQuest_Title.Split('\n'); // 퀘스트의 정보(분류, 제목, 난이도)
-            if (m_lQuestList_Progress_GOAWAY_TYPE[i].m_bCondition == false) // 퀘스트가 클리어 가능하지 않을때(퀘스트 클리어 조건 미충족)
+            if (m_lQuestList_Progress_GOAWAY_TYPE[i].m_bCondition == false) // 퀘스트가 클리어 가능하지 않을때(퀘스트 완료 조건 미충족)
             {
                 if (m_lQuestList_Progress_GOAWAY_TYPE[i].Check_GOAWAY_TYPE(mk) == true) // 1. 몬스터 코드(code)가 퀘스트와 관련 있는지 판단(return true : 관련있음 / return false : 관련없음)
-                                                                                        // 2. 퀘스트 클리어 조건 판단
+                                                                                        // 2. 퀘스트 완료 조건 판단
                 {
                     // 로그GUI에 퀘스트 현황 업데이트 정보 출력
-                    // 퀘스트 클리어 조건이 한가지만 존재
+                    // 퀘스트 완료 조건이 한가지만 존재
                     if (m_lQuestList_Progress_GOAWAY_TYPE[i].m_nCount_Max != m_lQuestList_Progress_GOAWAY_TYPE[i].m_nCount_Current)
                     {
                         GUIManager_Total.Instance.UpdateLog("[" + item[1] + "] " + "[" + m_lQuestList_Progress_GOAWAY_TYPE[i].m_eMonsterType + "] "+ m_lQuestList_Progress_GOAWAY_TYPE[i].m_nCount_Current + " / " + m_lQuestList_Progress_GOAWAY_TYPE[i].m_nCount_Max);
                     }
                 }
-                // 로그GUI에 퀘스트 클리어 가능 정보 출력(퀘스트 클리어 조건 충족)
+                // 로그GUI에 퀘스트 완료 가능 정보 출력(퀘스트 완료 조건 충족)
                 if (m_lQuestList_Progress_GOAWAY_TYPE[i].m_bCondition == true)
                 {
                     GUIManager_Total.Instance.UpdateLog("[" + item[1] + "] 완료");
-                    GUIManager_Total.Instance.Display_GUI_QuestStateInfo(m_lQuestList_Progress_GOAWAY_TYPE[i]); // 퀘스트 클리어 가능 알림
+                    GUIManager_Total.Instance.Display_GUI_QuestStateInfo(m_lQuestList_Progress_GOAWAY_TYPE[i]); // 퀘스트 완료 가능 알림
                 }
             }
-            // 퀘스트와 관련된 NPC(퀘스트 발행 NPC, 퀘스트 클리어 NPC)의 퀘스트 아이콘 업데이트
+            // 퀘스트와 관련된 NPC(퀘스트 발행 NPC, 퀘스트 완료 NPC)의 퀘스트 아이콘 업데이트
             if (NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_GOAWAY_TYPE[i].m_nNPC] != null)
             {
-                // 퀘스트 발행 NPC == 퀘스트 클리어 NPC
+                // 퀘스트 발행 NPC == 퀘스트 완료 NPC
                 if (m_lQuestList_Progress_GOAWAY_TYPE[i].m_nNPC == m_lQuestList_Progress_GOAWAY_TYPE[i].m_nNPC_Clear)
                 {
-                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_GOAWAY_TYPE[i].m_nNPC].UpdateIcon(); // NPC의 퀘스트 아이콘 : 퀘스트 클리어 가능
+                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_GOAWAY_TYPE[i].m_nNPC].UpdateIcon(); // NPC의 퀘스트 아이콘 : 퀘스트 완료 가능
                 }
-                // 퀘스트 발행 NPC != 퀘스트 클리어 NPC
+                // 퀘스트 발행 NPC != 퀘스트 완료 NPC
                 else
                 {
-                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_GOAWAY_TYPE[i].m_nNPC].UpdateIcon(); // 퀘스트 발행 NPC의 퀘스트 아이콘 : 퀘스트 진행중(해당 NPC를 통해 퀘스트 클리어 불가능)
-                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_GOAWAY_TYPE[i].m_nNPC_Clear].UpdateIcon(); // 퀘스트 클리어 NPC의 퀘스트 아이콘 : 퀘스트 클리어 가능
+                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_GOAWAY_TYPE[i].m_nNPC].UpdateIcon(); // 퀘스트 발행 NPC의 퀘스트 아이콘 : 퀘스트 진행중(해당 NPC를 통해 퀘스트 완료 불가능)
+                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_GOAWAY_TYPE[i].m_nNPC_Clear].UpdateIcon(); // 퀘스트 완료 NPC의 퀘스트 아이콘 : 퀘스트 완료 가능
                 }
             }
 
@@ -231,193 +231,170 @@ public class Player_Quest : MonoBehaviour
         }
     }
 
-    // COLLECT 퀘스트
+    // 퀘스트 타입 : 수집
+    // Player_Total.cs의 void GetQuestReward(ㆍㆍㆍ) 함수에서 사용된다. 퀘스트 보상으로 얻는 아이템에 대해 진행중인 수집 타입의 퀘스트 현황을 업데이트한다. 로그GUI에 정보를 출력하지 않는다.
     public void QuestUpdate_Collect_NoDisplay()
     {
-        for (int i = 0; i < m_lQuestList_Progress_COLLECT.Count; i++)
+        for (int i = 0; i < m_lQuestList_Progress_COLLECT.Count; i++) // 해당하는 퀘스트 타입의 진행중인 모든 퀘스트를 조사
         {
-            // Collect 퀘스트_타입
-            if (m_lQuestList_Progress_COLLECT[i].m_eQuestType == E_QUEST_TYPE.COLLECT)
+            m_lQuestList_Progress_COLLECT[i].Check_COLLECT(); // 1. 플레이어가 보유한 모든 아이템에대한 퀘스트 관련성 조사(하나라도 퀘스트와 관련된 아이템이 존재하는지 판단)
+                                                              // 1. (return true : 퀘스트와 관련된 아이템 존재 / return false : 모든 아이템이 해당 퀘스트와 관련없음)
+                                                              // 2. 퀘스트 완료 조건 판단
+            // 퀘스트 완료 가능 정보 출력(퀘스트 완료 조건 충족)
+            if (m_lQuestList_Progress_COLLECT[i].m_bCondition == true)
             {
-                if (m_lQuestList_Progress_COLLECT[i].m_bCondition == false)
-                {
-                    if (m_lQuestList_Progress_COLLECT[i].Check_COLLECT() == true)
-                    {
-                        for (int j = 0; j < m_lQuestList_Progress_COLLECT[i].m_nl_ItemCode.Count; j++)
-                        {
-                        }
-                    }
-                    if (m_lQuestList_Progress_COLLECT[i].m_bCondition == true)
-                    {
-                        GUIManager_Total.Instance.Display_GUI_QuestStateInfo(m_lQuestList_Progress_COLLECT[i]);
-                    }
-                }
-                else
-                {
-                    m_lQuestList_Progress_COLLECT[i].Check_COLLECT();
-                }
+                GUIManager_Total.Instance.Display_GUI_QuestStateInfo(m_lQuestList_Progress_COLLECT[i]); // 퀘스트 완료 가능 알림
             }
-
+            // 퀘스트와 관련된 NPC(퀘스트 발행 NPC, 퀘스트 완료 NPC)의 퀘스트 아이콘 업데이트
             if (NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_COLLECT[i].m_nNPC] != null)
             {
+                // 퀘스트 발행 NPC == 퀘스트 완료 NPC
                 if (m_lQuestList_Progress_COLLECT[i].m_nNPC == m_lQuestList_Progress_COLLECT[i].m_nNPC_Clear)
                 {
                     if (NPCManager_Total.m_Dictionary_NPC.ContainsKey(m_lQuestList_Progress_COLLECT[i].m_nNPC) == true)
                     {
-                        NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_COLLECT[i].m_nNPC].UpdateIcon();
+                        NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_COLLECT[i].m_nNPC].UpdateIcon(); // NPC의 퀘스트 아이콘 : 퀘스트 완료 가능
                     }
                 }
+                // 퀘스트 발행 NPC != 퀘스트 완료 NPC
                 else
                 {
                     if (NPCManager_Total.m_Dictionary_NPC.ContainsKey(m_lQuestList_Progress_COLLECT[i].m_nNPC) == true)
                     {
-                        NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_COLLECT[i].m_nNPC].UpdateIcon();
-                        //if (NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_COLLECT[i].m_nNPC_Clear] != null)
-                        NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_COLLECT[i].m_nNPC_Clear].UpdateIcon();
+                        NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_COLLECT[i].m_nNPC].UpdateIcon(); // 퀘스트 발행 NPC의 퀘스트 아이콘 : 퀘스트 진행중(해당 NPC를 통해 퀘스트 완료 불가능)
+                        NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_COLLECT[i].m_nNPC_Clear].UpdateIcon(); // 퀘스트 완료 NPC의 퀘스트 아이콘 : 퀘스트 완료 가능
                     }
                 }
             }
 
-            GUIManager_Total.Instance.Update_Quest_Information(m_lQuestList_Progress_COLLECT[i], 1);
+            GUIManager_Total.Instance.Update_Quest_Information(m_lQuestList_Progress_COLLECT[i], 1); // 퀘스트GUI 업데이트
         }
     }
-    // COLLECT 퀘스트
+    // 퀘스트 타입 : 수집
+    // Player_Total.cs의 void AddQuest(ㆍㆍㆍ) 함수에서 사용된다. 퀘스트 수락시 플레이어가 이미 가지고 있는 아이템에 대해 진행중인 수집타입의 퀘스트 현황을 업데이트한다. 로그GUI에 정보를 출력한다.
     public void QuestUpdate_Collect()
     {
-        for (int i = 0; i < m_lQuestList_Progress_COLLECT.Count; i++)
+        for (int i = 0; i < m_lQuestList_Progress_COLLECT.Count; i++) // 해당하는 퀘스트 타입의 진행중인 모든 퀘스트를 조사
         {
-            var item = m_lQuestList_Progress_COLLECT[i].m_sQuest_Title.Split('\n');
-            // Collect 퀘스트_타입
-            if (m_lQuestList_Progress_COLLECT[i].m_eQuestType == E_QUEST_TYPE.COLLECT)
+            var item = m_lQuestList_Progress_COLLECT[i].m_sQuest_Title.Split('\n'); // 퀘스트의 정보(분류, 제목, 난이도)
+
+            if (m_lQuestList_Progress_COLLECT[i].m_bCondition == false) // 퀘스트가 클리어 가능하지 않을때(퀘스트 완료 조건 미충족)
             {
-                if (m_lQuestList_Progress_COLLECT[i].m_bCondition == false)
+                if (m_lQuestList_Progress_COLLECT[i].Check_COLLECT() == true) // 1. 플레이어가 보유한 모든 아이템에대한 퀘스트 관련성 조사(하나라도 퀘스트와 관련된 아이템이 존재하는지 판단)
+                                                                              // 1. (return true : 퀘스트와 관련된 아이템 존재 / return false : 모든 아이템이 해당 퀘스트와 관련없음)
+                                                                              // 2. 퀘스트 완료 조건 판단
                 {
-                    if (m_lQuestList_Progress_COLLECT[i].Check_COLLECT() == true)
+                    // 로그GUI에 퀘스트 현황 업데이트 정보 출력
+                    for (int j = 0; j < m_lQuestList_Progress_COLLECT[i].m_nl_ItemCode.Count; j++)
                     {
-                        for (int j = 0; j < m_lQuestList_Progress_COLLECT[i].m_nl_ItemCode.Count; j++)
-                        {
-                            UnityEngine.Debug.Log("QuestUpdate_Collect !");
-                            //GUIManager_Total.Instance.UpdateLog("[" + m_lQuestList_Progress_COLLECT[i].m_sQuest_Title + "] " + m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Current[j] + " / " + m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Max[j]);
-                            GUIManager_Total.Instance.UpdateLog("[" + item[1] + "] " + m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Current[j] + " / " + m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Max[j]);
-                        }
+                        GUIManager_Total.Instance.UpdateLog("[" + item[1] + "] " + m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Current[j] + " / " + m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Max[j]);
                     }
-                    if (m_lQuestList_Progress_COLLECT[i].m_bCondition == true)
-                    {
-                        UnityEngine.Debug.Log("QuestUpdate_Collect !");
-                        //GUIManager_Total.Instance.UpdateLog("[" + m_lQuestList_Progress_COLLECT[i].m_sQuest_Title + "] 완료");
-                        GUIManager_Total.Instance.UpdateLog("[" + item[1] + "] 완료");
-                        GUIManager_Total.Instance.Display_GUI_QuestStateInfo(m_lQuestList_Progress_COLLECT[i]);
-                    }
-                }
-                else
-                {
-                    m_lQuestList_Progress_COLLECT[i].Check_COLLECT();
                 }
             }
-
+            else // 퀘스트가 클리어 가능할때(퀘스트 완료 조건 충족)
+                 // 수집 타입의 퀘스트의 경우 퀘스트 완료 가능 여부가 유동적이다.
+                 // 퀘스트 완료에 필요한 아이템을 획득하여 퀘스트 완료가 가능 하더라도 착용, 사용, 거래, 다른 퀘스트 완료 등의 이유로 퀘스트 완료가 불가능해 질수도 있다.
+                 // 따라서 다른 타입의 퀘스트와 달리 퀘스트 완료 조건 판단을 추가했다.
+            {
+                m_lQuestList_Progress_COLLECT[i].Check_COLLECT(); // 퀘스트 완료 조건 판단
+            }
+            // 로그GUI에 퀘스트 완료 가능 정보 출력(퀘스트 완료 조건 충족)
+            if (m_lQuestList_Progress_COLLECT[i].m_bCondition == true)
+            {
+                GUIManager_Total.Instance.UpdateLog("[" + item[1] + "] 완료");
+                GUIManager_Total.Instance.Display_GUI_QuestStateInfo(m_lQuestList_Progress_COLLECT[i]); // 퀘스트 완료 가능 알림
+            }
+            // 퀘스트와 관련된 NPC(퀘스트 발행 NPC, 퀘스트 완료 NPC)의 퀘스트 아이콘 업데이트
             if (NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_COLLECT[i].m_nNPC] != null)
             {
+                // 퀘스트 발행 NPC == 퀘스트 완료 NPC
                 if (m_lQuestList_Progress_COLLECT[i].m_nNPC == m_lQuestList_Progress_COLLECT[i].m_nNPC_Clear)
                 {
                     if (NPCManager_Total.m_Dictionary_NPC.ContainsKey(m_lQuestList_Progress_COLLECT[i].m_nNPC) == true)
                     {
-                        NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_COLLECT[i].m_nNPC].UpdateIcon();
+                        NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_COLLECT[i].m_nNPC].UpdateIcon(); // NPC의 퀘스트 아이콘 : 퀘스트 완료 가능
                     }
                 }
+                // 퀘스트 발행 NPC != 퀘스트 완료 NPC
                 else
                 {
                     if (NPCManager_Total.m_Dictionary_NPC.ContainsKey(m_lQuestList_Progress_COLLECT[i].m_nNPC) == true)
                     {
-                        NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_COLLECT[i].m_nNPC].UpdateIcon();
-                        //if (NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_COLLECT[i].m_nNPC_Clear] != null)
-                        NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_COLLECT[i].m_nNPC_Clear].UpdateIcon();
+                        NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_COLLECT[i].m_nNPC].UpdateIcon(); // 퀘스트 발행 NPC의 퀘스트 아이콘 : 퀘스트 진행중(해당 NPC를 통해 퀘스트 완료 불가능)
+                        NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_COLLECT[i].m_nNPC_Clear].UpdateIcon(); // 퀘스트 완료 NPC의 퀘스트 아이콘 : 퀘스트 완료 가능
                     }
                 }
             }
 
-            GUIManager_Total.Instance.Update_Quest_Information(m_lQuestList_Progress_COLLECT[i], 1);
+            GUIManager_Total.Instance.Update_Quest_Information(m_lQuestList_Progress_COLLECT[i], 1); // 퀘스트GUI 업데이트
         }
     }
-    public void QuestUpdate_Collect(Item item)
+    // 퀘스트 타입 : 수집
+    // 특정 목적을 가진 위의 void QuestUpdate_Collect_NoDisplay(), void QuestUpdate_Collect() 함수와는 달리 수집 타입의 퀘스트 현황 업데이트에 관련된 모든 함수에서 실행된다. 로그GUI에 정보를 출력한다.
+    public void QuestUpdate_Collect(Item item) // item : 획득하거나 잃어버린 아이템
     {
-        for (int i = 0; i < m_lQuestList_Progress_COLLECT.Count; i++)
+        for (int i = 0; i < m_lQuestList_Progress_COLLECT.Count; i++) // 해당하는 퀘스트 타입의 진행중인 모든 퀘스트를 조사
         {
-            var items = m_lQuestList_Progress_COLLECT[i].m_sQuest_Title.Split('\n');
-            // Collect 퀘스트_타입
-            if (m_lQuestList_Progress_COLLECT[i].m_eQuestType == E_QUEST_TYPE.COLLECT)
+            var items = m_lQuestList_Progress_COLLECT[i].m_sQuest_Title.Split('\n'); // 퀘스트의 정보(분류, 제목, 난이도)
+            if (m_lQuestList_Progress_COLLECT[i].m_bCondition == false) // 퀘스트가 클리어 가능하지 않을때(퀘스트 완료 조건 미충족)
             {
-                if (m_lQuestList_Progress_COLLECT[i].m_bCondition == false)
+                m_lQuestList_Progress_COLLECT[i].Check_COLLECT(); // 퀘스트 완료 조건 판단
                 {
-                    //UnityEngine.Debug.Log(m_lQuestList_Progress_COLLECT[i].m_sQuest_Title + " / Y");
-                    //if (m_lQuestList_Progress_COLLECT[i].Check_COLLECT() == true)
-                    m_lQuestList_Progress_COLLECT[i].Check_COLLECT();
-                    {
-                        for (int j = 0; j < m_lQuestList_Progress_COLLECT[i].m_nl_ItemCode.Count; j++)
-                            if (m_lQuestList_Progress_COLLECT[i].m_nl_ItemCode[j] == item.m_nItemCode)
-                            {
-                                //UnityEngine.Debug.Log(m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Max[j] + " / " + m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Current[j]);
-                                //if (m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Max[j] >= m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Current[j])
-                                {
-                                    //GUIManager_Total.Instance.UpdateLog("[" + m_lQuestList_Progress_COLLECT[i].m_sQuest_Title + "][" + ItemManager.instance.Get_Item_Information(item.m_nItemCode).m_sItemName + "] " + m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Current[j] + " / " + m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Max[j]);
-                                    GUIManager_Total.Instance.UpdateLog("[" + items[1] + "][" + ItemManager.instance.Get_Item_Information(item.m_nItemCode).m_sItemName + "] " + m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Current[j] + " / " + m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Max[j]);
-                                    //UnityEngine.Debug.Log("O");
-                                    //UnityEngine.Debug.Log("[" + items[1] + "][" + ItemManager.instance.Get_Item_Information(item.m_nItemCode).m_sItemName + "] " + m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Current[j] + " / " + m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Max[j]);
-                                }
-                            }    
-                    }
-                    if (m_lQuestList_Progress_COLLECT[i].m_bCondition == true)
-                    {
-                        //GUIManager_Total.Instance.UpdateLog("[" + m_lQuestList_Progress_COLLECT[i].m_sQuest_Title + "] 완료");
-                        GUIManager_Total.Instance.UpdateLog("[" + items[1] + "] 완료");
-                        GUIManager_Total.Instance.Display_GUI_QuestStateInfo(m_lQuestList_Progress_COLLECT[i]);
-                    }
+                    // 로그GUI에 퀘스트 현황 업데이트 정보 출력
+                    for (int j = 0; j < m_lQuestList_Progress_COLLECT[i].m_nl_ItemCode.Count; j++)
+                        if (m_lQuestList_Progress_COLLECT[i].m_nl_ItemCode[j] == item.m_nItemCode) // 해당하는 아이템의 퀘스트 완료 조건 현황만 출력한다. 다른 퀘스트 완료 조건의 아이템 현황은 출력하지 않는다.
+                        {
+                            GUIManager_Total.Instance.UpdateLog("[" + items[1] + "][" + ItemManager.instance.Get_Item_Information(item.m_nItemCode).m_sItemName + "] " + m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Current[j] + " / " + m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Max[j]);
+                        }    
                 }
-                else
+                if (m_lQuestList_Progress_COLLECT[i].m_bCondition == true)
                 {
-                    //UnityEngine.Debug.Log(m_lQuestList_Progress_COLLECT[i].m_sQuest_Title + " / N");
-                    // m_lQuestList_Progress_COLLECT[i].Check_COLLECT();
-
-                    //m_lQuestList_Progress_COLLECT[i].Check_COLLECT();
-                    //if (m_lQuestList_Progress_COLLECT[i].Check_COLLECT() == true)
-                    m_lQuestList_Progress_COLLECT[i].Check_COLLECT();
-                    {
-                        for (int j = 0; j < m_lQuestList_Progress_COLLECT[i].m_nl_ItemCode.Count; j++)
-                            if (m_lQuestList_Progress_COLLECT[i].m_nl_ItemCode[j] == item.m_nItemCode)
-                            {
-                                UnityEngine.Debug.Log(m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Max[j] + " / " + m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Current[j]);
-                                //UnityEngine.Debug.Log(m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Max[j] + " / " + m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Current[j]);
-                                if (m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Max[j] >= m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Current[j])
-                                {
-                                    //GUIManager_Total.Instance.UpdateLog("[" + m_lQuestList_Progress_COLLECT[i].m_sQuest_Title + "][" + ItemManager.instance.Get_Item_Information(item.m_nItemCode).m_sItemName + "] " + m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Current[j] + " / " + m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Max[j]);
-                                    GUIManager_Total.Instance.UpdateLog("[" + items[1] + "][" + ItemManager.instance.Get_Item_Information(item.m_nItemCode).m_sItemName + "] " + m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Current[j] + " / " + m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Max[j]);
-                                    //UnityEngine.Debug.Log("O");
-                                    //UnityEngine.Debug.Log("[" + items[1] + "][" + ItemManager.instance.Get_Item_Information(item.m_nItemCode).m_sItemName + "] " + m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Current[j] + " / " + m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Max[j]);
-                                }
-                            }
-                    }
+                    GUIManager_Total.Instance.UpdateLog("[" + items[1] + "] 완료");
+                    GUIManager_Total.Instance.Display_GUI_QuestStateInfo(m_lQuestList_Progress_COLLECT[i]); // 퀘스트 완료 가능 알림
                 }
             }
-
+            else // 퀘스트가 클리어 가능할때(퀘스트 완료 조건 충족)
+                 // 수집 타입의 퀘스트의 경우 퀘스트 완료 가능 여부가 유동적이다.
+                 // 퀘스트 완료에 필요한 아이템을 획득하여 퀘스트 완료가 가능 하더라도 착용, 사용, 거래, 다른 퀘스트 완료 등의 이유로 퀘스트 완료가 불가능해 질수도 있다.
+                 // 따라서 다른 타입의 퀘스트와 달리 퀘스트 완료 조건 판단을 추가했다.
+            {
+                m_lQuestList_Progress_COLLECT[i].Check_COLLECT(); // 퀘스트 완료 조건 판단
+                {
+                    // 로그GUI에 퀘스트 현황 업데이트 정보 출력
+                    for (int j = 0; j < m_lQuestList_Progress_COLLECT[i].m_nl_ItemCode.Count; j++)
+                        if (m_lQuestList_Progress_COLLECT[i].m_nl_ItemCode[j] == item.m_nItemCode) // 해당하는 아이템의 퀘스트 완료 조건 현황만 출력한다. 다른 퀘스트 완료 조건의 아이템 현황은 출력하지 않는다.
+                        {
+                            if (m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Max[j] >= m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Current[j]) // 퀘스트 완료 조건에 변동이 생겼을때만 아이템 현황을 출력한다.
+                            {
+                                GUIManager_Total.Instance.UpdateLog("[" + items[1] + "][" + ItemManager.instance.Get_Item_Information(item.m_nItemCode).m_sItemName + "] " + m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Current[j] + " / " + m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Max[j]);
+                                // 별도의 퀘스트 완료 가능 알림은 없다.
+                            }
+                        }
+                }
+            }
+            // 퀘스트와 관련된 NPC(퀘스트 발행 NPC, 퀘스트 완료 NPC)의 퀘스트 아이콘 업데이트
             if (NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_COLLECT[i].m_nNPC] != null)
             {
+                // 퀘스트 발행 NPC == 퀘스트 완료 NPC
                 if (m_lQuestList_Progress_COLLECT[i].m_nNPC == m_lQuestList_Progress_COLLECT[i].m_nNPC_Clear)
                 {
                     if (NPCManager_Total.m_Dictionary_NPC.ContainsKey(m_lQuestList_Progress_COLLECT[i].m_nNPC) == true)
                     {
-                        NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_COLLECT[i].m_nNPC].UpdateIcon();
+                        NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_COLLECT[i].m_nNPC].UpdateIcon(); // NPC의 퀘스트 아이콘 : 퀘스트 완료 가능
                     }
                 }
+                // 퀘스트 발행 NPC != 퀘스트 완료 NPC
                 else
                 {
                     if (NPCManager_Total.m_Dictionary_NPC.ContainsKey(m_lQuestList_Progress_COLLECT[i].m_nNPC) == true)
                     {
-                        NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_COLLECT[i].m_nNPC].UpdateIcon();
-                        NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_COLLECT[i].m_nNPC_Clear].UpdateIcon();
+                        NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_COLLECT[i].m_nNPC].UpdateIcon(); // 퀘스트 발행 NPC의 퀘스트 아이콘 : 퀘스트 진행중(해당 NPC를 통해 퀘스트 완료 불가능)
+                        NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_COLLECT[i].m_nNPC_Clear].UpdateIcon(); // 퀘스트 완료 NPC의 퀘스트 아이콘 : 퀘스트 완료 가능
                     }
                 }
             }
 
-            GUIManager_Total.Instance.Update_Quest_Information(m_lQuestList_Progress_COLLECT[i], 1);
+            GUIManager_Total.Instance.Update_Quest_Information(m_lQuestList_Progress_COLLECT[i], 1); // 퀘스트GUI 업데이트
         }
     }
 
