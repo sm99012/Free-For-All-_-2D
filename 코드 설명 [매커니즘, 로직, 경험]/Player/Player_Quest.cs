@@ -98,43 +98,46 @@ public class Player_Quest : MonoBehaviour
             GUIManager_Total.Instance.Update_Quest_Information(m_lQuestList_Progress_KILL_MONSTER[i], 1); // 퀘스트GUI에 퀘스트 업데이트
         }
         // 특정 타입의 몬스터 토벌 퀘스트 현황 업데이트
-        for (int i = 0; i < m_lQuestList_Progress_KILL_TYPE.Count; i++)
+        for (int i = 0; i < m_lQuestList_Progress_KILL_TYPE.Count; i++) // 해당하는 타입의 진행중인 모든 퀘스트를 조사
         {
-            var item = m_lQuestList_Progress_KILL_TYPE[i].m_sQuest_Title.Split('\n');
-            if (m_lQuestList_Progress_KILL_TYPE[i].m_bCondition == false)
+            var item = m_lQuestList_Progress_KILL_TYPE[i].m_sQuest_Title.Split('\n'); // 퀘스트의 정보(분류, 제목, 난이도)
+            if (m_lQuestList_Progress_KILL_TYPE[i].m_bCondition == false) // 퀘스트가 클리어 가능하지 않을때(퀘스트 클리어 조건 미충족)
             {
-                if (m_lQuestList_Progress_KILL_TYPE[i].Check_KILL_TYPE(mk) == true)
+                if (m_lQuestList_Progress_KILL_TYPE[i].Check_KILL_TYPE(mk) == true) // 1. 몬스터 코드(code)가 퀘스트와 관련 있는지 판단(return true : 관련있음 / return false : 관련없음)
+                                                                                    // 2. 퀘스트 클리어 조건 판단
                 {
+                    // 로그GUI에 퀘스트 현황 업데이트 정보 출력
+                    // 퀘스트 클리어 조건이 한가지만 존재
                     if (m_lQuestList_Progress_KILL_TYPE[i].m_nCount_Max != m_lQuestList_Progress_KILL_TYPE[i].m_nCount_Current)
                     {
-                        //GUIManager_Total.Instance.UpdateLog("[" + m_lQuestList_Progress_KILL_TYPE[i].m_sQuest_Title + "] " + m_lQuestList_Progress_KILL_TYPE[i].m_nCount_Current + " / " + m_lQuestList_Progress_KILL_TYPE[i].m_nCount_Max);
                         GUIManager_Total.Instance.UpdateLog("[" + item[1] + "] " + "[" + m_lQuestList_Progress_KILL_TYPE[i].m_eMonsterType + "] "+ m_lQuestList_Progress_KILL_TYPE[i].m_nCount_Current + " / " + m_lQuestList_Progress_KILL_TYPE[i].m_nCount_Max);
-
                     }
                 }
+                // 로그GUI에 퀘스트 클리어 가능 정보 출력(퀘스트 클리어 조건 충족)
                 if (m_lQuestList_Progress_KILL_TYPE[i].m_bCondition == true)
                 {
-                    //GUIManager_Total.Instance.UpdateLog("[" + m_lQuestList_Progress_KILL_TYPE[i].m_sQuest_Title + "] 완료");
                     GUIManager_Total.Instance.UpdateLog("[" + item[1] + "] 완료");
-                    GUIManager_Total.Instance.Display_GUI_QuestStateInfo(m_lQuestList_Progress_KILL_TYPE[i]);
+                    GUIManager_Total.Instance.Display_GUI_QuestStateInfo(m_lQuestList_Progress_KILL_TYPE[i]); // 퀘스트 클리어 가능 알림
                 }
             }
-
+            
+            // 퀘스트와 관련된 NPC(퀘스트 발행 NPC, 퀘스트 클리어 NPC)의 퀘스트 아이콘 업데이트
             if (NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_KILL_TYPE[i].m_nNPC] != null)
             {
+                // 퀘스트 발행 NPC == 퀘스트 클리어 NPC
                 if (m_lQuestList_Progress_KILL_TYPE[i].m_nNPC == m_lQuestList_Progress_KILL_TYPE[i].m_nNPC_Clear)
                 {
-                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_KILL_TYPE[i].m_nNPC].UpdateIcon();
+                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_KILL_TYPE[i].m_nNPC].UpdateIcon(); // NPC의 퀘스트 아이콘 : 퀘스트 클리어 가능
                 }
+                // 퀘스트 발행 NPC != 퀘스트 클리어 NPC
                 else
                 {
-                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_KILL_TYPE[i].m_nNPC].UpdateIcon();
-                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_KILL_TYPE[i].m_nNPC_Clear].UpdateIcon();
+                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_KILL_TYPE[i].m_nNPC].UpdateIcon(); // 퀘스트 발행 NPC의 퀘스트 아이콘 : 퀘스트 진행중(해당 NPC를 통해 퀘스트 클리어 불가능)
+                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_KILL_TYPE[i].m_nNPC_Clear].UpdateIcon(); // 퀘스트 클리어 NPC의 퀘스트 아이콘 : 퀘스트 클리어 가능
                 }
             }
 
-
-            GUIManager_Total.Instance.Update_Quest_Information(m_lQuestList_Progress_KILL_TYPE[i], 1);
+            GUIManager_Total.Instance.Update_Quest_Information(m_lQuestList_Progress_KILL_TYPE[i], 1); // 퀘스트GUI에 퀘스트 업데이트
         }
     }
 
