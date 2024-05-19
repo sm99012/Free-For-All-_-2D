@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player_Map : MonoBehaviour
 {
-    // 현재 Player 가 위치하고 있는 맵의 정보
+    // 현재 플레이어가 위치하고 있는 맵의 정보
     public Map m_Map;
     public string m_sMapName;
 
@@ -18,7 +18,5 @@ public class Player_Map : MonoBehaviour
     {
         m_Map = map;
         m_sMapName = map.GetMapName();
-
-        //Debug.Log("Player 맵 이동: " + m_sMapName);
     }
 }
