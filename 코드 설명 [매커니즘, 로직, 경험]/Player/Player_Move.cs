@@ -285,9 +285,10 @@ public class Player_Move : MonoBehaviour
     IEnumerator ProcessAttackDelay()
     {
         m_bAttack = false; // 기본 공격 불가능
-        while (m_fAttackDelay_DurationTime > 0)
+        float ftemp = m_fAttackDelay_DurationTime;
+        while (ftemp > 0)
         {
-            m_fAttackDelay_DurationTime -= 0.1f;
+            ftemp -= 0.1f;
             yield return new WaitForSeconds(0.1f);
         }
         m_bAttack = true; // 기본 공격 가능
