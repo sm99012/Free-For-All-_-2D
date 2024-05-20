@@ -5,22 +5,22 @@ using UnityEngine;
 public class Player_Equipment : MonoBehaviour
 {
     // 플레이어가 착용중인 장비
-    public static Item_Equip m_gEquipment_Hat; // 모자
-    public static Item_Equip m_gEquipment_Top; // 상의
-    public static Item_Equip m_gEquipment_Bottoms; // 하의
-    public static Item_Equip m_gEquipment_Shose; // 신발
-    public static Item_Equip m_gEquipment_Gloves; // 장갑
+    public static Item_Equip m_gEquipment_Hat;        // 모자
+    public static Item_Equip m_gEquipment_Top;        // 상의
+    public static Item_Equip m_gEquipment_Bottoms;    // 하의
+    public static Item_Equip m_gEquipment_Shose;      // 신발
+    public static Item_Equip m_gEquipment_Gloves;     // 장갑
     public static Item_Equip m_gEquipment_Mainweapon; // 주무기
-    public static Item_Equip m_gEquipment_Subweapon; // 보조무기
+    public static Item_Equip m_gEquipment_Subweapon;  // 보조무기
 
     // 플레이어의 장비 착용 현황
-    public static bool m_bEquipment_Hat; // 모자
-    public static bool m_bEquipment_Top; // 상의
-    public static bool m_bEquipment_Bottoms; // 하의
-    public static bool m_bEquipment_Shose; // 신발
-    public static bool m_bEquipment_Gloves; // 장갑
+    public static bool m_bEquipment_Hat;        // 모자
+    public static bool m_bEquipment_Top;        // 상의
+    public static bool m_bEquipment_Bottoms;    // 하의
+    public static bool m_bEquipment_Shose;      // 신발
+    public static bool m_bEquipment_Gloves;     // 장갑
     public static bool m_bEquipment_Mainweapon; // 주무기
-    public static bool m_bEquipment_Subweapon; // 보조무기
+    public static bool m_bEquipment_Subweapon;  // 보조무기
 
     public void InitialSet()
     {
