@@ -6,7 +6,7 @@ public class Player_Status : MonoBehaviour
 {
     // 플레이어 평판 관련 스탯
     public SOC m_sSoc;                        // 평판 총합
-    public SOC m_sSoc_Origin;                 // 고유 평판
+    public SOC m_sSoc_Origin;                 // 고유 평판(성장 평판 + 영구버프아이템, 퀘스트 완료 보상 등 추가로 획득한 평판)
     public SOC m_sSoc_Extra_Equip_Hat;        // 착용중인 장비아이템(모자) 평판
     public SOC m_sSoc_Extra_Equip_Top;        // 착용중인 장비아이템(상의) 평판
     public SOC m_sSoc_Extra_Equip_Bottoms;    // 착용중인 장비아이템(하의) 평판
@@ -14,36 +14,35 @@ public class Player_Status : MonoBehaviour
     public SOC m_sSoc_Extra_Equip_Gloves;     // 착용중인 장비아이템(장갑) 평판
     public SOC m_sSoc_Extra_Equip_Mainweapon; // 착용중인 장비아이템(주무기) 평판
     public SOC m_sSoc_Extra_Equip_Subweapon;  // 착용중인 장비아이템(보조무기) 평판
-    public SOC m_sSoc_Item_Use_Buff;          // 적용중인 스킬, 소비아이템(버프포션) 평판
+    public SOC m_sSoc_Item_Use_Buff;          // 적용중인 스킬, 소비아이템(버프포션) 등의 평판 합계
     public SOC m_sSoc_Extra_ItemSetEffect;    // 적용중인 아이템 세트효과 평판
     public SOC m_sSoc_Null;                   // 각종 평판 계산에 사용되는 초기화 평판
 
     // 플레이어 능력치 관련 스탯
-    public STATUS m_sStatus; // Total Status / m_sStatus_Origin + m_sStatus_Extra
-    public STATUS m_sStatus_Origin;
-    public STATUS m_sStatus_Extra_Equip_Hat;
-    public STATUS m_sStatus_Extra_Equip_Top;
-    public STATUS m_sStatus_Extra_Equip_Bottoms;
-    public STATUS m_sStatus_Extra_Equip_Shose;
-    public STATUS m_sStatus_Extra_Equip_Gloves;
-    public STATUS m_sStatus_Extra_Equip_Mainweapon;
-    public STATUS m_sStatus_Extra_Equip_Subweapon;
-    public STATUS m_sStatus_Item_Use_Buff;
-    public STATUS m_sStatus_Extra_ItemSetEffect;
-    public STATUS m_sStatus_Null;
+    public STATUS m_sStatus;                        // 능력치 총합
+    public STATUS m_sStatus_Origin;                 // 고유 능력치(성장 능력치 + 영구버프아이템, 퀘스트 완료 보상 등 추가로 획득한 능력치)
+    public STATUS m_sStatus_Extra_Equip_Hat;        // 착용중인 장비아이템(모자) 능력치
+    public STATUS m_sStatus_Extra_Equip_Top;        // 착용중인 장비아이템(상의) 능력치
+    public STATUS m_sStatus_Extra_Equip_Bottoms;    // 착용중인 장비아이템(하의) 능력치
+    public STATUS m_sStatus_Extra_Equip_Shose;      // 착용중인 장비아이템(신발) 능력치
+    public STATUS m_sStatus_Extra_Equip_Gloves;     // 착용중인 장비아이템(장갑) 능력치
+    public STATUS m_sStatus_Extra_Equip_Mainweapon; // 착용중인 장비아이템(주무기) 능력치
+    public STATUS m_sStatus_Extra_Equip_Subweapon;  // 착용중인 장비아이템(보조무기) 능력치
+    public STATUS m_sStatus_Item_Use_Buff;          // 적용중인 스킬, 소비아이템(버프포션) 등의 능력치 합계
+    public STATUS m_sStatus_Extra_ItemSetEffect;    // 적용중인 아이템 세트효과 능력치
+    public STATUS m_sStatus_Null;                   // 각종 능력치 계산에 사용되는 초기화 능력치
 
-    // Player 상태.
-    public static Condition m_cCondition;
-    // Player 에게 적용되고있는 스킬.
-    public static List<Skill> m_List_Skill;
-    // Player 에게 적용되고있는 소비 아이템 효과(버프).
-    public static Dictionary <int, Item_Use> m_Dictionary_Item_Use_Buff;
-    public static Dictionary <int, Item_Use> m_Dictionary_Item_Use_CoolTime;
-    public static Dictionary <int, Coroutine> m_Dictionary_Coroutine_Item_Use_Buff;
-    public static Dictionary <int, Coroutine> m_Dictionary_Coroutine_Item_Use_CoolTime;
-    ////// 게임 종료 시 남은 잔여 아이템 지속시간, 쿨타임을 저장함.
-    public static Dictionary <int, float> m_Dictionary_Item_Use_Buff_RemainingTime;
-    public static Dictionary <int, float> m_Dictionary_Item_Use_CoolTime_RemainingTime;
+    public static Condition m_cCondition;   // 플레이어에게 적용중인 상태이상(속박, 기절, 암흑, 둔화, 혼란) 정보
+    public static List<Skill> m_List_Skill; // 플레이어에게 적용중인 스킬 정보
+    
+    // 플레이어에게 적용되고있는 소비아이템 정보
+    public static Dictionary <int, Item_Use> m_Dictionary_Item_Use_Buff;                // 소비아이템 효과(버프 / 디버프). Dictionary <Key : 아이템코드 , Value : 소비아이템 정보>
+    public static Dictionary <int, Item_Use> m_Dictionary_Item_Use_CoolTime;            // 소비아이템 쿨타임. Dictionary <Key : 아이템코드 , Value : 소비아이템 정보>
+    public static Dictionary <int, Coroutine> m_Dictionary_Coroutine_Item_Use_Buff;     // 소비아이템 효과(버프 / 디버프) 관련 코루틴. Dictionary <Key : 아이템코드 , Value : 소비아이템 효과 지속시간 코루틴>
+    public static Dictionary <int, Coroutine> m_Dictionary_Coroutine_Item_Use_CoolTime; // 소비아이템 쿨타입 관련 코루틴. Dictionary <Key : 아이템코드 , Value : 소비아이템 쿨타임 지속시간 코루틴>
+    // 플레이어에게 적용되고있는 소비아이템 효과(버프 / 디버프)의 지속시간, 소비아이템 쿨타임을 저장한다. 유니티에는 특정 코루틴의 잔여 시간을 알 수 있는 방법이 없기에 고안했다.
+    public static Dictionary <int, float> m_Dictionary_Item_Use_Buff_RemainingTime;     // 소비아이템 효과(버프 / 디버프) 지속시간. Dictionary <Key : 아이템코드 , Value : 지속시간>
+    public static Dictionary <int, float> m_Dictionary_Item_Use_CoolTime_RemainingTime; // 소비아이템 쿨타임. Dictionary <Key : 아이템코드 , Value : 쿨타임>
 
     // Condition 표현.
     GameObject m_gCondition;
