@@ -446,6 +446,7 @@ public class Player_Quest : MonoBehaviour
     }
 
     // 퀘스트 타입 : 특정 몬스터 제거, 특정 타입의 몬스터 제거
+    // 제거 = 토벌 + 놓아주기
     public void QuestUpdate_Eliminate(E_MONSTER_KIND mk, int code) // mk : 몬스터 타입, code : 몬스터 코드
     {
         // 특정 몬스터 제거 퀘스트 현황 업데이트
@@ -533,166 +534,162 @@ public class Player_Quest : MonoBehaviour
         }
     }
 
-    // 퀘스트 추가
-    public void AddQuest(Quest_KILL_MONSTER quest)
+    // 진행중인 퀘스트를 추가하는 함수(퀘스트 최초 수락 시 사용)
+    // 퀘스트 타입 : 특정 몬스터 토벌
+    public void AddQuest(Quest_KILL_MONSTER quest) // quest : 추가할 퀘스트 정보
     {
-        quest.m_nQuestOrder = QuestManager.m_snQuest_ProcessOrder++;
+        quest.m_nQuestOrder = QuestManager.m_snQuest_ProcessOrder++; // 퀘스트 추가 순서
         m_lQuestList_Progress_KILL_MONSTER.Add(quest);
-        GUIManager_Total.Instance.Update_Quest(quest, 1);
+        GUIManager_Total.Instance.Update_Quest(quest, 1); // 퀘스트GUI 업데이트
         quest.m_bProcess = true;
         quest.m_bClear = false;
     }
-    public void AddQuest(Quest_KILL_TYPE quest)
+    // 퀘스트 타입 : 특정 타입의 몬스터 토벌
+    public void AddQuest(Quest_KILL_TYPE quest) // quest : 추가할 퀘스트 정보
     {
-        quest.m_nQuestOrder = QuestManager.m_snQuest_ProcessOrder++;
+        quest.m_nQuestOrder = QuestManager.m_snQuest_ProcessOrder++; // 퀘스트 추가 순서
         m_lQuestList_Progress_KILL_TYPE.Add(quest);
-        GUIManager_Total.Instance.Update_Quest(quest, 1);
+        GUIManager_Total.Instance.Update_Quest(quest, 1); // 퀘스트GUI 업데이트
         quest.m_bProcess = true;
         quest.m_bClear = false;
     }
-    public void AddQuest(Quest_GOAWAY_MONSTER quest)
+    // 퀘스트 타입 : 특정 몬스터 놓아주기
+    public void AddQuest(Quest_GOAWAY_MONSTER quest) // quest : 추가할 퀘스트 정보
     {
-        quest.m_nQuestOrder = QuestManager.m_snQuest_ProcessOrder++;
+        quest.m_nQuestOrder = QuestManager.m_snQuest_ProcessOrder++; // 퀘스트 추가 순서
         m_lQuestList_Progress_GOAWAY_MONSTER.Add(quest);
-        GUIManager_Total.Instance.Update_Quest(quest, 1);
+        GUIManager_Total.Instance.Update_Quest(quest, 1); // 퀘스트GUI 업데이트
         quest.m_bProcess = true;
         quest.m_bClear = false;
     }
-    public void AddQuest(Quest_GOAWAY_TYPE quest)
+    // 퀘스트 타입 : 특정 타입의 몬스터 놓아주기
+    public void AddQuest(Quest_GOAWAY_TYPE quest) // quest : 추가할 퀘스트 정보
     {
-        quest.m_nQuestOrder = QuestManager.m_snQuest_ProcessOrder++;
+        quest.m_nQuestOrder = QuestManager.m_snQuest_ProcessOrder++; // 퀘스트 추가 순서
         m_lQuestList_Progress_GOAWAY_TYPE.Add(quest);
-        GUIManager_Total.Instance.Update_Quest(quest, 1);
+        GUIManager_Total.Instance.Update_Quest(quest, 1); // 퀘스트GUI 업데이트
         quest.m_bProcess = true;
         quest.m_bClear = false;
     }
-    public void AddQuest(Quest_COLLECT quest)
+    // 퀘스트 타입 : 수집
+    public void AddQuest(Quest_COLLECT quest) // quest : 추가할 퀘스트 정보
     {
-        quest.m_nQuestOrder = QuestManager.m_snQuest_ProcessOrder++;
+        quest.m_nQuestOrder = QuestManager.m_snQuest_ProcessOrder++; // 퀘스트 추가 순서
         m_lQuestList_Progress_COLLECT.Add(quest);
-        GUIManager_Total.Instance.Update_Quest(quest, 1);
+        GUIManager_Total.Instance.Update_Quest(quest, 1); // 퀘스트GUI 업데이트
         quest.m_bProcess = true;
         quest.m_bClear = false;
     }
-    public void AddQuest(Quest_CONVERSATION quest)
+    // 퀘스트 타입 : 대화
+    public void AddQuest(Quest_CONVERSATION quest) // quest : 추가할 퀘스트 정보
     {
-        quest.m_nQuestOrder = QuestManager.m_snQuest_ProcessOrder++;
+        quest.m_nQuestOrder = QuestManager.m_snQuest_ProcessOrder++; // 퀘스트 추가 순서
         m_lQuestList_Progress_CONVERSATION.Add(quest);
-        GUIManager_Total.Instance.Update_Quest(quest, 1);
+        GUIManager_Total.Instance.Update_Quest(quest, 1); // 퀘스트GUI 업데이트
         quest.m_bProcess = true;
         quest.m_bClear = false;
     }
-    public void AddQuest(Quest_ROLL quest)
+    // 퀘스트 타입 : 구르기
+    public void AddQuest(Quest_ROLL quest) // quest : 추가할 퀘스트 정보
     {
-        quest.m_nQuestOrder = QuestManager.m_snQuest_ProcessOrder++;
+        quest.m_nQuestOrder = QuestManager.m_snQuest_ProcessOrder++; // 퀘스트 추가 순서
         m_lQuestList_Progress_ROLL.Add(quest);
-        GUIManager_Total.Instance.Update_Quest(quest, 1);
+        GUIManager_Total.Instance.Update_Quest(quest, 1); // 퀘스트GUI 업데이트
         quest.m_bProcess = true;
         quest.m_bClear = false;
     }
-    public void AddQuest(Quest_ELIMINATE_MONSTER quest)
+    // 퀘스트 타입 : 특정 몬스터 제거
+    public void AddQuest(Quest_ELIMINATE_MONSTER quest) // quest : 추가할 퀘스트 정보
     {
-        quest.m_nQuestOrder = QuestManager.m_snQuest_ProcessOrder++;
+        quest.m_nQuestOrder = QuestManager.m_snQuest_ProcessOrder++; // 퀘스트 추가 순서
         m_lQuestList_Progress_ELIMINATE_MONSTER.Add(quest);
-        GUIManager_Total.Instance.Update_Quest(quest, 1);
+        GUIManager_Total.Instance.Update_Quest(quest, 1); // 퀘스트GUI 업데이트
         quest.m_bProcess = true;
         quest.m_bClear = false;
     }
-    public void AddQuest(Quest_ELIMINATE_TYPE quest)
+    // 퀘스트 타입 : 특정 타입의 몬스터 제거
+    public void AddQuest(Quest_ELIMINATE_TYPE quest) // quest : 추가할 퀘스트 정보
     {
-        quest.m_nQuestOrder = QuestManager.m_snQuest_ProcessOrder++;
+        quest.m_nQuestOrder = QuestManager.m_snQuest_ProcessOrder++; // 퀘스트 추가 순서
         m_lQuestList_Progress_ELIMINATE_TYPE.Add(quest);
-        GUIManager_Total.Instance.Update_Quest(quest, 1);
+        GUIManager_Total.Instance.Update_Quest(quest, 1); // 퀘스트GUI 업데이트
         quest.m_bProcess = true;
         quest.m_bClear = false;
     }
 
-    //public void RemoveQuest(Quest quest)
-    //{
-    //    for (int i = 0; i < m_lQuestList_Progress.Count; i++)
-    //    {
-    //        if (m_lQuestList_Progress[i] == quest)
-    //        {
-    //            m_lQuestList_Progress.RemoveAt(i);
-    //            quest.m_bProcess = false;
-    //            quest.m_bClear = true;
-    //            break;
-    //        }
-    //    }
-    //}
-    //public void InitQuestAll()
-    //{
-    //    m_lQuestList_Progress.Clear();
-    //    m_lQuestList_Complete.Clear();
-    //}
-
-    public void GetQuestReward(Quest_KILL_MONSTER quest)
+    // 진행중인 퀘스트를 완료하는 함수
+    // 퀘스트 타입 : 특정 몬스터 토벌
+    public void GetQuestReward(Quest_KILL_MONSTER quest) // quest : 완료할 퀘스트 정보
     {
-        for (int i = 0; i < m_lQuestList_Progress_KILL_MONSTER.Count; i++)
+        for (int i = 0; i < m_lQuestList_Progress_KILL_MONSTER.Count; i++) // 완료할 퀘스트를 찾는 과정
         {
             if (m_lQuestList_Progress_KILL_MONSTER[i].m_nQuest_Code == quest.m_nQuest_Code)
             {
-                quest.m_nQuestOrder = QuestManager.m_snQuest_CompleteOrder++;
+                quest.m_nQuestOrder = QuestManager.m_snQuest_CompleteOrder++; // 퀘스트 완료 순서
                 m_lQuestList_Complete_KILL_MONSTER.Add(quest);
                 m_lQuestList_Progress_KILL_MONSTER.RemoveAt(i);
                 GUIManager_Total.Instance.UpdateLog(quest.m_sQuest_Title + "완료");
-                GUIManager_Total.Instance.Update_Quest(quest, 2);
-                GUIManager_Total.Instance.UnDisplay_GUI_QuestStateInfo(quest);
+                GUIManager_Total.Instance.Update_Quest(quest, 2); // 퀘스트GUI 업데이트
+                GUIManager_Total.Instance.UnDisplay_GUI_QuestStateInfo(quest); // 퀘스트 완료 가능 알림 삭제
                 break;
             }
         }
     }
-    public void GetQuestReward(Quest_KILL_TYPE quest)
+    // 퀘스트 타입 : 특정 타입의 몬스터 토벌
+    public void GetQuestReward(Quest_KILL_TYPE quest) // quest : 완료할 퀘스트 정보
     {
-        for (int i = 0; i < m_lQuestList_Progress_KILL_TYPE.Count; i++)
+        for (int i = 0; i < m_lQuestList_Progress_KILL_TYPE.Count; i++) // 완료할 퀘스트를 찾는 과정
         {
             if (m_lQuestList_Progress_KILL_TYPE[i].m_nQuest_Code == quest.m_nQuest_Code)
             {
-                quest.m_nQuestOrder = QuestManager.m_snQuest_CompleteOrder++;
+                quest.m_nQuestOrder = QuestManager.m_snQuest_CompleteOrder++; // 퀘스트 완료 순서
                 m_lQuestList_Complete_KILL_TYPE.Add(quest);
                 m_lQuestList_Progress_KILL_TYPE.RemoveAt(i);
                 GUIManager_Total.Instance.UpdateLog(quest.m_sQuest_Title + "완료");
-                GUIManager_Total.Instance.Update_Quest(quest, 2);
-                GUIManager_Total.Instance.UnDisplay_GUI_QuestStateInfo(quest);
+                GUIManager_Total.Instance.Update_Quest(quest, 2); // 퀘스트GUI 업데이트
+                GUIManager_Total.Instance.UnDisplay_GUI_QuestStateInfo(quest); // 퀘스트 완료 가능 알림 삭제
                 break;
             }
         }
     }
-    public void GetQuestReward(Quest_GOAWAY_MONSTER quest)
+    // 퀘스트 타입 : 특정 몬스터 놓아주기
+    public void GetQuestReward(Quest_GOAWAY_MONSTER quest) // quest : 완료할 퀘스트 정보
     {
-        for (int i = 0; i < m_lQuestList_Progress_GOAWAY_MONSTER.Count; i++)
+        for (int i = 0; i < m_lQuestList_Progress_GOAWAY_MONSTER.Count; i++) // 완료할 퀘스트를 찾는 과정
         {
             if (m_lQuestList_Progress_GOAWAY_MONSTER[i].m_nQuest_Code == quest.m_nQuest_Code)
             {
-                quest.m_nQuestOrder = QuestManager.m_snQuest_CompleteOrder++;
+                quest.m_nQuestOrder = QuestManager.m_snQuest_CompleteOrder++; // 퀘스트 완료 순서
                 m_lQuestList_Complete_GOAWAY_MONSTER.Add(quest);
                 m_lQuestList_Progress_GOAWAY_MONSTER.RemoveAt(i);
                 GUIManager_Total.Instance.UpdateLog(quest.m_sQuest_Title + "완료");
-                GUIManager_Total.Instance.Update_Quest(quest, 2);
-                GUIManager_Total.Instance.UnDisplay_GUI_QuestStateInfo(quest);
+                GUIManager_Total.Instance.Update_Quest(quest, 2); // 퀘스트GUI 업데이트
+                GUIManager_Total.Instance.UnDisplay_GUI_QuestStateInfo(quest); // 퀘스트 완료 가능 알림 삭제
                 break;
             }
         }
     }
-    public void GetQuestReward(Quest_GOAWAY_TYPE quest)
+    // 퀘스트 타입 : 특정 타입의 몬스터 놓아주기
+    public void GetQuestReward(Quest_GOAWAY_TYPE quest) // quest : 완료할 퀘스트 정보
     {
-        for (int i = 0; i < m_lQuestList_Progress_GOAWAY_TYPE.Count; i++)
+        for (int i = 0; i < m_lQuestList_Progress_GOAWAY_TYPE.Count; i++) // 완료할 퀘스트를 찾는 과정
         {
             if (m_lQuestList_Progress_GOAWAY_TYPE[i].m_nQuest_Code == quest.m_nQuest_Code)
             {
-                quest.m_nQuestOrder = QuestManager.m_snQuest_CompleteOrder++;
+                quest.m_nQuestOrder = QuestManager.m_snQuest_CompleteOrder++; // 퀘스트 완료 순서
                 m_lQuestList_Complete_GOAWAY_TYPE.Add(quest);
                 m_lQuestList_Progress_GOAWAY_TYPE.RemoveAt(i);
                 GUIManager_Total.Instance.UpdateLog(quest.m_sQuest_Title + "완료");
-                GUIManager_Total.Instance.Update_Quest(quest, 2);
-                GUIManager_Total.Instance.UnDisplay_GUI_QuestStateInfo(quest);
+                GUIManager_Total.Instance.Update_Quest(quest, 2); // 퀘스트GUI 업데이트
+                GUIManager_Total.Instance.UnDisplay_GUI_QuestStateInfo(quest); // 퀘스트 완료 가능 알림 삭제
                 break;
             }
         }
     }
-    public void GetQuestReward(Quest_COLLECT quest)
+    // 퀘스트 타입 : 수집
+    public void GetQuestReward(Quest_COLLECT quest) // quest : 완료할 퀘스트 정보
     {
-        for (int i = 0; i < m_lQuestList_Progress_COLLECT.Count; i++)
+        for (int i = 0; i < m_lQuestList_Progress_COLLECT.Count; i++) // 완료할 퀘스트를 찾는 과정
         {
             if (m_lQuestList_Progress_COLLECT[i].m_nQuest_Code == quest.m_nQuest_Code)
             {
@@ -700,76 +697,80 @@ public class Player_Quest : MonoBehaviour
                 {
                     m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Current[j] = m_lQuestList_Progress_COLLECT[i].m_nl_ItemCount_Max[j];
                 }
-                quest.m_nQuestOrder = QuestManager.m_snQuest_CompleteOrder++;
+                quest.m_nQuestOrder = QuestManager.m_snQuest_CompleteOrder++; // 퀘스트 완료 순서
                 m_lQuestList_Complete_COLLECT.Add(quest);
                 m_lQuestList_Progress_COLLECT.RemoveAt(i);
                 GUIManager_Total.Instance.UpdateLog(quest.m_sQuest_Title + "완료");
-                GUIManager_Total.Instance.Update_Quest(quest, 2);
-                GUIManager_Total.Instance.UnDisplay_GUI_QuestStateInfo(quest);
+                GUIManager_Total.Instance.Update_Quest(quest, 2); // 퀘스트GUI 업데이트
+                GUIManager_Total.Instance.UnDisplay_GUI_QuestStateInfo(quest); // 퀘스트 완료 가능 알림 삭제
                 break;
             }
         }
     }
-    public void GetQuestReward(Quest_CONVERSATION quest)
+    // 퀘스트 타입 : 대화
+    public void GetQuestReward(Quest_CONVERSATION quest) // quest : 완료할 퀘스트 정보
     {
-        for (int i = 0; i < m_lQuestList_Progress_CONVERSATION.Count; i++)
+        for (int i = 0; i < m_lQuestList_Progress_CONVERSATION.Count; i++) // 완료할 퀘스트를 찾는 과정
         {
             if (m_lQuestList_Progress_CONVERSATION[i].m_nQuest_Code == quest.m_nQuest_Code)
             {
-                quest.m_nQuestOrder = QuestManager.m_snQuest_CompleteOrder++;
+                quest.m_nQuestOrder = QuestManager.m_snQuest_CompleteOrder++; // 퀘스트 완료 순서
                 m_lQuestList_Complete_CONVERSATION.Add(quest);
                 m_lQuestList_Progress_CONVERSATION.RemoveAt(i);
                 GUIManager_Total.Instance.UpdateLog(quest.m_sQuest_Title + "완료");
-                GUIManager_Total.Instance.Update_Quest(quest, 2);
-                GUIManager_Total.Instance.UnDisplay_GUI_QuestStateInfo(quest);
+                GUIManager_Total.Instance.Update_Quest(quest, 2); // 퀘스트GUI 업데이트
+                GUIManager_Total.Instance.UnDisplay_GUI_QuestStateInfo(quest); // 퀘스트 완료 가능 알림 삭제
                 break;
             }
         }
     }
-    public void GetQuestReward(Quest_ROLL quest)
+    // 퀘스트 타입 : 구르기
+    public void GetQuestReward(Quest_ROLL quest) // quest : 완료할 퀘스트 정보
     {
-        for (int i = 0; i < m_lQuestList_Progress_ROLL.Count; i++)
+        for (int i = 0; i < m_lQuestList_Progress_ROLL.Count; i++) // 완료할 퀘스트를 찾는 과정
         {
             if (m_lQuestList_Progress_ROLL[i].m_nQuest_Code == quest.m_nQuest_Code)
             {
-                quest.m_nQuestOrder = QuestManager.m_snQuest_CompleteOrder++;
+                quest.m_nQuestOrder = QuestManager.m_snQuest_CompleteOrder++; // 퀘스트 완료 순서
                 m_lQuestList_Complete_ROLL.Add(quest);
                 m_lQuestList_Progress_ROLL.RemoveAt(i);
                 GUIManager_Total.Instance.UpdateLog(quest.m_sQuest_Title + "완료");
-                GUIManager_Total.Instance.Update_Quest(quest, 2);
-                GUIManager_Total.Instance.UnDisplay_GUI_QuestStateInfo(quest);
+                GUIManager_Total.Instance.Update_Quest(quest, 2); // 퀘스트GUI 업데이트
+                GUIManager_Total.Instance.UnDisplay_GUI_QuestStateInfo(quest); // 퀘스트 완료 가능 알림 삭제
                 break;
             }
         }
     }
-    public void GetQuestReward(Quest_ELIMINATE_MONSTER quest)
+    // 퀘스트 타입 : 특정 몬스터 제거
+    public void GetQuestReward(Quest_ELIMINATE_MONSTER quest) // quest : 완료할 퀘스트 정보
     {
-        for (int i = 0; i < m_lQuestList_Progress_ELIMINATE_MONSTER.Count; i++)
+        for (int i = 0; i < m_lQuestList_Progress_ELIMINATE_MONSTER.Count; i++) // 완료할 퀘스트를 찾는 과정
         {
             if (m_lQuestList_Progress_ELIMINATE_MONSTER[i].m_nQuest_Code == quest.m_nQuest_Code)
             {
-                quest.m_nQuestOrder = QuestManager.m_snQuest_CompleteOrder++;
+                quest.m_nQuestOrder = QuestManager.m_snQuest_CompleteOrder++; // 퀘스트 완료 순서
                 m_lQuestList_Complete_ELIMINATE_MONSTER.Add(quest);
                 m_lQuestList_Progress_ELIMINATE_MONSTER.RemoveAt(i);
                 GUIManager_Total.Instance.UpdateLog(quest.m_sQuest_Title + "완료");
-                GUIManager_Total.Instance.Update_Quest(quest, 2);
-                GUIManager_Total.Instance.UnDisplay_GUI_QuestStateInfo(quest);
+                GUIManager_Total.Instance.Update_Quest(quest, 2); // 퀘스트GUI 업데이트
+                GUIManager_Total.Instance.UnDisplay_GUI_QuestStateInfo(quest); // 퀘스트 완료 가능 알림 삭제
                 break;
             }
         }
     }
-    public void GetQuestReward(Quest_ELIMINATE_TYPE quest)
+    // 퀘스트 타입 : 특정 타입의 몬스터 제거
+    public void GetQuestReward(Quest_ELIMINATE_TYPE quest) // quest : 완료할 퀘스트 정보
     {
-        for (int i = 0; i < m_lQuestList_Progress_ELIMINATE_TYPE.Count; i++)
+        for (int i = 0; i < m_lQuestList_Progress_ELIMINATE_TYPE.Count; i++) // 완료할 퀘스트를 찾는 과정
         {
             if (m_lQuestList_Progress_ELIMINATE_TYPE[i].m_nQuest_Code == quest.m_nQuest_Code)
             {
-                quest.m_nQuestOrder = QuestManager.m_snQuest_CompleteOrder++;
+                quest.m_nQuestOrder = QuestManager.m_snQuest_CompleteOrder++; // 퀘스트 완료 순서
                 m_lQuestList_Complete_ELIMINATE_TYPE.Add(quest);
                 m_lQuestList_Progress_ELIMINATE_TYPE.RemoveAt(i);
                 GUIManager_Total.Instance.UpdateLog(quest.m_sQuest_Title + "완료");
-                GUIManager_Total.Instance.Update_Quest(quest, 2);
-                GUIManager_Total.Instance.UnDisplay_GUI_QuestStateInfo(quest);
+                GUIManager_Total.Instance.Update_Quest(quest, 2); // 퀘스트GUI 업데이트
+                GUIManager_Total.Instance.UnDisplay_GUI_QuestStateInfo(quest); // 퀘스트 완료 가능 알림 삭제
                 break;
             }
         }
