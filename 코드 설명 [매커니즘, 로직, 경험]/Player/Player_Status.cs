@@ -325,114 +325,128 @@ public class Player_Status : MonoBehaviour
         m_sStatus.SetSTATUS_MP_Current(m_nMP_Current);   // 현재마나 설정
     }
 
-    // 퀘스트 클리어로 인한 스탯 변경.
-    public void UpdateStatus_QuestClear(STATUS extrastatus)
+    // 퀘스트 완료로인한 능력치 업데이트
+    public void UpdateStatus_QuestClear(STATUS extrastatus) // extrastatus : 변경될 능력치 정보
     {
-        m_sStatus_Origin.P_OperatorSTATUS_HP_Max(extrastatus.GetSTATUS_HP_Max());
-        m_sStatus_Origin.P_OperatorSTATUS_MP_Max(extrastatus.GetSTATUS_MP_Max());
-        m_sStatus_Origin.P_OperatorSTATUS_Damage_Total(extrastatus.GetSTATUS_Damage_Total());
-        m_sStatus_Origin.P_OperatorSTATUS_CriticalRate(extrastatus.GetSTATUS_CriticalRate());
-        m_sStatus_Origin.P_OperatorSTATUS_CriticalDamage(extrastatus.GetSTATUS_CriticalDamage());
-        m_sStatus_Origin.P_OperatorSTATUS_Defence_Physical(extrastatus.GetSTATUS_Defence_Physical());
-        m_sStatus_Origin.P_OperatorSTATUS_Defence_Magical(extrastatus.GetSTATUS_Defence_Magical());
-        m_sStatus_Origin.P_OperatorSTATUS_Speed(extrastatus.GetSTATUS_Speed());
-        m_sStatus_Origin.P_OperatorSTATUS_AttackSpeed(extrastatus.GetSTATUS_AttackSpeed());
-        m_sStatus_Origin.P_OperatorSTATUS_EvasionRate(extrastatus.GetSTATUS_EvasionRate());
+        // 특정 능력치만 적용
+        m_sStatus_Origin.P_OperatorSTATUS_HP_Max(extrastatus.GetSTATUS_HP_Max());                     // 고유 능력치(최대체력) += 퀘스트 완료 보상 능력치(최대체력)
+        m_sStatus_Origin.P_OperatorSTATUS_MP_Max(extrastatus.GetSTATUS_MP_Max());                     // 고유 능력치(최대마나) += 퀘스트 완료 보상 능력치(최대마나)
+        m_sStatus_Origin.P_OperatorSTATUS_Damage_Total(extrastatus.GetSTATUS_Damage_Total());         // 고유 능력치(총데미지) += 퀘스트 완료 보상 능력치(총데미지)
+        m_sStatus_Origin.P_OperatorSTATUS_CriticalRate(extrastatus.GetSTATUS_CriticalRate());         // 고유 능력치(크리티컬 확률) += 퀘스트 완료 보상 능력치(크리티컬 확률)
+        m_sStatus_Origin.P_OperatorSTATUS_CriticalDamage(extrastatus.GetSTATUS_CriticalDamage());     // 고유 능력치(크리티컬 데미지) += 퀘스트 완료 보상 능력치(크리티컬 데미지)
+        m_sStatus_Origin.P_OperatorSTATUS_Defence_Physical(extrastatus.GetSTATUS_Defence_Physical()); // 고유 능력치(물리방어력) += 퀘스트 완료 보상 능력치(물리방어력)
+        m_sStatus_Origin.P_OperatorSTATUS_Defence_Magical(extrastatus.GetSTATUS_Defence_Magical());   // 고유 능력치(마법방어력) += 퀘스트 완료 보상 능력치(마법방어력)
+        m_sStatus_Origin.P_OperatorSTATUS_Speed(extrastatus.GetSTATUS_Speed());                       // 고유 능력치(이동속도) += 퀘스트 완료 보상 능력치(이동속도)
+        m_sStatus_Origin.P_OperatorSTATUS_AttackSpeed(extrastatus.GetSTATUS_AttackSpeed());           // 고유 능력치(공격속도) += 퀘스트 완료 보상 능력치(공격속도)
+        m_sStatus_Origin.P_OperatorSTATUS_EvasionRate(extrastatus.GetSTATUS_EvasionRate());           // 고유 능력치(회피율) += 퀘스트 완료 보상 능력치(회피율)
 
-        m_nHP_Current = m_sStatus.GetSTATUS_HP_Current();
-        m_nMP_Current = m_sStatus.GetSTATUS_MP_Current();
+        m_nHP_Current = m_sStatus.GetSTATUS_HP_Current();   // 현재체력 임시 저장
+        m_nMP_Current = m_sStatus.GetSTATUS_MP_Current();   // 현재마나 임시 저장
 
-        m_sStatus.SetSTATUS_Zero();
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Origin);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Item_Use_Buff);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Hat);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Top);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Bottoms);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Shose);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Gloves);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Mainweapon);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Subweapon);
+        m_sStatus.SetSTATUS_Zero(); // 능력치 합계 초기화
 
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_ItemSetEffect);
+        // 1. 플레이어 고유 능력치 업데이트
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Origin);                 // 능력치 합계 += 고유 능력치(성장 능력치 + 영구적 버프포션, 놓아주기, 퀘스트 완료 보상 등 추가로 획득한 능력치)
+        // 2. 플레이어에게 적용중인 소비아이템(일시적 버프포션)의 능력치 업데이트
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Item_Use_Buff);          // 능력치 합계 += 플레이어에게 적용중인 소비아이템(일시적 버프포션)의 능력치
+        // 플레이어가 착용중인 장비아이템의 능력치 업데이트
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Hat);        // 능력치 합계 += 착용중인 장비아이템(모자) 능력치
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Top);        // 능력치 합계 += 착용중인 장비아이템(상의) 능력치
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Bottoms);    // 능력치 합계 += 착용중인 장비아이템(하의) 능력치
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Shose);      // 능력치 합계 += 착용중인 장비아이템(신발) 능력치
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Gloves);     // 능력치 합계 += 착용중인 장비아이템(장갑) 능력치
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Mainweapon); // 능력치 합계 += 착용중인 장비아이템(주무기) 능력치
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Subweapon);  // 능력치 합계 += 착용중인 장비아이템(보조무기) 능력치
 
-        m_sStatus.SetSTATUS_HP_Current(m_nHP_Current);
-        m_sStatus.SetSTATUS_MP_Current(m_nMP_Current);
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_ItemSetEffect);    // 능력치 합계 += 적용중인 아이템 세트효과 능력치
 
-        //m_sStatus.SetSTATUS_EXP_Current(m_nEXP_Current);
-        //m_sStatus.SetSTATUS_HP_Current(m_nHP_Current);
-        //m_sStatus.SetSTATUS_MP_Current(m_nMP_Current);
+        m_sStatus.SetSTATUS_HP_Current(m_nHP_Current);   // 현재체력 설정
+        m_sStatus.SetSTATUS_MP_Current(m_nMP_Current);   // 현재마나 설정
 
-        CheckLogic();
+        CheckLogic(); // 능력치 논리 판단(현재체력, 현재마나)
     }
 
-    // 스킬 적용으로인한 스탯 변경(일시적)
+    // 스킬 적용으로인한 능력치 업데이트
     public void UpdateStatus_ApplySkill()
     {
-        // Status
-        m_nEXP_Current = m_sStatus.GetSTATUS_EXP_Current();
-        m_nHP_Current = m_sStatus.GetSTATUS_HP_Current();
-        m_nMP_Current = m_sStatus.GetSTATUS_MP_Current();
+        m_nEXP_Current = m_sStatus.GetSTATUS_EXP_Current(); // 현재경험치 임시 저장
+        m_nHP_Current = m_sStatus.GetSTATUS_HP_Current();   // 현재체력 임시 저장
+        m_nMP_Current = m_sStatus.GetSTATUS_MP_Current();   // 현재마나 임시 저장
 
-        m_sStatus.SetSTATUS_Zero();
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Origin);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Item_Use_Buff);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Hat);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Top);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Bottoms);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Shose);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Gloves);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Mainweapon);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Subweapon);
+        m_sStatus.SetSTATUS_Zero(); // 능력치 합계 초기화
 
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_ItemSetEffect);
+        // 1. 플레이어 고유 능력치 업데이트
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Origin);                 // 능력치 합계 += 고유 능력치(성장 능력치 + 영구적 버프포션, 놓아주기, 퀘스트 완료 보상 등 추가로 획득한 능력치)
+        // 2. 플레이어에게 적용중인 소비아이템(일시적 버프포션)의 능력치 업데이트
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Item_Use_Buff);          // 능력치 합계 += 플레이어에게 적용중인 소비아이템(일시적 버프포션)의 능력치
+        // 3. 플레이어가 착용중인 장비아이템의 능력치 업데이트
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Hat);        // 능력치 합계 += 착용중인 장비아이템(모자) 능력치
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Top);        // 능력치 합계 += 착용중인 장비아이템(상의) 능력치
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Bottoms);    // 능력치 합계 += 착용중인 장비아이템(하의) 능력치
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Shose);      // 능력치 합계 += 착용중인 장비아이템(신발) 능력치
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Gloves);     // 능력치 합계 += 착용중인 장비아이템(장갑) 능력치
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Mainweapon); // 능력치 합계 += 착용중인 장비아이템(주무기) 능력치
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Subweapon);  // 능력치 합계 += 착용중인 장비아이템(보조무기) 능력치
 
-        for (int i = 0; i < m_List_Skill.Count; i++)
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_ItemSetEffect);    // 능력치 합계 += 적용중인 아이템 세트효과 능력치
+
+        for (int i = 0; i < m_List_Skill.Count; i++) // 플레이어에게 적용중인 모든 스킬 조사
         {
-            m_sStatus.P_OperatorSTATUS(m_List_Skill[i].m_seSkillEffect.m_sStatus_Effect_Temporary);
+            m_sStatus.P_OperatorSTATUS(m_List_Skill[i].m_seSkillEffect.m_sStatus_Effect_Temporary); // 능력치 합계 += 적용중인 스킬 능력치
         }
 
-        m_sStatus.SetSTATUS_EXP_Current(m_nEXP_Current);
-        m_sStatus.SetSTATUS_HP_Current(m_nHP_Current);
-        m_sStatus.SetSTATUS_MP_Current(m_nMP_Current);
+        m_sStatus.SetSTATUS_EXP_Current(m_nEXP_Current); // 현재경험치 설정
+        m_sStatus.SetSTATUS_HP_Current(m_nHP_Current);   // 현재체력 설정
+        m_sStatus.SetSTATUS_MP_Current(m_nMP_Current);   // 현재마나 설정
 
-        CheckLogic();
+        CheckLogic(); // 능력치 논리 판단(현재체력, 현재마나)
     }
 
-    // 스킬 적용으로인한 평판 변경(일시적)
+    // 스킬 적용으로인한 평판 업데이트
     public void UpdateSoc_ApplySkill()
     {
-        m_sSoc.SetSOC_Zero();
-        m_sSoc.P_OperatorSOC(m_sSoc_Origin);
-        m_sSoc.P_OperatorSOC(m_sSoc_Item_Use_Buff);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Hat);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Top);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Bottoms);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Shose);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Gloves);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Mainweapon);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Subweapon);
+        m_sSoc.SetSOC_Zero(); // 평판 합계 초기화
 
-        for (int i = 0; i < m_List_Skill.Count; i++)
+        // 1. 플레이어 고유 평판 업데이트
+        m_sSoc.P_OperatorSOC(m_sSoc_Origin);                 // 평판 합계 += 고유 평판(성장 평판 + 영구적 버프포션, 놓아주기, 퀘스트 완료 보상 등 추가로 획득한 평판)
+        // 2. 플레이어에게 적용중인 소비아이템(일시적 버프포션)의 평판 업데이트
+        m_sSoc.P_OperatorSOC(m_sSoc_Item_Use_Buff);          // 평판 합계 += 플레이어에게 적용중인 소비아이템(일시적 버프포션)의 평판
+        // 3. 플레이어가 착용중인 장비아이템의 평판 업데이트
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Hat);        // 평판 합계 += 착용중인 장비아이템(모자) 평판
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Top);        // 평판 합계 += 착용중인 장비아이템(상의) 평판
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Bottoms);    // 평판 합계 += 착용중인 장비아이템(하의) 평판
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Shose);      // 평판 합계 += 착용중인 장비아이템(신발) 평판
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Gloves);     // 평판 합계 += 착용중인 장비아이템(장갑) 평판
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Mainweapon); // 평판 합계 += 착용중인 장비아이템(주무기) 평판
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Subweapon);  // 평판 합계 += 착용중인 장비아이템(보조무기) 평판
+
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_ItemSetEffect);    // 평판 합계 += 적용중인 아이템 세트효과 평판
+
+        for (int i = 0; i < m_List_Skill.Count; i++) // 플레이어에게 적용중인 모든 스킬 조사
         {
-            m_sSoc.P_OperatorSOC(m_List_Skill[i].m_seSkillEffect.m_sSoc_Effect_Temporary);
+            m_sSoc.P_OperatorSOC(m_List_Skill[i].m_seSkillEffect.m_sSoc_Effect_Temporary); // 평판 합계 += 적용중인 스킬 평판
         }
     }
 
-    // Monster Kill, Goaway 로 인한 SOC(평판) 변경
+    // 평판 업데이트. 대부분의 스탯(능력치, 평판) 업데이트 함수에서 사용된다.
     public void UpdateSOC()
     {
-        m_sSoc.SetSOC_Zero();
-        m_sSoc.P_OperatorSOC(m_sSoc_Origin);
-        m_sSoc.P_OperatorSOC(m_sSoc_Item_Use_Buff);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Hat);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Top);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Bottoms);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Shose);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Gloves);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Mainweapon);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Subweapon);
+        m_sSoc.SetSOC_Zero(); // 평판 합계 초기화
 
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_ItemSetEffect);
+        // 1. 플레이어 고유 평판 업데이트
+        m_sSoc.P_OperatorSOC(m_sSoc_Origin);                 // 평판 합계 += 고유 평판(성장 평판 + 영구적 버프포션, 놓아주기, 퀘스트 완료 보상 등 추가로 획득한 평판)
+        // 2. 플레이어에게 적용중인 소비아이템(일시적 버프포션)의 평판 업데이트
+        m_sSoc.P_OperatorSOC(m_sSoc_Item_Use_Buff);          // 평판 합계 += 플레이어에게 적용중인 소비아이템(일시적 버프포션)의 평판
+        // 3. 플레이어가 착용중인 장비아이템의 평판 업데이트
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Hat);        // 평판 합계 += 착용중인 장비아이템(모자) 평판
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Top);        // 평판 합계 += 착용중인 장비아이템(상의) 평판
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Bottoms);    // 평판 합계 += 착용중인 장비아이템(하의) 평판
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Shose);      // 평판 합계 += 착용중인 장비아이템(신발) 평판
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Gloves);     // 평판 합계 += 착용중인 장비아이템(장갑) 평판
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Mainweapon); // 평판 합계 += 착용중인 장비아이템(주무기) 평판
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Subweapon);  // 평판 합계 += 착용중인 장비아이템(보조무기) 평판
+
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_ItemSetEffect);    // 평판 합계 += 적용중인 아이템 세트효과 평판
     }
 
     public void MobDeath(SOC soc, STATUS status)
