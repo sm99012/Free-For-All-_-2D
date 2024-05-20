@@ -20,7 +20,7 @@ public class Player_Status : MonoBehaviour
 
     // 플레이어 능력치 관련 스탯
     public STATUS m_sStatus;                        // 능력치 총합
-    public STATUS m_sStatus_Origin;                 // 고유 능력치(성장 능력치 + 영구버프아이템, 퀘스트 완료 보상 등 추가로 획득한 능력치)
+    public STATUS m_sStatus_Origin;                 // 고유 능력치(성장 능력치 + 영구버프아이템, 놓아주기, 퀘스트 완료 보상 등 추가로 획득한 능력치)
     public STATUS m_sStatus_Extra_Equip_Hat;        // 착용중인 장비아이템(모자) 능력치
     public STATUS m_sStatus_Extra_Equip_Top;        // 착용중인 장비아이템(상의) 능력치
     public STATUS m_sStatus_Extra_Equip_Bottoms;    // 착용중인 장비아이템(하의) 능력치
@@ -32,8 +32,15 @@ public class Player_Status : MonoBehaviour
     public STATUS m_sStatus_Extra_ItemSetEffect;    // 적용중인 아이템 세트효과 능력치
     public STATUS m_sStatus_Null;                   // 각종 능력치 계산에 사용되는 초기화 능력치
 
+    public static List<Skill> m_List_Skill; // 플레이어에게 적용중인 스킬 정보    
+    
     public static Condition m_cCondition;   // 플레이어에게 적용중인 상태이상(속박, 기절, 암흑, 둔화, 혼란) 정보
-    public static List<Skill> m_List_Skill; // 플레이어에게 적용중인 스킬 정보
+    GameObject m_gCondition;
+    public GameObject m_gCondition_Bind;    // 속박 이펙트(애니메이션)
+    public GameObject m_gCondition_Shock;   // 기절 이펙트(애니메이션)
+    public GameObject m_gCondition_Dark;    // 암흑 이펙트(애니메이션)
+    public GameObject m_gCondition_Slow;    // 둔화 이펙트(애니메이션)
+    public GameObject m_gCondition_Confuse; // 혼란 이펙트(애니메이션)
     
     // 플레이어에게 적용되고있는 소비아이템 정보
     public static Dictionary <int, Item_Use> m_Dictionary_Item_Use_Buff;                // 소비아이템 효과(버프 / 디버프). Dictionary <Key : 아이템코드 , Value : 소비아이템 정보>
@@ -44,16 +51,7 @@ public class Player_Status : MonoBehaviour
     public static Dictionary <int, float> m_Dictionary_Item_Use_Buff_RemainingTime;     // 소비아이템 효과(버프 / 디버프) 지속시간. Dictionary <Key : 아이템코드 , Value : 지속시간>
     public static Dictionary <int, float> m_Dictionary_Item_Use_CoolTime_RemainingTime; // 소비아이템 쿨타임. Dictionary <Key : 아이템코드 , Value : 쿨타임>
 
-    // Condition 표현.
-    GameObject m_gCondition;
-    public GameObject m_gCondition_Bind;
-    public GameObject m_gCondition_Shock;
-    public GameObject m_gCondition_Dark;
-    public GameObject m_gCondition_Slow;
-    public GameObject m_gCondition_Confuse;
-
-    // 데미지 출력 오프셋
-    protected Vector3 m_vDamageOffSet;
+    protected Vector3 m_vDamageOffSet = new Vector3(0, 0.2f, 0); // 데미지 출력 오프셋
 
     public void InitialSet()
     {
@@ -62,17 +60,20 @@ public class Player_Status : MonoBehaviour
         InitialSet_Condition();
         InitialSet_Skill();
         InitialSet_Item_Use();
-
-        m_vDamageOffSet = new Vector3(0, 0.2f, 0);
     }
 
     public void InitialSet_Status()
     {
-        // 기본 스탯(공속 0.1)
-        // 공속의 경우 ATTACK1_1(0.5f), ATTACK1_2(0.5f), ATTACK1_3(1.0f) 의 연계 조건시간이 필요.
-        // 현 공속이 만약 1이라면 ATTACK1_1 에서 ATTACK1_2로의 공격 연계는 불가능.
+        // 기본 능력치
         m_sStatus_Origin = new STATUS(1, 10, 0, 10, 10, 0, 0, 1, 1, 1, 0, 100, 100, 1, 1, 0, 0.1f);
-        //m_sStatus_Origin = new STATUS(1, 10, 0, 300, 300, 0, 0, 25, 1, 1, 0, 100, 100, 0, 0, 0, 0.1f);
+        // 레벨 : 1, 레벨업 경험치 요구량 : 10, 현재경험치 : 0, 
+        // 최대체력 : 10, 현재체력 : 10, 최대마나 : 0, 현재마나 : 0, 
+        // 총데미지 : 1, 물리데미지 : 1, 마법데미지 : 1, 
+        // 크리티컬 확률 : 0, 크리티컬 데미지 : 100%, 
+        // 이동속도 : 100, 
+        // 물리방어력 : 1, 마법방어력 : 1,
+        // 회피율 : 0,
+        // 공격속도 : 0.1f(초)
         m_sStatus_Item_Use_Buff = new STATUS();
         m_sStatus_Extra_ItemSetEffect = new STATUS();
         m_sStatus_Null = new STATUS();
@@ -82,7 +83,17 @@ public class Player_Status : MonoBehaviour
     }
     public void InitialSet_SOC()
     {
+        // 기본 평판
         m_sSoc = new SOC();
+        // 명    예 : 0,
+        // 인    간 : 0,
+        // 동    물 : 0,
+        // 슬 라 임 : 0,
+        // 스켈레톤 : 0,
+        // 앤    트 : 0,
+        // 마    족 : 0,
+        // 용    족 : 0,
+        // 어    둠 : 0
         m_sSoc_Item_Use_Buff = new SOC();
         m_sSoc_Extra_ItemSetEffect = new SOC();
         m_sSoc_Null = new SOC();
@@ -114,45 +125,54 @@ public class Player_Status : MonoBehaviour
         m_Dictionary_Item_Use_CoolTime_RemainingTime = new Dictionary<int, float>();
     }
 
-    int m_nTotalDamage;
-    int m_fTotalDamage;
-    public void Attacked(int damage, Vector3 dir)
+    int m_nTotalDamage; // 피격 데미지
+    int m_fTotalDamage; // 피격 데미지
+    // 플레이어 피격 시 피격 데미지 계산 및 출력
+    // 데미지, 방어력 계산 공식 : 데미지 * (물리방어력 / (10(방어력 계수) + 물리방어력)). ※ 데미지, 방어력 계산 공식은 추후 변경될 수 있다.(단순 데미지 - 방어력 -> 방어력 계수 적용)
+    public void Attacked(int damage, Vector3 dir) // damage : 데미지, dir : 넉백 방향
     {
-        m_fTotalDamage = (int)((float)damage * ((float)m_sStatus.GetSTATUS_Defence_Physical() / ((float)(10) + (float)m_sStatus.GetSTATUS_Defence_Physical())));
-        m_nTotalDamage = damage - (int)Mathf.Round(m_fTotalDamage);
+        m_fTotalDamage = (int)((float)damage * ((float)m_sStatus.GetSTATUS_Defence_Physical() / ((float)(10) + (float)m_sStatus.GetSTATUS_Defence_Physical()))); // 피격 데미지 계산(float)
+        m_nTotalDamage = damage - (int)Mathf.Round(m_fTotalDamage); // 자료형 변환(float -> int)
 
-        //m_nTotalDamage = damage - m_sStatus.GetSTATUS_Defence_Physical();
-
-        if (m_nTotalDamage <= 0)
+        if (m_nTotalDamage <= 0) // 피격 데미지는 1 이상의 값
             m_nTotalDamage = 1;
-
+            
+        // 피격 데미지 적용
         if (m_sStatus.GetSTATUS_HP_Current() - m_nTotalDamage > 0)
             m_sStatus.P_OperatorSTATUS_HP_Current(-m_nTotalDamage);
         else
-            m_sStatus.SetSTATUS_HP_Current(0);
+            m_sStatus.SetSTATUS_HP_Current(0); // 플레이어의 현재체력은 0 보다 작은 값을 가질 수 없다.
 
+        //
+        // ※ 오브젝트 풀링 적용 예정
+        //
         GameObject obj = Resources.Load("Prefab/GUI/TextMesh_Damage") as GameObject;
         GameObject copyobj = Instantiate(obj);
-        copyobj.GetComponent<TextMesh_Damage>().InitialSet(this.transform.position + m_vDamageOffSet, -m_nTotalDamage);
-        //GUIManager_Total.Instance.UpdateLog("HP: " + (-damage).ToString());
+        copyobj.GetComponent<TextMesh_Damage>().InitialSet(this.transform.position + m_vDamageOffSet, -m_nTotalDamage); // 피격 데미지 출력
     }
 
-    public void Goaway(SOC soc)
+    // 플레이어가 놓아주기를 성공 시켰을때 평판 변경
+    public void Goaway(SOC soc) // soc : 변경될 평판 정보
     {
-        m_sSoc_Origin.P_OperatorSOC(soc);
-        UpdateSOC();
+        m_sSoc_Origin.P_OperatorSOC(soc); // 평판 변경
+        UpdateSOC(); // 평판 업데이트
     }
 
-    int stexp;
-    void CarculateEXP(STATUS status)
+    int stexp; // 변경될 능력치(경험치)
+    int m_nEXP_Current; // 현재경험치
+    int m_nHP_Current; // 현재체력
+    int m_nMP_Current; // 현재마나
+    // 경험치 계산 함수
+    void CarculateEXP(STATUS status) // status : 변경될 능력치(경험치) 정보
     {
-        // 획득 경험치
-        stexp = status.GetSTATUS_EXP_Current();
-        stexp += m_nEXP_Current;
+        stexp = status.GetSTATUS_EXP_Current(); // stexp = 추가될 경험치
+        stexp += m_nEXP_Current; // stexp = 추가될 경험치 + 현재경험치
+        // stexp가 레벨업 경험치 요구량보다 적을때
         if (stexp < m_sStatus.GetSTATUS_EXP_Max())
         {
-            m_sStatus.SetSTATUS_EXP_Current(stexp);
+            m_sStatus.SetSTATUS_EXP_Current(stexp); // 현재 경험치를 stexp로 설정
         }
+        // stexp가 레벨업 경험치 요구량보다 많을때(중첩 레벨업 가능)
         else
         {
             while (stexp >= m_sStatus.GetSTATUS_EXP_Max())
@@ -196,9 +216,6 @@ public class Player_Status : MonoBehaviour
         m_nMP_Current = m_sStatus.GetSTATUS_MP_Current();
     }
     STATUS m_sStatusBefore;
-    int m_nEXP_Current;
-    int m_nHP_Current;
-    int m_nMP_Current;
 
     // 소비 아이템 사용으로 인한 스탯 변경.
     // 회복포션.
