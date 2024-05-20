@@ -5,13 +5,13 @@ using UnityEngine;
 public class Player_Equipment : MonoBehaviour
 {
     // 플레이어가 착용중인 장비
-    public static Item_Equip m_gEquipment_Hat;        // 모자
-    public static Item_Equip m_gEquipment_Top;        // 상의
-    public static Item_Equip m_gEquipment_Bottoms;    // 하의
-    public static Item_Equip m_gEquipment_Shose;      // 신발
-    public static Item_Equip m_gEquipment_Gloves;     // 장갑
-    public static Item_Equip m_gEquipment_Mainweapon; // 주무기
-    public static Item_Equip m_gEquipment_Subweapon;  // 보조무기
+    public static Item_Equip m_gEquipment_Hat;        // 착용중인 장비아이템(모자)
+    public static Item_Equip m_gEquipment_Top;        // 착용중인 장비아이템(상의)
+    public static Item_Equip m_gEquipment_Bottoms;    // 착용중인 장비아이템(하의)
+    public static Item_Equip m_gEquipment_Shose;      // 착용중인 장비아이템(신발)
+    public static Item_Equip m_gEquipment_Gloves;     // 착용중인 장비아이템(장갑)
+    public static Item_Equip m_gEquipment_Mainweapon; // 착용중인 장비아이템(주무기)
+    public static Item_Equip m_gEquipment_Subweapon;  // 착용중인 장비아이템(보조무기)
 
     // 플레이어의 장비 착용 현황
     public static bool m_bEquipment_Hat;        // 모자
