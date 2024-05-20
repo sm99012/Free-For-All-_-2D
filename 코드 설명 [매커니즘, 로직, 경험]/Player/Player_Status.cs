@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player_Status : MonoBehaviour
 {
     // 플레이어 평판 관련 스탯
-    public SOC m_sSoc;                        // 평판 총합
+    public SOC m_sSoc;                        // 평판 합계
     public SOC m_sSoc_Origin;                 // 고유 평판(성장 평판 + 영구버프아이템, 퀘스트 완료 보상 등 추가로 획득한 평판)
     public SOC m_sSoc_Extra_Equip_Hat;        // 착용중인 장비아이템(모자) 평판
     public SOC m_sSoc_Extra_Equip_Top;        // 착용중인 장비아이템(상의) 평판
@@ -14,13 +14,13 @@ public class Player_Status : MonoBehaviour
     public SOC m_sSoc_Extra_Equip_Gloves;     // 착용중인 장비아이템(장갑) 평판
     public SOC m_sSoc_Extra_Equip_Mainweapon; // 착용중인 장비아이템(주무기) 평판
     public SOC m_sSoc_Extra_Equip_Subweapon;  // 착용중인 장비아이템(보조무기) 평판
-    public SOC m_sSoc_Item_Use_Buff;          // 적용중인 스킬, 소비아이템(버프포션) 등의 평판 합계
+    public SOC m_sSoc_Item_Use_Buff;          // 적용중인 소비아이템(일시적 버프포션) 평판 합계
     public SOC m_sSoc_Extra_ItemSetEffect;    // 적용중인 아이템 세트효과 평판
     public SOC m_sSoc_Null;                   // 각종 평판 계산에 사용되는 초기화 평판
 
     // 플레이어 능력치 관련 스탯
-    public STATUS m_sStatus;                        // 능력치 총합
-    public STATUS m_sStatus_Origin;                 // 고유 능력치(성장 능력치 + 영구버프아이템, 놓아주기, 퀘스트 완료 보상 등 추가로 획득한 능력치)
+    public STATUS m_sStatus;                        // 능력치 합계
+    public STATUS m_sStatus_Origin;                 // 고유 능력치(성장 능력치 + 영구적 버프포션, 놓아주기, 퀘스트 완료 보상 등 추가로 획득한 능력치)
     public STATUS m_sStatus_Extra_Equip_Hat;        // 착용중인 장비아이템(모자) 능력치
     public STATUS m_sStatus_Extra_Equip_Top;        // 착용중인 장비아이템(상의) 능력치
     public STATUS m_sStatus_Extra_Equip_Bottoms;    // 착용중인 장비아이템(하의) 능력치
@@ -28,7 +28,7 @@ public class Player_Status : MonoBehaviour
     public STATUS m_sStatus_Extra_Equip_Gloves;     // 착용중인 장비아이템(장갑) 능력치
     public STATUS m_sStatus_Extra_Equip_Mainweapon; // 착용중인 장비아이템(주무기) 능력치
     public STATUS m_sStatus_Extra_Equip_Subweapon;  // 착용중인 장비아이템(보조무기) 능력치
-    public STATUS m_sStatus_Item_Use_Buff;          // 적용중인 스킬, 소비아이템(버프포션) 등의 능력치 합계
+    public STATUS m_sStatus_Item_Use_Buff;          // 적용중인 소비아이템(일시적 버프포션) 능력치 합계
     public STATUS m_sStatus_Extra_ItemSetEffect;    // 적용중인 아이템 세트효과 능력치
     public STATUS m_sStatus_Null;                   // 각종 능력치 계산에 사용되는 초기화 능력치
 
@@ -160,8 +160,8 @@ public class Player_Status : MonoBehaviour
 
     int stexp; // 변경될 능력치(경험치)
     int m_nEXP_Current; // 현재경험치
-    int m_nHP_Current; // 현재체력
-    int m_nMP_Current; // 현재마나
+    int m_nHP_Current;  // 현재체력
+    int m_nMP_Current;  // 현재마나
     // 경험치 계산 함수
     void CarculateEXP(STATUS status) // status : 변경될 능력치(경험치) 정보
     {
@@ -187,21 +187,21 @@ public class Player_Status : MonoBehaviour
     // 레벨업 함수
     void CarculateLV()
     {
-        m_sStatus_Origin.P_OperatorSTATUS_LV(1); // 레벨 + 1
+        m_sStatus_Origin.P_OperatorSTATUS_LV(1); // 레벨 += 1
         
         // 플레이어의 레벨이 1 오를때 마다 특정 능력치 성장
-        m_sStatus_Origin.M_OperatorSTATUS_EXP_Max(1.3f); // 레벨업 경험치 요구량 * 1.3f
+        m_sStatus_Origin.M_OperatorSTATUS_EXP_Max(1.3f); // 레벨업 경험치 요구량 *= 1.3f
         m_sStatus_Origin.SetSTATUS_EXP_Current(0);
-        m_sStatus_Origin.P_OperatorSTATUS_HP_Max(1);     // 최대체력 + 1
-        m_sStatus_Origin.P_OperatorSTATUS_MP_Max(1);     // 최대마나 + 1
+        m_sStatus_Origin.P_OperatorSTATUS_HP_Max(1);     // 최대체력 += 1
+        m_sStatus_Origin.P_OperatorSTATUS_MP_Max(1);     // 최대마나 += 1
         // 플레이어의 레벨이 5의 배수를 도달할때 마다 특정 능력치 성장
         if (m_sStatus_Origin.GetSTATUS_LV() % 5 == 0)
         {
-            m_sStatus_Origin.P_OperatorSTATUS_Damage_Total(1);     // 총데미지 + 1
-            m_sStatus_Origin.P_OperatorSTATUS_Damage_Physical(1);  // 물리데미지 + 1
-            m_sStatus_Origin.P_OperatorSTATUS_Damage_Magical(1);   // 마법데미지 + 1
-            m_sStatus_Origin.P_OperatorSTATUS_Defence_Physical(1); // 물리방여력 + 1
-            m_sStatus_Origin.P_OperatorSTATUS_Defence_Magical(1);  // 마법방어력 + 1
+            m_sStatus_Origin.P_OperatorSTATUS_Damage_Total(1);     // 총데미지 += 1
+            m_sStatus_Origin.P_OperatorSTATUS_Damage_Physical(1);  // 물리데미지 += 1
+            m_sStatus_Origin.P_OperatorSTATUS_Damage_Magical(1);   // 마법데미지 += 1
+            m_sStatus_Origin.P_OperatorSTATUS_Defence_Physical(1); // 물리방여력 += 1
+            m_sStatus_Origin.P_OperatorSTATUS_Defence_Magical(1);  // 마법방어력 += 1
         }
 
         UpdateStatus_LVup(); // 능력치 업데이트(레벨업)
@@ -214,67 +214,54 @@ public class Player_Status : MonoBehaviour
         m_nMP_Current = m_sStatus.GetSTATUS_MP_Current();
     }
 
-    // 소비 아이템 사용으로 인한 스탯 변경.
-    // 회복포션.
-    // Status: HP_Current
-    // Status: MP_Current
-    public void UpdateStatus_Item_Use_Recover(STATUS status)
+    // 능력치 업데이트 함수
+    // 소비아이템(회복포션) 사용으로 인한 능력치 업데이트
+    public void UpdateStatus_Item_Use_Recover(STATUS status) // status : 변경될 능력치(현재체력, 현재마나) 정보
     {
-        m_sStatus.P_OperatorSTATUS_HP_Current(status.GetSTATUS_HP_Current());
-        m_sStatus.P_OperatorSTATUS_MP_Current(status.GetSTATUS_MP_Current());
+        m_sStatus.P_OperatorSTATUS_HP_Current(status.GetSTATUS_HP_Current()); // 현재체력 변경
+        m_sStatus.P_OperatorSTATUS_MP_Current(status.GetSTATUS_MP_Current()); // 현재마나 변경
 
-        CheckLogic();
-
-        GUIManager_Total.Instance.Update_SS();
-        GUIManager_Total.Instance.Update_Itemslot();
-        GUIManager_Total.Instance.Update_Equipslot();
+        CheckLogic(); // 능력치 논리 판단
     }
-    // 영구적 버프포션.
-    public void UpdateStatus_Item_Use_EternalBuff(STATUS status, SOC soc)
+    // 소비아이템(영구적 버프포션) 사용으로 인한 능력치 업데이트
+    public void UpdateStatus_Item_Use_EternalBuff(STATUS status, SOC soc) // status : 변경될 능력치 정보, soc : 변경될 평판 정보
     {
-        m_sStatus_Origin.P_OperatorSTATUS(status);
-        m_sSoc_Origin.P_OperatorSOC(soc);
+        m_sStatus_Origin.P_OperatorSTATUS(status); // 능력치 변경
+        m_sSoc_Origin.P_OperatorSOC(soc); // 평판 변경
 
-        UpdateStatus_Equip();
-        UpdateSOC();
-
-        GUIManager_Total.Instance.Update_SS();
-        GUIManager_Total.Instance.Update_Itemslot();
-        GUIManager_Total.Instance.Update_Equipslot();
+        UpdateStatus_Equip(); // 능력치 업데이트(착용중인 장비아이템 변경, 소비아이템(영구적 버프포션) 사용)
+        UpdateSOC(); // 평판 업데이트
     }
-    // 일시적 버프포션.
+    // 소비아이템(일시적 버프포션) 사용으로 인한 능력치 업데이트
     public void UpdateStatus_Item_Use_TemporaryBuff()
     {
-        m_sSoc.SetSOC_Zero();
+        m_nEXP_Current = m_sStatus.GetSTATUS_EXP_Current(); // 현재경험치 임시 저장
+        m_nHP_Current = m_sStatus.GetSTATUS_HP_Current();   // 현재체력 임시 저장
+        m_nMP_Current = m_sStatus.GetSTATUS_MP_Current();   // 현재마나 임시 저장
 
-        // Status
-        m_nEXP_Current = m_sStatus.GetSTATUS_EXP_Current();
-        m_nHP_Current = m_sStatus.GetSTATUS_HP_Current();
-        m_nMP_Current = m_sStatus.GetSTATUS_MP_Current();
+        m_sStatus.SetSTATUS_Zero(); // 능력치 합계 초기화
+        m_sSoc.SetSOC_Zero(); // 평판 합계 초기화
 
-        m_sStatus.SetSTATUS_Zero();
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Origin);
+        // 1. 플레이어의 고유 능력치 업데이트
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Origin); // 능력치 합계 += 고유 능력치(성장 능력치 + 영구적 버프포션, 놓아주기, 퀘스트 완료 보상 등 추가로 획득한 능력치)
 
-        m_sStatus_Item_Use_Buff.SetSTATUS_Zero();
-        m_sSoc_Item_Use_Buff.SetSOC_Zero();
-        //for (int i = 0; i < m_List_Item_Use_Buff.Count; i++)
-        //{
-        //    m_sStatus_Item_Use_Buff.P_OperatorSTATUS(m_List_Item_Use_Buff[i].m_sStatus_Effect);
-        //    m_sSoc_Item_Use_Buff.P_OperatorSOC(m_List_Item_Use_Buff[i].m_sSoc_Effect);
-        //}
+        // 2. 플레이어에게 적용중인 소비아이템(일시적 버프포션)의 능력치, 평판 업데이트
+        m_sStatus_Item_Use_Buff.SetSTATUS_Zero(); // 적용중인 소비아이템(일시적 버프포션) 능력치 합계 초기화
+        m_sSoc_Item_Use_Buff.SetSOC_Zero(); // 적용중인 소비아이템(일시적 버프포션) 평판 합계 초기화
         foreach (KeyValuePair<int, Item_Use> ditem in m_Dictionary_Item_Use_Buff)
         {
             m_sStatus_Item_Use_Buff.P_OperatorSTATUS(ditem.Value.m_sStatus_Effect);
             m_sSoc_Item_Use_Buff.P_OperatorSOC(ditem.Value.m_sSoc_Effect);
         }
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Item_Use_Buff);
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Item_Use_Buff); // 능력치 합계 += 플레이어에게 적용중인 소비아이템(일시적 버프포션)의 능력치
 
+        // 3. 플레이어가 착용중인 장비아이템의 능력치 업데이트
         m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Hat);
         m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Top);
         m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Bottoms);
         m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Shose);
         m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Gloves);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Mainweapon);
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Mainweapon); // 
         m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Subweapon);
 
         m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_ItemSetEffect);
