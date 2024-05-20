@@ -170,52 +170,49 @@ public class Player_Status : MonoBehaviour
         // stexp가 레벨업 경험치 요구량보다 적을때
         if (stexp < m_sStatus.GetSTATUS_EXP_Max())
         {
-            m_sStatus.SetSTATUS_EXP_Current(stexp); // 현재 경험치를 stexp로 설정
+            m_sStatus.SetSTATUS_EXP_Current(stexp); // 현재경험치를 stexp로 설정
         }
         // stexp가 레벨업 경험치 요구량보다 많을때(중첩 레벨업 가능)
         else
         {
-            while (stexp >= m_sStatus.GetSTATUS_EXP_Max())
+            while (stexp >= m_sStatus.GetSTATUS_EXP_Max()) // 중첩 레벨업
             {
                 stexp = stexp - m_sStatus.GetSTATUS_EXP_Max();
-                CarculateLV();
+                CarculateLV(); // 레벨업
             }
-
-            m_sStatus.SetSTATUS_EXP_Current(stexp);
+            m_sStatus.SetSTATUS_EXP_Current(stexp); // 현재경험치를 stexp로 설정
         }
         m_nEXP_Current = 0;
     }
-    // LV 업
+    // 레벨업 함수
     void CarculateLV()
     {
-        m_sStatus_Origin.P_OperatorSTATUS_LV(1);
+        m_sStatus_Origin.P_OperatorSTATUS_LV(1); // 레벨 + 1
+        
+        // 플레이어의 레벨이 1 오를때 마다 특정 능력치 성장
+        m_sStatus_Origin.M_OperatorSTATUS_EXP_Max(1.3f); // 레벨업 경험치 요구량 * 1.3f
+        m_sStatus_Origin.SetSTATUS_EXP_Current(0);
+        m_sStatus_Origin.P_OperatorSTATUS_HP_Max(1);     // 최대체력 + 1
+        m_sStatus_Origin.P_OperatorSTATUS_MP_Max(1);     // 최대마나 + 1
+        // 플레이어의 레벨이 5의 배수를 도달할때 마다 특정 능력치 성장
         if (m_sStatus_Origin.GetSTATUS_LV() % 5 == 0)
         {
-            m_sStatus_Origin.P_OperatorSTATUS_Damage_Total(1);
-            m_sStatus_Origin.P_OperatorSTATUS_Damage_Physical(1);
-            m_sStatus_Origin.P_OperatorSTATUS_Damage_Magical(1);
-            m_sStatus_Origin.P_OperatorSTATUS_Defence_Physical(1);
-            m_sStatus_Origin.P_OperatorSTATUS_Defence_Magical(1);
+            m_sStatus_Origin.P_OperatorSTATUS_Damage_Total(1);     // 총데미지 + 1
+            m_sStatus_Origin.P_OperatorSTATUS_Damage_Physical(1);  // 물리데미지 + 1
+            m_sStatus_Origin.P_OperatorSTATUS_Damage_Magical(1);   // 마법데미지 + 1
+            m_sStatus_Origin.P_OperatorSTATUS_Defence_Physical(1); // 물리방여력 + 1
+            m_sStatus_Origin.P_OperatorSTATUS_Defence_Magical(1);  // 마법방어력 + 1
         }
-        // 경험치통은 1.3배로 늘어난다???
-        m_sStatus_Origin.M_OperatorSTATUS_EXP_Max(1.3f);
-        m_sStatus_Origin.SetSTATUS_EXP_Current(0);
 
-        m_sStatus_Origin.P_OperatorSTATUS_HP_Max(1);
-        //m_sStatus_Origin.SetSTATUS_HP_Current(m_sStatus.GetSTATUS_HP_Max());
-        m_sStatus_Origin.P_OperatorSTATUS_MP_Max(1);
-        //m_sStatus_Origin.SetSTATUS_MP_Current(m_sStatus.GetSTATUS_MP_Max());
+        UpdateStatus_LVup(); // 능력치 업데이트(레벨업)
 
-        UpdateStatus_LVup();
-
-        m_sStatus.SetSTATUS_HP_Current(m_sStatus.GetSTATUS_HP_Max());
-        m_sStatus.SetSTATUS_MP_Current(m_sStatus.GetSTATUS_MP_Max());
+        m_sStatus.SetSTATUS_HP_Current(m_sStatus.GetSTATUS_HP_Max()); // 현재체력 회복(현재체력 = 최대체력)
+        m_sStatus.SetSTATUS_MP_Current(m_sStatus.GetSTATUS_MP_Max()); // 현재마나 회복(현재마나 = 최대마나)
 
         m_nEXP_Current = m_sStatus.GetSTATUS_EXP_Current();
         m_nHP_Current = m_sStatus.GetSTATUS_HP_Current();
         m_nMP_Current = m_sStatus.GetSTATUS_MP_Current();
     }
-    STATUS m_sStatusBefore;
 
     // 소비 아이템 사용으로 인한 스탯 변경.
     // 회복포션.
