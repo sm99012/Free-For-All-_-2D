@@ -4,21 +4,21 @@ using UnityEngine;
 
 public class Player_Status : MonoBehaviour
 {
-    // 평판 관련.
-    public SOC m_sSoc;
-    public SOC m_sSoc_Origin;
-    public SOC m_sSoc_Extra_Equip_Hat;
-    public SOC m_sSoc_Extra_Equip_Top;
-    public SOC m_sSoc_Extra_Equip_Bottoms;
-    public SOC m_sSoc_Extra_Equip_Shose;
-    public SOC m_sSoc_Extra_Equip_Gloves;
-    public SOC m_sSoc_Extra_Equip_Mainweapon;
-    public SOC m_sSoc_Extra_Equip_Subweapon;
-    public SOC m_sSoc_Item_Use_Buff;
-    public SOC m_sSoc_Extra_ItemSetEffect;
-    public SOC m_sSoc_Null;
+    // 플레이어 평판 관련 스탯
+    public SOC m_sSoc;                        // 평판 총합
+    public SOC m_sSoc_Origin;                 // 고유 평판
+    public SOC m_sSoc_Extra_Equip_Hat;        // 착용중인 장비아이템(모자) 평판
+    public SOC m_sSoc_Extra_Equip_Top;        // 착용중인 장비아이템(상의) 평판
+    public SOC m_sSoc_Extra_Equip_Bottoms;    // 착용중인 장비아이템(하의) 평판
+    public SOC m_sSoc_Extra_Equip_Shose;      // 착용중인 장비아이템(신발) 평판
+    public SOC m_sSoc_Extra_Equip_Gloves;     // 착용중인 장비아이템(장갑) 평판
+    public SOC m_sSoc_Extra_Equip_Mainweapon; // 착용중인 장비아이템(주무기) 평판
+    public SOC m_sSoc_Extra_Equip_Subweapon;  // 착용중인 장비아이템(보조무기) 평판
+    public SOC m_sSoc_Item_Use_Buff;          // 적용중인 스킬, 소비아이템(버프포션) 평판
+    public SOC m_sSoc_Extra_ItemSetEffect;    // 적용중인 아이템 세트효과 평판
+    public SOC m_sSoc_Null;                   // 각종 평판 계산에 사용되는 초기화 평판
 
-    // 스탯 관련.
+    // 플레이어 능력치 관련 스탯
     public STATUS m_sStatus; // Total Status / m_sStatus_Origin + m_sStatus_Extra
     public STATUS m_sStatus_Origin;
     public STATUS m_sStatus_Extra_Equip_Hat;
