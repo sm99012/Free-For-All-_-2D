@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player_Skill : MonoBehaviour
 {
-    public List<Skill> m_List_ApplySkill;
+    public List<Skill> m_List_ApplySkill; // 플레이어가 적용중인 스킬 정보
 
     public void InitialSet()
     {
