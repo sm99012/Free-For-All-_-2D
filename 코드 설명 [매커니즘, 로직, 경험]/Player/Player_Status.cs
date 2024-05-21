@@ -694,31 +694,8 @@ public class Player_Status : MonoBehaviour
 
         m_sSoc.P_OperatorSOC(m_sSoc_Extra_ItemSetEffect);    // 평판 합계 += 적용중인 아이템 세트효과 평판
     }
-    
-    // 장비 세트 효과
-    public void CheckSetItemEffect(Dictionary<int, int> setitemdictionary)
-    {
-        m_sStatus_Extra_ItemSetEffect.SetSTATUS_Zero();
-        m_sSoc_Extra_ItemSetEffect.SetSOC_Zero();
-        foreach(KeyValuePair<int, int> dictionary in setitemdictionary)
-        {
-            if (dictionary.Key != 0)
-            {
-                for (int i = 1; i < dictionary.Value + 1; i++)
-                {
-                    m_sStatus_Extra_ItemSetEffect.P_OperatorSTATUS(ItemSetEffectManager.instance.Return_SetItemEffect_STATUS(dictionary.Key, i));
-                    m_sSoc_Extra_ItemSetEffect.P_OperatorSOC(ItemSetEffectManager.instance.Return_SetItemEffect_SOC(dictionary.Key, i));
-                }
-                    
-                //GUIManager_Total.Instance.UpdateLog(ItemSetEffectManager.m_Dictionary_ItemSetEffect[dictionary.Key].m_sItemSetEffect_Name + " / " + dictionary.Value);
-            }
-        }
 
-        UpdateStatus_Equip();
-        UpdateSOC();
-    }
-
-    // 장비 착용 조건 체크 + 장비 착용
+    // 장비아이템 착용 조건 체크 + 장비아이템 착용 시 스탯(능력치, 평판) 업데이트
     public bool CheckCondition_Item_Equip(Item_Equip item, STATUS playerstatus, SOC playersoc)
     {
         if (playerstatus.CheckCondition_Max(item.m_sStatus_Limit_Max) == false)
@@ -843,6 +820,29 @@ public class Player_Status : MonoBehaviour
                     m_sSoc_Extra_Equip_Subweapon.SetSOC(m_sSoc_Null);
                 }
                 break;
+        }
+
+        UpdateStatus_Equip();
+        UpdateSOC();
+    }
+
+    // 장비 세트 효과
+    public void CheckSetItemEffect(Dictionary<int, int> setitemdictionary)
+    {
+        m_sStatus_Extra_ItemSetEffect.SetSTATUS_Zero();
+        m_sSoc_Extra_ItemSetEffect.SetSOC_Zero();
+        foreach(KeyValuePair<int, int> dictionary in setitemdictionary)
+        {
+            if (dictionary.Key != 0)
+            {
+                for (int i = 1; i < dictionary.Value + 1; i++)
+                {
+                    m_sStatus_Extra_ItemSetEffect.P_OperatorSTATUS(ItemSetEffectManager.instance.Return_SetItemEffect_STATUS(dictionary.Key, i));
+                    m_sSoc_Extra_ItemSetEffect.P_OperatorSOC(ItemSetEffectManager.instance.Return_SetItemEffect_SOC(dictionary.Key, i));
+                }
+                    
+                //GUIManager_Total.Instance.UpdateLog(ItemSetEffectManager.m_Dictionary_ItemSetEffect[dictionary.Key].m_sItemSetEffect_Name + " / " + dictionary.Value);
+            }
         }
 
         UpdateStatus_Equip();
