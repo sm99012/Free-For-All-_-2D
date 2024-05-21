@@ -573,7 +573,7 @@ public class Player_Status : MonoBehaviour
         GUIManager_Total.Instance.UpdateLog("+EXP: " + quest.m_sRewardSTATUS.GetSTATUS_EXP_Current()); // 로그GUI에 퀘스트 완료 보상(추가 경험치) 정보 출력
     }
 
-    // 논리(조건) 체크
+    // 능력치 논리(조건) 판단
     public void CheckLogic()
     {
         // 플레이어의 현재체력은 최대체력을 초과할 수 없다.
@@ -694,6 +694,10 @@ public class Player_Status : MonoBehaviour
 
         m_sSoc.P_OperatorSOC(m_sSoc_Extra_ItemSetEffect);    // 평판 합계 += 적용중인 아이템 세트효과 평판
     }
+
+    // 
+    // ※ 스탯(능력치, 평판) 업데이트 함수에 코드가 중복되는 부분이 많다. 이는 추후 중복되는 코드를 함수화 하여 코드 재사용성을 높이는 방향으로 변경할 예정이다.
+    // 
 
     // 장비아이템 착용 조건 체크 + 장비아이템 착용 시 스탯(능력치, 평판) 업데이트
     public bool CheckCondition_Item_Equip(Item_Equip item, STATUS playerstatus, SOC playersoc) // item : 착용할 장비아이템 정보(착용 조건(스탯(능력치, 평판) 최소ㆍ최대)), playerstatus : 플레이어 능력치 합계, playersoc : 플레이어 평판 합계
