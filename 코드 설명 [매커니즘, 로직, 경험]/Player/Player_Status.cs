@@ -296,7 +296,7 @@ public class Player_Status : MonoBehaviour
         UpdateSOC(); // 평판 업데이트
     }
 
-    // 장비아이템 착용으로인한 능력치 업데이트
+    // 장비아이템 착용으로인한 능력치 업데이트. 소비아이템(영구적 버프포션) 사용시에도 사용
     public void UpdateStatus_Equip()
     {
         m_nEXP_Current = m_sStatus.GetSTATUS_EXP_Current(); // 현재경험치 임시 저장
@@ -696,29 +696,30 @@ public class Player_Status : MonoBehaviour
     }
 
     // 장비아이템 착용 조건 체크 + 장비아이템 착용 시 스탯(능력치, 평판) 업데이트
-    public bool CheckCondition_Item_Equip(Item_Equip item, STATUS playerstatus, SOC playersoc)
+    public bool CheckCondition_Item_Equip(Item_Equip item, STATUS playerstatus, SOC playersoc) // item : 착용할 장비아이템 정보(착용 조건(스탯(능력치, 평판) 최소ㆍ최대)), playerstatus : 플레이어 능력치 합계, playersoc : 플레이어 평판 합계
     {
-        if (playerstatus.CheckCondition_Max(item.m_sStatus_Limit_Max) == false)
+        if (playerstatus.CheckCondition_Max(item.m_sStatus_Limit_Max) == false) // 장비아이템 착용 조건 : 최대 능력치(플레이어의 능력치 합계가 장비아이템 착용 조건(최대 능력치)를 초과한 경우 제한)
         {
-            Debug.Log(item.m_sItemName + ": Status 착용 최대 조건 불만족");
+            //Debug.Log(item.m_sItemName + ": Status 착용 최대 조건 불만족");
             return false;
         }
-        if (playerstatus.CheckCondition_Min(item.m_sStatus_Limit_Min) == false)
+        if (playerstatus.CheckCondition_Min(item.m_sStatus_Limit_Min) == false) // 장비아이템 착용 조건 : 최소 능력치(플레이어의 능력치 합계가 장비아이템 착용 조건(최소 능력치)에 미달한 경우 제한)
         {
-            Debug.Log(item.m_sItemName + ": Status 착용 최소 조건 불만족");
+            //Debug.Log(item.m_sItemName + ": Status 착용 최소 조건 불만족");
             return false;
         }
-        if (playersoc.CheckCondition_Max(item.m_sSoc_Limit_Max) == false)
+        if (playersoc.CheckCondition_Max(item.m_sSoc_Limit_Max) == false) // 장비아이템 착용 조건 : 최대 평판(플레이어의 평판 합계가 장비아이템 착용 조건(최대 평판)를 초과한 경우 제한)
         {
-            Debug.Log(item.m_sItemName + ": Soc 착용 최대 조건 불만족");
+            //Debug.Log(item.m_sItemName + ": Soc 착용 최대 조건 불만족");
             return false;
         }
-        if (playersoc.CheckCondition_Min(item.m_sSoc_Limit_Min) == false)
+        if (playersoc.CheckCondition_Min(item.m_sSoc_Limit_Min) == false) // 장비아이템 착용 조건 : 취소 평판(플레이어의 평판 합계가 장비아이템 착용 조건(최소 평판)에 미달한 경우 제한)
         {
-            Debug.Log(item.m_sItemName + ": Soc 착용 최소 조건 불만족");
+            //Debug.Log(item.m_sItemName + ": Soc 착용 최소 조건 불만족");
             return false;
         }
 
+        // 착용할 장비아이템의 분류에 따라 스탯(능력치, 평판) 할당
         switch (item.m_eItemEquipType)
         {
             case E_ITEM_EQUIP_TYPE.HAT:
@@ -765,17 +766,19 @@ public class Player_Status : MonoBehaviour
                 break;
         }
 
-        UpdateStatus_Equip();
-        UpdateSOC();
+        UpdateStatus_Equip(); // 능력치 업데이트(착용중인 장비아이템 변경, 소비아이템(영구적 버프포션) 사용)
+        UpdateSOC(); // 평판 업데이트
 
         return true;
     }
 
-    // 장비 해제
-    public void Remove_Item_Equip(Item_Equip item)
+    // 착용중인 장비아이템 해제
+    public void Remove_Item_Equip(Item_Equip item) // item : 해제할 장비아이템 정보
     {
-        m_sStatus_Extra_ItemSetEffect.SetSTATUS_Zero();
-        m_sSoc_Extra_ItemSetEffect.SetSOC_Zero();
+        m_sStatus_Extra_ItemSetEffect.SetSTATUS_Zero(); // 적용중인 아이템 세트효과 능력치 초기화
+        m_sSoc_Extra_ItemSetEffect.SetSOC_Zero(); // 적용중인 아이템 세트효과 평판 초기화
+
+        // 해제할 장비아이템의 분류에 따라 스탯(능력치, 평판) 초기화
         switch (item.m_eItemEquipType)
         {
             case E_ITEM_EQUIP_TYPE.HAT:
@@ -822,15 +825,17 @@ public class Player_Status : MonoBehaviour
                 break;
         }
 
-        UpdateStatus_Equip();
-        UpdateSOC();
+        UpdateStatus_Equip(); // 능력치 업데이트(착용중인 장비아이템 변경, 소비아이템(영구적 버프포션) 사용)
+        UpdateSOC(); // 평판 업데이트
     }
 
-    // 장비 세트 효과
-    public void CheckSetItemEffect(Dictionary<int, int> setitemdictionary)
+    // 장비아이템 세트효과 적용 함수
+    public void CheckSetItemEffect(Dictionary<int, int> setitemdictionary) // setitemdictionary : 플레이어에게 적용할 장비아이템 세트효과 정보
     {
-        m_sStatus_Extra_ItemSetEffect.SetSTATUS_Zero();
-        m_sSoc_Extra_ItemSetEffect.SetSOC_Zero();
+        m_sStatus_Extra_ItemSetEffect.SetSTATUS_Zero(); // 적용중인 아이템 세트효과 능력치 초기화
+        m_sSoc_Extra_ItemSetEffect.SetSOC_Zero(); // 적용중인 아이템 세트효과 평판 초기화
+
+        // 아이템 세트효과 스탯(능력치, 평판) 업데이트
         foreach(KeyValuePair<int, int> dictionary in setitemdictionary)
         {
             if (dictionary.Key != 0)
