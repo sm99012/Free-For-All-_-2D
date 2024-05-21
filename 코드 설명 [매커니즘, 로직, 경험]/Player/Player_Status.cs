@@ -464,7 +464,33 @@ public class Player_Status : MonoBehaviour
             GUIManager_Total.Instance.UpdateLog("+EXP: " + status.GetSTATUS_EXP_Current());
     }
 
-    // 게임 시작 시 플레이어 능력치 로딩
+    // 로딩 관련 함수
+    // 게임 시작 시 플레이어 스탯(능력치, 평판) 로딩
+    public void Update_Loading(int exp, int hp, int mp, STATUS status, SOC soc)
+    {
+        UpdateStatus_Loading(exp, hp, mp); // 플레이어 능력치 로딩
+        UpdateSoc_Loading(); // 플레이어 평판 로딩
+
+        // 로딩 마지막 부분에 추가할 예정인 코드
+        //if (m_sStatus.CheckIdentity(status) == true)
+        //{
+        //    GUIManager_Total.Instance.UpdateLog("Player_Status_STATUS 동기화 성공.");
+        //}
+        //else
+        //{
+        //    GUIManager_Total.Instance.UpdateLog("Player_Status_STATUS 동기화 실패.");
+        //}
+
+        //if (m_sSoc.CheckIdentity(soc) == true)
+        //{
+        //    GUIManager_Total.Instance.UpdateLog("Player_Status_SOC 동기화 성공.");
+        //}
+        //else
+        //{
+        //    GUIManager_Total.Instance.UpdateLog("Player_Status_SOC 동기화 실패.");
+        //}
+    }
+    // 플레이어 능력치 로딩
     public void UpdateStatus_Loading(int exp, int hp, int mp) // exp : 현재경험치, hp : 현재체력, mp : 현재마나
     {
         m_sStatus.SetSTATUS_Zero(); // 능력치 합계 초기화
@@ -501,63 +527,39 @@ public class Player_Status : MonoBehaviour
                                                                               //    따라서 해당 부분을 Player_Status.cs 외부로 옮기는 방향으로 수정할 예정이다.
                                                                               //
     }
-
-    // 로딩 시 스탯 계산.
+    // 플레이어 평판 로딩
     public void UpdateSoc_Loading()
     {
-        m_sSoc.SetSOC_Zero();
-        m_sSoc.P_OperatorSOC(m_sSoc_Origin);
-        m_sSoc.P_OperatorSOC(m_sSoc_Item_Use_Buff);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Hat);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Top);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Bottoms);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Shose);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Gloves);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Mainweapon);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Subweapon);
+        m_sSoc.SetSOC_Zero(); // 평판 합계 초기화
 
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_ItemSetEffect);
+        // 1. 플레이어 고유 평판 업데이트
+        m_sSoc.P_OperatorSOC(m_sSoc_Origin);                 // 평판 합계 += 고유 평판(성장 평판 + 영구적 버프포션, 놓아주기, 퀘스트 완료 보상 등 추가로 획득한 평판)
+        // 2. 플레이어에게 적용중인 소비아이템(일시적 버프포션)의 평판 업데이트
+        m_sSoc.P_OperatorSOC(m_sSoc_Item_Use_Buff);          // 평판 합계 += 플레이어에게 적용중인 소비아이템(일시적 버프포션)의 평판
+        // 3. 플레이어가 착용중인 장비아이템의 평판 업데이트
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Hat);        // 평판 합계 += 착용중인 장비아이템(모자) 평판
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Top);        // 평판 합계 += 착용중인 장비아이템(상의) 평판
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Bottoms);    // 평판 합계 += 착용중인 장비아이템(하의) 평판
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Shose);      // 평판 합계 += 착용중인 장비아이템(신발) 평판
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Gloves);     // 평판 합계 += 착용중인 장비아이템(장갑) 평판
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Mainweapon); // 평판 합계 += 착용중인 장비아이템(주무기) 평판
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Subweapon);  // 평판 합계 += 착용중인 장비아이템(보조무기) 평판
 
-        for (int i = 0; i < m_List_Skill.Count; i++)
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_ItemSetEffect);    // 평판 합계 += 적용중인 아이템 세트효과 평판
+
+        for (int i = 0; i < m_List_Skill.Count; i++) // 플레이어에게 적용중인 모든 스킬 조사
         {
-            m_sSoc.P_OperatorSOC(m_List_Skill[i].m_seSkillEffect.m_sSoc_Effect_Temporary);
+            m_sSoc.P_OperatorSOC(m_List_Skill[i].m_seSkillEffect.m_sSoc_Effect_Temporary);  // 평판 합계 += 적용중인 스킬 평판
         }
     }
 
-    // 로딩 시 소비 아이템 쿨타임, 지속시간.
+    // 사용중인 소비아이템의 지속시간, 쿨타임 로딩
     public void Item_Use_Loading()
     {
         
     }
 
-    // Player Stauts 업데이트.
-    public void Update_Loading(int exp, int hp, int mp, STATUS status, SOC soc)
-    {
-        UpdateStatus_Loading(exp, hp, mp);
-        UpdateSoc_Loading();
-
-        // Load 마지막 부분에 추가 예정.
-        //if (m_sStatus.CheckIdentity(status) == true)
-        //{
-        //    GUIManager_Total.Instance.UpdateLog("Player_Status_STATUS 동기화 성공.");
-        //}
-        //else
-        //{
-        //    GUIManager_Total.Instance.UpdateLog("Player_Status_STATUS 동기화 실패.");
-        //}
-
-        //if (m_sSoc.CheckIdentity(soc) == true)
-        //{
-        //    GUIManager_Total.Instance.UpdateLog("Player_Status_SOC 동기화 성공.");
-        //}
-        //else
-        //{
-        //    GUIManager_Total.Instance.UpdateLog("Player_Status_SOC 동기화 실패.");
-        //}
-
-        Player_Total.Instance.m_pm_Move.SetAttackSpeed(Return_AttackSpeed());
-    }
-
+    // 퀘스트 보상 수령으로인한 
     public void GetQuestReward(Quest quest)
     {
         m_sSoc_Origin.P_OperatorSOC(quest.m_sRewardSOC);
