@@ -841,11 +841,11 @@ public class Player_Status : MonoBehaviour
         {
             if (dictionary.Key != 0)
             {
-                // 아이템 세트효과 적용.
                 // 
                 // ※ 아이템 세트효과를 가지는 장비아이템의 경우 해당하는 아이템 세트효과 코드를 가진다. 
                 //    아이템 세트효과 코드를 가진 장비아이템을 장착하는 개수에 따라 상이한 세트효과가 적용되며, 이는 중첩 적용이 가능하다.
-                //    
+                //
+                // 아이템 세트효과 적용    
                 for (int i = 1; i < dictionary.Value + 1; i++)
                 {
                     m_sStatus_Extra_ItemSetEffect.P_OperatorSTATUS(ItemSetEffectManager.instance.Return_SetItemEffect_STATUS(dictionary.Key, i)); // 아이템 세트효과(능력치) 업데이트
