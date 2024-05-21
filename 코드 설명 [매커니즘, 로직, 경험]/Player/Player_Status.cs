@@ -450,46 +450,56 @@ public class Player_Status : MonoBehaviour
     }
 
     // 몬스터 토벌 시 변경되는 스탯(능력치(주로 경험치), 평판) 업데이트
-    public void MobDeath(SOC soc, STATUS status) // soc : 변경될 평판 정보, status : 변경될 능력치 정보
+    public void MobDeath(SOC soc, STATUS status) // soc : 변경될 평판 정보, status : 변경될 능력치(주로 경험치) 정보
     {
+        // 플레이어 고유 평판 업데이트
         m_sSoc_Origin.P_OperatorSOC(soc);
-        UpdateSOC();
+        UpdateSOC(); // 평판 업데이트
 
-        m_nEXP_Current = m_sStatus.GetSTATUS_EXP_Current();
+        m_nEXP_Current = m_sStatus.GetSTATUS_EXP_Current(); // 현재경험치 임시 저장
 
-        CarculateEXP(status);
+        CarculateEXP(status); // 경험치 계산
+        // 로그GUI에 획득한 경험치 정보 출력
         if (status.GetSTATUS_EXP_Current() != 0)
             GUIManager_Total.Instance.UpdateLog("+EXP: " + status.GetSTATUS_EXP_Current());
     }
 
-    // 로딩 시 스탯 계산.
-    public void UpdateStatus_Loading(int exp, int hp, int mp)
+    // 게임 시작 시 플레이어 능력치 로딩
+    public void UpdateStatus_Loading(int exp, int hp, int mp) // exp : 현재경험치, hp : 현재체력, mp : 현재마나
     {
-        m_sStatus.SetSTATUS_Zero();
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Origin);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Item_Use_Buff);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Hat);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Top);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Bottoms);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Shose);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Gloves);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Mainweapon);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Subweapon);
+        m_sStatus.SetSTATUS_Zero(); // 능력치 합계 초기화
 
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_ItemSetEffect);
+        // 1. 플레이어 고유 능력치 업데이트
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Origin);                 // 능력치 합계 += 고유 능력치(성장 능력치 + 영구적 버프포션, 놓아주기, 퀘스트 완료 보상 등 추가로 획득한 능력치)
+        // 2. 플레이어에게 적용중인 소비아이템(일시적 버프포션)의 능력치 업데이트
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Item_Use_Buff);          // 능력치 합계 += 플레이어에게 적용중인 소비아이템(일시적 버프포션)의 능력치
+        // 3. 플레이어가 착용중인 장비아이템의 능력치 업데이트
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Hat);        // 능력치 합계 += 착용중인 장비아이템(모자) 능력치
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Top);        // 능력치 합계 += 착용중인 장비아이템(상의) 능력치
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Bottoms);    // 능력치 합계 += 착용중인 장비아이템(하의) 능력치
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Shose);      // 능력치 합계 += 착용중인 장비아이템(신발) 능력치
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Gloves);     // 능력치 합계 += 착용중인 장비아이템(장갑) 능력치
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Mainweapon); // 능력치 합계 += 착용중인 장비아이템(주무기) 능력치
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Subweapon);  // 능력치 합계 += 착용중인 장비아이템(보조무기) 능력치
 
-        for (int i = 0; i < m_List_Skill.Count; i++)
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_ItemSetEffect);    // 능력치 합계 += 적용중인 아이템 세트효과 능력치
+        
+        for (int i = 0; i < m_List_Skill.Count; i++) // 플레이어에게 적용중인 모든 스킬 조사
         {
-            m_sStatus.P_OperatorSTATUS(m_List_Skill[i].m_seSkillEffect.m_sStatus_Effect_Temporary);
+            m_sStatus.P_OperatorSTATUS(m_List_Skill[i].m_seSkillEffect.m_sStatus_Effect_Temporary); // 능력치 합계 += 적용중인 스킬 능력치
         }
 
-        m_sStatus.SetSTATUS_EXP_Current(exp);
-        m_sStatus.SetSTATUS_HP_Current(hp);
-        m_sStatus.SetSTATUS_MP_Current(mp);
+        m_sStatus.SetSTATUS_EXP_Current(exp); // 현재경험치 설정
+        m_sStatus.SetSTATUS_HP_Current(hp);   // 현재체력 설정
+        m_sStatus.SetSTATUS_MP_Current(mp);   // 현재마나 설정
 
-        CheckLogic();
+        CheckLogic(); // 능력치 논리 판단(현재체력, 현재마나)
 
-        Player_Total.Instance.m_pm_Move.SetAttackSpeed(Return_AttackSpeed());
+        Player_Total.Instance.m_pm_Move.SetAttackSpeed(Return_AttackSpeed()); // 플레이어의 행동을 관리하는 Player_Move.cs에 플레이어의 공격속도를 제공
+                                                                              // 
+                                                                              // ※ Player_Total.cs에 포함되는 Player_Status.cs에서 다시 Player_Total.cs에 접근하는것은 계층구조상 바람직하지 않다.
+                                                                              //    따라서 해당 부분을 Player_Status.cs 외부로 옮기는 방향으로 수정할 예정이다.
+                                                                              //
     }
 
     // 로딩 시 스탯 계산.
