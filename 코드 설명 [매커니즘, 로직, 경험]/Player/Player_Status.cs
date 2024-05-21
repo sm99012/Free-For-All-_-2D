@@ -559,97 +559,67 @@ public class Player_Status : MonoBehaviour
         
     }
 
-    // 퀘스트 보상 수령으로인한 
-    public void GetQuestReward(Quest quest)
+    // 퀘스트 완료 보상 수령으로인한 스탯(능력치, 평판) 업데이트
+    public void GetQuestReward(Quest quest) // queset : 퀘스트 정보(퀘스트 완료 보상(스탯(능력치, 평판)))
     {
+        // 플레이어 고유 평판 업데이트
         m_sSoc_Origin.P_OperatorSOC(quest.m_sRewardSOC);
-        UpdateSOC();
+        UpdateSOC(); // 평판 업데이트
 
-        m_nEXP_Current = m_sStatus.GetSTATUS_EXP_Current();
-        UpdateStatus_QuestClear(quest.m_sRewardSTATUS);
+        m_nEXP_Current = m_sStatus.GetSTATUS_EXP_Current(); // 현재경험치 임시 저장
+        UpdateStatus_QuestClear(quest.m_sRewardSTATUS); // 퀘스트 완료로인한 능력치 업데이트
 
-        CarculateEXP(quest.m_sRewardSTATUS);
-        GUIManager_Total.Instance.UpdateLog("+EXP: " + quest.m_sRewardSTATUS.GetSTATUS_EXP_Current());
-        // + 퀘스트 보상 스탯.
+        CarculateEXP(quest.m_sRewardSTATUS); // 경험치 계산
+        GUIManager_Total.Instance.UpdateLog("+EXP: " + quest.m_sRewardSTATUS.GetSTATUS_EXP_Current()); // 로그GUI에 퀘스트 완료 보상(추가 경험치) 정보 출력
     }
 
     // 논리(조건) 체크
     public void CheckLogic()
     {
+        // 플레이어의 현재체력은 최대체력을 초과할 수 없다.
         if (m_sStatus.GetSTATUS_HP_Current() > m_sStatus.GetSTATUS_HP_Max())
         {
             m_sStatus.SetSTATUS_HP_Current(m_sStatus.GetSTATUS_HP_Max());
         }
-
+        // 플레이어의 현재마나는 최대마나를 초과할 수 없다.
         if (m_sStatus.GetSTATUS_MP_Current() > m_sStatus.GetSTATUS_MP_Max())
         {
             m_sStatus.SetSTATUS_MP_Current(m_sStatus.GetSTATUS_MP_Max());
         }
-        //Debug.Log(m_sStatus.GetSTATUS_HP_Current() + " / " +  m_sStatus.GetSTATUS_HP_Max() + " / " + m_sStatus_Extra_ItemSetEffect.GetSTATUS_HP_Max());
     }
-    
-    // 적용중인 버프, 디버프, 스킬 모두 해제.
-    void UpdateStatus_ReTry()
+
+    // 리트라이(부활) 관련 함수
+    public void ReTry()
     {
-        m_nEXP_Current = m_sStatus.GetSTATUS_EXP_Current();
-        m_nHP_Current = m_sStatus.GetSTATUS_HP_Current();
-        m_nMP_Current = m_sStatus.GetSTATUS_MP_Current();
-
-        m_sStatus.SetSTATUS_Zero();
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Origin);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Hat);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Top);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Bottoms);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Shose);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Gloves);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Mainweapon);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Subweapon);
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_ItemSetEffect);
-
-        m_sStatus_Item_Use_Buff.SetSTATUS_Zero();
-        m_sStatus.P_OperatorSTATUS(m_sStatus_Item_Use_Buff);
-
-        m_sStatus.SetSTATUS_EXP_Current(m_nEXP_Current);
-        m_sStatus.SetSTATUS_HP_Current(m_sStatus.GetSTATUS_HP_Max());
-        m_sStatus.SetSTATUS_MP_Current(m_sStatus.GetSTATUS_MP_Max());
-
-        CheckLogic();
+        ReTry_Initializing();
     }
-    void UpdateSoc_ReTry()
-    {
-        m_sSoc.SetSOC_Zero();
-        m_sSoc.P_OperatorSOC(m_sSoc_Origin);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Hat);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Top);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Bottoms);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Shose);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Gloves);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Mainweapon);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Subweapon);
-        m_sSoc.P_OperatorSOC(m_sSoc_Extra_ItemSetEffect);
-
-        m_sSoc_Item_Use_Buff.SetSOC_Zero();
-        m_sSoc.P_OperatorSOC(m_sSoc_Item_Use_Buff);
-    }
+    // 리트라이(부활) 시 플레이어 스탯(능력치, 평판) 초기화(플레이어에게 적용중인 소비아이템 효과(버프ㆍ디버프), 스킬, 상태이상 해제)
     public void ReTry_Initializing()
     {
-        m_Dictionary_Item_Use_Buff.Clear();
-        m_Dictionary_Item_Use_CoolTime.Clear();
-
+        // 소비아이템 목록 초기화
+        m_Dictionary_Item_Use_Buff.Clear(); // 플레이어에게 적용중인 소비아이템 목록 초기화
+        m_Dictionary_Item_Use_CoolTime.Clear(); // 소비아이템 쿨타임 목록 초기화
+        // 플레이어에게 적용중인 소비아이템의 지속시간을 계산하는 코루틴 종료
         foreach(KeyValuePair<int, Coroutine> item in m_Dictionary_Coroutine_Item_Use_Buff)
         {
             StopCoroutine(item.Value);
         }
+        // 소비아이템의 쿨타임을 계산하는 코루틴 종료
         foreach (KeyValuePair<int, Coroutine> item in m_Dictionary_Coroutine_Item_Use_CoolTime)
         {
             StopCoroutine(item.Value);
         }
-        m_Dictionary_Coroutine_Item_Use_Buff.Clear();
-        m_Dictionary_Coroutine_Item_Use_CoolTime.Clear();
+        // 코루틴 초기화
+        m_Dictionary_Coroutine_Item_Use_Buff.Clear(); // 플레이어에게 적용중인 소비아이템의 지속시간을 계산하는 코루틴 목록 초기화
+        m_Dictionary_Coroutine_Item_Use_CoolTime.Clear(); // 소비아이템의 쿨타임을 계산하는 코루틴 목록 초기화
+        // 시간(float) 초기화
+        m_Dictionary_Item_Use_Buff_RemainingTime.Clear(); // 플레이어에게 적용중인 소비아이템의 지속시간 목록 초기화
+        m_Dictionary_Item_Use_CoolTime_RemainingTime.Clear(); // 소비아이템의 쿨타임 목록 초기화
 
-        m_Dictionary_Item_Use_Buff_RemainingTime.Clear();
-        m_Dictionary_Item_Use_CoolTime_RemainingTime.Clear();
+        // 플레이어에게 적용중인 스킬 해제
+        m_List_Skill.Clear();
 
+        // 플레이어에게 적용중인 상태이상 해제(코루틴 종료)
         if (m_cProcessBind != null)
             StopCoroutine(m_cProcessBind);
         m_gCondition_Bind.SetActive(false);
@@ -666,19 +636,65 @@ public class Player_Status : MonoBehaviour
             StopCoroutine(m_cProcessSlow);
         m_gCondition_Slow.SetActive(false);
 
-        m_cCondition.Initializing();
+        m_cCondition.Initializing(); // 플레이어 상태이상 정보 초기화
 
-        m_List_Skill.Clear();
-
-        UpdateStatus_ReTry();
-        UpdateSoc_ReTry();
+        UpdateStatus_ReTry(); // 능력치 업데이트
+        UpdateSoc_ReTry(); // 평판 업데이트
     }
-
-    public void ReTry()
+    // 리트라이(부활) 시 스탯(능력치, 평판) 업데이트 관련 함수.
+    // 리트라이(부활) 시 능력치 업데이트
+    void UpdateStatus_ReTry()
     {
-        ReTry_Initializing();
-    }
+        m_nEXP_Current = m_sStatus.GetSTATUS_EXP_Current(); // 현재경험치 임시 저장
+        m_nHP_Current = m_sStatus.GetSTATUS_HP_Current();   // 현재체력 임시 저장
+        m_nMP_Current = m_sStatus.GetSTATUS_MP_Current();   // 현재마나 임시 저장
 
+        m_sStatus.SetSTATUS_Zero(); // 능력치 합계 초기화
+        
+        // 1. 플레이어 고유 능력치 업데이트
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Origin);                 // 능력치 합계 += 고유 능력치(성장 능력치 + 영구적 버프포션, 놓아주기, 퀘스트 완료 보상 등 추가로 획득한 능력치)
+        // 2. 플레이어에게 적용중인 소비아이템(일시적 버프포션)의 능력치 업데이트
+        m_sStatus_Item_Use_Buff.SetSTATUS_Zero();
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Item_Use_Buff);          // 능력치 합계 += 플레이어에게 적용중인 소비아이템(일시적 버프포션)의 능력치
+        // 3. 플레이어가 착용중인 장비아이템의 능력치 업데이트
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Hat);        // 능력치 합계 += 착용중인 장비아이템(모자) 능력치
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Top);        // 능력치 합계 += 착용중인 장비아이템(상의) 능력치
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Bottoms);    // 능력치 합계 += 착용중인 장비아이템(하의) 능력치
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Shose);      // 능력치 합계 += 착용중인 장비아이템(신발) 능력치
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Gloves);     // 능력치 합계 += 착용중인 장비아이템(장갑) 능력치
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Mainweapon); // 능력치 합계 += 착용중인 장비아이템(주무기) 능력치
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_Equip_Subweapon);  // 능력치 합계 += 착용중인 장비아이템(보조무기) 능력치
+
+        m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_ItemSetEffect);    // 능력치 합계 += 적용중인 아이템 세트효과 능력치
+
+        m_sStatus.SetSTATUS_EXP_Current(m_nEXP_Current);              // 현재경험치 설정
+        m_sStatus.SetSTATUS_HP_Current(m_sStatus.GetSTATUS_HP_Max()); // 현재체력 설정(현재체력 = 최대체력)
+        m_sStatus.SetSTATUS_MP_Current(m_sStatus.GetSTATUS_MP_Max()); // 현재마나 설정(현재마나 = 최대마나)
+
+        CheckLogic(); // 능력치 논리 판단(현재체력, 현재마나)
+    }
+    // 리트라이(부활) 시 평판 업데이트
+    void UpdateSoc_ReTry()
+    {
+        m_sSoc.SetSOC_Zero(); // 평판 합계 초기화
+
+        // 1. 플레이어 고유 평판 업데이트
+        m_sSoc.P_OperatorSOC(m_sSoc_Origin);                 // 평판 합계 += 고유 평판(성장 평판 + 영구적 버프포션, 놓아주기, 퀘스트 완료 보상 등 추가로 획득한 평판)
+        // 2. 플레이어에게 적용중인 소비아이템(일시적 버프포션)의 평판 업데이트
+        m_sSoc_Item_Use_Buff.SetSOC_Zero();
+        m_sSoc.P_OperatorSOC(m_sSoc_Item_Use_Buff);          // 평판 합계 += 플레이어에게 적용중인 소비아이템(일시적 버프포션)의 평판
+        // 3. 플레이어가 착용중인 장비아이템의 평판 업데이트
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Hat);        // 평판 합계 += 착용중인 장비아이템(모자) 평판
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Top);        // 평판 합계 += 착용중인 장비아이템(상의) 평판
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Bottoms);    // 평판 합계 += 착용중인 장비아이템(하의) 평판
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Shose);      // 평판 합계 += 착용중인 장비아이템(신발) 평판
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Gloves);     // 평판 합계 += 착용중인 장비아이템(장갑) 평판
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Mainweapon); // 평판 합계 += 착용중인 장비아이템(주무기) 평판
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Subweapon);  // 평판 합계 += 착용중인 장비아이템(보조무기) 평판
+
+        m_sSoc.P_OperatorSOC(m_sSoc_Extra_ItemSetEffect);    // 평판 합계 += 적용중인 아이템 세트효과 평판
+    }
+    
     // 장비 세트 효과
     public void CheckSetItemEffect(Dictionary<int, int> setitemdictionary)
     {
