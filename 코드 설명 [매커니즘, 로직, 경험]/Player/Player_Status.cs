@@ -830,7 +830,8 @@ public class Player_Status : MonoBehaviour
     }
 
     // 장비아이템 세트효과 적용 함수
-    public void CheckSetItemEffect(Dictionary<int, int> setitemdictionary) // setitemdictionary : 플레이어에게 적용할 장비아이템 세트효과 정보
+    public void CheckSetItemEffect(Dictionary<int, int> setitemdictionary) // setitemdictionary : 플레이어에게 적용할 장비아이템 세트효과 정보.
+                                                                           // Dictionary <Key : 아이템 세트효과 코드 , Value : Key값(아이템 세트효과 코드)을 가지는 장비아이템 개수>
     {
         m_sStatus_Extra_ItemSetEffect.SetSTATUS_Zero(); // 적용중인 아이템 세트효과 능력치 초기화
         m_sSoc_Extra_ItemSetEffect.SetSOC_Zero(); // 적용중인 아이템 세트효과 평판 초기화
@@ -840,18 +841,24 @@ public class Player_Status : MonoBehaviour
         {
             if (dictionary.Key != 0)
             {
+                // 아이템 세트효과 적용.
+                // 
+                // ※ 아이템 세트효과를 가지는 장비아이템의 경우 해당하는 아이템 세트효과 코드를 가진다. 
+                //    아이템 세트효과 코드를 가진 장비아이템을 장착하는 개수에 따라 상이한 세트효과가 적용되며, 이는 중첩 적용이 가능하다.
+                //    
                 for (int i = 1; i < dictionary.Value + 1; i++)
                 {
-                    m_sStatus_Extra_ItemSetEffect.P_OperatorSTATUS(ItemSetEffectManager.instance.Return_SetItemEffect_STATUS(dictionary.Key, i));
-                    m_sSoc_Extra_ItemSetEffect.P_OperatorSOC(ItemSetEffectManager.instance.Return_SetItemEffect_SOC(dictionary.Key, i));
+                    m_sStatus_Extra_ItemSetEffect.P_OperatorSTATUS(ItemSetEffectManager.instance.Return_SetItemEffect_STATUS(dictionary.Key, i)); // 아이템 세트효과(능력치) 업데이트
+                    m_sSoc_Extra_ItemSetEffect.P_OperatorSOC(ItemSetEffectManager.instance.Return_SetItemEffect_SOC(dictionary.Key, i)); // 아이템 세트효과(평판) 업데이트
                 }
-                    
+
+                // 로그GUI에 적용중인 아이템 세트효과 정보를 출력
                 //GUIManager_Total.Instance.UpdateLog(ItemSetEffectManager.m_Dictionary_ItemSetEffect[dictionary.Key].m_sItemSetEffect_Name + " / " + dictionary.Value);
             }
         }
 
-        UpdateStatus_Equip();
-        UpdateSOC();
+        UpdateStatus_Equip(); // 능력치 업데이트(착용중인 장비아이템 변경, 소비아이템(영구적 버프포션) 사용)
+        UpdateSOC(); // 평판 업데이트
     }
 
     // 소비 아이템 사용 조건 체크
