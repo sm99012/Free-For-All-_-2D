@@ -449,7 +449,8 @@ public class Player_Status : MonoBehaviour
         m_sSoc.P_OperatorSOC(m_sSoc_Extra_ItemSetEffect);    // 평판 합계 += 적용중인 아이템 세트효과 평판
     }
 
-    public void MobDeath(SOC soc, STATUS status)
+    // 몬스터 토벌 시 변경되는 스탯(능력치(주로 경험치), 평판) 업데이트
+    public void MobDeath(SOC soc, STATUS status) // soc : 변경될 평판 정보, status : 변경될 능력치 정보
     {
         m_sSoc_Origin.P_OperatorSOC(soc);
         UpdateSOC();
