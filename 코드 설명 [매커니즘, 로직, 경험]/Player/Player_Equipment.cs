@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player_Equipment : MonoBehaviour
 {
-    // 플레이어가 착용중인 장비
+    // 플레이어가 착용중인 장비아이템
     public static Item_Equip m_gEquipment_Hat;        // 착용중인 장비아이템(모자)
     public static Item_Equip m_gEquipment_Top;        // 착용중인 장비아이템(상의)
     public static Item_Equip m_gEquipment_Bottoms;    // 착용중인 장비아이템(하의)
@@ -13,7 +13,7 @@ public class Player_Equipment : MonoBehaviour
     public static Item_Equip m_gEquipment_Mainweapon; // 착용중인 장비아이템(주무기)
     public static Item_Equip m_gEquipment_Subweapon;  // 착용중인 장비아이템(보조무기)
 
-    // 플레이어의 장비 착용 현황
+    // 플레이어의 장비아이템 착용 현황
     public static bool m_bEquipment_Hat;        // 모자
     public static bool m_bEquipment_Top;        // 상의
     public static bool m_bEquipment_Bottoms;    // 하의
@@ -41,7 +41,7 @@ public class Player_Equipment : MonoBehaviour
         m_bEquipment_Subweapon = false;
     }
     
-    // 장비 착용
+    // 장비아이템 착용
     public void Equip(Item_Equip item)
     {
         switch (item.m_eItemEquipType)
@@ -91,7 +91,7 @@ public class Player_Equipment : MonoBehaviour
         }
     }
 
-    // 장비 해제
+    // 장비아이템 해제
     public void Remove_Equip(E_ITEM_EQUIP_TYPE miet)
     {
         switch(miet)
@@ -148,7 +148,7 @@ public class Player_Equipment : MonoBehaviour
         return m_gEquipment_Mainweapon.m_eItemEquipMainWeaponType;
     }
 
-    // 착용중인 장비의 아이템 세트 효과 코드 반환
+    // 착용중인 장비아이템의 아이템 세트 효과 코드 반환
     public int CheckSetItemEffect(E_ITEM_EQUIP_TYPE eiet)
     {
         switch (eiet)
@@ -221,7 +221,7 @@ public class Player_Equipment : MonoBehaviour
         return 0;
     }
 
-    // 리트라이(부활) 시 아이템을 잃어버리는 함수
+    // 리트라이(부활) 시 아이템 소실 + 장비아이템 해제
     public bool ReTry_Lost_Item_Equip(Dictionary<int, int> dictionary) // 매개변수 dictionary에 잃어버리는 아이템 정보가 존재.
     {
         foreach (KeyValuePair<int, int> item in dictionary)
