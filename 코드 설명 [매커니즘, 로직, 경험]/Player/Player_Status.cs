@@ -699,7 +699,7 @@ public class Player_Status : MonoBehaviour
     // ※ 스탯(능력치, 평판) 업데이트 함수에 코드가 중복되는 부분이 많다. 이는 추후 중복되는 코드를 함수화 하여 코드 재사용성을 높이는 방향으로 변경할 예정이다.
     // 
 
-    // 장비아이템 착용 조건 체크 + 장비아이템 착용 시 스탯(능력치, 평판) 업데이트
+    // 장비아이템 착용 조건 판단, 장비아이템 착용 시 스탯(능력치, 평판) 업데이트
     public bool CheckCondition_Item_Equip(Item_Equip item, STATUS playerstatus, SOC playersoc) // item : 착용할 장비아이템 정보(착용 조건(스탯(능력치, 평판) 최소ㆍ최대)), playerstatus : 플레이어 능력치 합계, playersoc : 플레이어 평판 합계
     {
         if (playerstatus.CheckCondition_Max(item.m_sStatus_Limit_Max) == false) // 장비아이템 착용 조건 : 최대 능력치(플레이어의 능력치 합계가 장비아이템 착용 조건(최대 능력치)를 초과한 경우 제한)
@@ -865,28 +865,25 @@ public class Player_Status : MonoBehaviour
         UpdateSOC(); // 평판 업데이트
     }
 
-    // 소비 아이템 사용 조건 체크
-    // return 0: 아이템 사용.
-    // return 1: 아이템 사용 조건 불만족. - STATUS, SOC
-    // 
-    public int CheckCondition_Item_Use(Item_Use item)
+    // 소비아이템 사용 조건 판단
+    public int CheckCondition_Item_Use(Item_Use item) // item : 사용할 소비아이템 정보
     {
-        if (m_sStatus.CheckCondition_Max(item.m_sStatus_Limit_Max) == false)
+        if (m_sStatus.CheckCondition_Max(item.m_sStatus_Limit_Max) == false) // 소비아이템 사용 조건 : 최대 능력치(플레이어의 능력치 합계가 소비아이템 사용 조건(최대 능력치)를 초과한 경우 제한)
         {
             Debug.Log(item.m_sItemName + ": Status 최대 조건 불만족");
             return 1;
         }
-        if (m_sStatus.CheckCondition_Min(item.m_sStatus_Limit_Min) == false)
+        if (m_sStatus.CheckCondition_Min(item.m_sStatus_Limit_Min) == false) // 소비아이템 사용 조건 : 최소 능력치(플레이어의 능력치 합계가 소비아이템 사용 조건(최소 능력치)에 미달한 경우 제한)
         {
             Debug.Log(item.m_sItemName + ": Status 최소 조건 불만족");
             return 1;
         }
-        if (m_sSoc.CheckCondition_Max(item.m_sSoc_Limit_Max) == false)
+        if (m_sSoc.CheckCondition_Max(item.m_sSoc_Limit_Max) == false) // 소비아이템 사용 조건 : 최소 평판(플레이어의 평판 합계가 소비아이템 사용 조건(최소 평판)에 미달한 경우 제한)
         {
             Debug.Log(item.m_sItemName + ": Soc 최대 조건 불만족");
             return 1;
         }
-        if (m_sSoc.CheckCondition_Min(item.m_sSoc_Limit_Min) == false)
+        if (m_sSoc.CheckCondition_Min(item.m_sSoc_Limit_Min) == false) // 소비아이템 사용 조건 : 최대 평판(플레이어의 평판 합계가 소비아이템 사용 조건(최대 평판)를 초과한 경우 제한)
         {
             Debug.Log(item.m_sItemName + ": Soc 최소 조건 불만족");
             return 1;
@@ -895,52 +892,23 @@ public class Player_Status : MonoBehaviour
         return 0;
     }
 
+    // 플레이어의 합계 공격속도 반환
     public float Return_AttackSpeed()
     {
         return m_sStatus.GetSTATUS_AttackSpeed();
     }
 
 
-    // 소비 아이템 사용에 관한 버프 적용
-    // ApplyPotion == 0: 적용.
-    // ApplyPotion == 1 ~ 9: 회복 포션.
-    // ApplyPotion == 1: 쿨타임 적용중이라 적용 안됨.
-    // ApplyPotion == 2: 회복 포션 적용.
-    //
-    // ApplyPotion == 10 ~ 19: 일시적 버프 포션.
-    // ApplyPotion == 10: 버프 포션 쿨타임 적용중이라 적용 안됨.
-    // ApplyPotion == 11: 이미 버프 포션 적용 중일때 사용.
-    // ApplyPotion == 12: 버프 포션 적용.
-    // 
-    // ApplyPotion == 20 ~ 29: 영구적 스탯 변화 포션.
-    //
-    //
-    //
+    // 소비아이템 사용 시 스탯(능력치, 평판), 버프ㆍ디버프 업데이트
+    // return 0 : 소비아이템 사용 성공 / return 1 : 소비아이템 사용 실패
     public int ApplyPotion(Item_Use item)
     {
         Coroutine coroutine_buff;
         Coroutine coroutine_cooltime;
 
+        // 소비아이템_회복포션 사용
         if (item.m_eItemUseType == E_ITEM_USE_TYPE.RECOVERPOTION)
         {
-            //for (int i = 0; i < m_List_Coroutine_Item_Use_CoolTime.Count; i++)
-            //{
-            //    // 아이템 쿨타임일때.
-            //    if (m_List_Item_Use_CoolTime[i].m_nItemCode == item.m_nItemCode)
-            //    {
-            //        GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 사용 불가.(쿨타임)");
-            //        return 1;
-            //    }
-            //}
-            //foreach (KeyValuePair<int, Item_Use> ditem in m_Dictionary_Item_Use_CoolTime)
-            //{
-            //    // Item_Use: CoolTime!
-            //    if (ditem.Value.m_nItemCode == item.m_nItemCode)
-            //    {
-            //        GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 사용 불가.(쿨타임)");
-            //        return 1;
-            //    }
-            //}
             if (m_Dictionary_Item_Use_CoolTime.ContainsKey(item.m_nItemCode) == true)
             {
                 GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 사용 불가.(쿨타임)");
@@ -949,12 +917,6 @@ public class Player_Status : MonoBehaviour
 
             UpdateStatus_Item_Use_Recover(item.m_sStatus_Effect);
 
-            //if (item.m_fCoolTime > 0)
-            //{
-            //    m_List_Item_Use_CoolTime.Add(item);
-            //    coroutine_cooltime = StartCoroutine(Process_Item_Use_CoolTime(item));
-            //    m_List_Coroutine_Item_Use_CoolTime.Add(coroutine_cooltime);
-            //}
             if (item.m_fCoolTime > 0)
             {
                 m_Dictionary_Item_Use_CoolTime.Add(item.m_nItemCode, item);
@@ -968,23 +930,6 @@ public class Player_Status : MonoBehaviour
 
         if (item.m_eItemUseType == E_ITEM_USE_TYPE.ETERNALBUFFPOTION)
         {
-            //for (int i = 0; i < m_List_Coroutine_Item_Use_CoolTime.Count; i++)
-            //{
-            //    // 아이템 쿨타임일때.
-            //    if (m_List_Item_Use_CoolTime[i].m_nItemCode == item.m_nItemCode)
-            //    {
-            //        GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 사용 불가.(쿨타임)");
-            //        return 1;
-            //    }
-            //}
-            //foreach (KeyValuePair<int, Item_Use> ditem in m_Dictionary_Item_Use_CoolTime)
-            //{
-            //    if (ditem.Value.m_nItemCode == item.m_nItemCode)
-            //    {
-            //        GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 사용 불가.(쿨타임)");
-            //        return 1;
-            //    }
-            //}
             if (m_Dictionary_Item_Use_CoolTime.ContainsKey(item.m_nItemCode) == true)
             {
                 GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 사용 불가.(쿨타임)");
@@ -993,12 +938,6 @@ public class Player_Status : MonoBehaviour
 
             UpdateStatus_Item_Use_EternalBuff(item.m_sStatus_Effect, item.m_sSoc_Effect);
 
-            //if (item.m_fCoolTime > 0)
-            //{
-            //    m_List_Item_Use_CoolTime.Add(item);
-            //    coroutine_cooltime = StartCoroutine(Process_Item_Use_CoolTime(item));
-            //    m_List_Coroutine_Item_Use_CoolTime.Add(coroutine_cooltime);
-            //}
             if (item.m_fCoolTime > 0)
             {
                 m_Dictionary_Item_Use_CoolTime.Add(item.m_nItemCode, item);
@@ -1012,71 +951,12 @@ public class Player_Status : MonoBehaviour
 
         if (item.m_eItemUseType == E_ITEM_USE_TYPE.TEMPORARYBUFFPOTION)
         {
-            //for (int i = 0; i < m_List_Coroutine_Item_Use_CoolTime.Count; i++)
-            //{
-            //    // 아이템 쿨타임일때.
-            //    if (m_List_Item_Use_CoolTime[i].m_nItemCode == item.m_nItemCode)
-            //    {
-            //        GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 사용 불가.(쿨타임)");
-            //        return 1;
-            //    }
-            //}
             if (m_Dictionary_Item_Use_CoolTime.ContainsKey(item.m_nItemCode) == true)
             {
                 GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 사용 불가.(쿨타임)");
                 return 1;
             }
-            //for (int i = 0; i < m_List_Item_Use_Buff.Count; i++)
-            //{
-            //    // 같은 아이템 코드를 가진 버프 포션은 중복해서 적용이 불가.
-            //    // 단순 지속시간 초기화는 가능.
-            //    if (m_List_Item_Use_Buff[i].m_nItemCode == item.m_nItemCode)
-            //    {
-            //        m_List_Item_Use_Buff.RemoveAt(i);
-            //        //m_fList_Item_Use_Buff_RemainingTime.RemoveAt(i);
-            //        StopCoroutine(m_List_Coroutine_Item_Use_Buff[i]);
-            //        m_List_Coroutine_Item_Use_Buff.RemoveAt(i);
-
-            //        m_List_Item_Use_Buff.Add(item);
-            //        //m_fList_Item_Use_Buff_RemainingTime.Add(item.m_fDurationTime);
-            //        coroutine_buff = StartCoroutine(Process_Item_Use_BuffTime(item));
-            //        m_List_Coroutine_Item_Use_Buff.Add(coroutine_buff);
-            //        if (item.m_fCoolTime > 0)
-            //        {
-            //            m_List_Item_Use_CoolTime.Add(item);
-            //            coroutine_cooltime = StartCoroutine(Process_Item_Use_CoolTime(item));
-            //            m_List_Coroutine_Item_Use_CoolTime.Add(coroutine_cooltime);
-            //        }
-
-            //        GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 버프 효과 적용. (지속시간 초기화)");
-            //        return 0;
-            //    }
-            //}
-            //foreach (KeyValuePair<int, Item_Use> ditem in m_Dictionary_Item_Use_Buff)
-            //{
-            //    // 같은 아이템 코드를 가진 버프 포션은 중복해서 적용이 불가.
-            //    // 단순 지속시간 초기화는 가능.
-            //    if (ditem.Value.m_nItemCode == item.m_nItemCode)
-            //    {
-            //        m_Dictionary_Item_Use_Buff.Remove(ditem.Key); Debug.Log("!!!");
-            //        StopCoroutine(m_Dictionary_Coroutine_Item_Use_Buff[ditem.Key]);
-            //        m_Dictionary_Coroutine_Item_Use_Buff.Remove(ditem.Key);
-
-            //        m_Dictionary_Item_Use_Buff.Add(item.m_nItemCode, item);
-            //        coroutine_buff = StartCoroutine(Process_Item_Use_BuffTime(item));
-            //        //m_Dictionary_Coroutine_Ite
-            //        //    m_Use_Buff.Add(item.m_nItemCode, coroutine_buff);
-            //        if (item.m_fCoolTime > 0)
-            //        {
-            //            m_Dictionary_Item_Use_CoolTime.Add(item.m_nItemCode, item);
-            //            coroutine_cooltime = StartCoroutine(Process_Item_Use_CoolTime(item));
-            //            m_Dictionary_Coroutine_Item_Use_CoolTime.Add(item.m_nItemCode, coroutine_cooltime);
-            //        }
-
-            //        GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 버프 효과 적용. (지속시간 초기화)");
-            //        return 0;
-            //    }
-            //}
+            
             if (m_Dictionary_Item_Use_Buff.ContainsKey(item.m_nItemCode) == true)
             {
                 m_Dictionary_Item_Use_Buff.Remove(item.m_nItemCode);
