@@ -393,7 +393,7 @@ public class Player_Move : MonoBehaviour
     // ※ 각종 딜레이의 종료 우선순위는 1. 구르기(딜레이 캔슬 기능) > 2. 넉백 중 딜레이 > 3. 피격 후 딜레이 < 4. 공격 후 딜레이 순이다. 우선순위가 높은 딜레이가 종료된다면 지속중인 하위 딜레이는 모두 취소된다.
     //
     
-    // 사망 함수. 모든 코루틴가 종료
+    // 사망 함수. 모든 코루틴 종료
     // Monster_Total.cs에서 Player_Total.cs의 함수를 호출해 실행. 플레이어의 사망 동작 수행
     public void Death()
     {
@@ -509,7 +509,7 @@ public class Player_Move : MonoBehaviour
 
                 m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.ROLL); // 플레이어 동작 FSM 변경
 
-                if (m_cProcess_Power != null) // 구르기 이전에 이미 플레이어 피격 불가능 상태(m_bPower == true)라면 해당 코루틴는 종료하고 구르기로 인한 플레이어 피격 불가능 상태를 다시 적용한다. 
+                if (m_cProcess_Power != null) // 구르기 이전에 이미 플레이어 피격 불가능 상태(m_bPower == true)라면 해당 코루틴은 종료하고 구르기로 인한 플레이어 피격 불가능 상태를 다시 적용한다. 
                 {
                     StopCoroutine(m_cProcess_Power);
                     m_cProcess_Power = null;
