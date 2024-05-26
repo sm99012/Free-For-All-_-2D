@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player_Status : MonoBehaviour
 {
-* * *
+
     // 플레이어 평판 관련 스탯
     public SOC m_sSoc;                        // 평판 합계
     public SOC m_sSoc_Origin;                 // 고유 평판(성장 평판 + 영구버프아이템, 퀘스트 완료 보상 등 추가로 획득한 평판)
