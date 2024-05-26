@@ -1249,91 +1249,92 @@ public class Player_Status : MonoBehaviour
     }
 
     // 플레이어에게 상태이상을 적용하는 함수
-    // 상태이상(속박)
+    // 상태이상(속박) 적용 함수
     public void ApplySkillEffect_Bind(Skill skill) // skill : 상태이상(속박) 정보(등급, 지속시간)
     {
-        if (m_cCondition.GetBindTime() > 0)
+        if (m_cCondition.GetBindTime() > 0) // 상태이상(속박) 지속시간이 존재하는 경우
         {
             if (m_cProcessBind == null)
             {
-                m_cProcessBind = StartCoroutine(ProcessBind(skill));
+                m_cProcessBind = StartCoroutine(ProcessBind(skill)); // 상태이상(속박) 관련 코루틴 실행
             }
             else
             {
                 StopCoroutine(m_cProcessBind);
-                m_cProcessBind = StartCoroutine(ProcessBind(skill));
+                m_cProcessBind = StartCoroutine(ProcessBind(skill)); // 상태이상(속박) 관련 코루틴 실행
             }
         }
     }
     Coroutine m_cProcessBind;
     IEnumerator ProcessBind(Skill skill) // skill : 상태이상(속박) 정보(등급, 지속시간)
     {
-        m_sStatus.SetSTATUS_Speed(0);
-        GUIManager_Total.Instance.Update_SS();
-        m_cCondition.SetBindCondition(true);
-        m_gCondition_Bind.SetActive(true);
+        m_sStatus.SetSTATUS_Speed(0); // 플레이어의 현재 이동속도를 0으로 설정
+        GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
+        m_cCondition.SetBindCondition(true); // 플레이어에게 적용중인 상태이상 업데이트 : 속박상태 true
+        m_gCondition_Bind.SetActive(true); // 상태이상(속박) 이팩트 활성화
         while (m_cCondition.GetBindTime() > 0)
         {
-            m_cCondition.AddBindTime(-Time.deltaTime);
-            //Debug.Log(m_cCondition.GetBindTime());
-            yield return null;
+            m_cCondition.AddBindTime(-Time.deltaTime); // 상태이상(속박) 잔여 지속시간 -= 0.016
+            yield return null; // Time.deltaTime(0.016)
         }
-        m_cCondition.SetBindCondition(false);
-        m_gCondition_Bind.SetActive(false);
-        RemoveSkill(skill);
-        UpdateStatus_ApplySkill();
-        GUIManager_Total.Instance.Update_SS();
-        UpdateSoc_ApplySkill();
-        m_cCondition.SetBindTime(0);
+        m_cCondition.SetBindCondition(false); // 플레이어에게 적용중인 상태이상 업데이트 : 속박상태 false
+        m_gCondition_Bind.SetActive(false); // 상태이상(속박) 이팩트 비활성화
+        RemoveSkill(skill); // 사용 중단할 스킬을 플레이어에게 적용중인 스킬 리스트에서 제거
+        UpdateStatus_ApplySkill(); // 스킬 적용으로인한 능력치 업데이트
+        UpdateSoc_ApplySkill(); // 스킬 적용으로인한 평판 업데이트
+        GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
+        m_cCondition.SetBindTime(0); // 상태이상(속박) 잔여 지속시간 = 0
         m_cProcessBind = null;
     }
 
-    // 상태이상(기절)
+    // 상태이상(기절) 적용 함수
     public void ApplySkillEffect_Shock(Skill skill) // skill : 상태이상(기절) 정보(등급, 지속시간)
     {
-        if (m_cCondition.GetShockTime() > 0)
+        if (m_cCondition.GetShockTime() > 0) // 상태이상(기절) 지속시간이 존재하는 경우
         {
             if (m_cProcessShock == null)
             {
-                m_cProcessShock = StartCoroutine(ProcessShock(skill));
+                m_cProcessShock = StartCoroutine(ProcessShock(skill)); // 상태이상(기절) 관련 코루틴 실행
             }
             else
             {
                 StopCoroutine(m_cProcessShock);
-                m_cProcessShock = StartCoroutine(ProcessShock(skill));
+                m_cProcessShock = StartCoroutine(ProcessShock(skill)); // 상태이상(기절) 관련 코루틴 실행
             }
         }
     }
     Coroutine m_cProcessShock;
     IEnumerator ProcessShock(Skill skill) // skill : 상태이상(기절) 정보(등급, 지속시간)
     {
-        GUIManager_Total.Instance.Update_SS();
-        m_cCondition.SetShockCondition(true);
-        m_gCondition_Shock.SetActive(true);
+    	// 코루틴 시작 시점
+        GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
+        m_cCondition.SetShockCondition(true); // 플레이어에게 적용중인 상태이상 업데이트 : 기절상태 true
+        m_gCondition_Shock.SetActive(true); // 상태이상(기절) 이팩트 활성화
         while (m_cCondition.GetShockTime() > 0)
         {
-            m_cCondition.AddShockTime(-Time.deltaTime);
-            //Debug.Log(m_cCondition.GetDarkTime());
-            yield return null;
+            m_cCondition.AddShockTime(-Time.deltaTime); // 상태이상(기절) 잔여 지속시간 -= 0.016
+            yield return null; // Time.deltaTime(0.016)
         }
-        m_cCondition.SetShockCondition(false);
-        m_gCondition_Shock.SetActive(false);
-        RemoveSkill(skill);
-        UpdateStatus_ApplySkill();
-        UpdateSoc_ApplySkill();
-        GUIManager_Total.Instance.Update_SS();
-        m_cCondition.SetShockTime(0);
+	
+	// 코루틴 종료 시점
+        m_cCondition.SetShockCondition(false); // 플레이어에게 적용중인 상태이상 업데이트 : 기절상태 false
+        m_gCondition_Shock.SetActive(false);상태이상(기절) 이팩트 비활성화
+        RemoveSkill(skill); // 사용 중단할 스킬을 플레이어에게 적용중인 스킬 리스트에서 제거
+        UpdateStatus_ApplySkill(); // 스킬 적용으로인한 능력치 업데이트
+        UpdateSoc_ApplySkill(); // 스킬 적용으로인한 평판 업데이트
+        GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
+        m_cCondition.SetShockTime(0); // 상태이상(기절) 잔여 지속시간 = 0
         m_cProcessShock = null;
     }
 
-    // 상태이상(암흑)
+    // 상태이상(암흑) 적용 함수
     public void ApplySkillEffect_Dark(Skill skill) // skill : 상태이상(암흑) 정보(등급, 지속시간)
     {
-        if (m_cCondition.GetDarkTime() > 0)
+        if (m_cCondition.GetDarkTime() > 0) // 상태이상(암흑) 지속시간이 존재하는 경우
         {
             if (m_cProcessDark == null)
             {
-                m_cProcessDark = StartCoroutine(ProcessDark(skill));
+                m_cProcessDark = StartCoroutine(ProcessDark(skill)); // 상태이상(암흑) 관련 코루틴 실행
             }
             else
             {
@@ -1344,34 +1345,36 @@ public class Player_Status : MonoBehaviour
     Coroutine m_cProcessDark;
     IEnumerator ProcessDark(Skill skill) // skill : 상태이상(암흑) 정보(등급, 지속시간)
     {
-        GUIManager_Total.Instance.Update_SS();
-        m_cCondition.SetDarkCondition(true);
-        m_gCondition_Dark.SetActive(true);
+    	// 코루틴 시작 시점
+        GUIManager_Total.Instance.Update_SS();  // 스탯GUI 업데이트
+        m_cCondition.SetDarkCondition(true); // 플레이어에게 적용중인 상태이상 업데이트 : 암흑상태 true
+        m_gCondition_Dark.SetActive(true); // 상태이상(암흑) 이팩트 활성화
         while (m_cCondition.GetDarkTime() > 0)
         {
-            m_cCondition.AddDarkTime(-Time.deltaTime);
-            //Debug.Log(m_cCondition.GetDarkTime());
-            yield return null;
+            m_cCondition.AddDarkTime(-Time.deltaTime); // 상태이상(암흑) 잔여 지속시간 -= 0.016
+            yield return null; // Time.deltaTime(0.016)
         }
-        m_cCondition.SetDarkCondition(false);
-        m_gCondition_Dark.SetActive(false);
-        RemoveSkill(skill);
-        UpdateStatus_ApplySkill();
-        UpdateSoc_ApplySkill();
-        GUIManager_Total.Instance.Update_SS();
-        m_cCondition.SetDarkTime(0);
-        m_cCondition.SetDarkRatio(0);
+
+ 	// 코루틴 종료 시점
+        m_cCondition.SetDarkCondition(false); // 플레이어에게 적용중인 상태이상 업데이트 : 암흑상태 false
+        m_gCondition_Dark.SetActive(false); // 상태이상(암흑) 이팩트 활성화
+        RemoveSkill(skill); // 사용 중단할 스킬을 플레이어에게 적용중인 스킬 리스트에서 제거
+        UpdateStatus_ApplySkill(); // 스킬 적용으로인한 능력치 업데이트
+        UpdateSoc_ApplySkill(); // 스킬 적용으로인한 평판 업데이트
+        GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
+        m_cCondition.SetDarkTime(0); // 상태이상(암흑) 잔여 지속시간 = 0
+        m_cCondition.SetDarkRatio(0); // 상태이상(암흑) 비율(등급) = 0
         m_cProcessDark = null;
     }
 
-    // 상태이상(둔화)
+    // 상태이상(둔화) 적용 함수
     public void ApplySkillEffect_Slow(Skill skill) // skill : 상태이상(둔화) 정보(등급, 지속시간)
     {
-        if (m_cCondition.GetSlowTime() > 0)
+        if (m_cCondition.GetSlowTime() > 0) // 상태이상(둔화) 지속시간이 존재하는 경우
         {
             if (m_cProcessSlow == null)
             {
-                m_cProcessSlow = StartCoroutine(ProcessSlow(skill));
+                m_cProcessSlow = StartCoroutine(ProcessSlow(skill)); // 상태이상(둔화) 관련 코루틴 실행
             }
             else
             {
@@ -1382,35 +1385,38 @@ public class Player_Status : MonoBehaviour
     Coroutine m_cProcessSlow;
     IEnumerator ProcessSlow(Skill skill) // skill : 상태이상(둔화) 정보(등급, 지속시간)
     {
-        m_sStatus.SetSTATUS_Speed((int)((float)m_sStatus.GetSTATUS_Speed() * ((100 - skill.m_seSkillEffect.m_cCondition.GetSlowRatio()) / 100)));
-        GUIManager_Total.Instance.Update_SS();
-        m_cCondition.SetSlowCondition(true);
-        m_gCondition_Slow.SetActive(true);
+    	// 코루틴 시작 시점
+        m_sStatus.SetSTATUS_Speed((int)((float)m_sStatus.GetSTATUS_Speed() * ((100 - skill.m_seSkillEffect.m_cCondition.GetSlowRatio()) / 100))); // 상태이상(둔화) 비율에 따라 플레이어의 현재 이동속도 변화
+																		  // 상태이상(둔화) 비율 : 1% ~ 99%
+        GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
+        m_cCondition.SetSlowCondition(true); // 플레이어에게 적용중인 상태이상 업데이트 : 둔화상태 true
+        m_gCondition_Slow.SetActive(true); // 상태이상(둔화) 이팩트 활성화
         while (m_cCondition.GetSlowTime() > 0)
         {
-            m_cCondition.AddSlowTime(-Time.deltaTime);
-            //Debug.Log(m_cCondition.GetDarkTime());
-            yield return null;
+            m_cCondition.AddSlowTime(-Time.deltaTime); // 상태이상(둔화) 잔여 지속시간 -= 0.016
+            yield return null; // Time.deltaTime(0.016)
         }
-        m_cCondition.SetSlowCondition(false);
-        m_gCondition_Slow.SetActive(false);
-        RemoveSkill(skill);
-        UpdateStatus_ApplySkill();
-        UpdateSoc_ApplySkill();
-        GUIManager_Total.Instance.Update_SS();
-        m_cCondition.SetSlowTime(0);
-        m_cCondition.SetSlowRatio(0);
+
+ 	// 코루틴 종료 시점
+        m_cCondition.SetSlowCondition(false); // 플레이어에게 적용중인 상태이상 업데이트 : 둔화상태 false
+        m_gCondition_Slow.SetActive(false); // 상태이상(둔화) 이팩트 비활성화
+        RemoveSkill(skill); // 사용 중단할 스킬을 플레이어에게 적용중인 스킬 리스트에서 제거
+        UpdateStatus_ApplySkill(); // 스킬 적용으로인한 능력치 업데이트
+        UpdateSoc_ApplySkill(); // 스킬 적용으로인한 평판 업데이트
+        GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
+        m_cCondition.SetSlowTime(0); // 상태이상(둔화) 잔여 지속시간 = 0
+        m_cCondition.SetSlowRatio(0); // 상태이상(둔화) 비율(등급) = 0;
         m_cProcessSlow = null;
     }
 
-    // 상태이상(혼란)
+    // 상태이상(혼란) 적용 함수
     public void ApplySkillEffect_Confuse(Skill skill) // skill : 상태이상(혼란) 정보(등급, 지속시간)
     {
-        if (m_cCondition.GetConfuseTime() > 0)
+        if (m_cCondition.GetConfuseTime() > 0) // 상태이상(혼란) 지속시간이 존재하는 경우
         {
             if (m_cProcessConfuse == null)
             {
-                m_cProcessConfuse = StartCoroutine(ProcessConfuse(skill));
+                m_cProcessConfuse = StartCoroutine(ProcessConfuse(skill)); // 상태이상(혼란) 관련 코루틴 실행
             }
             else
             {
@@ -1421,22 +1427,21 @@ public class Player_Status : MonoBehaviour
     Coroutine m_cProcessConfuse;
     IEnumerator ProcessConfuse(Skill skill) // skill : 상태이상(혼란) 정보(등급, 지속시간)
     {
-        GUIManager_Total.Instance.Update_SS();
-        m_cCondition.SetConfuseCondition(true);
-        m_gCondition_Confuse.SetActive(true);
+        GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
+        m_cCondition.SetConfuseCondition(true); // 플레이어에게 적용중인 상태이상 업데이트 : 혼란상태 true
+        m_gCondition_Confuse.SetActive(true); // 상태이상(혼란) 이팩트 활성화
         while (m_cCondition.GetConfuseTime() > 0)
         {
-            m_cCondition.AddConfuseTime(-Time.deltaTime);
-            //Debug.Log(m_cCondition.GetDarkTime());
-            yield return null;
+            m_cCondition.AddConfuseTime(-Time.deltaTime); // 상태이상(혼란) 잔여 지속시간 -= 0.016
+            yield return null; // Time.deltaTime(0.016)
         }
-        m_cCondition.SetConfuseCondition(false);
-        m_gCondition_Confuse.SetActive(false);
-        RemoveSkill(skill);
-        UpdateStatus_ApplySkill();
-        UpdateSoc_ApplySkill();
-        GUIManager_Total.Instance.Update_SS();
-        m_cCondition.SetConfuseTime(0);
+        m_cCondition.SetConfuseCondition(false); // 플레이어에게 적용중인 상태이상 업데이트 : 혼란상태 false
+        m_gCondition_Confuse.SetActive(false); // 상태이상(혼란) 이팩트 비활성화
+        RemoveSkill(skill); // 사용 중단할 스킬을 플레이어에게 적용중인 스킬 리스트에서 제거
+        UpdateStatus_ApplySkill(); // 스킬 적용으로인한 능력치 업데이트
+        UpdateSoc_ApplySkill(); // 스킬 적용으로인한 평판 업데이트
+        GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
+        m_cCondition.SetConfuseTime(0); // 상태이상(혼란) 잔여 지속시간 = 0
         m_cProcessConfuse = null;
     }
 
