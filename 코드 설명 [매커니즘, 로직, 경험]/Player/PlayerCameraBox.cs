@@ -46,7 +46,7 @@ public class PlayerCameraBox : MonoBehaviour
     // ↖  ↑  ↗
     // ←       →
     // ↙  ↓  ↘
-    // 8개 방향의 카메라 박스의 충돌 상태
+    // 8개 방향의 카메라 박스의 충돌 상태 판단
     public string JudgeCameraCenterPosition()
     {
         if (m_eCC == E_CAMERA_CATEGORY.NORMAL)
@@ -156,6 +156,7 @@ public class PlayerCameraBox : MonoBehaviour
     {
         return m_vCameraCenterPosition;
     }
+    // 카메라 박스의 중심점 설정
     public Vector3 SetCameraCenterPosition()
     {
         // 카메라 박스가 충돌하지 않을때 카메라 박스의 중심점은 플레이어의 위치와 동일하다.
