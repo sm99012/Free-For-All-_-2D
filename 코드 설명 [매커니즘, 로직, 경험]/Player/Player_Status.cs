@@ -1318,7 +1318,7 @@ public class Player_Status : MonoBehaviour
 	
 	// 코루틴 종료 시점
         m_cCondition.SetShockCondition(false); // 플레이어에게 적용중인 상태이상 업데이트 : 기절상태 false
-        m_gCondition_Shock.SetActive(false);상태이상(기절) 이팩트 비활성화
+        m_gCondition_Shock.SetActive(false); // 상태이상(기절) 이팩트 비활성화
         RemoveSkill(skill); // 사용 중단할 스킬을 플레이어에게 적용중인 스킬 리스트에서 제거
         UpdateStatus_ApplySkill(); // 스킬 적용으로인한 능력치 업데이트
         UpdateSoc_ApplySkill(); // 스킬 적용으로인한 평판 업데이트
