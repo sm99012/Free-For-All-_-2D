@@ -43,13 +43,13 @@ public class Player_Status : MonoBehaviour
     public GameObject m_gCondition_Confuse; // 혼란 이펙트(애니메이션)
     
     // 플레이어에게 적용되고있는 소비아이템 정보
-    public static Dictionary <int, Item_Use> m_Dictionary_Item_Use_Buff;                // 소비아이템 효과(버프 / 디버프). Dictionary <Key : 아이템코드 , Value : 소비아이템 정보>
-    public static Dictionary <int, Item_Use> m_Dictionary_Item_Use_CoolTime;            // 소비아이템 쿨타임. Dictionary <Key : 아이템코드 , Value : 소비아이템 정보>
-    public static Dictionary <int, Coroutine> m_Dictionary_Coroutine_Item_Use_Buff;     // 소비아이템 효과(버프 / 디버프) 관련 코루틴. Dictionary <Key : 아이템코드 , Value : 소비아이템 효과 지속시간 코루틴>
-    public static Dictionary <int, Coroutine> m_Dictionary_Coroutine_Item_Use_CoolTime; // 소비아이템 쿨타입 관련 코루틴. Dictionary <Key : 아이템코드 , Value : 소비아이템 쿨타임 지속시간 코루틴>
+    public static Dictionary <int, Item_Use> m_Dictionary_Item_Use_Buff;                // 소비아이템 효과 딕셔너리(버프 / 디버프). Dictionary <Key : 아이템코드 , Value : 소비아이템 정보>
+    public static Dictionary <int, Item_Use> m_Dictionary_Item_Use_CoolTime;            // 소비아이템 쿨타임 딕셔너리. Dictionary <Key : 아이템코드 , Value : 소비아이템 정보>
+    public static Dictionary <int, Coroutine> m_Dictionary_Coroutine_Item_Use_Buff;     // 소비아이템 효과(버프 / 디버프) 지속시간(코루틴) 딕셔너리. Dictionary <Key : 아이템코드 , Value : 소비아이템 효과 지속시간 코루틴>
+    public static Dictionary <int, Coroutine> m_Dictionary_Coroutine_Item_Use_CoolTime; // 소비아이템 쿨타입(코루틴) 딕셔너리. Dictionary <Key : 아이템코드 , Value : 소비아이템 쿨타임 지속시간 코루틴>
     // 플레이어에게 적용되고있는 소비아이템 효과(버프 / 디버프)의 지속시간, 소비아이템 쿨타임을 저장한다. 유니티에는 특정 코루틴의 잔여 시간을 알 수 있는 방법이 없기에 고안했다.
-    public static Dictionary <int, float> m_Dictionary_Item_Use_Buff_RemainingTime;     // 소비아이템 효과(버프 / 디버프) 지속시간. Dictionary <Key : 아이템코드 , Value : 지속시간>
-    public static Dictionary <int, float> m_Dictionary_Item_Use_CoolTime_RemainingTime; // 소비아이템 쿨타임. Dictionary <Key : 아이템코드 , Value : 쿨타임>
+    public static Dictionary <int, float> m_Dictionary_Item_Use_Buff_RemainingTime;     // 소비아이템 효과(버프 / 디버프) 지속시간(float) 딕셔너리. Dictionary <Key : 아이템코드 , Value : 지속시간>
+    public static Dictionary <int, float> m_Dictionary_Item_Use_CoolTime_RemainingTime; // 소비아이템 쿨타임(float) 딕셔너리. Dictionary <Key : 아이템코드 , Value : 쿨타임>
 
     protected Vector3 m_vDamageOffSet = new Vector3(0, 0.2f, 0); // 데미지 출력 오프셋
 
@@ -898,10 +898,9 @@ public class Player_Status : MonoBehaviour
         return m_sStatus.GetSTATUS_AttackSpeed();
     }
 
-
     // 소비아이템 사용 시 스탯(능력치, 평판), 버프ㆍ디버프 업데이트
     // return 0 : 소비아이템 사용 성공 / return 1 : 소비아이템 사용 실패
-    public int ApplyPotion(Item_Use item)
+    public int ApplyPotion(Item_Use item) // item : 사용할 소비아이템
     {
         Coroutine coroutine_buff;
         Coroutine coroutine_cooltime;
@@ -921,9 +920,8 @@ public class Player_Status : MonoBehaviour
             // 사용한 소비아이템의 쿨타임 계산
             if (item.m_fCoolTime > 0) // 해당 소비아이템의 쿨타임이 존재하는 경우
             {
-                m_Dictionary_Item_Use_CoolTime.Add(item.m_nItemCode, item); // 소비아이템 쿨타임 딕셔너리에 추가
-                // 소비아이템 쿨타임 계산
-                coroutine_cooltime = StartCoroutine(Process_Item_Use_CoolTime(item));
+                m_Dictionary_Item_Use_CoolTime.Add(item.m_nItemCode, item); // 적용중인 소비아이템 쿨타임 목록에서 해당 소비아이템 추가. <소비아이템 쿨타임 딕셔너리>
+                coroutine_cooltime = StartCoroutine(Process_Item_Use_CoolTime(item)); // 소비아이템 쿨타임을 계산하는 코루틴 시작 및 추가. <소비아이템 쿨타임(코루틴) 딕셔너리>
                 m_Dictionary_Coroutine_Item_Use_CoolTime.Add(item.m_nItemCode, coroutine_cooltime);
             }
 
@@ -945,9 +943,8 @@ public class Player_Status : MonoBehaviour
             // 사용한 소비아이템의 쿨타임 계산
             if (item.m_fCoolTime > 0) // 해당 소비아이템의 쿨타임이 존재하는 경우
             {
-                m_Dictionary_Item_Use_CoolTime.Add(item.m_nItemCode, item); // 소비아이템 쿨타임 딕셔너리에 추가
-                // 소비아이템 쿨타임 계산
-                coroutine_cooltime = StartCoroutine(Process_Item_Use_CoolTime(item));
+                m_Dictionary_Item_Use_CoolTime.Add(item.m_nItemCode, item); // 적용중인 소비아이템 쿨타임 목록에서 해당 소비아이템 추가. <소비아이템 쿨타임 딕셔너리>
+                coroutine_cooltime = StartCoroutine(Process_Item_Use_CoolTime(item)); // 소비아이템 쿨타임을 계산하는 코루틴 시작 및 추가. <소비아이템 쿨타임(코루틴) 딕셔너리>
                 m_Dictionary_Coroutine_Item_Use_CoolTime.Add(item.m_nItemCode, coroutine_cooltime);
             }
 
@@ -965,151 +962,102 @@ public class Player_Status : MonoBehaviour
             }
 
             // 사용한 소비아이템(일시적 버프포션) 효과 적용(지속시간 중첩 불가능(초기화)), 지속시간 및 쿨타임 계산
-            if (m_Dictionary_Item_Use_Buff.ContainsKey(item.m_nItemCode) == true) // 소비아이템 효과 딕셔너리에서 해당 소비아이템이 존재하는 경우
-                                                                                  // 소비아이템 효과 딕셔너리 : 플레이어에게 적용중인 소비아이템 목록
+            if (m_Dictionary_Item_Use_Buff.ContainsKey(item.m_nItemCode) == true) // 해당 소비아이템 효과가 이미 적용중인 경우(소비아이템 효과 지속시간 갱신)
             {
-                m_Dictionary_Item_Use_Buff.Remove(item.m_nItemCode); // 소비아이템 효과 딕셔너리에서 해당 소비아이템(일시적 버프포션) 제거
-                StopCoroutine(m_Dictionary_Coroutine_Item_Use_Buff[item.m_nItemCode]);
+                // 각종 딕셔너리에서 소비아이템 제거(효과, 지속시간)
+                m_Dictionary_Item_Use_Buff.Remove(item.m_nItemCode); // 적용중인 소비아이템 목록에서 해당 소비아이템 제거. <소비아이템 효과 딕셔너리>
+                StopCoroutine(m_Dictionary_Coroutine_Item_Use_Buff[item.m_nItemCode]); // 소비아이템의 지속시간을 계산하는 코루틴 중단 및 제거. <소비아이템 효과 지속시간(코루틴) 딕셔너리>
                 m_Dictionary_Coroutine_Item_Use_Buff.Remove(item.m_nItemCode);
-                m_Dictionary_Item_Use_Buff_RemainingTime.Remove(item.m_nItemCode);
-
-                m_Dictionary_Item_Use_Buff.Add(item.m_nItemCode, item);
-                coroutine_buff = StartCoroutine(Process_Item_Use_BuffTime(item)); // 소비아이템(일시적 버프포션) 사용으로인한 능력치 업데이트, 사용한 소비아이템(일시적 버프포션) 지속시간 계산
+                m_Dictionary_Item_Use_Buff_RemainingTime.Remove(item.m_nItemCode); // 소비아이템의 지속시간 딕셔너리에서 해당 소비아이템 제거. <소비아이템 효과 지속시간(float) 딕셔너리>
+                
+                // 각종 딕셔너리에 소비아이템 추가(효과, 지속시간, 쿨타임)
+                m_Dictionary_Item_Use_Buff.Add(item.m_nItemCode, item); // 적용중인 소비아이템 목록에 해당 소비아이템 추가. <소비아이템 효과 딕셔너리>
+                coroutine_buff = StartCoroutine(Process_Item_Use_BuffTime(item)); // 소비아이템의 지속시간을 계산하는 코루틴 시작 및 추가. <소비아이템 효과 지속시간(코루틴) 딕셔너리>
+                                                                                  // 해당 코루틴이 시작되면 소비아이템의 지속시간 딕셔너리가 갱신(추가, 업데이트). <소비아이템 효과 지속시간(float) 딕셔너리>
                 m_Dictionary_Coroutine_Item_Use_Buff.Add(item.m_nItemCode, coroutine_buff);
-
-                if (item.m_fCoolTime > 0)
+                if (item.m_fCoolTime > 0) // 해당 소비아이템의 쿨타임이 존재하는 경우
                 {
-                    m_Dictionary_Item_Use_CoolTime.Add(item.m_nItemCode, item);
-                    coroutine_cooltime = StartCoroutine(Process_Item_Use_CoolTime(item));
+                    m_Dictionary_Item_Use_CoolTime.Add(item.m_nItemCode, item); // 적용중인 소비아이템 쿨타임 목록에서 해당 소비아이템 추가. <소비아이템 쿨타임 딕셔너리>
+                    coroutine_cooltime = StartCoroutine(Process_Item_Use_CoolTime(item)); // 소비아이템 쿨타임을 계산하는 코루틴 시작 및 추가. <소비아이템 쿨타임(코루틴) 딕셔너리>
                     m_Dictionary_Coroutine_Item_Use_CoolTime.Add(item.m_nItemCode, coroutine_cooltime);
                 }
 
-                GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 버프 효과 적용. (지속시간 초기화)");
+                GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 버프 효과 적용. (지속시간 초기화)"); // 로그GUI에 사용한 소비아이템 정보 출력
             }
-            else
+            else // 해당 소비아이템 효과가 이미 적용중이지 않을 경우(소비아이템 효과 추가)
             {
-                m_Dictionary_Item_Use_Buff.Add(item.m_nItemCode, item);
-                coroutine_buff = StartCoroutine(Process_Item_Use_BuffTime(item));
+                // 각종 딕셔너리에 소비아이템 추가(효과, 지속시간, 쿨타임)
+                m_Dictionary_Item_Use_Buff.Add(item.m_nItemCode, item); // 적용중인 소비아이템 목록에 해당 소비아이템 추가. <소비아이템 효과 딕셔너리>
+                coroutine_buff = StartCoroutine(Process_Item_Use_BuffTime(item)); // 소비아이템의 지속시간을 계산하는 코루틴 시작 및 추가. <소비아이템 효과 지속시간(코루틴) 딕셔너리>
+                                                                                  // 해당 코루틴이 시작되면 소비아이템의 지속시간 딕셔너리가 갱신(추가, 업데이트). <소비아이템 효과 지속시간(float) 딕셔너리>
                 m_Dictionary_Coroutine_Item_Use_Buff.Add(item.m_nItemCode, coroutine_buff);
-                m_Dictionary_Item_Use_Buff_RemainingTime.Remove(item.m_nItemCode);
-                if (item.m_fCoolTime > 0)
+                if (item.m_fCoolTime > 0) // 해당 소비아이템의 쿨타임이 존재하는 경우
                 {
-                    m_Dictionary_Item_Use_CoolTime.Add(item.m_nItemCode, item);
-                    coroutine_cooltime = StartCoroutine(Process_Item_Use_CoolTime(item));
+                    m_Dictionary_Item_Use_CoolTime.Add(item.m_nItemCode, item); // 적용중인 소비아이템 쿨타임 목록에서 해당 소비아이템 추가. <소비아이템 쿨타임 딕셔너리>
+                    coroutine_cooltime = StartCoroutine(Process_Item_Use_CoolTime(item)); // 소비아이템 쿨타임을 계산하는 코루틴 시작 및 추가. <소비아이템 쿨타임(코루틴) 딕셔너리>
                     m_Dictionary_Coroutine_Item_Use_CoolTime.Add(item.m_nItemCode, coroutine_cooltime);
                 }
     
-                GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 버프 효과 적용.");
+                GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 버프 효과 적용."); // 로그GUI에 사용한 소비아이템 정보 출력
             }
             return 0;
         }
 
         return 0;
     }
-    public int Load_ApplyPotion(Item_Use item, float duration, float cool)
+    // 게임 시작 시 플레이어에게 적용중인 소비아이템(효과, 지속시간, 쿨타임) 로딩
+    // return 0 : 소비아이템 로딩 성공
+    public int Load_ApplyPotion(Item_Use item, float duration, float cool) // item : 로딩할 소비아이템, duration : 소비아이템 잔여 지속시간, cool : 소비아이템 잔여 쿨타임
     {
         Coroutine coroutine_buff;
         Coroutine coroutine_cooltime;
 
+        // 소비아이템(회복포션) 로딩(쿨타임)
         if (item.m_eItemUseType == E_ITEM_USE_TYPE.RECOVERPOTION)
         {
-            //if (m_Dictionary_Item_Use_CoolTime.ContainsKey(item.m_nItemCode) == true)
-            //{
-            //    GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 사용 불가.(쿨타임)");
-            //    return 1;
-            //}
-
-            //UpdateStatus_Item_Use_Recover(item.m_sStatus_Effect);
-
-            if (cool > 0)
+            if (cool > 0) // 해당 소비아이템의 잔여 쿨타임이 존재하는 경우
             {
-                m_Dictionary_Item_Use_CoolTime.Add(item.m_nItemCode, item);
-                coroutine_cooltime = StartCoroutine(Process_Item_Use_CoolTime(item, cool));
+                m_Dictionary_Item_Use_CoolTime.Add(item.m_nItemCode, item); // 적용중인 소비아이템 쿨타임 목록에서 해당 소비아이템 추가. <소비아이템 쿨타임 딕셔너리>
+                coroutine_cooltime = StartCoroutine(Process_Item_Use_CoolTime(item, cool)); // 소비아이템 쿨타임을 계산하는 코루틴 시작 및 추가. <소비아이템 쿨타임(코루틴) 딕셔너리>
                 m_Dictionary_Coroutine_Item_Use_CoolTime.Add(item.m_nItemCode, coroutine_cooltime);
             }
 
-            //GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 회복 효과 적용.");
-            GUIManager_Total.Instance.Update_SS();
-            GUIManager_Total.Instance.Update_Itemslot();
-            GUIManager_Total.Instance.Update_Equipslot();
             return 0;
         }
-
+        // 소비아이템(영구적 버프포션) 로딩(쿨타임)
         if (item.m_eItemUseType == E_ITEM_USE_TYPE.ETERNALBUFFPOTION)
         {
-            //if (m_Dictionary_Item_Use_CoolTime.ContainsKey(item.m_nItemCode) == true)
-            //{
-            //    GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 사용 불가.(쿨타임)");
-            //    return 1;
-            //}
-
-            //UpdateStatus_Item_Use_EternalBuff(item.m_sStatus_Effect, item.m_sSoc_Effect);
-
-            if (cool > 0)
+            if (cool > 0) // 해당 소비아이템의 잔여 쿨타임이 존재하는 경우
             {
-                m_Dictionary_Item_Use_CoolTime.Add(item.m_nItemCode, item);
-                coroutine_cooltime = StartCoroutine(Process_Item_Use_CoolTime(item, cool));
+                m_Dictionary_Item_Use_CoolTime.Add(item.m_nItemCode, item); // 적용중인 소비아이템 쿨타임 목록에서 해당 소비아이템 추가. <소비아이템 쿨타임 딕셔너리>
+                coroutine_cooltime = StartCoroutine(Process_Item_Use_CoolTime(item, cool)); // 소비아이템 쿨타임을 계산하는 코루틴 시작 및 추가. <소비아이템 쿨타임(코루틴) 딕셔너리>
                 m_Dictionary_Coroutine_Item_Use_CoolTime.Add(item.m_nItemCode, coroutine_cooltime);
             }
 
-            //GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 영구 스탯 변화 적용.");
-            GUIManager_Total.Instance.Update_SS();
-            GUIManager_Total.Instance.Update_Itemslot();
-            GUIManager_Total.Instance.Update_Equipslot();
             return 0;
         }
-
+        // 소비아이템(일시적 버프포션) 로딩(효과, 지속시간, 쿨타임)
         if (item.m_eItemUseType == E_ITEM_USE_TYPE.TEMPORARYBUFFPOTION)
         {
-            //if (m_Dictionary_Item_Use_CoolTime.ContainsKey(item.m_nItemCode) == true)
-            //{
-            //    GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 사용 불가.(쿨타임)");
-            //    return 1;
-            //}
-
-            //if (m_Dictionary_Item_Use_Buff.ContainsKey(item.m_nItemCode) == true)
-            //{
-            //    m_Dictionary_Item_Use_Buff.Remove(item.m_nItemCode);
-            //    StopCoroutine(m_Dictionary_Coroutine_Item_Use_Buff[item.m_nItemCode]);
-            //    m_Dictionary_Coroutine_Item_Use_Buff.Remove(item.m_nItemCode);
-            //    m_Dictionary_Item_Use_Buff_RemainingTime.Remove(item.m_nItemCode);
-
-            //    m_Dictionary_Item_Use_Buff.Add(item.m_nItemCode, item);
-            //    coroutine_buff = StartCoroutine(Process_Item_Use_BuffTime(item));
-            //    m_Dictionary_Coroutine_Item_Use_Buff.Add(item.m_nItemCode, coroutine_buff);
-
-            //    if (item.m_fCoolTime > 0)
-            //    {
-            //        m_Dictionary_Item_Use_CoolTime.Add(item.m_nItemCode, item);
-            //        coroutine_cooltime = StartCoroutine(Process_Item_Use_CoolTime(item));
-            //        m_Dictionary_Coroutine_Item_Use_CoolTime.Add(item.m_nItemCode, coroutine_cooltime);
-            //    }
-
-            //    GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 버프 효과 적용. (지속시간 초기화)");
-            //    return 0;
-            //}
-
-            m_Dictionary_Item_Use_Buff.Add(item.m_nItemCode, item);
-            coroutine_buff = StartCoroutine(Process_Item_Use_BuffTime(item, duration));
+            m_Dictionary_Item_Use_Buff.Add(item.m_nItemCode, item); // 적용중인 소비아이템 목록에 해당 소비아이템 추가. <소비아이템 효과 딕셔너리>
+            coroutine_buff = StartCoroutine(Process_Item_Use_BuffTime(item, duration)); // 소비아이템의 지속시간을 계산하는 코루틴 시작 및 추가. <소비아이템 효과 지속시간(코루틴) 딕셔너리>
+																			            // 해당 코루틴이 시작되면 소비아이템의 지속시간 딕셔너리가 갱신(추가, 업데이트). <소비아이템 효과 지속시간(float) 딕셔너리>
             m_Dictionary_Coroutine_Item_Use_Buff.Add(item.m_nItemCode, coroutine_buff);
-            m_Dictionary_Item_Use_Buff_RemainingTime.Remove(item.m_nItemCode);
-            if (cool > 0)
+            if (cool > 0) // 해당 소비아이템의 잔여 쿨타임이 존재하는 경우
             {
-                m_Dictionary_Item_Use_CoolTime.Add(item.m_nItemCode, item);
-                coroutine_cooltime = StartCoroutine(Process_Item_Use_CoolTime(item, cool));
+                m_Dictionary_Item_Use_CoolTime.Add(item.m_nItemCode, item); // 적용중인 소비아이템 쿨타임 목록에서 해당 소비아이템 추가. <소비아이템 쿨타임 딕셔너리>
+                coroutine_cooltime = StartCoroutine(Process_Item_Use_CoolTime(item, cool)); // 소비아이템 쿨타임을 계산하는 코루틴 시작 및 추가. <소비아이템 쿨타임(코루틴) 딕셔너리>
                 m_Dictionary_Coroutine_Item_Use_CoolTime.Add(item.m_nItemCode, coroutine_cooltime);
             }
 
-            GUIManager_Total.Instance.Update_SS();
-            GUIManager_Total.Instance.Update_Itemslot();
-            GUIManager_Total.Instance.Update_Equipslot();
-            GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 버프 효과 적용.");
+            GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 버프 효과 적용."); // 로그GUI에 사용한 소비아이템 정보 출력
             return 0;
         }
 
         return 0;
     }
 
+    // 소비아이템 사용 시 지속시간을 계산하는 코루틴
     IEnumerator Process_Item_Use_BuffTime(Item_Use item)
     {
         UpdateStatus_Item_Use_TemporaryBuff();
