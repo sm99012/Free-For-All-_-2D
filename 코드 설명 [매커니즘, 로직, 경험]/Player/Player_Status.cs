@@ -1146,89 +1146,94 @@ public class Player_Status : MonoBehaviour
         m_Dictionary_Item_Use_CoolTime_RemainingTime.Remove(item.m_nItemCode); // 소비아이템의 쿨타임 딕셔너리에 해당 소비아이템 제거. <소비아이템 효과 쿨타임(float) 딕셔너리>
     }
 
-
-    // 리팩토링 필요.
-    // SkillEffect(버프, 디버프, 상태이상) 적용.
-    public bool ApplySkill(Skill skill)
+    // 스킬 적용 시 스탯(능력치, 평판), 버프ㆍ디버프, 상태이상 업데이트. SkillEffect : 상태이상 { 속박, 기절, 암흑, 둔화,  혼란 }
+    // return true : SkillEffect 적용 / return false : SkillEffect 미적용
+    public bool ApplySkill(Skill skill) // skill : 적용할 스킬
     {
-        m_List_Skill.Add(skill);
-        m_sStatus.P_OperatorSTATUS(skill.m_seSkillEffect.m_sStatus_Effect_Eternal);
+        // 스킬 적용으로 인한 영구적 스탯(능력치, 평판) 변화 업데이트
+        m_sStatus_Origin.P_OperatorSTATUS(skill.m_seSkillEffect.m_sStatus_Effect_Eternal);
         m_sSoc_Origin.P_OperatorSOC(skill.m_seSkillEffect.m_sSoc_Effect_Eternal);
-        UpdateSOC();
-
-        bool Check = false;
-        // 적용 Skill 에 Bind 효과가 있는지 없는지 검사.
-        if (skill.m_seSkillEffect.m_cCondition.ConditionCheck_Bind() == true)
+	
+	m_List_Skill.Add(skill); // 플레이어에게 적용중인 스킬 추가
+ 
+        bool Check = false; // 상태이상 적용 여부
+	
+        // 적용할 스킬의 상태이상 적용
+        if (skill.m_seSkillEffect.m_cCondition.ConditionCheck_Bind() == true) // 적용할 스킬에 상태이상(속박)이 존재하는 경우
         {
-            m_cCondition.AddBindTime(skill.m_seSkillEffect.m_cCondition.GetBindTime());
-            ApplySkillEffect_Bind(skill);
+            m_cCondition.AddBindTime(skill.m_seSkillEffect.m_cCondition.GetBindTime()); // 플레이어에게 적용할 상태이상(속박) 지속시간 추가
+            ApplySkillEffect_Bind(skill); // 플레이어에게 상태이상(속박) 적용
             Check = true;
         }
-        if (skill.m_seSkillEffect.m_cCondition.ConditionCheck_Shock() == true)
+        if (skill.m_seSkillEffect.m_cCondition.ConditionCheck_Shock() == true) // 적용할 스킬에 상태이상(기절)이 존재하는 경우
         {
-            m_cCondition.AddShockTime(skill.m_seSkillEffect.m_cCondition.GetShockTime());
-            ApplySkillEffect_Shock(skill);
+            m_cCondition.AddShockTime(skill.m_seSkillEffect.m_cCondition.GetShockTime()); // 플레이어에게 적용할 상태이상(기절) 지속시간 추가
+            ApplySkillEffect_Shock(skill); // 플레이어에게 상태이상(기절) 적용
             Check = true;
         }
-        if (skill.m_seSkillEffect.m_cCondition.ConditionCheck_Dark() == true)
+        if (skill.m_seSkillEffect.m_cCondition.ConditionCheck_Dark() == true) // 적용할 스킬에 상태이상(암흑)이 존재하는 경우
         {
-            if (m_cCondition.GetDarkRatio() == skill.m_seSkillEffect.m_cCondition.GetDarkRatio())
+	    // 이미 적용중인 상태이상(암흑)과 새로 적용할 상태이상(암흑)을 비교하여 더 강력한 상태이상(암흑) 효과 적용
+            if (m_cCondition.GetDarkRatio() == skill.m_seSkillEffect.m_cCondition.GetDarkRatio()) // 이미 적용중인 상태이상(암흑) == 새로 적용할 상태이상(암흑) : 상태이상(암흑) 지속시간 추가
             {
-                ApplySkillEffect_Dark(skill);
-                m_cCondition.AddDarkTime(skill.m_seSkillEffect.m_cCondition.GetDarkTime());
+                m_cCondition.AddDarkTime(skill.m_seSkillEffect.m_cCondition.GetDarkTime()); // 플레이어에게 적용할 상태이상(암흑) 지속시간 추가
+		ApplySkillEffect_Dark(skill); // 플레이어에게 상태이상(암흑) 적용
                 Check = true;
             }
-            else if (m_cCondition.GetDarkRatio() > skill.m_seSkillEffect.m_cCondition.GetDarkRatio())
+            else if (m_cCondition.GetDarkRatio() > skill.m_seSkillEffect.m_cCondition.GetDarkRatio()) // 이미 적용중인 상태이상(암흑) > 새로 적용할 상태이상(암흑) : 적용할 스킬의 상태이상(암흑) 미적용
             {
                 Check = false;
             }
-            else
+            else // 이미 적용중인 상태이상(암흑) < 새로 적용할 상태이상(암흑) : 적용할 스킬의 상태이상(암흑) 적용
             {
-                m_cCondition.SetDarkTime(skill.m_seSkillEffect.m_cCondition.GetDarkTime());
-                m_cCondition.SetDarkRatio(skill.m_seSkillEffect.m_cCondition.GetDarkRatio());
-                ApplySkillEffect_Dark(skill);
+                m_cCondition.SetDarkTime(skill.m_seSkillEffect.m_cCondition.GetDarkTime()); // 플레이어에게 적용할 상태이상(암흑) 지속시간 설정
+                m_cCondition.SetDarkRatio(skill.m_seSkillEffect.m_cCondition.GetDarkRatio()); // 플레이어에게 적용할 상태이상(암흑) 등급 설정
+                ApplySkillEffect_Dark(skill); // 플레이어에게 상태이상(암흑) 적용
                 Check = true;
             }
         }
-        if (skill.m_seSkillEffect.m_cCondition.ConditionCheck_Slow() == true)
+        if (skill.m_seSkillEffect.m_cCondition.ConditionCheck_Slow() == true) // 적용할 스킬에 상태이상(둔화)이 존재하는 경우
         {
-            if (m_cCondition.GetSlowRatio() == skill.m_seSkillEffect.m_cCondition.GetSlowRatio())
+	    // 이미 적용중인 상태이상(둔화)과 새로 적용할 상태이상(둔화)을 비교하여 더 강력한 상태이상(둔화) 효과 적용
+            if (m_cCondition.GetSlowRatio() == skill.m_seSkillEffect.m_cCondition.GetSlowRatio()) // 이미 적용중인 상태이상(둔화) == 새로 적용할 상태이상(둔화) : 상태이상(둔화) 지속시간 추가
             {
-                m_cCondition.AddSlowTime(skill.m_seSkillEffect.m_cCondition.GetSlowTime());
-                ApplySkillEffect_Slow(skill);
+                m_cCondition.AddSlowTime(skill.m_seSkillEffect.m_cCondition.GetSlowTime()); // 플레이어에게 적용할 상태이상(둔화) 지속시간 추가
+                ApplySkillEffect_Slow(skill); // 플레이어에게 상태이상(둔화) 적용
                 Check = true;
             }
-            else if (m_cCondition.GetSlowRatio() > skill.m_seSkillEffect.m_cCondition.GetSlowRatio())
+            else if (m_cCondition.GetSlowRatio() > skill.m_seSkillEffect.m_cCondition.GetSlowRatio()) // 이미 적용중인 상태이상(둔화) > 새로 적용할 상태이상(둔화) : 상태이상(둔화) 지속시간 추가
             {
                 Check = false;
             }
-            else
+            else // 이미 적용중인 상태이상(둔화) < 새로 적용할 상태이상(둔화) : 상태이상(둔화) 지속시간 추가
             {
-                m_cCondition.SetSlowTime(skill.m_seSkillEffect.m_cCondition.GetSlowTime());
-                m_cCondition.SetSlowRatio(skill.m_seSkillEffect.m_cCondition.GetSlowRatio());
-                ApplySkillEffect_Slow(skill);
+                m_cCondition.SetSlowTime(skill.m_seSkillEffect.m_cCondition.GetSlowTime()); // 플레이어에게 적용할 상태이상(둔화) 지속시간 설정
+                m_cCondition.SetSlowRatio(skill.m_seSkillEffect.m_cCondition.GetSlowRatio()); // 플레이어에게 적용할 상태이상(둔화) 등급 설정
+                ApplySkillEffect_Slow(skill); // 플레이어에게 상태이상(둔화) 적용
                 Check = true;
             }
         }
-        if (skill.m_seSkillEffect.m_cCondition.ConditionCheck_Confuse() == true)
+        if (skill.m_seSkillEffect.m_cCondition.ConditionCheck_Confuse() == true) // 적용할 스킬에 상태이상(혼란)이 존재하는 경우
         {
-            m_cCondition.AddConfuseTime(skill.m_seSkillEffect.m_cCondition.GetConfuseTime());
-            ApplySkillEffect_Confuse(skill);
+            m_cCondition.AddConfuseTime(skill.m_seSkillEffect.m_cCondition.GetConfuseTime()); // 플레이어에게 적용할 상태이상(혼란) 지속시간 추가
+            ApplySkillEffect_Confuse(skill); // 플레이어에게 상태이상(혼란) 적용
             Check = true;
         }
 
-        UpdateStatus_ApplySkill();
-        UpdateSoc_ApplySkill();
+        UpdateStatus_ApplySkill(); // 스킬 적용으로인한 능력치 업데이트
+        UpdateSoc_ApplySkill(); // 스킬 적용으로인한 평판 업데이트
 
-        // SkillEffect 적용 시 true, 미 적용 시 false 반환.
         if (Check == true)
             return true;
         else
             return false;
     }
 
-    // 해제된 스킬을 List에서 제거.
-    void RemoveSkill(Skill skill)
+    // 사용 중단할 스킬을 플레이어에게 적용중인 스킬 리스트에서 제거
+    //
+    // ※ 람다식을 이용한 방식으로 변경할 예정(for문과 람다식 두가지 경우를 비교하여 결정)
+    //
+    void RemoveSkill(Skill skill) // skill : 사용 중단할 스킬
     {
         for (int i = 0; i < m_List_Skill.Count; i++)
         {
@@ -1238,10 +1243,14 @@ public class Player_Status : MonoBehaviour
                 break;
             }
         }
+
+	// 람다식
+	//m_List_Skill.RemoveAt(m_List_Skill.FindIndex(i => i.m_nSkillCode == skill.m_nSkillCode));
     }
 
-    // Bind(속박)
-    public void ApplySkillEffect_Bind(Skill skill)
+    // 플레이어에게 상태이상을 적용하는 함수
+    // 상태이상(속박)
+    public void ApplySkillEffect_Bind(Skill skill) // skill : 상태이상(속박) 정보(등급, 지속시간)
     {
         if (m_cCondition.GetBindTime() > 0)
         {
@@ -1257,7 +1266,7 @@ public class Player_Status : MonoBehaviour
         }
     }
     Coroutine m_cProcessBind;
-    IEnumerator ProcessBind(Skill skill)
+    IEnumerator ProcessBind(Skill skill) // skill : 상태이상(속박) 정보(등급, 지속시간)
     {
         m_sStatus.SetSTATUS_Speed(0);
         GUIManager_Total.Instance.Update_SS();
@@ -1279,8 +1288,8 @@ public class Player_Status : MonoBehaviour
         m_cProcessBind = null;
     }
 
-    // Shock(기절)
-    public void ApplySkillEffect_Shock(Skill skill)
+    // 상태이상(기절)
+    public void ApplySkillEffect_Shock(Skill skill) // skill : 상태이상(기절) 정보(등급, 지속시간)
     {
         if (m_cCondition.GetShockTime() > 0)
         {
@@ -1296,7 +1305,7 @@ public class Player_Status : MonoBehaviour
         }
     }
     Coroutine m_cProcessShock;
-    IEnumerator ProcessShock(Skill skill)
+    IEnumerator ProcessShock(Skill skill) // skill : 상태이상(기절) 정보(등급, 지속시간)
     {
         GUIManager_Total.Instance.Update_SS();
         m_cCondition.SetShockCondition(true);
@@ -1317,8 +1326,8 @@ public class Player_Status : MonoBehaviour
         m_cProcessShock = null;
     }
 
-    // Dark(암흑)
-    public void ApplySkillEffect_Dark(Skill skill)
+    // 상태이상(암흑)
+    public void ApplySkillEffect_Dark(Skill skill) // skill : 상태이상(암흑) 정보(등급, 지속시간)
     {
         if (m_cCondition.GetDarkTime() > 0)
         {
@@ -1333,7 +1342,7 @@ public class Player_Status : MonoBehaviour
         }
     }
     Coroutine m_cProcessDark;
-    IEnumerator ProcessDark(Skill skill)
+    IEnumerator ProcessDark(Skill skill) // skill : 상태이상(암흑) 정보(등급, 지속시간)
     {
         GUIManager_Total.Instance.Update_SS();
         m_cCondition.SetDarkCondition(true);
@@ -1355,8 +1364,8 @@ public class Player_Status : MonoBehaviour
         m_cProcessDark = null;
     }
 
-    // Slow(둔화)
-    public void ApplySkillEffect_Slow(Skill skill)
+    // 상태이상(둔화)
+    public void ApplySkillEffect_Slow(Skill skill) // skill : 상태이상(둔화) 정보(등급, 지속시간)
     {
         if (m_cCondition.GetSlowTime() > 0)
         {
@@ -1371,7 +1380,7 @@ public class Player_Status : MonoBehaviour
         }
     }
     Coroutine m_cProcessSlow;
-    IEnumerator ProcessSlow(Skill skill)
+    IEnumerator ProcessSlow(Skill skill) // skill : 상태이상(둔화) 정보(등급, 지속시간)
     {
         m_sStatus.SetSTATUS_Speed((int)((float)m_sStatus.GetSTATUS_Speed() * ((100 - skill.m_seSkillEffect.m_cCondition.GetSlowRatio()) / 100)));
         GUIManager_Total.Instance.Update_SS();
@@ -1394,8 +1403,8 @@ public class Player_Status : MonoBehaviour
         m_cProcessSlow = null;
     }
 
-    // Confuse(혼돈)
-    public void ApplySkillEffect_Confuse(Skill skill)
+    // 상태이상(혼란)
+    public void ApplySkillEffect_Confuse(Skill skill) // skill : 상태이상(혼란) 정보(등급, 지속시간)
     {
         if (m_cCondition.GetConfuseTime() > 0)
         {
@@ -1410,7 +1419,7 @@ public class Player_Status : MonoBehaviour
         }
     }
     Coroutine m_cProcessConfuse;
-    IEnumerator ProcessConfuse(Skill skill)
+    IEnumerator ProcessConfuse(Skill skill) // skill : 상태이상(혼란) 정보(등급, 지속시간)
     {
         GUIManager_Total.Instance.Update_SS();
         m_cCondition.SetConfuseCondition(true);
@@ -1430,5 +1439,9 @@ public class Player_Status : MonoBehaviour
         m_cCondition.SetConfuseTime(0);
         m_cProcessConfuse = null;
     }
+
+    //
+    // ※ 스킬 관련 코드는 전체적인 매커니즘 수정 필요
+    //
 }
 
