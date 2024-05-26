@@ -18,7 +18,7 @@ public class Player_Status : MonoBehaviour
     public SOC m_sSoc_Item_Use_Buff;          // 적용중인 소비아이템(일시적 버프포션) 평판 합계
     public SOC m_sSoc_Extra_ItemSetEffect;    // 적용중인 아이템 세트효과 평판
     public SOC m_sSoc_Null;                   // 각종 평판 계산에 사용되는 초기화 평판
-</>
+
     // 플레이어 능력치 관련 스탯
     public STATUS m_sStatus;                        // 능력치 합계
     public STATUS m_sStatus_Origin;                 // 고유 능력치(성장 능력치 + 영구적 버프포션, 놓아주기, 퀘스트 완료 보상 등 추가로 획득한 능력치)
