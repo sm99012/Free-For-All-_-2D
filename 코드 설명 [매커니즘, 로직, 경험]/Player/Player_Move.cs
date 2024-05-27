@@ -108,7 +108,7 @@ public class Player_Move : MonoBehaviour
                     
                 if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.IDLE || m_ePlayerMoveState == E_PLAYER_MOVE_STATE.RUN) // 달리기 상태
                 {
-                    m_fMoveRate = 1f;   // 기본 이동 계수
+                    m_fMoveRate = 1f; // 기본 이동 계수
                     m_rRigdbody.MovePosition(this.gameObject.transform.position + (m_vInputDir * fspeed * 0.016f * 0.01f * m_fMoveRate));
                 }
                 if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.ROLL) // 구르기 상태
