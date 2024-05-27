@@ -523,9 +523,11 @@ public class Player_Total : MonoBehaviour
             }
         }
     }
-    public void MobDeath(Monster_Total mt)
+
+    // 몬스터 토벌 시 플레이어 업데이트(스탯(능력치, 평판), 퀘스트 현황 업데이트)
+    public void MobDeath(Monster_Total mt) // mt : 토벌 된 몬스터 정보
     {
-        m_ps_Status.MobDeath(mt.m_ms_Status.m_sSoc_Death, mt.m_ms_Status.m_sStatus_Death);
+        m_ps_Status.MobDeath(mt.m_ms_Status.m_sStatus_Death, mt.m_ms_Status.m_sSoc_Death); // 플레이어 스탯(능력치, 평판) 업데이트
         m_pq_Quest.QuestUpdate_Kill(mt.m_ms_Status.m_eMonster_Kind, mt.m_ms_Status.m_nMonsterCode);
         m_pq_Quest.QuestUpdate_Eliminate(mt.m_ms_Status.m_eMonster_Kind, mt.m_ms_Status.m_nMonsterCode);
 
@@ -534,7 +536,7 @@ public class Player_Total : MonoBehaviour
     }
     public void MobDeath(TeSlime_Total mt)
     {
-        m_ps_Status.MobDeath(mt.m_ts_Status.m_sSoc_Death, mt.m_ts_Status.m_sStatus_Death);
+        m_ps_Status.MobDeath(mt.m_ts_Status.m_sStatus_Death, mt.m_ts_Status.m_sSoc_Death);
         m_pq_Quest.QuestUpdate_Kill(mt.m_ts_Status.m_eMonster_Kind, mt.m_ts_Status.m_nMonsterCode);
         m_pq_Quest.QuestUpdate_Eliminate(mt.m_ts_Status.m_eMonster_Kind, mt.m_ts_Status.m_nMonsterCode);
         GUIManager_Total.Instance.Update_SS();
