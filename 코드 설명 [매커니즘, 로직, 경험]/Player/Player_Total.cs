@@ -37,7 +37,7 @@ public class Player_Total : MonoBehaviour
     public Player_Move m_pm_Move;           // 플레이어 움직임
     public Player_Itemslot m_pi_Itemslot;   // 플레이어 인벤토리
     public Player_Equipment m_pe_Equipment; // 플레이어 장비창
-    public Player_Effect m_pe_Effect;       // 플레이어 이팩트
+    public Player_Effect m_pe_Effect;       // 플레이어 이펙트
     public Player_Quest m_pq_Quest;         // 플레이어 퀘스트
     public Player_Skill m_ps_Skill;         // 플레이어 스킬
     public Player_Camera m_pc_Camera;       // 플레이어 카메라
@@ -72,6 +72,10 @@ public class Player_Total : MonoBehaviour
     BoxCollider2D m_BoxCollider_Attack1_2_Area_Knife; // Knife(단검) 기본 공격2 공격범위
     GameObject m_gAttack1_3_Area_Knife;
     BoxCollider2D m_BoxCollider_Attack1_3_Area_Knife; // Knife(단검) 기본 공격3 공격범위
+
+    Collider2D[] co2_1;   // 플레이어의 공격 대상(몬스터, 파괴 가능한 오브젝트)의 콜라이더(충돌 처리를 위한 오브젝트)
+    Vector3 m_vAttackPos; // 공격 지점(타격 이펙트가 연출되는 지점)
+    int AttackDamage;     // 공격 데미지
 
     Vector2 m_vSize = new Vector2(0.25f, 0.35f); // 상호작용 범위
 
@@ -278,245 +282,241 @@ public class Player_Total : MonoBehaviour
         }
     }
 
-    // Attack
+    // 공격 키입력(A)
     public void InputKey_Attack()
     {
-        //if (Input.GetKeyUp(KeyCode.A))
         if (Input.GetKey(KeyCode.A))
         {
             Attack();
         }
     }
-    int m_nAtk;
+    // 공격 함수
     private void Attack()
     {
-        //AttackCheck();
-        if (Player_Status.m_cCondition.ConditionCheck_Shock() == false)
+        if (Player_Status.m_cCondition.ConditionCheck_Shock() == false) // 플레이어에게 상태이상(기절)이 적용중이지 않을때
         {
-            m_nAtk = m_pm_Move.Attack();
-
-            if (m_nAtk != 0)
-            {
-                switch (m_nAtk)
-                {
-                    case 1:
-                        {
-                            //AttackCheck(1, 1f);
-                        }
-                        break;
-                    case 2:
-                        {
-                            //AttackCheck(2, 1f);
-                        }
-                        break;
-                    case 3:
-                        {
-                            //AttackCheck(3, 2f);
-                        }
-                        break;
-                }
-            }
+            m_nAtk = m_pm_Move.Attack(); // 플레이어 공격 함수. 기본 공격 단계 반환
         }
     }
 
+    // 무기분류별 기본 공격 판정 관련 함수
+    // 기본 공격 애니메이션의 특정 프레임에서 호출된다. 기본 공격의 종류별로 공격범위, 공격력 계수, 공격 타이밍이 다르다. 
+    // Sword(검) 기본 공격 판정
     public void AttackCheck1_1_Sword()
     {
-        AttackCheck(E_ITEM_EQUIP_MAINWEAPON_TYPE.SWORD, 1, 1f);
+        AttackCheck(E_ITEM_EQUIP_MAINWEAPON_TYPE.SWORD, 1, 1f); // 기본 공격1 판정. 공격력 계수 : 100%
     }
     public void AttackCheck1_2_Sword()
     {
-        AttackCheck(E_ITEM_EQUIP_MAINWEAPON_TYPE.SWORD, 2, 2f);
+        AttackCheck(E_ITEM_EQUIP_MAINWEAPON_TYPE.SWORD, 2, 2f); // 기본 공격2 판정. 공격력 계수 : 200%
     }
     public void AttackCheck1_3_Sword()
     {
-        AttackCheck(E_ITEM_EQUIP_MAINWEAPON_TYPE.SWORD, 3, 4f);
+        AttackCheck(E_ITEM_EQUIP_MAINWEAPON_TYPE.SWORD, 3, 4f); // 기본 공격3 판정. 공격력 계수 : 400%
     }
-
+    // Axe(도끼) 기본 공격 판정
     public void AttackCheck1_1_Axe()
     {
-        AttackCheck(E_ITEM_EQUIP_MAINWEAPON_TYPE.AXE, 1, 1.5f);
+        AttackCheck(E_ITEM_EQUIP_MAINWEAPON_TYPE.AXE, 1, 1.5f); // 기본 공격1 판정. 공격력 계수 : 150%
     }
     public void AttackCheck1_2_Axe()
     {
-        AttackCheck(E_ITEM_EQUIP_MAINWEAPON_TYPE.AXE, 2, 2f);
+        AttackCheck(E_ITEM_EQUIP_MAINWEAPON_TYPE.AXE, 2, 2f); // 기본 공격2 판정. 공격력 계수 : 200%
     }
     public void AttackCheck1_3_Axe()
     {
-        AttackCheck(E_ITEM_EQUIP_MAINWEAPON_TYPE.AXE, 3, 6f);
+        AttackCheck(E_ITEM_EQUIP_MAINWEAPON_TYPE.AXE, 3, 6f); // 기본 공격3 판정. 공격력 계수 : 600%
     }
-
+    // Knife(단검) 기본 공격 판정
     public void AttackCheck1_1_Knife()
     {
-        AttackCheck(E_ITEM_EQUIP_MAINWEAPON_TYPE.KNIFE, 1, 1f);
+        AttackCheck(E_ITEM_EQUIP_MAINWEAPON_TYPE.KNIFE, 1, 1f); // 기본 공격1 판정. 공격력 계수 : 100%
     }
     public void AttackCheck1_2_Knife()
     {
-        AttackCheck(E_ITEM_EQUIP_MAINWEAPON_TYPE.KNIFE, 2, 1.5f);
+        AttackCheck(E_ITEM_EQUIP_MAINWEAPON_TYPE.KNIFE, 2, 1.5f); // 기본 공격2 판정. 공격력 계수 : 150%
     }
     public void AttackCheck1_3_Knife()
     {
-        AttackCheck(E_ITEM_EQUIP_MAINWEAPON_TYPE.KNIFE, 3, 2.5f);
+        AttackCheck(E_ITEM_EQUIP_MAINWEAPON_TYPE.KNIFE, 3, 2.5f); // 기본 공격3 판정. 공격력 계수 : 250%
     }
 
-    Collider2D[] co2_1;
-    Vector3 m_vAttackPos;
-    int AttackDamage;
-    void AttackCheck(E_ITEM_EQUIP_MAINWEAPON_TYPE mt, int attacknumber, float percent)
+    // 기본 공격 판정 함수
+    // 오버랩을 이용해 공격 범위내의 모든 오브젝트(몬스터, 파괴 가능한 오브젝트)에 특정 공격력 계수를 적용한 데미지를 가한다.
+    // Physics2D.OverlapBoxAll(Vector2 point, Vector2 size, float angle, int layerMask) // point : 오버랩 지점, size : 오버랩 크기, angle : 각도, layerMask : 오버랩을 적용할 레이어 // return Collider2D[]
+    void AttackCheck(E_ITEM_EQUIP_MAINWEAPON_TYPE mt, int attacknumber, float percent) // mt : 무기분류, attacknumber : 기본 공격 단계(1, 2, 3), percent : 공격력 계수
     {
-        if (mt == E_ITEM_EQUIP_MAINWEAPON_TYPE.SWORD)
+        if (mt == E_ITEM_EQUIP_MAINWEAPON_TYPE.SWORD) // 무기분류 : Sword(검)
         {
-            if (attacknumber == 1)
+            if (attacknumber == 1) // 기본 공격1
             {
-                if (m_nPosValue == 1)
+                // 공격 방향 설정, 공격 범위내의 모든 오브젝트(몬스터, 파괴 가능한 오브젝트) 배열 반환(Collider2D[])
+                if (m_nPosValue == 1) // → 방향 공격
                 {
                     co2_1 = Physics2D.OverlapBoxAll(new Vector2(this.transform.position.x + m_BoxCollider_Attack1_1_Area_Sword.offset.x, this.transform.position.y + m_BoxCollider_Attack1_1_Area_Sword.offset.y), m_BoxCollider_Attack1_1_Area_Sword.size, 0, nLayer1);
                 }
-                else
+                else // ← 방향 공격
                 {
                     co2_1 = Physics2D.OverlapBoxAll(new Vector2(this.transform.position.x - m_BoxCollider_Attack1_1_Area_Sword.offset.x, this.transform.position.y + m_BoxCollider_Attack1_1_Area_Sword.offset.y), m_BoxCollider_Attack1_1_Area_Sword.size, 0, nLayer1);
                 }
             }
-            else if (attacknumber == 2)
+            else if (attacknumber == 2) // 기본 공격2
             {
-                if (m_nPosValue == 1)
+                // 공격 방향 설정, 공격 범위내의 모든 오브젝트(몬스터, 파괴 가능한 오브젝트) 배열 반환(Collider2D[])
+                if (m_nPosValue == 1) // → 방향 공격
                 {
                     co2_1 = Physics2D.OverlapBoxAll(new Vector2(this.transform.position.x + m_BoxCollider_Attack1_2_Area_Sword.offset.x, this.transform.position.y + m_BoxCollider_Attack1_2_Area_Sword.offset.y), m_BoxCollider_Attack1_2_Area_Sword.size, 0, nLayer1);
                 }
-                else
+                else // ← 방향 공격
                 {
                     co2_1 = Physics2D.OverlapBoxAll(new Vector2(this.transform.position.x - m_BoxCollider_Attack1_2_Area_Sword.offset.x, this.transform.position.y + m_BoxCollider_Attack1_2_Area_Sword.offset.y), m_BoxCollider_Attack1_2_Area_Sword.size, 0, nLayer1);
                 }
             }
-            else if (attacknumber == 3)
+            else if (attacknumber == 3) // 기본 공격3
             {
-                if (m_nPosValue == 1)
+                // 공격 방향 설정, 공격 범위내의 모든 오브젝트(몬스터, 파괴 가능한 오브젝트) 배열 반환(Collider2D[])
+                if (m_nPosValue == 1) // → 방향 공격
                 {
                     co2_1 = Physics2D.OverlapBoxAll(new Vector2(this.transform.position.x + m_BoxCollider_Attack1_3_Area_Sword.offset.x, this.transform.position.y + m_BoxCollider_Attack1_3_Area_Sword.offset.y), m_BoxCollider_Attack1_3_Area_Sword.size, 0, nLayer1);
                 }
-                else
+                else // ← 방향 공격
                 {
                     co2_1 = Physics2D.OverlapBoxAll(new Vector2(this.transform.position.x - m_BoxCollider_Attack1_3_Area_Sword.offset.x, this.transform.position.y + m_BoxCollider_Attack1_3_Area_Sword.offset.y), m_BoxCollider_Attack1_3_Area_Sword.size, 0, nLayer1);
                 }
             }
         }
-        else if (mt == E_ITEM_EQUIP_MAINWEAPON_TYPE.AXE)
+        else if (mt == E_ITEM_EQUIP_MAINWEAPON_TYPE.AXE) // 무기분류 : Axe(도끼)
         {
-            if (attacknumber == 1)
+            if (attacknumber == 1) // 기본 공격1
             {
-                if (m_nPosValue == 1)
+                // 공격 방향 설정, 공격 범위내의 모든 오브젝트(몬스터, 파괴 가능한 오브젝트) 배열 반환(Collider2D[])
+                if (m_nPosValue == 1) // → 방향 공격
                 {
                     co2_1 = Physics2D.OverlapBoxAll(new Vector2(this.transform.position.x + m_BoxCollider_Attack1_1_Area_Axe.offset.x, this.transform.position.y + m_BoxCollider_Attack1_1_Area_Axe.offset.y), m_BoxCollider_Attack1_1_Area_Axe.size, 0, nLayer1);
                 }
-                else
+                else // ← 방향 공격
                 {
                     co2_1 = Physics2D.OverlapBoxAll(new Vector2(this.transform.position.x - m_BoxCollider_Attack1_1_Area_Axe.offset.x, this.transform.position.y + m_BoxCollider_Attack1_1_Area_Axe.offset.y), m_BoxCollider_Attack1_1_Area_Axe.size, 0, nLayer1);
                 }
             }
-            else if (attacknumber == 2)
+            else if (attacknumber == 2) // 기본 공격2
             {
-                if (m_nPosValue == 1)
+                // 공격 방향 설정, 공격 범위내의 모든 오브젝트(몬스터, 파괴 가능한 오브젝트) 배열 반환(Collider2D[])
+                if (m_nPosValue == 1) // → 방향 공격
                 {
                     co2_1 = Physics2D.OverlapBoxAll(new Vector2(this.transform.position.x + m_BoxCollider_Attack1_2_Area_Axe.offset.x, this.transform.position.y + m_BoxCollider_Attack1_2_Area_Axe.offset.y), m_BoxCollider_Attack1_2_Area_Axe.size, 0, nLayer1);
                 }
-                else
+                else // ← 방향 공격
                 {
                     co2_1 = Physics2D.OverlapBoxAll(new Vector2(this.transform.position.x - m_BoxCollider_Attack1_2_Area_Axe.offset.x, this.transform.position.y + m_BoxCollider_Attack1_2_Area_Axe.offset.y), m_BoxCollider_Attack1_2_Area_Axe.size, 0, nLayer1);
                 }
             }
-            else if (attacknumber == 3)
+            else if (attacknumber == 3) // 기본 공격3
             {
-                if (m_nPosValue == 1)
+                // 공격 방향 설정, 공격 범위내의 모든 오브젝트(몬스터, 파괴 가능한 오브젝트) 배열 반환(Collider2D[])
+                if (m_nPosValue == 1) // → 방향 공격
                 {
                     co2_1 = Physics2D.OverlapBoxAll(new Vector2(this.transform.position.x + m_BoxCollider_Attack1_3_Area_Axe.offset.x, this.transform.position.y + m_BoxCollider_Attack1_3_Area_Axe.offset.y), m_BoxCollider_Attack1_3_Area_Axe.size, 0, nLayer1);
                 }
-                else
+                else // ← 방향 공격
                 {
                     co2_1 = Physics2D.OverlapBoxAll(new Vector2(this.transform.position.x - m_BoxCollider_Attack1_3_Area_Axe.offset.x, this.transform.position.y + m_BoxCollider_Attack1_3_Area_Axe.offset.y), m_BoxCollider_Attack1_3_Area_Axe.size, 0, nLayer1);
                 }
             }
         }
-        else if (mt == E_ITEM_EQUIP_MAINWEAPON_TYPE.KNIFE)
+        else if (mt == E_ITEM_EQUIP_MAINWEAPON_TYPE.KNIFE) // 무기분류 : Knife(단검)
         {
-            if (attacknumber == 1)
+            if (attacknumber == 1) // 기본 공격1
             {
-                if (m_nPosValue == 1)
+                // 공격 방향 설정, 공격 범위내의 모든 오브젝트(몬스터, 파괴 가능한 오브젝트) 배열 반환(Collider2D[])
+                if (m_nPosValue == 1) // → 방향 공격
                 {
                     co2_1 = Physics2D.OverlapBoxAll(new Vector2(this.transform.position.x + m_BoxCollider_Attack1_1_Area_Knife.offset.x, this.transform.position.y + m_BoxCollider_Attack1_1_Area_Knife.offset.y), m_BoxCollider_Attack1_1_Area_Knife.size, 0, nLayer1);
                 }
-                else
+                else // ← 방향 공격
                 {
                     co2_1 = Physics2D.OverlapBoxAll(new Vector2(this.transform.position.x - m_BoxCollider_Attack1_1_Area_Knife.offset.x, this.transform.position.y + m_BoxCollider_Attack1_1_Area_Knife.offset.y), m_BoxCollider_Attack1_1_Area_Knife.size, 0, nLayer1);
                 }
             }
-            else if (attacknumber == 2)
+            else if (attacknumber == 2) // 기본 공격2
             {
-                if (m_nPosValue == 1)
+                // 공격 방향 설정, 공격 범위내의 모든 오브젝트(몬스터, 파괴 가능한 오브젝트) 배열 반환(Collider2D[])
+                if (m_nPosValue == 1) // → 방향 공격
                 {
                     co2_1 = Physics2D.OverlapBoxAll(new Vector2(this.transform.position.x + m_BoxCollider_Attack1_2_Area_Knife.offset.x, this.transform.position.y + m_BoxCollider_Attack1_2_Area_Knife.offset.y), m_BoxCollider_Attack1_2_Area_Knife.size, 0, nLayer1);
                 }
-                else
+                else // ← 방향 공격
                 {
                     co2_1 = Physics2D.OverlapBoxAll(new Vector2(this.transform.position.x - m_BoxCollider_Attack1_2_Area_Knife.offset.x, this.transform.position.y + m_BoxCollider_Attack1_2_Area_Knife.offset.y), m_BoxCollider_Attack1_2_Area_Knife.size, 0, nLayer1);
                 }
             }
-            else if (attacknumber == 3)
+            else if (attacknumber == 3) // 기본 공격3
             {
-                if (m_nPosValue == 1)
+                // 공격 방향 설정, 공격 범위내의 모든 오브젝트(몬스터, 파괴 가능한 오브젝트) 배열 반환(Collider2D[])
+                if (m_nPosValue == 1) // → 방향 공격
                 {
                     co2_1 = Physics2D.OverlapBoxAll(new Vector2(this.transform.position.x + m_BoxCollider_Attack1_3_Area_Knife.offset.x, this.transform.position.y + m_BoxCollider_Attack1_3_Area_Knife.offset.y), m_BoxCollider_Attack1_3_Area_Knife.size, 0, nLayer1);
                 }
-                else
+                else // ← 방향 공격
                 {
                     co2_1 = Physics2D.OverlapBoxAll(new Vector2(this.transform.position.x - m_BoxCollider_Attack1_3_Area_Knife.offset.x, this.transform.position.y + m_BoxCollider_Attack1_3_Area_Knife.offset.y), m_BoxCollider_Attack1_3_Area_Knife.size, 0, nLayer1);
                 }
             }
         }
 
-        if (Player_Status.m_cCondition.ConditionCheck_Dark() == false)
+        // 상태이상(암흑) 적용에따른 데미지 설정
+        if (Player_Status.m_cCondition.ConditionCheck_Dark() == false) // 플레이어에게 상태이상(암흑)이 적용중이지 않을때
         {
-            AttackDamage = m_ps_Status.m_sStatus.GetSTATUS_Damage_Total();
+            AttackDamage = m_ps_Status.m_sStatus.GetSTATUS_Damage_Total(); // 데미지 = 플레이어의 능력치(데미지)
         }
-        else
+        else // 플레이어에게 상태이상(암흑)이 적용중일때
         {
-            m_nRandomRatio = Random.Range(1, 101);
+            m_nRandomRatio = Random.Range(1, 101); // 상태이상(암흑) 비율(등급) : 1% ~ 100% (1 <= m_nRandomRatio <= 100)
 
+            // 상태이상(암흑) 비율(등급)과 난수(m_nRandomRatio)에 따라 데미지 계산
             if (m_nRandomRatio <= Player_Status.m_cCondition.GetDarkRatio())
             {
-                AttackDamage = 1;
+                AttackDamage = 1; // 데미지 = 1
             }
             else
             {
-                AttackDamage = m_ps_Status.m_sStatus.GetSTATUS_Damage_Total();
+                AttackDamage = m_ps_Status.m_sStatus.GetSTATUS_Damage_Total(); // 데미지 = 플레이어의 능력치(데미지)
             }
         }
 
-        if (co2_1.Length > 0)
+        // 공격 범위내의 모든 오브젝트에 타격 이펙트를 연출하고 데미지를 가한다.
+        if (co2_1.Length > 0) // 공격 범위내의 오브젝트가 하나이상 있을 경우
         {
             for (int i = 0; i < co2_1.Length; i++)
             {
-                if (co2_1[i].gameObject.layer == LayerMask.NameToLayer("Monster"))
+                // 공격 지점 설정
+                if (co2_1[i].gameObject.layer == LayerMask.NameToLayer("Monster")) // 몬스터일 경우
                     m_vAttackPos = co2_1[i].gameObject.transform.position;
-                else if (co2_1[i].gameObject.layer == LayerMask.NameToLayer("RuinableObject"))
+                else if (co2_1[i].gameObject.layer == LayerMask.NameToLayer("RuinableObject")) // 파괴 가능한 오브젝트일 경우
                 {
                     m_vAttackPos = co2_1[i].gameObject.transform.position;
-                    m_vAttackPos += new Vector3(0, 0.1f, 0);
+                    m_vAttackPos += new Vector3(0, 0.1f, 0); // 오프셋
                 }
-                if (co2_1[i].gameObject.tag == "Monster")
+                //
+                // ※ 공격 지점에 타격 이펙트가 연출된다. 현재 위의 코드에서 알 수 있듯이 단순히 해당 오브젝트의 위치에 타격 이펙트를 연출한다. 그러나 조금 부자연스럽다.
+                //    따라서 오브젝트 각각의 타격 지점 오프셋을 정해두고 해당 위치에 타격 이펙트를 연출하도록 변경할 예정이다.
+                //
+
+                // 오브젝트에 데미지 정산 (데미지를 가한다.)
+                if (co2_1[i].gameObject.tag == "Monster") // 몬스터일 경우
                 {
-                    if (co2_1[i].GetComponent<Monster_Total>().Attacked((int)(AttackDamage), percent, this.gameObject) == true)
+                    if (co2_1[i].GetComponent<Monster_Total>().Attacked((int)(AttackDamage), percent, this.gameObject) == true) // 데미지를 정산하고 공격 여부를 반환
                     {
-                        //Debug.Log("Damage: " + (int)(m_ps_Status.m_sStatus.GetSTATUS_Damage_Total() * percent));
-                        m_pe_Effect.Effect1(co2_1[i].transform.position);
+                        m_pe_Effect.Effect1(co2_1[i].transform.position); // 타격 이펙트 연출
                     }
                 }
-                else if (co2_1[i].gameObject.tag == "Boss")
+                else if (co2_1[i].gameObject.tag == "Boss") // 보스몬스터일 경우
                 {
-                    if (co2_1[i].gameObject.name == "TeSlime")
+                    if (co2_1[i].gameObject.name == "TeSlime") // 보스몬스터(테슬라임)일 경우
                     {
-                        if (co2_1[i].GetComponent<TeSlime_Total>().Attacked((int)(AttackDamage), percent, this.gameObject) == true)
+                        if (co2_1[i].GetComponent<TeSlime_Total>().Attacked((int)(AttackDamage), percent, this.gameObject) == true) // 데미지를 정산하고 공격 여부를 반환
                         {
-                            //Debug.Log("Damage: " + (int)(m_ps_Status.m_sStatus.GetSTATUS_Damage_Total() * percent));
-                            m_pe_Effect.Effect1(co2_1[i].transform.position);
+                            m_pe_Effect.Effect1(co2_1[i].transform.position); // 타격 이펙트 연출
                         }
                     }
                 }
