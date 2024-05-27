@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Player_Total : MonoBehaviour
 {
+    // 플레이어에 관한 모든것이 Player_Total.cs를 거친다.
+    // 싱글톤패턴을 이용했다.(오직 하나의 개체만 존재, 접근성 용이)
     private static Player_Total instance = null;
-        
     private void Awake()
     {
         if (instance == null)
@@ -33,7 +34,7 @@ public class Player_Total : MonoBehaviour
     public Player_Status m_ps_Status;
     public Player_Move m_pm_Move;
     public Player_Itemslot m_pi_Itemslot;
-    public Player_Equipment m_pe_Equipment;
+    public Player_Equipment m_pe_Equipment; // 플레이어 장비창
     public Player_Effect m_pe_Effect;
     public Player_Quest m_pq_Quest;
     public Player_Skill m_ps_Skill;
