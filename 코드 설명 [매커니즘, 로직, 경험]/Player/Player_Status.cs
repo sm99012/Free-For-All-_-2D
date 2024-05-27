@@ -451,7 +451,7 @@ public class Player_Status : MonoBehaviour
     }
 
     // 몬스터 토벌 시 변경되는 스탯(능력치(주로 경험치), 평판) 업데이트
-    public void MobDeath(SOC soc, STATUS status) // soc : 변경될 평판 정보, status : 변경될 능력치(주로 경험치) 정보
+    public void MobDeath(STATUS status, SOC soc) // soc : 변경될 평판 정보, status : 변경될 능력치(주로 경험치) 정보
     {
         // 플레이어 고유 평판 업데이트
         m_sSoc_Origin.P_OperatorSOC(soc);
