@@ -15,12 +15,12 @@ public class Player_Camera : MonoBehaviour
     PlayerCameraBox m_PlayerCameraBox;
 
 
-    // 카메라 중심점.
+    // 카메라 중심점
     [SerializeField]
     Vector3 m_vCameraCenterPosition;
     Vector3 m_vGetCameraCenterPosition;
-    float m_fFixZ; // 카메라의 고정된 z좌표.
-    float m_fZommInZ; // 카메라 줌인 최대 z좌표.
+    float m_fFixZ; // 카메라의 고정된 z좌표
+    float m_fZommInZ; // 카메라 줌인 최대 z좌표
 
     public void InitialSet()
     {
@@ -46,20 +46,11 @@ public class Player_Camera : MonoBehaviour
         if (m_PlayerCameraBox.m_eCC == PlayerCameraBox.E_CAMERA_CATEGORY.NORMAL)
         {
             m_sJudgeStr = m_PlayerCameraBox.JudgeCameraCenterPosition();
-            //if (m_sJudgeStr == "BLANK")
-            //{
-            //    m_vGetCameraCenterPosition = m_PlayerCameraBox.SetCameraCenterPosition();
-            //    m_vCameraCenterPosition = new Vector3(playerpos.x, playerpos.y, m_fFixZ);
-            //    //m_tCameraTransform.position = m_vCameraCenterPosition;
-            //    m_tCameraTransform.position = Vector3.Lerp(m_tCameraTransform.position, m_vCameraCenterPosition, 0.025f * (Player_Total.Instance.m_ps_Status.m_sStatus.GetSTATUS_Speed() * 0.03f));
-            //}
-            //else
-            //{
-                m_vGetCameraCenterPosition = m_PlayerCameraBox.SetCameraCenterPosition();
-                m_vCameraCenterPosition = new Vector3(m_vGetCameraCenterPosition.x, m_vGetCameraCenterPosition.y, m_fFixZ);
-            //m_tCameraTransform.position = m_vCameraCenterPosition;
+
+            m_vGetCameraCenterPosition = m_PlayerCameraBox.SetCameraCenterPosition();
+            m_vCameraCenterPosition = new Vector3(m_vGetCameraCenterPosition.x, m_vGetCameraCenterPosition.y, m_fFixZ);
+
             m_tCameraTransform.position = Vector3.Lerp(m_tCameraTransform.position, m_vCameraCenterPosition, 0.025f * (Player_Total.Instance.m_ps_Status.m_sStatus.GetSTATUS_Speed() * 0.03f));
-            //}
         }
         else if (m_PlayerCameraBox.m_eCC == PlayerCameraBox.E_CAMERA_CATEGORY.FULL)
         {
@@ -73,20 +64,20 @@ public class Player_Camera : MonoBehaviour
         return true;
     }
 
-    // 카메라 모드 변경 _ 일반
+    // 카메라 모드 변경(일반)
     public void SetCamera_NORMAL()
     {
         m_PlayerCameraBox.m_eCC = PlayerCameraBox.E_CAMERA_CATEGORY.NORMAL;
     }
 
-    // 카메라 모드 변경 _ 풀
+    // 카메라 모드 변경(풀)
     public void SetCamera_FULL(Vector3 pos)
     {
         m_PlayerCameraBox.m_eCC = PlayerCameraBox.E_CAMERA_CATEGORY.FULL;
         m_vCameraCenterPosition = pos;
     }
 
-    // 카메라 모드 변경 _ 줌인
+    // 카메라 모드 변경(줌인)
     PlayerCameraBox.E_CAMERA_CATEGORY m_CC_Before; // 카메라 줌인 이전의 카메라 박스 충돌 상태(줌인 해제시 카메라 시점 설정을 위해 존재) 
     public void SetCamera_ZOOMIN(Vector3 pos)
     {
