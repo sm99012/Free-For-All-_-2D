@@ -33,7 +33,7 @@ public class Player_Total : MonoBehaviour
 
     public Player_Status m_ps_Status;
     public Player_Move m_pm_Move;
-    public Player_Itemslot m_pi_Itemslot;
+    public Player_Itemslot m_pi_Itemslot;   // 인벤토리
     public Player_Equipment m_pe_Equipment; // 플레이어 장비창
     public Player_Effect m_pe_Effect;
     public Player_Quest m_pq_Quest;
