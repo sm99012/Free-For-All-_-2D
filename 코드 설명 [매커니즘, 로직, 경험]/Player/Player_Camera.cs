@@ -37,7 +37,7 @@ public class Player_Camera : MonoBehaviour
         m_fZommInZ = -1f;
     }
 
-    // Camera 이동 관련 함수
+    // 카메라 설정 관련 함수(카메라 중심점 판단ㆍ설정)
     // true: Player 이동 시 Player가 카메라의 중심에 위치.
     // false: 카메라 포지션 제한.
     string m_sJudgeStr;
