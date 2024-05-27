@@ -229,48 +229,52 @@ public class Player_Total : MonoBehaviour
     // 이동(가만히 있기, 달리기), 방향설정 함수
     private void Move()
     {
-        Player_Move.E_PLAYER_MOVE_STATE epms = Player_Move.E_PLAYER_MOVE_STATE.NULL;
+        Player_Move.E_PLAYER_MOVE_STATE epms = Player_Move.E_PLAYER_MOVE_STATE.NULL; // 플레이어 동작 FSM 임시 변수
 
+        // 플레이어 이동, 방향설정
         if (Player_Status.m_cCondition.ConditionCheck_Bind() == false && Player_Status.m_cCondition.ConditionCheck_Shock() == false) // 플레이어에게 상태이상(속박, 기절)이 적용중이지 않을때
         {
-            epms = m_pm_Move.Move(hInput, vInput, m_ps_Status.m_sStatus.GetSTATUS_Speed()); // 플레이어 이동 함수
+            epms = m_pm_Move.Move(hInput, vInput, m_ps_Status.m_sStatus.GetSTATUS_Speed()); // 플레이어 이동 함수. 플레이어 동작 FSM 상태 반환
         }
         else
         {
-            if (Player_Status.m_cCondition.ConditionCheck_Shock() == true)
+            if (Player_Status.m_cCondition.ConditionCheck_Shock() == true) // 플레이어에게 상태이상(기절)이 적용중일때
             {
-                epms = m_pm_Move.Move(0, 0, 0);
+                epms = m_pm_Move.Move(0, 0, 0); // 이동 불가
             }
-            else if (Player_Status.m_cCondition.ConditionCheck_Bind() == true)
-                epms = m_pm_Move.Move(hInput, vInput, 0);
+            else if (Player_Status.m_cCondition.ConditionCheck_Bind() == true) // 플레이어에게 상태이상(기절)이 적용중이지 않을때 && 때플레이어에게 상태이상(속박)이 적용중일때
+                epms = m_pm_Move.Move(hInput, vInput, 0); // 이동 불가. 좌ㆍ우 전환만 가능
 
         }
 
-        if (epms != Player_Move.E_PLAYER_MOVE_STATE.NULL)
+        // 카메라 이동(카메라 중심점 설정)
+        if (epms != Player_Move.E_PLAYER_MOVE_STATE.NULL) // 플레이어 동작 FSM { NULL(플레이어 이동 불가 상태(기절, 속박 등의 상태이상)) } 상태가 아닐때
         {
             if (epms == Player_Move.E_PLAYER_MOVE_STATE.IDLE || epms == Player_Move.E_PLAYER_MOVE_STATE.RUN ||
-                epms == Player_Move.E_PLAYER_MOVE_STATE.ROLL || epms == Player_Move.E_PLAYER_MOVE_STATE.GOAWAY)
+                epms == Player_Move.E_PLAYER_MOVE_STATE.ROLL || epms == Player_Move.E_PLAYER_MOVE_STATE.GOAWAY) // 플레이어 동작 FSM { IDEL(가만히 있기), RUN(달리기), ROLL(구르기), GOAWAY(놓아주기) } 상태일때
             {
                 switch (epms)
                 {
                     case Player_Move.E_PLAYER_MOVE_STATE.IDLE:
-                    case Player_Move.E_PLAYER_MOVE_STATE.RUN:
+                    case Player_Move.E_PLAYER_MOVE_STATE.RUN: // 플레이어 동작 FSM { IDEL(가만히 있기), RUN(달리기) } 상태일때
                         {
-                            CameraMove(this.gameObject.transform.position + (m_pm_Move.Get_MoveDir() * m_ps_Status.m_sStatus.GetSTATUS_Speed() * 0.05f * 0.01f));
+                            CameraMove(this.gameObject.transform.position + (m_pm_Move.Get_MoveDir() * m_ps_Status.m_sStatus.GetSTATUS_Speed() * 0.05f * 0.01f * 1f));   // 카메라 이동에 기본 이동 계수(1f) 적용
                         }
                         break;
-                    case Player_Move.E_PLAYER_MOVE_STATE.ROLL:
+                    case Player_Move.E_PLAYER_MOVE_STATE.ROLL: // 플레이어 동작 FSM { ROLL(구르기) } 상태일때
                         {
-                            CameraMove(this.gameObject.transform.position + (m_pm_Move.Get_MoveDir() * m_ps_Status.m_sStatus.GetSTATUS_Speed() * 0.05f * 0.01f * 1.5f));
+                            CameraMove(this.gameObject.transform.position + (m_pm_Move.Get_MoveDir() * m_ps_Status.m_sStatus.GetSTATUS_Speed() * 0.05f * 0.01f * 1.5f)); // 카메라 이동에 구르기 이동계수(1.5f) 적용
                         }
                         break;
                 }
             }
         }
-        else
+        else // 플레이어 동작 FSM { NULL(플레이어 이동 불가 상태(속박, 기절 등의 상태이상)) } 상태일때
         {
-            //CameraMove(this.gameObject.transform.position + (m_pm_Move.Get_MoveDir() * Speed * 0.016f * 0.005f * m_fMoveRate));
-            CameraMove(this.gameObject.transform.position + (m_pm_Move.Get_MoveDir() * m_ps_Status.m_sStatus.GetSTATUS_Speed() * 0.05f * 0.005f));
+            // 플레이어에게 상태이상(속박, 기절)이 적용되면 플레이어는 능동적으로 움직일 수 없다. 그렇기에 카메라 이동 또한 제한된다.
+            // 이러한 경우 유일하게 플레이어가 움직일 수 있는 방법은 몬스터에게 피격당하는것이다. 이때 넉백이 일어나게 되는데 카메라는 넉백된 플레이어를 느리게 따라간다.
+            // 이는 유저의 눈(카메라)또한 상태이상에 빠진것처럼 느끼게 하기 위함이다.
+            CameraMove(this.gameObject.transform.position + (m_pm_Move.Get_MoveDir() * m_ps_Status.m_sStatus.GetSTATUS_Speed() * 0.05f * 0.01f * 0.5f)); // 카메라 이동에 상태이상(속박, 기절) 계수(0.5f) 적용
         }
     }
 
