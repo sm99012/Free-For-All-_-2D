@@ -113,7 +113,7 @@ public class Player_Move : MonoBehaviour
                 }
                 if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.ROLL) // 구르기 상태
                 {
-                    m_fMoveRate = 1.5f; // 달리기보다 빠른 이동이 가능한 구르기
+                    m_fMoveRate = 1.5f; // 달리기보다 빠른 이동이 가능한 구르기 이동 계수
                     m_rRigdbody.MovePosition(this.gameObject.transform.position + m_vInputDir * fspeed * 0.016f * 0.01f * m_fMoveRate);
                 }
             }
