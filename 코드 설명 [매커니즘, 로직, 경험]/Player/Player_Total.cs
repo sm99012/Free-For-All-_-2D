@@ -31,45 +31,47 @@ public class Player_Total : MonoBehaviour
         }
     }
 
-    public Player_Status m_ps_Status;
-    public Player_Move m_pm_Move;
-    public Player_Itemslot m_pi_Itemslot;   // 인벤토리
+    // Has-a 관계로 Player_Total.cs는 아래 클래스를 포함한다.
+    // Player_Total.cs에서 특정 함수가 실행되면 아래 클래스의 특정 함수를 호출한다.
+    public Player_Status m_ps_Status;       // 플레이어 스탯(능력치, 평판)
+    public Player_Move m_pm_Move;           // 플레이어 움직임
+    public Player_Itemslot m_pi_Itemslot;   // 플레이어 인벤토리
     public Player_Equipment m_pe_Equipment; // 플레이어 장비창
-    public Player_Effect m_pe_Effect;
-    public Player_Quest m_pq_Quest;
-    public Player_Skill m_ps_Skill;
-    public Player_Camera m_pc_Camera;
-    public Player_Map m_pm_Map;
+    public Player_Effect m_pe_Effect;       // 플레이어 이팩트
+    public Player_Quest m_pq_Quest;         // 플레이어 퀘스트
+    public Player_Skill m_ps_Skill;         // 플레이어 스킬
+    public Player_Camera m_pc_Camera;       // 플레이어 카메라
+    public Player_Map m_pm_Map;             // 플레이어 맵
 
-    // 공격 범위
-    // Sword
+    // 플레이어가 착용한 무기분류에 따라 상이한 공격 패턴(공격범위, 공격력 계수, 공격 타이밍)을 가진다.
+    // Sword(검) 공격범위
     GameObject m_gAttack_Area_Sword;
     GameObject m_gAttack1_1_Area_Sword;
-    BoxCollider2D m_BoxCollider_Attack1_1_Area_Sword;
+    BoxCollider2D m_BoxCollider_Attack1_1_Area_Sword; // Sword(검) 기본 공격1 공격범위
     GameObject m_gAttack1_2_Area_Sword;
-    BoxCollider2D m_BoxCollider_Attack1_2_Area_Sword;
+    BoxCollider2D m_BoxCollider_Attack1_2_Area_Sword; // Sword(검) 기본 공격2 공격범위
     GameObject m_gAttack1_3_Area_Sword;
-    BoxCollider2D m_BoxCollider_Attack1_3_Area_Sword;
-    // Axe
+    BoxCollider2D m_BoxCollider_Attack1_3_Area_Sword; // Sword(검) 기본 공격3 공격범위
+    // Axe(도끼) 공격범위
     GameObject m_gAttack_Area_Axe;
     GameObject m_gAttack1_1_Area_Axe;
-    BoxCollider2D m_BoxCollider_Attack1_1_Area_Axe;
+    BoxCollider2D m_BoxCollider_Attack1_1_Area_Axe; // Axe(도끼) 기본 공격1 공격범위
     GameObject m_gAttack1_2_Area_Axe;
-    BoxCollider2D m_BoxCollider_Attack1_2_Area_Axe;
+    BoxCollider2D m_BoxCollider_Attack1_2_Area_Axe; // Axe(도끼) 기본 공격2 공격범위
     GameObject m_gAttack1_3_Area_Axe;
-    BoxCollider2D m_BoxCollider_Attack1_3_Area_Axe;
-    // Knife
+    BoxCollider2D m_BoxCollider_Attack1_3_Area_Axe; // Axe(도끼) 기본 공겨3 공격범위
+    // Knife(단검) 공격범위
     GameObject m_gAttack_Area_Knife;
     GameObject m_gAttack1_1_Area_Knife;
-    BoxCollider2D m_BoxCollider_Attack1_1_Area_Knife;
+    BoxCollider2D m_BoxCollider_Attack1_1_Area_Knife; // Knife(단검) 기본 공격1 공격범위
     GameObject m_gAttack1_2_Area_Knife;
-    BoxCollider2D m_BoxCollider_Attack1_2_Area_Knife;
+    BoxCollider2D m_BoxCollider_Attack1_2_Area_Knife; // Knife(단검) 기본 공격2 공격범위
     GameObject m_gAttack1_3_Area_Knife;
-    BoxCollider2D m_BoxCollider_Attack1_3_Area_Knife;
+    BoxCollider2D m_BoxCollider_Attack1_3_Area_Knife; // Knife(단검) 기본 공격3 공격범위
 
-    public int hInput; // 수평이동
-    public int vInput; // 수직이동
-    public int m_nPosValue;
+    public int hInput; // 수평이동 값
+    public int vInput; // 수직이동 값
+    public int m_nPosValue; //
 
     // 공격 히트박스
     Vector2 m_vSize;
