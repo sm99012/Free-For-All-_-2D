@@ -43,6 +43,10 @@ public class Player_Total : MonoBehaviour
     public Player_Camera m_pc_Camera;       // 플레이어 카메라
     public Player_Map m_pm_Map;             // 플레이어 맵
 
+    public int hInput;      // 수평이동 값
+    public int vInput;      // 수직이동 값
+    public int m_nPosValue; // 플레이어가 바라보는 방향(2D 탑다운 게임이지만 플레이어는 우측과 좌측만 바라보고 게임을 진행한다.)
+    
     // 플레이어가 착용한 무기분류에 따라 상이한 공격 패턴(공격범위, 공격력 계수, 공격 타이밍)을 가진다.
     // Sword(검) 공격범위
     GameObject m_gAttack_Area_Sword;
@@ -69,24 +73,21 @@ public class Player_Total : MonoBehaviour
     GameObject m_gAttack1_3_Area_Knife;
     BoxCollider2D m_BoxCollider_Attack1_3_Area_Knife; // Knife(단검) 기본 공격3 공격범위
 
-    public int hInput; // 수평이동 값
-    public int vInput; // 수직이동 값
-    public int m_nPosValue; //
+    Vector2 m_vSize = new Vector2(0.25f, 0.35f); // 상호작용 범위
 
-    // 공격 히트박스
-    Vector2 m_vSize;
-    int nLayer1;
-    // 특수기능 히트박스
-    int nLayer2;
-    // NPC
-    int nLayer3;
-    // 아이템
-    int nLayer4;
-    // Random 변수.
-    int m_nRandomRatio;
+    int nLayer1 = 1 << LayerMask.NameToLayer("Monster") | 1 << LayerMask.NameToLayer("RuinableObject"); // 공격 가능한 대상의 레이어
+    int nLayer2 = 1 << LayerMask.NameToLayer("Monster");                                                // 놓아주기 가능한 대상의 레이어
+    int nLayer3 = 1 << LayerMask.NameToLayer("NPC") | 1 << LayerMask.NameToLayer("Collection");         // 상호작용 가능한 대상의 레이어
+    int nLayer4 = 1 << LayerMask.NameToLayer("Item");                                                   // 아이템의 레이어
+    
+    int m_nRandomRatio; // 플레이어가 상태이상(암흑) 상태일때 제대로된 공격을 할 수 있을지 결정하는 난수.(상태이상(암흑) 상태에서는 일정 확률로 공격시 데미지를 1밖에 주지 못한다.)
 
+    Dictionary<int, int> m_Dictionary_SerItemEffect = new Dictionary<int, int>(); // 플레이어에게 적용중인 아이템 세트 효과. Dictionary <Key : 아이템 세트 효과 코드 , Value : 아이템 세트 효과 코드(Key)를 가진 아이템 개수>
+    
+    // 변수 초기화
     public void InitialSet()
     {
+        // Player_Total.cs가 포함하는 클래스
         m_ps_Status = this.GetComponent<Player_Status>();
         m_pm_Move = this.GetComponent<Player_Move>();
         m_pi_Itemslot = this.GetComponent<Player_Itemslot>();
@@ -96,37 +97,8 @@ public class Player_Total : MonoBehaviour
         m_ps_Skill = this.GetComponent<Player_Skill>();
         m_pc_Camera = this.GetComponent<Player_Camera>();
         m_pm_Map = this.GetComponent<Player_Map>();
-
-        m_vSize = new Vector2(0.25f, 0.35f);
-        nLayer1 = 1 << LayerMask.NameToLayer("Monster") | 1 << LayerMask.NameToLayer("RuinableObject");
-        nLayer2 = 1 << LayerMask.NameToLayer("Monster");
-        nLayer3 = 1 << LayerMask.NameToLayer("NPC") | 1 << LayerMask.NameToLayer("Collection");
-        nLayer4 = 1 << LayerMask.NameToLayer("Item");
-
-        m_gAttack_Area_Sword = transform.Find("Player_Attack_Sword").gameObject;
-        m_gAttack1_1_Area_Sword = m_gAttack_Area_Sword.transform.Find("Attack1_1_Sword").gameObject;
-        m_BoxCollider_Attack1_1_Area_Sword = m_gAttack1_1_Area_Sword.GetComponent<BoxCollider2D>();
-        m_gAttack1_2_Area_Sword = m_gAttack_Area_Sword.transform.Find("Attack1_2_Sword").gameObject;
-        m_BoxCollider_Attack1_2_Area_Sword = m_gAttack1_2_Area_Sword.GetComponent<BoxCollider2D>();
-        m_gAttack1_3_Area_Sword = m_gAttack_Area_Sword.transform.Find("Attack1_3_Sword").gameObject;
-        m_BoxCollider_Attack1_3_Area_Sword = m_gAttack1_3_Area_Sword.GetComponent<BoxCollider2D>();
-
-        m_gAttack_Area_Axe = transform.Find("Player_Attack_Axe").gameObject;
-        m_gAttack1_1_Area_Axe = m_gAttack_Area_Axe.transform.Find("Attack1_1_Axe").gameObject;
-        m_BoxCollider_Attack1_1_Area_Axe = m_gAttack1_1_Area_Axe.GetComponent<BoxCollider2D>();
-        m_gAttack1_2_Area_Axe = m_gAttack_Area_Axe.transform.Find("Attack1_2_Axe").gameObject;
-        m_BoxCollider_Attack1_2_Area_Axe = m_gAttack1_2_Area_Axe.GetComponent<BoxCollider2D>();
-        m_gAttack1_3_Area_Axe = m_gAttack_Area_Axe.transform.Find("Attack1_3_Axe").gameObject;
-        m_BoxCollider_Attack1_3_Area_Axe = m_gAttack1_3_Area_Axe.GetComponent<BoxCollider2D>();
-
-        m_gAttack_Area_Knife = transform.Find("Player_Attack_Knife").gameObject;
-        m_gAttack1_1_Area_Knife = m_gAttack_Area_Knife.transform.Find("Attack1_1_Knife").gameObject;
-        m_BoxCollider_Attack1_1_Area_Knife = m_gAttack1_1_Area_Knife.GetComponent<BoxCollider2D>();
-        m_gAttack1_2_Area_Knife = m_gAttack_Area_Knife.transform.Find("Attack1_2_Knife").gameObject;
-        m_BoxCollider_Attack1_2_Area_Knife = m_gAttack1_2_Area_Knife.GetComponent<BoxCollider2D>();
-        m_gAttack1_3_Area_Knife = m_gAttack_Area_Knife.transform.Find("Attack1_3_Knife").gameObject;
-        m_BoxCollider_Attack1_3_Area_Knife = m_gAttack1_3_Area_Knife.GetComponent<BoxCollider2D>();
-
+        
+        // Player_Total.cs가 포함하는 클래스 초기화
         m_ps_Status.InitialSet();
         m_pm_Move.InitialSet();
         m_pi_Itemslot.InitialSet();
@@ -137,95 +109,111 @@ public class Player_Total : MonoBehaviour
         m_pc_Camera.InitialSet();
         m_pm_Map.InitialSet();
 
-        m_Dictionary_SerItemEffect = new Dictionary<int, int>();
+        // Sword(검) 공격범위
+        m_gAttack_Area_Sword = transform.Find("Player_Attack_Sword").gameObject;
+        m_gAttack1_1_Area_Sword = m_gAttack_Area_Sword.transform.Find("Attack1_1_Sword").gameObject;
+        m_BoxCollider_Attack1_1_Area_Sword = m_gAttack1_1_Area_Sword.GetComponent<BoxCollider2D>();
+        m_gAttack1_2_Area_Sword = m_gAttack_Area_Sword.transform.Find("Attack1_2_Sword").gameObject;
+        m_BoxCollider_Attack1_2_Area_Sword = m_gAttack1_2_Area_Sword.GetComponent<BoxCollider2D>();
+        m_gAttack1_3_Area_Sword = m_gAttack_Area_Sword.transform.Find("Attack1_3_Sword").gameObject;
+        m_BoxCollider_Attack1_3_Area_Sword = m_gAttack1_3_Area_Sword.GetComponent<BoxCollider2D>();
+
+        // Axe(도끼) 공격범위
+        m_gAttack_Area_Axe = transform.Find("Player_Attack_Axe").gameObject;
+        m_gAttack1_1_Area_Axe = m_gAttack_Area_Axe.transform.Find("Attack1_1_Axe").gameObject;
+        m_BoxCollider_Attack1_1_Area_Axe = m_gAttack1_1_Area_Axe.GetComponent<BoxCollider2D>();
+        m_gAttack1_2_Area_Axe = m_gAttack_Area_Axe.transform.Find("Attack1_2_Axe").gameObject;
+        m_BoxCollider_Attack1_2_Area_Axe = m_gAttack1_2_Area_Axe.GetComponent<BoxCollider2D>();
+        m_gAttack1_3_Area_Axe = m_gAttack_Area_Axe.transform.Find("Attack1_3_Axe").gameObject;
+        m_BoxCollider_Attack1_3_Area_Axe = m_gAttack1_3_Area_Axe.GetComponent<BoxCollider2D>();
+
+        // Knife(단검) 공격범위
+        m_gAttack_Area_Knife = transform.Find("Player_Attack_Knife").gameObject;
+        m_gAttack1_1_Area_Knife = m_gAttack_Area_Knife.transform.Find("Attack1_1_Knife").gameObject;
+        m_BoxCollider_Attack1_1_Area_Knife = m_gAttack1_1_Area_Knife.GetComponent<BoxCollider2D>();
+        m_gAttack1_2_Area_Knife = m_gAttack_Area_Knife.transform.Find("Attack1_2_Knife").gameObject;
+        m_BoxCollider_Attack1_2_Area_Knife = m_gAttack1_2_Area_Knife.GetComponent<BoxCollider2D>();
+        m_gAttack1_3_Area_Knife = m_gAttack_Area_Knife.transform.Find("Attack1_3_Knife").gameObject;
+        m_BoxCollider_Attack1_3_Area_Knife = m_gAttack1_3_Area_Knife.GetComponent<BoxCollider2D>();
     }
 
     void Update()
     {
-        if (Total_Manager.Instance.m_bStart == true && Time.timeScale != 0)
-            Controller();
+        if (Total_Manager.Instance.m_bStart == true && Time.timeScale != 0) // 게임을 시작 했을때, 일시 정지가 아닐때
+            Controller(); // 컨트롤러
     }
 
+    // 컨트롤러(키입력 + @) 함수
     public void Controller()
     {
-        // 조건 FIX.
         if (GUIManager_Total.Instance != null)
         {
             if (GUIManager_Total.Instance.m_GUI_Interaction.m_gPanel_ChatBox.activeSelf == false &&
-                GUIManager_Total.Instance.m_GUI_ChangeMap.m_gPanel_ChangeMap.activeSelf == false)
+                GUIManager_Total.Instance.m_GUI_ChangeMap.m_gPanel_ChangeMap.activeSelf == false) // NPC와 상호작용 하지 않을때, 맵 변경이 끝났을때
+                                                                                                  //
+                                                                                                  // ※ GUI상태 FSM을 추가할 예정
+                                                                                                  //
             {
-                InputKey_Move();
-                InputKey_Attack();
-                InputKey_Goaway();
-                InputKey_Roll();
+                // 플레이어 동작
+                InputKey_Move();    // 이동(가만히 있기, 달리기), 방향설정 키입력(↑, ↓, ←, →)
+                InputKey_Attack();  // 공격 키입력(A)
+                InputKey_Goaway();  // 놓아주기 키입력(D)
+                InputKey_Roll();    // 구르기 키입력(S)
+                InputKey_GetItem(); // 아이템 줍기(키입력 필요없음)
 
-                InputKey_GUI_Quest();
-                //InputKey_GUI_Loop();
-                InputKey_GetItem();
-                InputKey_GUI_Itemslot();
-                //InputKey_GUI_Equipslot();
-                //InputKey_GUI_Status();
-                InputKey_GUI_ES();
-                InputKey_GUI_MonsterDictionary();
-
-                //InputKey_Equip(); //
-
-                //if (Input.GetKeyUp(KeyCode.F1))
-                //{
-                //    Debug.Log("진행 여부: " + QuestManager.Instance.m_Dictionary_QuestList_KILL_MONSTER[0000].m_bProcess);
-                //    Debug.Log("클리어 조건: " + QuestManager.Instance.m_Dictionary_QuestList_KILL_MONSTER[0000].m_bCondition);
-                //    Debug.Log("클리어 여부: " + QuestManager.Instance.m_Dictionary_QuestList_KILL_MONSTER[0000].m_bClear);
-
-                //    GUIManager_Total.Instance.m_GUI_Quest.UpdateQuest_Init();
-                //}
+                // 
+                InputKey_GUI_Quest();             // 플레이어 퀘스트창GUI
+                InputKey_GUI_Itemslot();          // 플레이어 인벤토리GUI
+                InputKey_GUI_ES();                // 플레이어 상태창(능력치창 + 장비창)GUI. InputKey_GUI_Equipslot() + InputKey_GUI_Status()
+                InputKey_GUI_MonsterDictionary(); // 몬스터 도감GUI
             }
-            else
+            else // NPC와 상호작용 하거나, 맵 변경이 끝나지 않았을때
             {
                 hInput = 0; vInput = 0;
-                m_pm_Move.Cancel_Goaway();
-                m_pm_Move.Move(0, 0, 0);
-                CameraMove(this.gameObject.transform.position);
+                m_pm_Move.Cancel_Goaway(); // 놓아주기 취소
+                m_pm_Move.Move(0, 0, 0); // 이동(가만히 있기)
+                CameraMove(this.gameObject.transform.position); // 카메라 설정 관련 함수(카메라 중심점 판단ㆍ설정)
             }
 
-            InputKey_Interaction();
-            InputKey_GUI_ESC();
+            InputKey_Interaction(); // NPC와 상호작용, 채집
+            InputKey_GUI_ESC();     // GUI 닫기, 일시중지GUI(옵션GUI)
         }
     }
 
-    // Idle, Run
+    // 이동(가만히 있기, 달리기), 방향설정 키입력(↑, ↓, ←, →)
     public void InputKey_Move()
     {
-        if (m_pm_Move.m_bMove == true)
+        if (m_pm_Move.m_bMove == true) // Player_Move.cs의 이동 관련 변수. 플레이어가 이동 가능할때
         {
             hInput = 0;
             vInput = 0;
 
-            if (Input.GetKey(KeyCode.RightArrow))
+            if (Input.GetKey(KeyCode.RightArrow)) // 수평 이동(→ 방향 이동)
             {
                 hInput = 1;
                 m_nPosValue = 1;
             }
-            if (Input.GetKeyUp(KeyCode.RightArrow))
+            if (Input.GetKeyUp(KeyCode.RightArrow)) // 수평 이동(→ 방향 이동) 중단
                 hInput = 0;
-            if (Input.GetKey(KeyCode.LeftArrow))
+            if (Input.GetKey(KeyCode.LeftArrow)) // 수평 이동(← 방향 이동)
             {
                 hInput = -1;
                 m_nPosValue = -1;
             }
-            if (Input.GetKeyUp(KeyCode.LeftArrow))
+            if (Input.GetKeyUp(KeyCode.LeftArrow)) // 수평 이동(← 방향 이동) 중단
                 hInput = 0;
-            if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow))
+            if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow)) // 수평 이동 중단
                 hInput = 0;
 
-            if (Input.GetKey(KeyCode.UpArrow))
+            if (Input.GetKey(KeyCode.UpArrow)) // 수직 이동(↓ 방향 이동)
                 vInput = 1;
-            if (Input.GetKeyUp(KeyCode.UpArrow))
+            if (Input.GetKeyUp(KeyCode.UpArrow)) // 수직 이동(↓ 방향 이동) 중단
                 vInput = 0;
-            if (Input.GetKey(KeyCode.DownArrow))
+            if (Input.GetKey(KeyCode.DownArrow)) // 수직 이동(↓ 방향 이동)
                 vInput = -1;
-            if (Input.GetKeyUp(KeyCode.DownArrow))
+            if (Input.GetKeyUp(KeyCode.DownArrow)) // 수직 이동(↓ 방향 이동) 중단
                 vInput = 0;
-            if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.DownArrow))
+            if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.DownArrow)) // 수직 이동 중단
                 vInput = 0;
 
             Move();
@@ -238,15 +226,14 @@ public class Player_Total : MonoBehaviour
             Move();
         }
     }
-    int Speed;
+    // 이동(가만히 있기, 달리기), 방향설정 함수
     private void Move()
     {
-        Player_Move.E_PLAYER_MOVE_STATE epms = Player_Move.E_PLAYER_MOVE_STATE.IDLE;
+        Player_Move.E_PLAYER_MOVE_STATE epms = Player_Move.E_PLAYER_MOVE_STATE.NULL;
 
-        if (Player_Status.m_cCondition.ConditionCheck_Bind() == false && Player_Status.m_cCondition.ConditionCheck_Shock() == false)
+        if (Player_Status.m_cCondition.ConditionCheck_Bind() == false && Player_Status.m_cCondition.ConditionCheck_Shock() == false) // 플레이어에게 상태이상(속박, 기절)이 적용중이지 않을때
         {
-            Speed = m_ps_Status.m_sStatus.GetSTATUS_Speed();
-            epms = m_pm_Move.Move(hInput, vInput, Speed);
+            epms = m_pm_Move.Move(hInput, vInput, m_ps_Status.m_sStatus.GetSTATUS_Speed()); // 플레이어 이동 함수
         }
         else
         {
@@ -269,12 +256,12 @@ public class Player_Total : MonoBehaviour
                     case Player_Move.E_PLAYER_MOVE_STATE.IDLE:
                     case Player_Move.E_PLAYER_MOVE_STATE.RUN:
                         {
-                            CameraMove(this.gameObject.transform.position + (m_pm_Move.Get_MoveDir() * Speed * 0.05f * 0.01f));
+                            CameraMove(this.gameObject.transform.position + (m_pm_Move.Get_MoveDir() * m_ps_Status.m_sStatus.GetSTATUS_Speed() * 0.05f * 0.01f));
                         }
                         break;
                     case Player_Move.E_PLAYER_MOVE_STATE.ROLL:
                         {
-                            CameraMove(this.gameObject.transform.position + (m_pm_Move.Get_MoveDir() * Speed * 0.05f * 0.01f * 1.5f));
+                            CameraMove(this.gameObject.transform.position + (m_pm_Move.Get_MoveDir() * m_ps_Status.m_sStatus.GetSTATUS_Speed() * 0.05f * 0.01f * 1.5f));
                         }
                         break;
                 }
@@ -283,7 +270,7 @@ public class Player_Total : MonoBehaviour
         else
         {
             //CameraMove(this.gameObject.transform.position + (m_pm_Move.Get_MoveDir() * Speed * 0.016f * 0.005f * m_fMoveRate));
-            CameraMove(this.gameObject.transform.position + (m_pm_Move.Get_MoveDir() * Speed * 0.05f * 0.005f));
+            CameraMove(this.gameObject.transform.position + (m_pm_Move.Get_MoveDir() * m_ps_Status.m_sStatus.GetSTATUS_Speed() * 0.05f * 0.005f));
         }
     }
 
@@ -1308,7 +1295,6 @@ public class Player_Total : MonoBehaviour
         return true;
     }
 
-    Dictionary<int, int> m_Dictionary_SerItemEffect;
     // Player 세트아이템 효과 체크. Dictionary 형태로 저장.
     void CheckSetItemEffect_Dictionary()
     {
