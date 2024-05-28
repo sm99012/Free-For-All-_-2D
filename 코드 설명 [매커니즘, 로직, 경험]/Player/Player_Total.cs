@@ -230,7 +230,7 @@ public class Player_Total : MonoBehaviour
             Move();
         }
     }
-    // 이동(가만히 있기, 달리기), 방향설정 함수
+    // 플레이어 이동(가만히 있기, 달리기), 방향설정 함수
     private void Move()
     {
         Player_Move.E_PLAYER_MOVE_STATE epms = Player_Move.E_PLAYER_MOVE_STATE.NULL; // 플레이어 동작 FSM 임시 변수
@@ -290,7 +290,7 @@ public class Player_Total : MonoBehaviour
             Attack();
         }
     }
-    // 공격 함수
+    // 플레이어 공격 함수
     private void Attack()
     {
         if (Player_Status.m_cCondition.ConditionCheck_Shock() == false) // 플레이어에게 상태이상(기절)이 적용중이지 않을때
@@ -512,7 +512,7 @@ public class Player_Total : MonoBehaviour
                 }
                 else if (co2_1[i].gameObject.tag == "Boss") // 보스몬스터일 경우
                 {
-                    if (co2_1[i].gameObject.name == "TeSlime") // 보스몬스터(테슬라임)일 경우
+                    if (co2_1[i].gameObject.name == "TeSlime") // 보스몬스터(테 슬라임)일 경우
                     {
                         if (co2_1[i].GetComponent<TeSlime_Total>().Attacked((int)(AttackDamage), percent, this.gameObject) == true) // 데미지를 정산하고 공격 여부를 반환
                         {
@@ -524,46 +524,48 @@ public class Player_Total : MonoBehaviour
         }
     }
 
-    // 몬스터 토벌 시 플레이어 업데이트(스탯(능력치, 평판), 퀘스트 현황 업데이트)
+    // 몬스터 토벌 시 플레이어 업데이트(스탯(능력치(경험치 + @), 평판), 퀘스트 현황 업데이트)
     public void MobDeath(Monster_Total mt) // mt : 토벌 된 몬스터 정보
     {
         m_ps_Status.MobDeath(mt.m_ms_Status.m_sStatus_Death, mt.m_ms_Status.m_sSoc_Death); // 플레이어 스탯(능력치, 평판) 업데이트
-        m_pq_Quest.QuestUpdate_Kill(mt.m_ms_Status.m_eMonster_Kind, mt.m_ms_Status.m_nMonsterCode);
-        m_pq_Quest.QuestUpdate_Eliminate(mt.m_ms_Status.m_eMonster_Kind, mt.m_ms_Status.m_nMonsterCode);
+        // 진행중인 퀘스트 현황 업데이트
+        m_pq_Quest.QuestUpdate_Kill(mt.m_ms_Status.m_eMonster_Kind, mt.m_ms_Status.m_nMonsterCode); // (특정 몬스터 토벌, 특정 타입의 몬스터 토벌) 퀘스트 업데이트
+        m_pq_Quest.QuestUpdate_Eliminate(mt.m_ms_Status.m_eMonster_Kind, mt.m_ms_Status.m_nMonsterCode); // (특정 몬스터 제거(토벌 + 놓아주기), 특정 타입의 몬스터 제거(토벌 + 놓아주기)) 퀘스트 업데이트
 
-        GUIManager_Total.Instance.Update_SS();
-        MonsterManager.Instance.Update_Monster_Dictionary(mt.m_ms_Status.m_eMonster_Kind, mt.m_ms_Status.m_nMonsterCode);
+        GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
+        MonsterManager.Instance.Update_Monster_Dictionary(mt.m_ms_Status.m_eMonster_Kind, mt.m_ms_Status.m_nMonsterCode); // 몬스터 도감 업데이트
     }
-    public void MobDeath(TeSlime_Total mt)
+    public void MobDeath(TeSlime_Total mt) // mt : 토벌 된 몬스터(보스몬스터(테 슬라임)) 정보
     {
-        m_ps_Status.MobDeath(mt.m_ts_Status.m_sStatus_Death, mt.m_ts_Status.m_sSoc_Death);
-        m_pq_Quest.QuestUpdate_Kill(mt.m_ts_Status.m_eMonster_Kind, mt.m_ts_Status.m_nMonsterCode);
-        m_pq_Quest.QuestUpdate_Eliminate(mt.m_ts_Status.m_eMonster_Kind, mt.m_ts_Status.m_nMonsterCode);
-        GUIManager_Total.Instance.Update_SS();
+        m_ps_Status.MobDeath(mt.m_ts_Status.m_sStatus_Death, mt.m_ts_Status.m_sSoc_Death); // 플레이어 스탯(능력치, 평판) 업데이트
+        // 진행중인 퀘스트 현황 업데이트
+        m_pq_Quest.QuestUpdate_Kill(mt.m_ts_Status.m_eMonster_Kind, mt.m_ts_Status.m_nMonsterCode); // (특정 몬스터 토벌, 특정 타입의 몬스터 토벌) 퀘스트 업데이트
+        m_pq_Quest.QuestUpdate_Eliminate(mt.m_ts_Status.m_eMonster_Kind, mt.m_ts_Status.m_nMonsterCode); // (특정 몬스터 제거(토벌 + 놓아주기), 특정 타입의 몬스터 제거(토벌 + 놓아주기)) 퀘스트 업데이트
+        GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
 
-        MonsterManager.Instance.Update_Monster_Dictionary(mt.m_ts_Status.m_eMonster_Kind,mt.m_ts_Status.m_nMonsterCode);
+        MonsterManager.Instance.Update_Monster_Dictionary(mt.m_ts_Status.m_eMonster_Kind,mt.m_ts_Status.m_nMonsterCode); // 몬스터 도감 업데이트
 
+        // 보스몬스터 전투 종료(토벌 성공)
         BossManager.Instance.End_Battle_Boss_Succes();
-        GUIManager_Total.Instance.UnDisplay_GUI_BossInformation();
+        GUIManager_Total.Instance.UnDisplay_GUI_BossInformation(); // 보스몬스터 전투GUI 비활성화
     }
 
-    // 스킬 적용.(디버프, 상태이상)
-    public void ApplySkill(Skill skill)
+    // 스킬(버프ㆍ디버프, 상태이상) 적용 함수
+    public void ApplySkill(Skill skill) // skill : 플레이어에게 적용할 스킬
     {
-        //if (m_pm_Move.m_bPower == false)
+        m_ps_Status.ApplySkill(skill); // 스킬 적용 시 스탯(능력치, 평판), 버프ㆍ디버프, 상태이상 업데이트.
+        GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
+
+        // 스킬 적용 시 피격(넉백) 적용
+        if (skill.m_seSkillEffect.m_cCondition.ConditionCheck_Shock() == true) // 플레이어에게 적용할 스킬에 상태이상(기절)이 존재하는 경우
         {
-            Debug.Log("[" + skill.m_sSkillName + "]");
-            m_ps_Status.ApplySkill(skill);
-            GUIManager_Total.Instance.Update_SS();
-            
-            if (skill.m_seSkillEffect.m_cCondition.ConditionCheck_Shock() == true)
-            {
-                Attacked(0, this.gameObject.transform.position, 0.3f, skill.m_sSkillName);
-            }
+            Attacked(0, this.gameObject.transform.position, 0.3f, skill.m_sSkillName); // 플레이어 피격(넉백)
+                                                                                       // 데미지 : 0, 넉백 방향 : 플레이어 현재 위치, 넉백 시간 : 0.3f초, 피격 이름 : 해당 스킬 이름
         }
     }
 
-    // Attacked
+    // 플레이어 피격 함수
+    // return true : 플레이어 피격 / return false : 플레이어 피격 안됨
     public bool Attacked(int damage, Vector3 dir, float time = 0.3f, string attackedname = "???")
     {
         if (m_pm_Move.Attacked(time, m_ps_Status.m_sStatus.GetSTATUS_Speed(), dir) == true)
