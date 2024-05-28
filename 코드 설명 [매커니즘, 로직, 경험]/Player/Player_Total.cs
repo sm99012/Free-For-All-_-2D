@@ -84,7 +84,7 @@ public class Player_Total : MonoBehaviour
     int nLayer3 = 1 << LayerMask.NameToLayer("NPC") | 1 << LayerMask.NameToLayer("Collection");         // 상호작용 가능한 대상의 레이어
     int nLayer4 = 1 << LayerMask.NameToLayer("Item");                                                   // 아이템의 레이어
     
-    int m_nRandomRatio; // 플레이어가 상태이상(암흑) 상태일때 제대로된 공격을 할 수 있을지 결정하는 난수.(상태이상(암흑) 상태에서는 일정 확률로 공격시 데미지를 1밖에 주지 못한다.)
+    int m_nRandomRatio; // 플레이어가 상태이상(암흑) 상태일때 제대로된 공격을 할 수 있을지 결정하는 난수.(상태이상(암흑) 상태에서는 일정 확률로 공격 시 데미지를 1밖에 주지 못한다.)
 
     Dictionary<int, int> m_Dictionary_SerItemEffect = new Dictionary<int, int>(); // 플레이어에게 적용중인 아이템 세트 효과. Dictionary <Key : 아이템 세트 효과 코드 , Value : 아이템 세트 효과 코드(Key)를 가진 아이템 개수>
     
@@ -560,19 +560,18 @@ public class Player_Total : MonoBehaviour
         if (skill.m_seSkillEffect.m_cCondition.ConditionCheck_Shock() == true) // 플레이어에게 적용할 스킬에 상태이상(기절)이 존재하는 경우
         {
             Attacked(0, this.gameObject.transform.position, 0.3f, skill.m_sSkillName); // 플레이어 피격(넉백)
-                                                                                       // 데미지 : 0, 넉백 방향 : 플레이어 현재 위치, 넉백 시간 : 0.3f초, 피격 이름 : 해당 스킬 이름
+                                                                                       // 데미지 : 0, 피격(넉백) 방향 : 플레이어 현재 위치, 넉백 시간 : 0.3f초, 피격 이름(정보) : 해당 스킬 이름
         }
     }
 
     // 플레이어 피격 함수
-    // return true : 플레이어 피격 / return false : 플레이어 피격 안됨
-    public bool Attacked(int damage, Vector3 dir, float time = 0.3f, string attackedname = "???")
+    // return true : 플레이어 피격됨 / return false : 플레이어 피격안됨
+    public bool Attacked(int damage, Vector3 dir, float time = 0.3f, string attackedname = "???") // damage : 피격 데미지, dir : 피격(넉백) 방향, time : 넉백 시간(기본 0.3f초), attackedname : 피격 이름(정보)
     {
-        if (m_pm_Move.Attacked(time, m_ps_Status.m_sStatus.GetSTATUS_Speed(), dir) == true)
+        if (m_pm_Move.Attacked(time, m_ps_Status.m_sStatus.GetSTATUS_Speed(), dir) == true) // 플레이어 피격 함수. 피격 여부 반환
         {
-            m_ps_Status.Attacked(damage, dir);
+            m_ps_Status.Attacked(damage, dir); // 플레이어 피격 시 피격 데미지 계산 및 출력
             GUIManager_Total.Instance.Update_SS();
-            //Debug.Log("Player attacked by monster");
             Death(attackedname);
 
             return true;
