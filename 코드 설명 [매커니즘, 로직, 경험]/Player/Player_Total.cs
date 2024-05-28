@@ -616,9 +616,9 @@ public class Player_Total : MonoBehaviour
             {
                 if (co2_2[i].gameObject.tag != "Boss") // 해당 오브젝트의 태그가 "BOSS"가 아닐 경우
                 {
+                    // 놓아주기를 성공했을때 일정 확률(50%)로 평판을 획득할 수 있다.
                     soc2_2.SetSOC(co2_2[i].gameObject.GetComponent<Monster_Total>().Goaway()); // 임시 변수에 해당 오브젝트의 놓아주기 관련 평판(놓아주기를 성공했을때 획득할 수 있는 평판)을 저장
-                    // 평판은 33%확률로 상승
-                    int nrandom = Random.Range(0, 101); // 평판 획득 가능 비율 : 1% ~ 100% (1 <= m_nRandomRatio <= 100)
+                    int nrandom = Random.Range(0, 101); // 평판 획득 확률 : 0% ~ 100% (0 <= m_nRandomRatio <= 100)
                     if (nrandom <= 50)
                     {
                         m_ps_Status.Goaway(soc2_2);
