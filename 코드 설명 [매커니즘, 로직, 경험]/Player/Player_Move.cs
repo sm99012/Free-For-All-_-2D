@@ -607,6 +607,7 @@ public class Player_Move : MonoBehaviour
 
     // 플레이어와 NPC간의 상호작용(대화, 퀘스트, 거래)
     // Player_Total.cs에서 키입력(SPACE)을 통해 함수 실행. 플레이어와 NPC간의 상호작용 동작 수행
+    // return true : 상호작용 가능 / return false : 상호작용 불가능
     public bool Conversation()
     {
         if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.IDLE || m_ePlayerMoveState == E_PLAYER_MOVE_STATE.RUN)
