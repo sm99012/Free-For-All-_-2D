@@ -80,6 +80,8 @@ public class Player_Total : MonoBehaviour
     Collider2D[] co2_2; // 플레이어의 놓아주기 대상(몬스터)의 콜라이더(충돌 처리를 위한 오브젝트)
     SOC soc2_2;         // 플레이어의 놓아주기가 성공했을때 평판 업데이트를 위한 임시 변수
 
+    Collider2D[] co2_3; // 플레이어의 상호작용ㆍ채집 대상의 콜라이더(충돌 처리를 위한 오브젝트)
+
     Vector2 m_vSize = new Vector2(0.25f, 0.35f); // 상호작용 범위
 
     int nLayer1 = 1 << LayerMask.NameToLayer("Monster") | 1 << LayerMask.NameToLayer("RuinableObject"); // 공격 가능한 대상의 레이어
@@ -182,8 +184,8 @@ public class Player_Total : MonoBehaviour
                 CameraMove(this.gameObject.transform.position); // 카메라 설정 관련 함수(카메라 중심점 판단ㆍ설정)
             }
 
-            InputKey_Interaction(); // NPC와 상호작용, 채집
-            InputKey_GUI_ESC();     // GUI 닫기, 일시중지GUI(옵션GUI)
+            InputKey_Interaction(); // NPC와 상호작용ㆍ채집 키입력(SPACE)
+            InputKey_GUI_ESC();     // GUI 닫기(비활성화), 일시중지GUI(옵션GUI) 키입력(ESC)
         }
     }
 
@@ -241,7 +243,7 @@ public class Player_Total : MonoBehaviour
         // 플레이어 이동, 방향설정
         if (Player_Status.m_cCondition.ConditionCheck_Bind() == false && Player_Status.m_cCondition.ConditionCheck_Shock() == false) // 플레이어에게 상태이상(속박, 기절)이 적용중이지 않을때
         {
-            epms = m_pm_Move.Move(hInput, vInput, m_ps_Status.m_sStatus.GetSTATUS_Speed()); // 플레이어 이동 함수. 플레이어 동작 FSM 상태 반환
+            epms = m_pm_Move.Move(hInput, vInput, m_ps_Status.m_sStatus.GetSTATUS_Speed()); // 플레이어 이동 함수 실행. 플레이어 동작 FSM 상태 반환
         }
         else
         {
@@ -298,7 +300,7 @@ public class Player_Total : MonoBehaviour
     {
         if (Player_Status.m_cCondition.ConditionCheck_Shock() == false) // 플레이어에게 상태이상(기절)이 적용중이지 않을때
         {
-            m_nAtk = m_pm_Move.Attack(); // 플레이어 공격 함수. 기본 공격 단계 반환
+            m_nAtk = m_pm_Move.Attack(); // 플레이어 공격 함수 실행. 기본 공격 단계 반환
         }
     }
 
@@ -532,8 +534,8 @@ public class Player_Total : MonoBehaviour
     {
         m_ps_Status.MobDeath(mt.m_ms_Status.m_sStatus_Death, mt.m_ms_Status.m_sSoc_Death); // 플레이어 스탯(능력치, 평판) 업데이트
         // 진행중인 퀘스트 현황 업데이트
-        m_pq_Quest.QuestUpdate_Kill(mt.m_ms_Status.m_eMonster_Kind, mt.m_ms_Status.m_nMonsterCode); // (특정 몬스터 토벌, 특정 타입의 몬스터 토벌) 퀘스트 업데이트
-        m_pq_Quest.QuestUpdate_Eliminate(mt.m_ms_Status.m_eMonster_Kind, mt.m_ms_Status.m_nMonsterCode); // (특정 몬스터 제거(토벌 + 놓아주기), 특정 타입의 몬스터 제거(토벌 + 놓아주기)) 퀘스트 업데이트
+        m_pq_Quest.QuestUpdate_Kill(mt.m_ms_Status.m_eMonster_Kind, mt.m_ms_Status.m_nMonsterCode);
+        m_pq_Quest.QuestUpdate_Eliminate(mt.m_ms_Status.m_eMonster_Kind, mt.m_ms_Status.m_nMonsterCode);
 
         GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
         MonsterManager.Instance.Update_Monster_Dictionary(mt.m_ms_Status.m_eMonster_Kind, mt.m_ms_Status.m_nMonsterCode); // 몬스터 도감 업데이트
@@ -542,8 +544,8 @@ public class Player_Total : MonoBehaviour
     {
         m_ps_Status.MobDeath(mt.m_ts_Status.m_sStatus_Death, mt.m_ts_Status.m_sSoc_Death); // 플레이어 스탯(능력치, 평판) 업데이트
         // 진행중인 퀘스트 현황 업데이트
-        m_pq_Quest.QuestUpdate_Kill(mt.m_ts_Status.m_eMonster_Kind, mt.m_ts_Status.m_nMonsterCode); // (특정 몬스터 토벌, 특정 타입의 몬스터 토벌) 퀘스트 업데이트
-        m_pq_Quest.QuestUpdate_Eliminate(mt.m_ts_Status.m_eMonster_Kind, mt.m_ts_Status.m_nMonsterCode); // (특정 몬스터 제거(토벌 + 놓아주기), 특정 타입의 몬스터 제거(토벌 + 놓아주기)) 퀘스트 업데이트
+        m_pq_Quest.QuestUpdate_Kill(mt.m_ts_Status.m_eMonster_Kind, mt.m_ts_Status.m_nMonsterCode);
+        m_pq_Quest.QuestUpdate_Eliminate(mt.m_ts_Status.m_eMonster_Kind, mt.m_ts_Status.m_nMonsterCode);
         GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
 
         MonsterManager.Instance.Update_Monster_Dictionary(mt.m_ts_Status.m_eMonster_Kind,mt.m_ts_Status.m_nMonsterCode); // 몬스터 도감 업데이트
@@ -575,7 +577,7 @@ public class Player_Total : MonoBehaviour
         {
             m_ps_Status.Attacked(damage, dir); // 플레이어 피격 시 피격 데미지 계산 및 출력
             GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
-            Death(attackedname); // 플레이어 사망 여부 판단
+            Death(attackedname); // 플레이어 사망 판단
 
             return true;
         }
@@ -599,7 +601,7 @@ public class Player_Total : MonoBehaviour
     {
         if (Player_Status.m_cCondition.ConditionCheck_Bind() == false)
         {
-            m_pm_Move.Goaway();
+            m_pm_Move.Goaway(); // 플레이어 놓아주기 함수 실행
         }
     }
     // 놓아주기 판정 함수
@@ -621,33 +623,23 @@ public class Player_Total : MonoBehaviour
                     int nrandom = Random.Range(0, 101); // 평판 획득 확률 : 0% ~ 100% (0 <= m_nRandomRatio <= 100)
                     if (nrandom <= 50)
                     {
-                        m_ps_Status.Goaway(soc2_2);
+                        m_ps_Status.Goaway(soc2_2); // 플레이어 평판 변경
                     }
-                    //m_pe_Effect.Effect2(co2_2[i].transform.position);
-                    m_vEffectPos = co2_2[i].gameObject.transform.position;
+
+                    // 진행중인 퀘스트 현황 업데이트
                     m_pq_Quest.QuestUpdate_Goaway(co2_2[i].gameObject.GetComponent<Monster_Total>().m_ms_Status.m_eMonster_Kind, co2_2[i].gameObject.GetComponent<Monster_Total>().m_ms_Status.m_nMonsterCode);
                     m_pq_Quest.QuestUpdate_Eliminate(co2_2[i].gameObject.GetComponent<Monster_Total>().m_ms_Status.m_eMonster_Kind, co2_2[i].gameObject.GetComponent<Monster_Total>().m_ms_Status.m_nMonsterCode);
 
-                    if (co2_2[i].gameObject.GetComponent<Monster_Total>().m_ms_Status.m_eMonster_Kind != E_MONSTER_KIND.OBJECT)
-                        MonsterManager.Instance.Update_Monster_Dictionary(co2_2[i].gameObject.GetComponent<Monster_Total>().m_ms_Status.m_eMonster_Kind, co2_2[i].gameObject.GetComponent<Monster_Total>().m_ms_Status.m_nMonsterCode);
+                    if (co2_2[i].gameObject.GetComponent<Monster_Total>().m_ms_Status.m_eMonster_Kind != E_MONSTER_KIND.OBJECT) // 해당 오브젝트(몬스터)의 종족 분류가 오브젝트가 아닐때
+                        MonsterManager.Instance.Update_Monster_Dictionary(co2_2[i].gameObject.GetComponent<Monster_Total>().m_ms_Status.m_eMonster_Kind, co2_2[i].gameObject.GetComponent<Monster_Total>().m_ms_Status.m_nMonsterCode); // 몬스터 도감 업데이트
                 }
             }
         }
 
-        GUIManager_Total.Instance.Update_SS();
-    }
-    Vector3 m_vEffectPos;
-    IEnumerator ProcessGoawayEffect(Vector3 pos)
-    {
-        Vector3 vpos = pos;
-        m_pe_Effect.Effect4(vpos);
-        yield return new WaitForSeconds(0.3f);
-        m_pe_Effect.Effect4(vpos);
-        yield return new WaitForSeconds(0.3f);
-        m_pe_Effect.Effect4(vpos);
+        GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
     }
 
-    // Roll
+    // 구르기 키입력(S)
     public void InputKey_Roll()
     {
         if (Input.GetKeyDown(KeyCode.S))
@@ -655,90 +647,95 @@ public class Player_Total : MonoBehaviour
             Roll();
         }
     }
+    // 플레이어 구르기 함수
     public void Roll()
     {
-        if (Player_Status.m_cCondition.ConditionCheck_Shock() == false)
+        if (Player_Status.m_cCondition.ConditionCheck_Shock() == false) // 플레이어에게 상태이상(기절)이 적용중이지 않을때
         {
-            if (m_pm_Move.Roll() == true)
-                m_pq_Quest.QuestUpdate_Roll();
+            if (m_pm_Move.Roll() == true) // 플레이어 구르기 함수 실행. 구르기 성공 여부 반환
+                m_pq_Quest.QuestUpdate_Roll(); // 진행중인 퀘스트 현황 업데이트
         }
     }
 
-    // 플레이어 사망 여부 판단 함수
-    public void Death(string deathname)
+    // 플레이어 사망 판단 함수
+    public void Death(string deathname) // deathname : 사망 정보
     {
-        if (m_ps_Status.m_sStatus.GetSTATUS_HP_Current() <= 0)
+        // 사망 여부 판단
+        if (m_ps_Status.m_sStatus.GetSTATUS_HP_Current() <= 0) // 플레이어의 현재 체력이 0 이하일때
         {
-            m_pm_Move.Death();
+            m_pm_Move.Death(); // 플레이어 사망 함수
 
-            GUIManager_Total.Instance.Display_GUI_ReTry(deathname);
+            GUIManager_Total.Instance.Display_GUI_ReTry(deathname); // 리트라이(부활)GUI 활성화
 
-            if (BossManager.Instance.m_eBattle_Boss_State == E_BATTLE_BOSS_STATE.BATTLE)
+            if (BossManager.Instance.m_eBattle_Boss_State == E_BATTLE_BOSS_STATE.BATTLE) // 보스몬스터와 전투 중이었을때
             {
-                BossManager.Instance.End_Battle_Boss_Fail();
+                BossManager.Instance.End_Battle_Boss_Fail(); // 보스몬스터 전투 종료(토벌 실패)
             }
         }
     }
 
-    // NPC와 상호작용, 채집 등
+    // NPC와 상호작용ㆍ채집 키입력(SPACE)
     public void InputKey_Interaction()
     {
         if (GUIManager_Total.Instance.m_GUI_Interaction.m_gPanel_ChatBox.activeSelf == false &&
-            GUIManager_Total.Instance.m_GUI_ChangeMap.m_gPanel_ChangeMap.activeSelf == false)
+            GUIManager_Total.Instance.m_GUI_ChangeMap.m_gPanel_ChangeMap.activeSelf == false) // NPC와 상호작용 하지 않을때, 맵 변경이 끝났을때
         {
             if (Input.GetKeyUp(KeyCode.Space))
             {
                 Interaction();
             }
         }
-        else
+        else // NPC와 상호작용 할때
         {
-            // 키입력으로 NPC 상호작용.
-            // Space: 스크립트 스킵, 클릭.
-            // ↑, ↓: 상호작용 종류 선택, 다음으로/이전으로 선택, 수락하기/거절하기 선택.
+            // 키입력(↑, ↓, SPACE)으로 NPC와 상호작용
+            // ↑, ↓ : 상호작용 선택지 선택(상호작용 종류(대화, 퀘스트, 거래) 선택, 다음/이전 선택, 수락/거절 선택), SPACE : 스크립트 스킵, 선택지 확정
             if (Input.GetKeyUp(KeyCode.Space))
             {
-                GUIManager_Total.Instance.Interaction_In_SSD(KeyCode.Space);
+                GUIManager_Total.Instance.Interaction_In_SSD(KeyCode.Space); // NPC와 상호작용 시 선택지 확정
             }
             else if (Input.GetKeyUp(KeyCode.UpArrow))
             {
-                GUIManager_Total.Instance.Interaction_In_SSD(KeyCode.UpArrow);
+                GUIManager_Total.Instance.Interaction_In_SSD(KeyCode.UpArrow); // NPC와 상호작용 시 선택지 선택
             }
             else if (Input.GetKeyUp(KeyCode.DownArrow))
             {
-                GUIManager_Total.Instance.Interaction_In_SSD(KeyCode.DownArrow);
+                GUIManager_Total.Instance.Interaction_In_SSD(KeyCode.DownArrow); // NPC와 상호작용 시 선택지 선택
             }
         }
     }
-    Collider2D[] co2_3;
+    // NPC와 상호작용ㆍ채집 함수
     public void Interaction()
     {
-        if (Player_Status.m_cCondition.ConditionCheck_Bind() == false && Player_Status.m_cCondition.ConditionCheck_Shock() == false &&
-            GUIManager_Total.Instance.m_nList_UI_Priority.Contains(4) == false && GUIManager_Total.Instance.m_nList_UI_Priority.Contains(29) == false)
+        if (Player_Status.m_cCondition.ConditionCheck_Bind() == false && Player_Status.m_cCondition.ConditionCheck_Shock() == false && // 플레이어에게 상태이상(속박, 기절)이 적용중이지 않을때
+            GUIManager_Total.Instance.m_nList_UI_Priority.Contains(4) == false && GUIManager_Total.Instance.m_nList_UI_Priority.Contains(29) == false) // 퀘스트GUI(4), 몬스터 도감GUI(29)가 비활성화 되었을때
         {
-            if (m_nPosValue == 1)
+            // 상호작용ㆍ채집 방향 설정, 범위내의 모든 오브젝트(NPC, 채집물) 배열 반환(Collider2D[])
+            if (m_nPosValue == 1) // → 방향 상호작용ㆍ채집
             {
                 co2_3 = Physics2D.OverlapBoxAll(transform.position + new Vector3(0.125f, 0.15f, 0), m_vSize, 0, nLayer3);
             }
-            else
+            else // ← 방향 상호작용ㆍ채집
             {
                 co2_3 = Physics2D.OverlapBoxAll(transform.position + new Vector3(-0.125f, 0.15f, 0), m_vSize, 0, nLayer3);
             }
 
-            if (co2_3.Length > 0)
+            // 범위내의 모든 오브젝트(NPC, 채집물)와 상호작용(NPC와 상호작용(대화, 퀘스트, 거래), 채집물 채집) 한다.
+            if (co2_3.Length > 0) // 범위내의 오브젝트가 하나이상 있을 경우
             {
                 for (int i = 0; i < co2_3.Length; i++)
                 {
-                    if (co2_3[i].gameObject.tag == "NPC")
+                    // NPC와 상호작용
+                    if (co2_3[i].gameObject.tag == "NPC") // 해당 오브젝트의 가 "NPC"인 경우
                     {
-                        if (m_pm_Move.Conversation() == true)
+                        if (m_pm_Move.Conversation() == true) // NPC와 상호작용 실행. 상호작용 가능 여부 반환
                         {
                             m_pc_Camera.SetCamera_ZOOMIN(co2_3[i].gameObject.transform.position);
                             GUIManager_Total.Instance.Interaction(co2_3[i].gameObject.GetComponent<NPC_Total>());
                         }
                         break;
                     }
-                    if (co2_3[i].gameObject.tag == "Collection")
+                    // 채집
+                    if (co2_3[i].gameObject.tag == "Collection") // 해당 오브젝트의 태그가 "Collection"인 경우
                     {
                         co2_3[i].gameObject.GetComponent<Collection>().DropItem(this.transform.position);
                         break;
