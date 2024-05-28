@@ -175,10 +175,10 @@ public class Player_Total : MonoBehaviour
                 InputKey_GetItem(); // 아이템 줍기(키입력 필요없음)
 
                 // 플레이어 정보GUI
-                InputKey_GUI_Quest();             // 플레이어 퀘스트창GUI
-                InputKey_GUI_Itemslot();          // 플레이어 인벤토리GUI
-                InputKey_GUI_ES();                // 플레이어 상태창(능력치창 + 장비창)GUI. InputKey_GUI_Equipslot() + InputKey_GUI_Status()
-                InputKey_GUI_MonsterDictionary(); // 몬스터 도감GUI
+                InputKey_GUI_Quest();             // 퀘스트창GUI 키입력(Q)
+                InputKey_GUI_Itemslot();          // 인벤토리GUI 키입력(I)
+                InputKey_GUI_ES();                // 상태창(능력치창 + 장비창)GUI. 키입력(E) InputKey_GUI_Equipslot() + InputKey_GUI_Status()
+                InputKey_GUI_MonsterDictionary(); // 몬스터 도감GUI 키입력(M)
             }
             else // NPC와 상호작용 하거나, 맵 변경이 끝나지 않았을때
             {
@@ -809,7 +809,7 @@ public class Player_Total : MonoBehaviour
                         GUIManager_Total.Instance.UpdateLog("[소비 아이템]" + co2_4[i].gameObject.GetComponent<Item>().m_sItemName + " 을(를) 획득 하였습니다."); // 로그GUI에 획득한 소비아이템 정보 출력
                     }
 
-                    GUIManager_Total.Instance.Update_Itemslot(); // 아이템슬롯GUI 업데이트
+                    GUIManager_Total.Instance.Update_Itemslot(); // 인벤토리GUI 업데이트
                     m_pq_Quest.QuestUpdate_Collect(co2_4[i].gameObject.GetComponent<Item>()); // 진행중인 퀘스트 현황 업데이트
 
                     break;
@@ -818,230 +818,238 @@ public class Player_Total : MonoBehaviour
         }
     }
 
-    // Quest창 오픈
+    // 퀘스트창GUI 키입력(Q)
     public void InputKey_GUI_Quest()
     {
         if (Input.GetKeyUp(KeyCode.Q))
         {
-            GUIManager_Total.Instance.Display_GUI_Quest();
+            GUIManager_Total.Instance.Display_GUI_Quest(); // 퀘스트창GUI 활성화
         }
     }
 
-    // Itemslot 오픈
+    // 인벤토리GUI 키입력(I)
     public void InputKey_GUI_Itemslot()
     {
         if (Input.GetKeyUp(KeyCode.I))
         {
-            GUIManager_Total.Instance.Display_GUI_Itemslot();
+            GUIManager_Total.Instance.Display_GUI_Itemslot(); // 인벤토리GUI 활성화
         }
     }
 
-    // Equipslot 오픈
-    // Not Use
-    public void InputKey_GUI_Equipslot()
-    {
-        if (Input.GetKeyUp(KeyCode.E))
-        {
-            GUIManager_Total.Instance.Display_GUI_Equipslot();
-        }
-    }
-    // Status 오픈
-    // Not Use
-    public void InputKey_GUI_Status()
-    {
-        if (Input.GetKeyUp(KeyCode.O))
-        {
-            GUIManager_Total.Instance.Display_GUI_Status();
-        }
-    }
+    // 상태창(능력치창 + 장비창)GUI 키입력(E)
     public void InputKey_GUI_ES()
     {
         if (Input.GetKeyUp(KeyCode.E))
         {
-            GUIManager_Total.Instance.Display_GUI_ES();
+            GUIManager_Total.Instance.Display_GUI_ES(); // 상태창(능력치창 + 장비창)GUI 활성화
         }
     }
+
+    // 몬스터 도감GUI 키입력(M)
     public void InputKey_GUI_MonsterDictionary()
     {
         if (Input.GetKeyUp(KeyCode.M))
         {
-            GUIManager_Total.Instance.Display_GUI_Dictionary();
+            GUIManager_Total.Instance.Display_GUI_Dictionary(); // 몬드토 도감GUI 활성화
         }
     }    
+
+    // GUI 닫기(비활성화), 일시중지GUI(옵션GUI) 키입력(ESC)
+    // 활성화된 GUI를 우선순위에 따라 하나씩 비활성화 한다. 활성화된 GUI가 존재하지 않을 경우 일시중지GUI(옵션GUI)를 활성화 한다.
     public void InputKey_GUI_ESC()
     {
         if (Input.GetKeyUp(KeyCode.Escape))
         {
-            if (GUIManager_Total.Instance.Exit_GUI_Priority() == false)
-                GUIManager_Total.Instance.Display_GUI_Option();
+            if (GUIManager_Total.Instance.Exit_GUI_Priority() == false) // GUI 닫기(비활성화). 활성화된 GUI 정보 반환
+                GUIManager_Total.Instance.Display_GUI_Option(); // 일시중지GUI(옵션GUI) 활성화
         }
     }
 
-    // 진행중인 퀘스트 처리 관련 함수
-    public void AddQuest(Quest_KILL_MONSTER quest)
+    // 퀘스트를 추가하는 함수(퀘스트 최초 수락 시 사용). 함수 오버로딩을 이용
+    // 퀘스트 타입 : 특정 몬스터 토벌
+    public void AddQuest(Quest_KILL_MONSTER quest) // quest : 추가할 퀘스트 정보
     {
-        m_pq_Quest.AddQuest(quest);
+        m_pq_Quest.AddQuest(quest); // 퀘스트 추가(수락)
     }
-    public void AddQuest(Quest_KILL_TYPE quest)
+    // 퀘스트 타입 : 특정 타입의 몬스터 토벌
+    public void AddQuest(Quest_KILL_TYPE quest) // quest : 추가할 퀘스트 정보
     {
-        m_pq_Quest.AddQuest(quest);
+        m_pq_Quest.AddQuest(quest); // 퀘스트 추가(수락)
     }
-    public void AddQuest(Quest_GOAWAY_MONSTER quest)
+    // 퀘스트 타입 : 특정 몬스터 놓아주기
+    public void AddQuest(Quest_GOAWAY_MONSTER quest) // quest : 추가할 퀘스트 정보
     {
-        m_pq_Quest.AddQuest(quest);
+        m_pq_Quest.AddQuest(quest); // 퀘스트 추가(수락)
     }
-    public void AddQuest(Quest_GOAWAY_TYPE quest)
+    // 퀘스트 타입 : 특정 타입의 몬스터 놓아주기
+    public void AddQuest(Quest_GOAWAY_TYPE quest) // quest : 추가할 퀘스트 정보
     {
-        m_pq_Quest.AddQuest(quest);
+        m_pq_Quest.AddQuest(quest); // 퀘스트 추가(수락)
     }
-    public void AddQuest(Quest_COLLECT quest)
+    // 퀘스트 타입 : 수집
+    public void AddQuest(Quest_COLLECT quest) // quest : 추가할 퀘스트 정보
     {
-        m_pq_Quest.AddQuest(quest);
-        m_pq_Quest.QuestUpdate_Collect();
+        m_pq_Quest.AddQuest(quest); // 퀘스트 추가(수락)
+        m_pq_Quest.QuestUpdate_Collect(); // 퀘스트(수집 타입) 현황 업데이트
     }
-    public void AddQuest(Quest_CONVERSATION quest)
+    // 퀘스트 타입 : 대화
+    public void AddQuest(Quest_CONVERSATION quest) // quest : 추가할 퀘스트 정보
     {
-        m_pq_Quest.AddQuest(quest);
+        m_pq_Quest.AddQuest(quest); // 퀘스트 추가(수락)
     }
-    public void AddQuest(Quest_ROLL quest)
+    // 퀘스트 타입 : 구르기
+    public void AddQuest(Quest_ROLL quest) // quest : 추가할 퀘스트 정보
     {
-        m_pq_Quest.AddQuest(quest);
+        m_pq_Quest.AddQuest(quest); // 퀘스트 추가(수락)
     }
-    public void AddQuest(Quest_ELIMINATE_MONSTER quest)
+    // 퀘스트 타입 : 특정 몬스터 제거
+    public void AddQuest(Quest_ELIMINATE_MONSTER quest) // quest : 추가할 퀘스트 정보
     {
-        m_pq_Quest.AddQuest(quest);
+        m_pq_Quest.AddQuest(quest); // 퀘스트 추가(수락)
     }
-    public void AddQuest(Quest_ELIMINATE_TYPE quest)
+    // 퀘스트 타입 : 특정 타입의 몬스터 제거
+    public void AddQuest(Quest_ELIMINATE_TYPE quest) // quest : 추가할 퀘스트 정보
     {
-        m_pq_Quest.AddQuest(quest);
+        m_pq_Quest.AddQuest(quest); // 퀘스트 추가(수락)
     }
 
+    // 퀘스트를 제거하는 함수(퀘스트 포기)
+    //
+    // ※ 미구현
+    //
     //public void RemoveQuest(Quest quest)
     //{
     //    m_pq_Quest.RemoveQuest(quest);
     //}
 
-    //
-
-    public void GetQuestReward(Quest_KILL_MONSTER quest)
+    // 진행중인(완료 가능한) 퀘스트를 완료하는 함수. 함수 오버로딩을 이용
+    // 퀘스트 타입 : 특정 몬스터 토벌
+    public void GetQuestReward(Quest_KILL_MONSTER quest) // quest : 완료할 퀘스트 정보
     {
-        m_pq_Quest.GetQuestReward(quest);
-        m_ps_Status.GetQuestReward(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Equip(quest);
-        //if (m_pi_Itemslot.GetQuestReward_Item_Equip(quest) == false)
-        m_pi_Itemslot.GetQuestReward_Item_Use(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Etc(quest);
-        m_pq_Quest.QuestUpdate_Collect_NoDisplay();
-        m_pi_Itemslot.m_nGold += quest.m_nRewardGold;
+        m_pq_Quest.GetQuestReward(quest); // 퀘스트 완료
+        m_ps_Status.GetQuestReward(quest); // 퀘스트 완료 보상(능력치, 평판) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Equip(quest); // 퀘스트 완료 보상(장비아이템) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Use(quest); // 퀘스트 완료 보상(소비아이템) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Etc(quest); // 퀘스트 완료 보상(기타아이템) 수령
+        m_pq_Quest.QuestUpdate_Collect_NoDisplay(); // 퀘스트(수집 타입) 현황 업데이트
+        m_pi_Itemslot.m_nGold += quest.m_nRewardGold; // 퀘스트 완료 보상(골드(재화)) 수령
 
-        GUIManager_Total.Instance.Update_SS();
-        GUIManager_Total.Instance.Update_Itemslot();
+        GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
+        GUIManager_Total.Instance.Update_Itemslot(); // 인벤토리GUI 업데이트
     }
-    public void GetQuestReward(Quest_KILL_TYPE quest)
+    // 퀘스트 타입 : 특정 타입의 몬스터 토벌
+    public void GetQuestReward(Quest_KILL_TYPE quest) // quest : 완료할 퀘스트 정보
     {
-        m_pq_Quest.GetQuestReward(quest);
-        m_ps_Status.GetQuestReward(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Equip(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Use(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Etc(quest);
-        m_pq_Quest.QuestUpdate_Collect_NoDisplay();
-        m_pi_Itemslot.m_nGold += quest.m_nRewardGold;
+        m_pq_Quest.GetQuestReward(quest); // 퀘스트 완료
+        m_ps_Status.GetQuestReward(quest); // 퀘스트 완료 보상(능력치, 평판) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Equip(quest); // 퀘스트 완료 보상(장비아이템) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Use(quest); // 퀘스트 완료 보상(소비아이템) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Etc(quest); // 퀘스트 완료 보상(기타아이템) 수령
+        m_pq_Quest.QuestUpdate_Collect_NoDisplay(); // 퀘스트(수집 타입) 현황 업데이트
+        m_pi_Itemslot.m_nGold += quest.m_nRewardGold; // 퀘스트 완료 보상(골드(재화)) 수령
 
-        GUIManager_Total.Instance.Update_SS();
-        GUIManager_Total.Instance.Update_Itemslot();
+        GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
+        GUIManager_Total.Instance.Update_Itemslot(); // 인벤토리GUI 업데이트
     }
-    public void GetQuestReward(Quest_GOAWAY_MONSTER quest)
+    // 퀘스트 타입 : 특정 몬스터 놓아주기
+    public void GetQuestReward(Quest_GOAWAY_MONSTER quest) // quest : 완료할 퀘스트 정보
     {
-        m_pq_Quest.GetQuestReward(quest);
-        m_ps_Status.GetQuestReward(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Equip(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Use(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Etc(quest);
-        m_pq_Quest.QuestUpdate_Collect_NoDisplay();
-        m_pi_Itemslot.m_nGold += quest.m_nRewardGold;
+        m_pq_Quest.GetQuestReward(quest); // 퀘스트 완료
+        m_ps_Status.GetQuestReward(quest); // 퀘스트 완료 보상(능력치, 평판) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Equip(quest); // 퀘스트 완료 보상(장비아이템) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Use(quest); // 퀘스트 완료 보상(소비아이템) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Etc(quest); // 퀘스트 완료 보상(기타아이템) 수령
+        m_pq_Quest.QuestUpdate_Collect_NoDisplay(); // 퀘스트(수집 타입) 현황 업데이트
+        m_pi_Itemslot.m_nGold += quest.m_nRewardGold; // 퀘스트 완료 보상(골드(재화)) 수령
 
-        GUIManager_Total.Instance.Update_SS();
-        GUIManager_Total.Instance.Update_Itemslot();
+        GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
+        GUIManager_Total.Instance.Update_Itemslot(); // 인벤토리GUI 업데이트
     }
-    public void GetQuestReward(Quest_GOAWAY_TYPE quest)
+    // 퀘스트 타입 : 특정 타입의 몬스터 놓아주기
+    public void GetQuestReward(Quest_GOAWAY_TYPE quest) // quest : 완료할 퀘스트 정보
     {
-        m_pq_Quest.GetQuestReward(quest);
-        m_ps_Status.GetQuestReward(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Equip(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Use(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Etc(quest);
-        m_pq_Quest.QuestUpdate_Collect_NoDisplay();
-        m_pi_Itemslot.m_nGold += quest.m_nRewardGold;
+        m_pq_Quest.GetQuestReward(quest); // 퀘스트 완료
+        m_ps_Status.GetQuestReward(quest); // 퀘스트 완료 보상(능력치, 평판) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Equip(quest); // 퀘스트 완료 보상(장비아이템) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Use(quest); // 퀘스트 완료 보상(소비아이템) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Etc(quest); // 퀘스트 완료 보상(기타아이템) 수령
+        m_pq_Quest.QuestUpdate_Collect_NoDisplay(); // 퀘스트(수집 타입) 현황 업데이트
+        m_pi_Itemslot.m_nGold += quest.m_nRewardGold; // 퀘스트 완료 보상(골드(재화)) 수령
 
-        GUIManager_Total.Instance.Update_SS();
-        GUIManager_Total.Instance.Update_Itemslot();
+        GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
+        GUIManager_Total.Instance.Update_Itemslot(); // 인벤토리GUI 업데이트
     }
+    // 퀘스트 타입 : 수집
     // 퀘스트 타입이 COLLECT 일 때 대상 아이템을 제거하기위해.
-    public void GetQuestReward(Quest_COLLECT quest)
+    public void GetQuestReward(Quest_COLLECT quest) // quest : 완료할 퀘스트 정보
     {
-        m_pq_Quest.GetQuestReward(quest);
-        m_ps_Status.GetQuestReward(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Equip(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Use(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Etc(quest);
+        m_pq_Quest.GetQuestReward(quest); // 퀘스트 완료
+        m_ps_Status.GetQuestReward(quest); // 퀘스트 완료 보상(능력치, 평판) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Equip(quest); // 퀘스트 완료 보상(장비아이템) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Use(quest); // 퀘스트 완료 보상(소비아이템) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Etc(quest); // 퀘스트 완료 보상(기타아이템) 수령
         m_pi_Itemslot.DeleteCollectItem(quest);
-        m_pq_Quest.QuestUpdate_Collect_NoDisplay();
-        m_pi_Itemslot.m_nGold += quest.m_nRewardGold;
+        m_pq_Quest.QuestUpdate_Collect_NoDisplay(); // 퀘스트(수집 타입) 현황 업데이트
+        m_pi_Itemslot.m_nGold += quest.m_nRewardGold; // 퀘스트 완료 보상(골드(재화)) 수령
 
-        GUIManager_Total.Instance.Update_SS();
-        GUIManager_Total.Instance.Update_Itemslot();
+        GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
+        GUIManager_Total.Instance.Update_Itemslot(); // 인벤토리GUI 업데이트
     }
-    public void GetQuestReward(Quest_CONVERSATION quest)
+    // 퀘스트 타입 : 대화
+    public void GetQuestReward(Quest_CONVERSATION quest) // quest : 완료할 퀘스트 정보
     {
-        m_pq_Quest.GetQuestReward(quest);
-        m_ps_Status.GetQuestReward(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Equip(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Use(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Etc(quest);
-        m_pq_Quest.QuestUpdate_Collect_NoDisplay();
-        m_pi_Itemslot.m_nGold += quest.m_nRewardGold;
+        m_pq_Quest.GetQuestReward(quest); // 퀘스트 완료
+        m_ps_Status.GetQuestReward(quest); // 퀘스트 완료 보상(능력치, 평판) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Equip(quest); // 퀘스트 완료 보상(장비아이템) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Use(quest); // 퀘스트 완료 보상(소비아이템) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Etc(quest); // 퀘스트 완료 보상(기타아이템) 수령
+        m_pq_Quest.QuestUpdate_Collect_NoDisplay(); // 퀘스트(수집 타입) 현황 업데이트
+        m_pi_Itemslot.m_nGold += quest.m_nRewardGold; // 퀘스트 완료 보상(골드(재화)) 수령
 
-        GUIManager_Total.Instance.Update_SS();
-        GUIManager_Total.Instance.Update_Itemslot();
+        GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
+        GUIManager_Total.Instance.Update_Itemslot(); // 인벤토리GUI 업데이트
     }
-    public void GetQuestReward(Quest_ROLL quest)
+    // 퀘스트 타입 : 구르기
+    public void GetQuestReward(Quest_ROLL quest) // quest : 완료할 퀘스트 정보
     {
-        m_pq_Quest.GetQuestReward(quest);
-        m_ps_Status.GetQuestReward(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Equip(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Use(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Etc(quest);
-        m_pq_Quest.QuestUpdate_Collect_NoDisplay();
-        m_pi_Itemslot.m_nGold += quest.m_nRewardGold;
+        m_pq_Quest.GetQuestReward(quest); // 퀘스트 완료
+        m_ps_Status.GetQuestReward(quest); // 퀘스트 완료 보상(능력치, 평판) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Equip(quest); // 퀘스트 완료 보상(장비아이템) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Use(quest); // 퀘스트 완료 보상(소비아이템) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Etc(quest); // 퀘스트 완료 보상(기타아이템) 수령
+        m_pq_Quest.QuestUpdate_Collect_NoDisplay(); // 퀘스트(수집 타입) 현황 업데이트
+        m_pi_Itemslot.m_nGold += quest.m_nRewardGold; // 퀘스트 완료 보상(골드(재화)) 수령
 
-        GUIManager_Total.Instance.Update_SS();
-        GUIManager_Total.Instance.Update_Itemslot();
+        GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
+        GUIManager_Total.Instance.Update_Itemslot(); // 인벤토리GUI 업데이트
     }
-    public void GetQuestReward(Quest_ELIMINATE_MONSTER quest)
+    // 퀘스트 타입 : 특정 몬스터 제거
+    public void GetQuestReward(Quest_ELIMINATE_MONSTER quest) // quest : 완료할 퀘스트 정보
     {
-        m_pq_Quest.GetQuestReward(quest);
-        m_ps_Status.GetQuestReward(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Equip(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Use(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Etc(quest);
-        m_pq_Quest.QuestUpdate_Collect_NoDisplay();
-        m_pi_Itemslot.m_nGold += quest.m_nRewardGold;
+        m_pq_Quest.GetQuestReward(quest); // 퀘스트 완료
+        m_ps_Status.GetQuestReward(quest); // 퀘스트 완료 보상(능력치, 평판) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Equip(quest); // 퀘스트 완료 보상(장비아이템) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Use(quest); // 퀘스트 완료 보상(소비아이템) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Etc(quest); // 퀘스트 완료 보상(기타아이템) 수령
+        m_pq_Quest.QuestUpdate_Collect_NoDisplay(); // 퀘스트(수집 타입) 현황 업데이트
+        m_pi_Itemslot.m_nGold += quest.m_nRewardGold; // 퀘스트 완료 보상(골드(재화)) 수령
 
-        GUIManager_Total.Instance.Update_SS();
-        GUIManager_Total.Instance.Update_Itemslot();
+        GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
+        GUIManager_Total.Instance.Update_Itemslot(); // 인벤토리GUI 업데이트
     }
-    public void GetQuestReward(Quest_ELIMINATE_TYPE quest)
+    // 퀘스트 타입 : 특정 타입의 몬스터 제거
+    public void GetQuestReward(Quest_ELIMINATE_TYPE quest) // quest : 완료할 퀘스트 정보
     {
-        m_pq_Quest.GetQuestReward(quest);
-        m_ps_Status.GetQuestReward(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Equip(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Use(quest);
-        m_pi_Itemslot.GetQuestReward_Item_Etc(quest);
-        m_pq_Quest.QuestUpdate_Collect_NoDisplay();
-        m_pi_Itemslot.m_nGold += quest.m_nRewardGold;
+        m_pq_Quest.GetQuestReward(quest); // 퀘스트 완료
+        m_ps_Status.GetQuestReward(quest); // 퀘스트 완료 보상(능력치, 평판) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Equip(quest); // 퀘스트 완료 보상(장비아이템) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Use(quest); // 퀘스트 완료 보상(소비아이템) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Etc(quest); // 퀘스트 완료 보상(기타아이템) 수령
+        m_pq_Quest.QuestUpdate_Collect_NoDisplay(); // 퀘스트(수집 타입) 현황 업데이트
+        m_pi_Itemslot.m_nGold += quest.m_nRewardGold; // 퀘스트 완료 보상(골드(재화)) 수령
 
-        GUIManager_Total.Instance.Update_SS();
-        GUIManager_Total.Instance.Update_Itemslot();
+        GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
+        GUIManager_Total.Instance.Update_Itemslot(); // 인벤토리GUI 업데이트
     }
 
     // 장비 착용 관련.(장비 착용 제한 체크 + 장비 착용)
