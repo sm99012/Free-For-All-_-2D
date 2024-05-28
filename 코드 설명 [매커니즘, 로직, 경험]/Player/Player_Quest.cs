@@ -534,7 +534,7 @@ public class Player_Quest : MonoBehaviour
         }
     }
 
-    // 진행중인 퀘스트를 추가하는 함수(퀘스트 최초 수락 시 사용). 함수 오버로딩을 이용
+    // 퀘스트를 추가하는 함수(퀘스트 최초 수락 시 사용). 진행중인 퀘스트 목록에 추가. 함수 오버로딩을 이용
     // 퀘스트 타입 : 특정 몬스터 토벌
     public void AddQuest(Quest_KILL_MONSTER quest) // quest : 추가할 퀘스트 정보
     {
