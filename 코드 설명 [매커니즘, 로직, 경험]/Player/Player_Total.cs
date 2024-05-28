@@ -113,7 +113,7 @@ public class Player_Total : MonoBehaviour
         m_pc_Camera.InitialSet();
         m_pm_Map.InitialSet();
 
-        // Sword(검) 공격범위
+        // Sword(검) 공격범위 관련 변수 초기화
         m_gAttack_Area_Sword = transform.Find("Player_Attack_Sword").gameObject;
         m_gAttack1_1_Area_Sword = m_gAttack_Area_Sword.transform.Find("Attack1_1_Sword").gameObject;
         m_BoxCollider_Attack1_1_Area_Sword = m_gAttack1_1_Area_Sword.GetComponent<BoxCollider2D>();
@@ -122,7 +122,7 @@ public class Player_Total : MonoBehaviour
         m_gAttack1_3_Area_Sword = m_gAttack_Area_Sword.transform.Find("Attack1_3_Sword").gameObject;
         m_BoxCollider_Attack1_3_Area_Sword = m_gAttack1_3_Area_Sword.GetComponent<BoxCollider2D>();
 
-        // Axe(도끼) 공격범위
+        // Axe(도끼) 공격범위 관련 변수 초기화
         m_gAttack_Area_Axe = transform.Find("Player_Attack_Axe").gameObject;
         m_gAttack1_1_Area_Axe = m_gAttack_Area_Axe.transform.Find("Attack1_1_Axe").gameObject;
         m_BoxCollider_Attack1_1_Area_Axe = m_gAttack1_1_Area_Axe.GetComponent<BoxCollider2D>();
@@ -131,7 +131,7 @@ public class Player_Total : MonoBehaviour
         m_gAttack1_3_Area_Axe = m_gAttack_Area_Axe.transform.Find("Attack1_3_Axe").gameObject;
         m_BoxCollider_Attack1_3_Area_Axe = m_gAttack1_3_Area_Axe.GetComponent<BoxCollider2D>();
 
-        // Knife(단검) 공격범위
+        // Knife(단검) 공격범위 관련 변수 초기화
         m_gAttack_Area_Knife = transform.Find("Player_Attack_Knife").gameObject;
         m_gAttack1_1_Area_Knife = m_gAttack_Area_Knife.transform.Find("Attack1_1_Knife").gameObject;
         m_BoxCollider_Attack1_1_Area_Knife = m_gAttack1_1_Area_Knife.GetComponent<BoxCollider2D>();
