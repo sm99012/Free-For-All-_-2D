@@ -72,10 +72,13 @@ public class Player_Total : MonoBehaviour
     BoxCollider2D m_BoxCollider_Attack1_2_Area_Knife; // Knife(단검) 기본 공격2 공격범위
     GameObject m_gAttack1_3_Area_Knife;
     BoxCollider2D m_BoxCollider_Attack1_3_Area_Knife; // Knife(단검) 기본 공격3 공격범위
-
+    
     Collider2D[] co2_1;   // 플레이어의 공격 대상(몬스터, 파괴 가능한 오브젝트)의 콜라이더(충돌 처리를 위한 오브젝트)
     Vector3 m_vAttackPos; // 공격 지점(타격 이펙트가 연출되는 지점)
     int AttackDamage;     // 공격 데미지
+
+    Collider2D[] co2_2; // 플레이어의 놓아주기 대상(몬스터)의 콜라이더(충돌 처리를 위한 오브젝트)
+    SOC soc2_2;         // 플레이어의 놓아주기가 성공했을때 평판 업데이트를 위한 임시 변수
 
     Vector2 m_vSize = new Vector2(0.25f, 0.35f); // 상호작용 범위
 
@@ -165,7 +168,7 @@ public class Player_Total : MonoBehaviour
                 InputKey_Roll();    // 구르기 키입력(S)
                 InputKey_GetItem(); // 아이템 줍기(키입력 필요없음)
 
-                // 
+                // 플레이어 정보GUI
                 InputKey_GUI_Quest();             // 플레이어 퀘스트창GUI
                 InputKey_GUI_Itemslot();          // 플레이어 인벤토리GUI
                 InputKey_GUI_ES();                // 플레이어 상태창(능력치창 + 장비창)GUI. InputKey_GUI_Equipslot() + InputKey_GUI_Status()
@@ -571,26 +574,27 @@ public class Player_Total : MonoBehaviour
         if (m_pm_Move.Attacked(time, m_ps_Status.m_sStatus.GetSTATUS_Speed(), dir) == true) // 플레이어 피격 함수. 피격 여부 반환
         {
             m_ps_Status.Attacked(damage, dir); // 플레이어 피격 시 피격 데미지 계산 및 출력
-            GUIManager_Total.Instance.Update_SS();
-            Death(attackedname);
+            GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
+            Death(attackedname); // 플레이어 사망 여부 판단
 
             return true;
         }
         return false;
     }
 
-    // Goaway
+    // 놓아주기 키입력(D)
     public void InputKey_Goaway()
     {
         if (Input.GetKeyUp(KeyCode.D))
         {
             Goaway();
         }
-        if (m_pm_Move.m_bGoaway_Success == true)
+        if (m_pm_Move.m_bGoaway_Success == true) // 놓아주기를 성공 했을때
         {
             GoawayCheck();
         }
     }
+    // 플레이어 놓아주기 함수
     private void Goaway()
     {
         if (Player_Status.m_cCondition.ConditionCheck_Bind() == false)
@@ -598,21 +602,23 @@ public class Player_Total : MonoBehaviour
             m_pm_Move.Goaway();
         }
     }
-    Collider2D[] co2_2;
-    SOC soc2_2;
+    // 놓아주기 판정 함수
+    // 오버랩을 이용해 놓아주기 범위내의 모든 오브젝트(몬스터)를 놓아준다.
+    // Physics2D.OverlapCircleAll(Vector2 point, float radius, int layerMask) // point : 오버랩 지점, radius : 오버랩 반지름, layerMask : 오버랩을 적용할 레이어 // return Collider2D[]
     void GoawayCheck()
     {
-        co2_2 = Physics2D.OverlapCircleAll(transform.position, 0.5f, nLayer2);
+        co2_2 = Physics2D.OverlapCircleAll(transform.position, 0.5f, nLayer2); // 놓아주기 범위내의 모든 오브젝트(몬스터) 배열 반환(Collider2D[])
 
-        if (co2_2.Length > 0)
+        // 놓아주기 범위내의 모든 오브젝트에 놓아주기 이펙트를 연출하고 오브젝트를 제거한다.
+        if (co2_2.Length > 0) // 놓아주기 범위내의 오브젝트가 하나이상 있을 경우
         {
             for (int i = 0; i < co2_2.Length; i++)
             {
-                if (co2_2[i].gameObject.tag != "Boss")
+                if (co2_2[i].gameObject.tag != "Boss") // 해당 오브젝트의 태그가 "BOSS"가 아닐 경우
                 {
-                    soc2_2.SetSOC(co2_2[i].gameObject.GetComponent<Monster_Total>().Goaway());
+                    soc2_2.SetSOC(co2_2[i].gameObject.GetComponent<Monster_Total>().Goaway()); // 임시 변수에 해당 오브젝트의 놓아주기 관련 평판(놓아주기를 성공했을때 획득할 수 있는 평판)을 저장
                     // 평판은 33%확률로 상승
-                    int nrandom = Random.Range(0, 101);
+                    int nrandom = Random.Range(0, 101); // 평판 획득 가능 비율 : 1% ~ 100% (1 <= m_nRandomRatio <= 100)
                     if (nrandom <= 50)
                     {
                         m_ps_Status.Goaway(soc2_2);
@@ -658,7 +664,7 @@ public class Player_Total : MonoBehaviour
         }
     }
 
-    // Death
+    // 플레이어 사망 여부 판단 함수
     public void Death(string deathname)
     {
         if (m_ps_Status.m_sStatus.GetSTATUS_HP_Current() <= 0)
