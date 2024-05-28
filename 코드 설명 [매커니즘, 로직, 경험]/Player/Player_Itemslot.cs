@@ -17,7 +17,7 @@ public class Player_Itemslot : MonoBehaviour
 
     int m_nMaxCount = 10; // 아이템 보유 최대치
 
-    public int m_nGold; // 보유 재화
+    public int m_nGold; // 보유 골드(재화)
 
 
     public void InitialSet()
@@ -191,7 +191,7 @@ public class Player_Itemslot : MonoBehaviour
         }
     }
 
-    // 재화 획득 함수
+    // 골드(재화) 획득 함수
     public void Get_Gold(int gold)
     {
         m_nGold += gold;
@@ -365,7 +365,7 @@ public class Player_Itemslot : MonoBehaviour
         }
     }
 
-    // 리트라이(부활) 시 지불할 재화
+    // 리트라이(부활) 시 지불할 골드(재화)
     public void ReTry_Pay_Gold(int gold)
     {
         m_nGold -= gold;
@@ -485,7 +485,7 @@ public class Player_Itemslot : MonoBehaviour
         }
     }
 
-    // 리트라이(부활) 시 잃어버리는 재화. 리트라이 단계에 따라 잃어버리는 재화의 비율이 결정된다. 
+    // 리트라이(부활) 시 잃어버리는 골드(재화). 리트라이 단계에 따라 잃어버리는 골드(재화)의 비율이 결정된다. 
     public int ReTry_Lost_Gold(int min = 1, int max = 10)
     {
         int lostrate = Random.Range(min, max + 1);
