@@ -82,6 +82,10 @@ public class Player_Total : MonoBehaviour
 
     Collider2D[] co2_3; // 플레이어의 상호작용ㆍ채집 대상의 콜라이더(충돌 처리를 위한 오브젝트)
 
+    Collider2D[] co2_4;                                     // 아이템 줍기 대상(장비아이템, 소비아이템, 기타아이템, 골드)의 콜라이더(충돌 처리를 위한 오브젝트)
+    Vector3 co2_4_Offset = new Vector3(-0.007f, 0.035f, 0); // 아이템 줍기 범위 오프셋
+    Vector3 co2_4_BoxSize = new Vector3(0.13f, 0.05f, 0);   // 아이템 줍기 범위
+
     Vector2 m_vSize = new Vector2(0.25f, 0.35f); // 상호작용 범위
 
     int nLayer1 = 1 << LayerMask.NameToLayer("Monster") | 1 << LayerMask.NameToLayer("RuinableObject"); // 공격 가능한 대상의 레이어
@@ -704,6 +708,7 @@ public class Player_Total : MonoBehaviour
         }
     }
     // NPC와 상호작용ㆍ채집 함수
+    // Physics2D.OverlapBoxAll(Vector2 point, Vector2 size, float angle, int layerMask) // point : 오버랩 지점, size : 오버랩 크기, angle : 각도, layerMask : 오버랩을 적용할 레이어 // return Collider2D[]
     public void Interaction()
     {
         if (Player_Status.m_cCondition.ConditionCheck_Bind() == false && Player_Status.m_cCondition.ConditionCheck_Shock() == false && // 플레이어에게 상태이상(속박, 기절)이 적용중이지 않을때
@@ -719,7 +724,8 @@ public class Player_Total : MonoBehaviour
                 co2_3 = Physics2D.OverlapBoxAll(transform.position + new Vector3(-0.125f, 0.15f, 0), m_vSize, 0, nLayer3);
             }
 
-            // 범위내의 모든 오브젝트(NPC, 채집물)와 상호작용(NPC와 상호작용(대화, 퀘스트, 거래), 채집물 채집) 한다.
+            // 범위내의 모든 오브젝트(NPC, 채집물)중 가장 가까운 하나의 오브젝트(NPC, 채집물)와 상호작용(NPC와 상호작용(대화, 퀘스트, 거래), 채집물 채집) 한다.
+            // NPC와 채집물이 동일한 거리(동일한 우선순위)일때 NPC와 상호작용이 채집보다 우선 적용된다.
             if (co2_3.Length > 0) // 범위내의 오브젝트가 하나이상 있을 경우
             {
                 for (int i = 0; i < co2_3.Length; i++)
@@ -727,92 +733,87 @@ public class Player_Total : MonoBehaviour
                     // NPC와 상호작용
                     if (co2_3[i].gameObject.tag == "NPC") // 해당 오브젝트의 가 "NPC"인 경우
                     {
-                        if (m_pm_Move.Conversation() == true) // NPC와 상호작용 실행. 상호작용 가능 여부 반환
+                        if (m_pm_Move.Conversation() == true) // NPC와 상호작용 가능 여부 반환
                         {
-                            m_pc_Camera.SetCamera_ZOOMIN(co2_3[i].gameObject.transform.position);
-                            GUIManager_Total.Instance.Interaction(co2_3[i].gameObject.GetComponent<NPC_Total>());
+                            m_pc_Camera.SetCamera_ZOOMIN(co2_3[i].gameObject.transform.position); // 카메라 모드 변경(줌인)
+                            GUIManager_Total.Instance.Interaction(co2_3[i].gameObject.GetComponent<NPC_Total>()); // NPC와 상호작용 실행(상호작용GUI 활성화)
                         }
                         break;
                     }
                     // 채집
                     if (co2_3[i].gameObject.tag == "Collection") // 해당 오브젝트의 태그가 "Collection"인 경우
                     {
-                        co2_3[i].gameObject.GetComponent<Collection>().DropItem(this.transform.position);
+                        co2_3[i].gameObject.GetComponent<Collection>().DropItem(this.transform.position); // 채집 실행
                         break;
                     }
                 }
             }
         }
     }
+    // NPC와 상호작용 종료 함수
     public void ExitConversation()
     {
-        m_pm_Move.m_ePlayerMoveState = m_pm_Move.SetPlayerMoveState(Player_Move.E_PLAYER_MOVE_STATE.IDLE);
+        m_pm_Move.m_ePlayerMoveState = m_pm_Move.SetPlayerMoveState(Player_Move.E_PLAYER_MOVE_STATE.IDLE); // 플레이어 동작 FSM 변경
     }
 
-    // 아이템 줍기
+    // 아이템 줍기(키입력 필요없음)
     public void InputKey_GetItem()
     {
-        //if (Input.GetKeyDown(KeyCode.Z))
-        {
-            GetItem();
-        }
+        GetItem();
     }
-    Collider2D[] co2_4;
-    Vector3 co2_4_Offset = new Vector3(-0.007f, 0.035f, 0);
-    Vector3 co2_4_BoxSize = new Vector3(0.13f, 0.05f, 0);
+    // 아이템 줍기 함수
+    // Physics2D.OverlapBoxAll(Vector2 point, Vector2 size, float angle, int layerMask) // point : 오버랩 지점, size : 오버랩 크기, angle : 각도, layerMask : 오버랩을 적용할 레이어 // return Collider2D[]
     public void GetItem()
     {
-        if (Player_Status.m_cCondition.ConditionCheck_Bind() == false && Player_Status.m_cCondition.ConditionCheck_Shock() == false)
+        if (Player_Status.m_cCondition.ConditionCheck_Bind() == false && Player_Status.m_cCondition.ConditionCheck_Shock() == false) // 플레이어에게 상태이상(속박, 기절)이 적용중이지 않을때
         {
+            // 상호작용ㆍ채집 방향 설정, 범위내의 모든 오브젝트(NPC, 채집물) 배열 반환(Collider2D[])
             co2_4 = Physics2D.OverlapBoxAll(this.transform.position + co2_4_Offset, co2_4_BoxSize, 0, nLayer4);
 
             for (int i = 0; i < co2_4.Length; i++)
             {
-                //Debug.Log(co2_4[i].gameObject.GetComponent<Item>().m_sItemName + " 획득");
-
-                if (co2_4[i].gameObject.GetComponent<Item>().m_bPossible_Get == true)
+                if (co2_4[i].gameObject.GetComponent<Item>().m_bPossible_Get == true) // 아이템이 획득 가능한 상태일때
                 {
-                    if (co2_4[i].gameObject.GetComponent<Item>().m_nItemCode == 0)
+                    // 골드(재화) 획득
+                    if (co2_4[i].gameObject.GetComponent<Item>().m_nItemCode == 0) // 아이템 코드 : 0
                     {
-                        //Debug.Log(co2_4[i].gameObject.GetComponent<Item_Gold>().m_nGold);
-                        m_pi_Itemslot.Get_Gold(co2_4[i].gameObject.GetComponent<Item_Gold>().GetGold(co2_4[i].gameObject.GetComponent<Item_Gold>()));
+                        m_pi_Itemslot.Get_Gold(co2_4[i].gameObject.GetComponent<Item_Gold>().GetGold(co2_4[i].gameObject.GetComponent<Item_Gold>())); // 골드(재화) 획득 함수
 
-                        GUIManager_Total.Instance.UpdateLog("[재화]" + co2_4[i].gameObject.GetComponent<Item>().m_sItemName + " 을(를) 획득 하였습니다.");
+                        GUIManager_Total.Instance.UpdateLog("[재화]" + co2_4[i].gameObject.GetComponent<Item>().m_sItemName + " 골드를 획득 하였습니다."); // 로그GUI에 획득한 골드(재화) 정보 출력
                     }
-                    else if (co2_4[i].gameObject.GetComponent<Item>().m_nItemCode < 1000)
+                    // 기타아이템 획득
+                    else if (co2_4[i].gameObject.GetComponent<Item>().m_nItemCode < 1000) // 아이템 코드 : 1 <= itemcode < 1000
                     {
-                        m_pi_Itemslot.Get_Item_Etc(co2_4[i].gameObject.GetComponent<Item_Etc>().DeleteItem(co2_4[i].gameObject.GetComponent<Item_Etc>()));
+                        m_pi_Itemslot.Get_Item_Etc(co2_4[i].gameObject.GetComponent<Item_Etc>().DeleteItem(co2_4[i].gameObject.GetComponent<Item_Etc>())); // 기타아이텝 획득 함수
 
-                        GUIManager_Total.Instance.UpdateLog("[기타 아이템]" + co2_4[i].gameObject.GetComponent<Item>().m_sItemName + " 을(를) 획득 하였습니다.");
+                        GUIManager_Total.Instance.UpdateLog("[기타 아이템]" + co2_4[i].gameObject.GetComponent<Item>().m_sItemName + " 을(를) 획득 하였습니다."); // 로그GUI에 획득한 기타아이템 정보 출력
                     }
-                    else if (co2_4[i].gameObject.GetComponent<Item>().m_nItemCode < 7000)
+                    // 장비아이템 획득
+                    else if (co2_4[i].gameObject.GetComponent<Item>().m_nItemCode < 7000) // 아이템 코드 : 1000 <= itemcode < 7000
                     {
-                        if (m_pi_Itemslot.Get_Item_Equip(co2_4[i].gameObject.GetComponent<Item_Equip>().DeleteItem(co2_4[i].gameObject.GetComponent<Item_Equip>())) != -1)
+                        if (m_pi_Itemslot.Get_Item_Equip(co2_4[i].gameObject.GetComponent<Item_Equip>().DeleteItem(co2_4[i].gameObject.GetComponent<Item_Equip>())) != -1) // 장비아이텝 획득 함수. 할당된 인벤토리 배열 번호 반환
                         {
-                            GUIManager_Total.Instance.UpdateLog("[장비 아이템]" + co2_4[i].gameObject.GetComponent<Item>().m_sItemName + " 을(를) 획득 하였습니다.");
+                            GUIManager_Total.Instance.UpdateLog("[장비 아이템]" + co2_4[i].gameObject.GetComponent<Item>().m_sItemName + " 을(를) 획득 하였습니다."); // 로그GUI에 획득한 장비아이템 정보 출력
                         }
                         else
                         {
-                            GUIManager_Total.Instance.UpdateLog("[장비 아이템]" + co2_4[i].gameObject.GetComponent<Item>().m_sItemName + " 을(를) 획득 할 수 없습니다.");
+                            GUIManager_Total.Instance.UpdateLog("[장비 아이템]" + co2_4[i].gameObject.GetComponent<Item>().m_sItemName + " 을(를) 획득 할 수 없습니다."); // 로그GUI에 장비아이템 획득 실패 출력
                             Item_Equip item = new Item_Equip(co2_4[i].gameObject.GetComponent<Item_Equip>(), co2_4[i].gameObject.transform.position);
                         }
                     }
-                    else
+                    // 소비아이템 획득
+                    else // 아이템 코드 : 7000 <= itemcode
                     {
-                        m_pi_Itemslot.Get_Item_Use(co2_4[i].gameObject.GetComponent<Item_Use>().DeleteItem(co2_4[i].gameObject.GetComponent<Item_Use>()));
+                        m_pi_Itemslot.Get_Item_Use(co2_4[i].gameObject.GetComponent<Item_Use>().DeleteItem(co2_4[i].gameObject.GetComponent<Item_Use>())); // 소비아이템 획득 함수
 
-                        GUIManager_Total.Instance.UpdateLog("[소비 아이템]" + co2_4[i].gameObject.GetComponent<Item>().m_sItemName + " 을(를) 획득 하였습니다.");
+                        GUIManager_Total.Instance.UpdateLog("[소비 아이템]" + co2_4[i].gameObject.GetComponent<Item>().m_sItemName + " 을(를) 획득 하였습니다."); // 로그GUI에 획득한 소비아이템 정보 출력
                     }
 
-                    GUIManager_Total.Instance.Update_Itemslot();
-                    m_pq_Quest.QuestUpdate_Collect(co2_4[i].gameObject.GetComponent<Item>());
+                    GUIManager_Total.Instance.Update_Itemslot(); // 아이템슬롯GUI 업데이트
+                    m_pq_Quest.QuestUpdate_Collect(co2_4[i].gameObject.GetComponent<Item>()); // 진행중인 퀘스트 현황 업데이트
 
                     break;
                 }
-                //if (co2_4[i].gameObject.GetComponent<Item>().m_eItemtype == ItemType.ETC || co2_4[i].gameObject.GetComponent<Item>().m_eItemtype == ItemType.USE)
-                //    Destroy(co2_4[i].gameObject);
-                //else
-                //    co2_4[i].gameObject.SetActive(false);
             }
         }
     }
