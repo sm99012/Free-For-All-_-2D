@@ -178,8 +178,9 @@ public class Player_Move : MonoBehaviour
         m_tTransform.position = pos;
     }
 
-    // 기본 공격 함수(return 1: '기본 공격1' / return 2 : '기본 공격2' / return 3 : '기본 공격3' / return 0 : 공격 안됨)
+    // 기본 공격 함수
     // Player_Total.cs에서 키입력(A)을 통해 함수 실행. 플레이어의 공격 동작 수행
+    // return 1: '기본 공격1' / return 2 : '기본 공격2' / return 3 : '기본 공격3' / return 0 : 공격 안됨
     public int Attack()
     {
         if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.IDLE || m_ePlayerMoveState == E_PLAYER_MOVE_STATE.RUN)
@@ -318,8 +319,9 @@ public class Player_Move : MonoBehaviour
         m_cProcess_AttackToIdle_Duration = StartCoroutine(ProcessAttackToIdle(0.6f)); // 공격 후 딜레이(0.6초) 설정
     }
 
-    // 플레이어 피격 함수(return true : 피격됨 / return false : 피격안됨)
+    // 플레이어 피격 함수
     // Monster_Total.cs에서 Player_Total.cs의 함수를 호출해 실행. 플레이어의 피격 동작 수행
+    // return true : 피격됨 / return false : 피격안됨
     public bool Attacked(float time, float speed, Vector3 dir) // time : 넉백 지속 시간, speed : 플레이어 이동 속도, dir : 넉백 방향
     {
         if (m_bPower == false) // 플레이어 피격 가능할 때
@@ -477,9 +479,10 @@ public class Player_Move : MonoBehaviour
         m_bPower = false;
     }
 
-    // 플레이어 구르기(return true : 구르기 시전 성공 / return false : 구르기 시전 실패)
+    // 플레이어 구르기
     // Player_Total.cs에서 키입력(S)을 통해 함수 실행. 플레이어의 구르기 동작 수행
     // 각종 딜레이 캔슬, 회피, 빠른 이동 기능
+    // return true : 구르기 시전 성공 / return false : 구르기 시전 실패
     public bool Roll()
     {
         if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.IDLE || m_ePlayerMoveState == E_PLAYER_MOVE_STATE.RUN || 
