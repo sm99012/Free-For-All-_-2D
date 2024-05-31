@@ -95,7 +95,8 @@ public class Player_Total : MonoBehaviour
     
     int m_nRandomRatio; // 플레이어가 상태이상(암흑) 상태일때 제대로된 공격을 할 수 있을지 결정하는 난수.(상태이상(암흑) 상태에서는 일정 확률로 공격 시 데미지를 1밖에 주지 못한다.)
 
-    Dictionary<int, int> m_Dictionary_SerItemEffect = new Dictionary<int, int>(); // 플레이어에게 적용중인 아이템 세트 효과. Dictionary <Key : 아이템 세트 효과 코드 , Value : 아이템 세트 효과 코드(Key)를 가진 아이템 개수>
+    Dictionary<int, int> m_Dictionary_SerItemEffect = new Dictionary<int, int>(); // 플레이어에게 적용중인 아이템 세트효과. Dictionary <Key : 아이템 세트효과 코드 , Value : 아이템 세트효과 코드(Key)를 가진 아이템 개수>
+                                                                                  //  Key == 0 : 세트효과 없음
     
     // 변수 초기화
     public void InitialSet()
@@ -1268,18 +1269,19 @@ public class Player_Total : MonoBehaviour
         }
     }
 
-    // Player 세트아이템 효과 체크. Dictionary 형태로 저장.
+    // 적용중인 아이템 세트효과 판단. m_Dictionary_SerItemEffect(플레이어에게 적용중인 아이템 세트효과 딕셔너리) 에 저장
+    // Dictionary <Key : 아이템 세트효과 코드 , Value : 아이템 세트효과 코드(Key)를 가진 아이템 개수> Key == 0 : 세트효과 없음
    void CheckSetItemEffect_Dictionary()
     {
-        m_Dictionary_SerItemEffect.Clear();
+        m_Dictionary_SerItemEffect.Clear(); // 플레이어에게 적용중인 아이템 세트효과 딕셔너리 초기화
 
-        int nhat = m_pe_Equipment.CheckSetItemEffect(E_ITEM_EQUIP_TYPE.HAT);
-        int ntop = m_pe_Equipment.CheckSetItemEffect(E_ITEM_EQUIP_TYPE.TOP);
-        int nbottoms = m_pe_Equipment.CheckSetItemEffect(E_ITEM_EQUIP_TYPE.BOTTOMS);
-        int nshose = m_pe_Equipment.CheckSetItemEffect(E_ITEM_EQUIP_TYPE.SHOSE);
-        int ngloves = m_pe_Equipment.CheckSetItemEffect(E_ITEM_EQUIP_TYPE.GLOVES);
-        int nmainwaepon = m_pe_Equipment.CheckSetItemEffect(E_ITEM_EQUIP_TYPE.MAINWEAPON);
-        int nsubweapon = m_pe_Equipment.CheckSetItemEffect(E_ITEM_EQUIP_TYPE.SUBWEAPON);
+        int nhat = m_pe_Equipment.CheckSetItemEffect(E_ITEM_EQUIP_TYPE.HAT);               // 착용중인 장비아이템(모자)이 가진 아이템 세트효과 코드번호(세트효과 없을 시 0)
+        int ntop = m_pe_Equipment.CheckSetItemEffect(E_ITEM_EQUIP_TYPE.TOP);               // 착용중인 장비아이템(상의)이 가진 아이템 세트효과 코드번호(세트효과 없을 시 0)
+        int nbottoms = m_pe_Equipment.CheckSetItemEffect(E_ITEM_EQUIP_TYPE.BOTTOMS);       // 착용중인 장비아이템(하의)이 가진 아이템 세트효과 코드번호(세트효과 없을 시 0)
+        int nshose = m_pe_Equipment.CheckSetItemEffect(E_ITEM_EQUIP_TYPE.SHOSE);           // 착용중인 장비아이템(신발)이 가진 아이템 세트효과 코드번호(세트효과 없을 시 0)
+        int ngloves = m_pe_Equipment.CheckSetItemEffect(E_ITEM_EQUIP_TYPE.GLOVES);         // 착용중인 장비아이템(장갑)이 가진 아이템 세트효과 코드번호(세트효과 없을 시 0)
+        int nmainwaepon = m_pe_Equipment.CheckSetItemEffect(E_ITEM_EQUIP_TYPE.MAINWEAPON); // 착용중인 장비아이템(주무기)이 가진 아이템 세트효과 코드번호(세트효과 없을 시 0)
+        int nsubweapon = m_pe_Equipment.CheckSetItemEffect(E_ITEM_EQUIP_TYPE.SUBWEAPON);   // 착용중인 장비아이템(보조무기)이 가진 아이템 세트효과 코드번호(세트효과 없을 시 0)
 
         // Hat
         if (Player_Equipment.m_bEquipment_Hat == true)
