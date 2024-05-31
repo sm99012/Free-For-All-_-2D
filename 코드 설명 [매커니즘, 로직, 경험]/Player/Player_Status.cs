@@ -297,7 +297,7 @@ public class Player_Status : MonoBehaviour
         UpdateSOC(); // 평판 업데이트
     }
 
-    // 장비아이템 착용으로인한 능력치 업데이트. 소비아이템(영구적 버프포션) 사용시에도 사용
+    // 장비아이템 착용ㆍ해제 로인한 능력치 업데이트. 소비아이템(영구적 버프포션) 사용시에도 사용
     public void UpdateStatus_Equip()
     {
         m_nEXP_Current = m_sStatus.GetSTATUS_EXP_Current(); // 현재경험치 임시 저장
