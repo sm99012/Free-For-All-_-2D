@@ -90,7 +90,7 @@ public class Player_Move : MonoBehaviour
     // 플레이어 이동 함수
     // Player_Total.cs에서 키입력(↑, ↓, ←, →)을 통해 함수 실행. 플레이어의 달리기 동작 수행
     // 플레이어 동작 FSM 정보를 반환
-    public E_PLAYER_MOVE_STATE Move(int h, int v, int fspeed) // h : 수평 이동 값, v : 수직 이동 값, fspeed : 플레이어 이동속도
+    public E_PLAYER_MOVE_STATE Move(int h, int v, int fspeed) // h : 수평 이동 값, v : 수직 이동 값, fspeed : 플레이어 이동 속도
     {
         if (m_bMove == true)
         {
