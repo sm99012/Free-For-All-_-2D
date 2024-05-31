@@ -148,7 +148,7 @@ public class Player_Equipment : MonoBehaviour
         return m_gEquipment_Mainweapon.m_eItemEquipMainWeaponType;
     }
 
-    // 착용중인 장비아이템의 아이템 세트 효과 코드 반환
+    // 착용중인 장비아이템의 아이템 세트효과 코드 반환
     public int CheckSetItemEffect(E_ITEM_EQUIP_TYPE eiet)
     {
         switch (eiet)
