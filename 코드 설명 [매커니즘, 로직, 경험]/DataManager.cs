@@ -721,7 +721,10 @@ public class DataManager : MonoBehaviour
             }
         }
 
+        GUIManager_Total.Instance.Update_Itemslot();
         GUIManager_Total.Instance.Update_Equipslot();
+        Player_Total.Instance.CheckSetItemEffect();
+        Player_Total.Instance.m_pm_Move.SetAttackSpeed(Player_Total.Instance.m_ps_Status.Return_AttackSpeed());
         GUIManager_Total.Instance.Update_SS();
 
         //Debug.Log("[플레이어가 착용한 장비 아이템 데이터 로드 완료.]");
@@ -2110,6 +2113,12 @@ public class DataManager : MonoBehaviour
                 Player_Total.Instance.m_ps_Status.Load_ApplyPotion(ItemManager.instance.m_Dictionary_MonsterDrop_Use[int.Parse(itemdata[0])], float.Parse(itemdata[1]) + 11f, float.Parse(itemdata[2]) + 11f);
 
             }
+
+            GUIManager_Total.Instance.Update_Itemslot();
+            GUIManager_Total.Instance.Update_Equipslot();
+            Player_Total.Instance.CheckSetItemEffect();
+            Player_Total.Instance.m_pm_Move.SetAttackSpeed(Player_Total.Instance.m_ps_Status.Return_AttackSpeed());
+            GUIManager_Total.Instance.Update_SS();
         }
 
         //Debug.Log("[플레이어에게 적용중인 버프 아이템 로드 완료.]");
