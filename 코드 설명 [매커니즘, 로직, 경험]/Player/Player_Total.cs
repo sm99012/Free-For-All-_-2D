@@ -1108,155 +1108,168 @@ public class Player_Total : MonoBehaviour
 
         return false;
     }
-    // 착용중인 장비아이템의 조건 판단
+    // 착용중인 장비아이템의 착용 조건 판단(장비아이템 변경 시, 버프ㆍ디버프 스킬 적용ㆍ해제 시, 버프포션 적용ㆍ해제 시 실행)
     // return true : 현재 착용중인 장비아이템 착용 조건 충족 / return false : 현재 착용중인 장비아이템 착용 조건 불만족
+    //
+    // ※ 코드가 꼬여서 불필요하게 함수가 호출되는 경우가 있다. 추후 최적화 예정(문서화 예정)
+    //
+    // 착용중인 장비아이템(모자) 착용 조건 판단
     public bool CheckCondition_Item_Equip_Hat()
     {
-        if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Hat, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true) // 장비아이템 착용 조건 판단, 장비아이템 착용 시 스탯(능력치, 평판) 업데이트
+        if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Hat, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true) // 장비아이템(모자) 착용 조건 판단, 조건 충족 시 스탯(능력치, 평판) 업데이트
+                                                                                                                                         // 장비아이템(모자) 착용 조건을 만족 했을 경우
         {
-            CheckSetItemEffect();
-            m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed());
-            GUIManager_Total.Instance.Update_SS();
+            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
 
             return true;
         }
-        else
+        else // 장비아이템(모자) 착용 조건을 불만족 했을 경우
         {
+            // 착용중인 장비아이템(모자) 스탯(능력치, 평판) 초기화
             m_ps_Status.m_sStatus_Extra_Equip_Hat = m_ps_Status.m_sStatus_Null;
             m_ps_Status.m_sSoc_Extra_Equip_Hat = m_ps_Status.m_sSoc_Null;
-            CheckSetItemEffect();
-            m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed());
-            m_ps_Status.UpdateStatus_Equip();
-            m_ps_Status.UpdateSOC();
-            GUIManager_Total.Instance.Update_SS();
+            m_ps_Status.UpdateStatus_Equip(); // 장비아이템 해제로인한 능력치 업데이트
+            m_ps_Status.UpdateSOC(); // 장비아이템 해제로인한 평판 업데이트 
+            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
 
             return false;
         }
     }
+    // 착용중인 장비아이템(상의) 착용 조건 판단
     public bool CheckCondition_Item_Equip_Top()
     {
-        if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Top, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true)
+        if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Top, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true) // 장비아이템(상의) 착용 조건 판단, 조건 충족 시 스탯(능력치, 평판) 업데이트
+                                                                                                                                         // 장비아이템 착용 조건을 만족 했을 경우
         {
-            GUIManager_Total.Instance.Update_SS();
+            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
 
             return true;
         }
-        else
+        else // 장비아이템(상의) 착용 조건을 불만족 했을 경우
         {
-            GUIManager_Total.Instance.Update_SS();
+            // 착용중인 장비아이템(상의) 스탯(능력치, 평판) 초기화
+            m_ps_Status.m_sStatus_Extra_Equip_Hat = m_ps_Status.m_sStatus_Null;
+            m_ps_Status.m_sSoc_Extra_Equip_Hat = m_ps_Status.m_sSoc_Null;
+            m_ps_Status.UpdateStatus_Equip(); // 장비아이템 해제로인한 능력치 업데이트
+            m_ps_Status.UpdateSOC(); // 장비아이템 해제로인한 평판 업데이트 
+            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
 
             return false;
         }
     }
+    // 착용중인 장비아이템(하의) 착용 조건 판단
     public bool CheckCondition_Item_Equip_Bottoms()
     {
-        if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Bottoms, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true)
+        if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Bottoms, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true) // 장비아이템(하의) 착용 조건 판단, 조건 충족 시 스탯(능력치, 평판) 업데이트
+                                                                                                                                             // 장비아이템(하의) 착용 조건을 만족 했을 경우
         {
-
-            GUIManager_Total.Instance.Update_SS();
+            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
 
             return true;
         }
-        else
+        else // 장비아이템(하의) 착용 조건을 불만족 했을 경우
         {
+            // 착용중인 장비아이템(하의) 스탯(능력치, 평판) 초기화
             m_ps_Status.m_sStatus_Extra_Equip_Bottoms = m_ps_Status.m_sStatus_Null;
             m_ps_Status.m_sSoc_Extra_Equip_Bottoms = m_ps_Status.m_sSoc_Null;
-            CheckSetItemEffect();
-            m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed());
-            m_ps_Status.UpdateStatus_Equip();
-            m_ps_Status.UpdateSOC();
-            GUIManager_Total.Instance.Update_SS();
+            m_ps_Status.UpdateStatus_Equip(); // 장비아이템 해제로인한 능력치 업데이트
+            m_ps_Status.UpdateSOC(); // 장비아이템 해제로인한 평판 업데이트 
+            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
 
             return false;
         }
     }
+    // 착용중인 장비아이템(신발) 착용 조건 판단
     public bool CheckCondition_Item_Equip_Shose()
     {
-        if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Shose, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true)
+        if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Shose, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true) // 장비아이템(신발) 착용 조건 판단, 조건 충족 시 스탯(능력치, 평판) 업데이트
+                                                                                                                                           // 장비아이템(신발) 착용 조건을 만족 했을 경우
         {
-            GUIManager_Total.Instance.Update_SS();
+            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
 
             return true;
         }
-        else
+        else // 장비아이템(신발) 착용 조건을 불만족 했을 경우
         {
+            // 착용중인 장비아이템(신발) 스탯(능력치, 평판) 초기화
             m_ps_Status.m_sStatus_Extra_Equip_Shose = m_ps_Status.m_sStatus_Null;
             m_ps_Status.m_sSoc_Extra_Equip_Shose = m_ps_Status.m_sSoc_Null;
-            CheckSetItemEffect();
-            m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed());
-            m_ps_Status.UpdateStatus_Equip();
-            m_ps_Status.UpdateSOC();
-            GUIManager_Total.Instance.Update_SS();
+            m_ps_Status.UpdateStatus_Equip(); // 장비아이템 해제로인한 능력치 업데이트
+            m_ps_Status.UpdateSOC(); // 장비아이템 해제로인한 평판 업데이트 
+            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
 
             return false;
         }
     }
+    // 착용중인 장비아이템(장갑) 착용 조건 판단
     public bool CheckCondition_Item_Equip_Gloves()
     {
-        if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Gloves, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true)
+        if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Gloves, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true) // 장비아이템(장갑) 착용 조건 판단, 조건 충족 시 스탯(능력치, 평판) 업데이트
+                                                                                                                                            // 장비아이템(장갑) 착용 조건을 만족 했을 경우
         {
-            GUIManager_Total.Instance.Update_SS();
+            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
 
             return true;
         }
-        else
+        else // 장비아이템(장갑) 착용 조건을 불만족 했을 경우
         {
+            // 착용중인 장비아이템(장갑) 스탯(능력치, 평판) 초기화
             m_ps_Status.m_sStatus_Extra_Equip_Gloves = m_ps_Status.m_sStatus_Null;
             m_ps_Status.m_sSoc_Extra_Equip_Gloves = m_ps_Status.m_sSoc_Null;
-            CheckSetItemEffect();
-            m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed());
-            m_ps_Status.UpdateStatus_Equip();
-            m_ps_Status.UpdateSOC();
-            GUIManager_Total.Instance.Update_SS();
+            m_ps_Status.UpdateStatus_Equip(); // 장비아이템 해제로인한 능력치 업데이트
+            m_ps_Status.UpdateSOC(); // 장비아이템 해제로인한 평판 업데이트 
+            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
 
             return false;
         }
     }
+    // 착용중인 장비아이템(주무기) 착용 조건 판단
     public bool CheckCondition_Item_Equip_MainWeapon()
     {
-        if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Mainweapon, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true)
+        if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Mainweapon, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true) // 장비아이템(주무기) 착용 조건 판단, 조건 충족 시 스탯(능력치, 평판) 업데이트
+                                                                                                                                                // 장비아이템(주무기) 착용 조건을 만족 했을 경우
         {
-            GUIManager_Total.Instance.Update_SS();
+            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
 
             return true;
         }
-        else
+        else // 장비아이템(주무기) 착용 조건을 불만족 했을 경우
         {
+            // 착용중인 장비아이템(주무기) 스탯(능력치, 평판) 초기화
             m_ps_Status.m_sStatus_Extra_Equip_Mainweapon = m_ps_Status.m_sStatus_Null;
             m_ps_Status.m_sSoc_Extra_Equip_Mainweapon = m_ps_Status.m_sSoc_Null;
-            CheckSetItemEffect();
-            m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed());
-            m_ps_Status.UpdateStatus_Equip();
-            m_ps_Status.UpdateSOC();
-            GUIManager_Total.Instance.Update_SS();
+            m_ps_Status.UpdateStatus_Equip(); // 장비아이템 해제로인한 능력치 업데이트
+            m_ps_Status.UpdateSOC(); // 장비아이템 해제로인한 평판 업데이트 
+            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
 
             return false;
         }
     }
+    // 착용중인 장비아이템(보조무기) 착용 조건 판단
     public bool CheckCondition_Item_Equip_SubWeapon()
     {
-        if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Subweapon, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true)
+        if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Subweapon, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true) // 장비아이템(보조무기) 착용 조건 판단, 조건 충족 시 스탯(능력치, 평판) 업데이트
+                                                                                                                                               // 장비아이템(보조무기) 착용 조건을 불만족 했을 경우
         {
-            GUIManager_Total.Instance.Update_SS();
+            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
 
             return true;
         }
-        else
+        else // 장비아이템(보조무기) 착용 조건을 불만족 했을 경우
         {
+            // 착용중인 장비아이템(보조무기) 스탯(능력치, 평판) 초기화
             m_ps_Status.m_sStatus_Extra_Equip_Subweapon = m_ps_Status.m_sStatus_Null;
             m_ps_Status.m_sSoc_Extra_Equip_Subweapon = m_ps_Status.m_sSoc_Null;
-            CheckSetItemEffect();
-            m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed());
-            m_ps_Status.UpdateStatus_Equip();
-            m_ps_Status.UpdateSOC();
-            GUIManager_Total.Instance.Update_SS();
+            m_ps_Status.UpdateStatus_Equip(); // 장비아이템 해제로인한 능력치 업데이트
+            m_ps_Status.UpdateSOC(); // 장비아이템 해제로인한 평판 업데이트 
+            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
 
             return false;
         }
     }
 
     // Player 세트아이템 효과 체크. Dictionary 형태로 저장.
-       void CheckSetItemEffect_Dictionary()
+   void CheckSetItemEffect_Dictionary()
     {
         m_Dictionary_SerItemEffect.Clear();
 
