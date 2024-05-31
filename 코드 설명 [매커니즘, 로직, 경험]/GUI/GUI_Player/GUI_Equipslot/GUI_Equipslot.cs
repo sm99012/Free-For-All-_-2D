@@ -109,8 +109,6 @@ public class GUI_Equipslot : MonoBehaviour
 
     public void UpdateEquipslot()
     {
-        Player_Total.Instance.CheckSetItemEffect();
-
         if (Player_Equipment.m_bEquipment_Hat == false)
         {
             m_gary_Equipslot[0].GetComponent<Equipslot>().SetNull();
@@ -216,10 +214,6 @@ public class GUI_Equipslot : MonoBehaviour
                 m_gPanel_Equipslot_Remove_Information.SetActive(true);
             }
         }
-
-        Player_Total.Instance.CheckSetItemEffect();
-        Player_Total.Instance.m_pm_Move.SetAttackSpeed(Player_Total.Instance.m_ps_Status.Return_AttackSpeed());
-        GUIManager_Total.Instance.Update_SS();
     }
 
     public bool Display_GUI_Equipslot()
