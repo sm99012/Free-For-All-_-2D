@@ -208,7 +208,7 @@ public class Player_Move : MonoBehaviour
         return 0;
     }
 
-    // Player_Move.cs 외부에서 호출되는 플레이어의 공격 속도를 알려주는 함수. 플레이어 공격 속도 계산에 사용된다.
+    // Player_Total.cs에서 호출되는 플레이어의 공격 속도를 알려주는 함수. 플레이어 공격 속도 계산에 사용된다.
     // ※ 추후 플레이어 공격 속도 계산을 매개변수를 이용한 방식으로 변경한다면 사용되지 않을 예정
     public void SetAttackSpeed(float atkspd) // atkspd : 플레이어 공격 속도
     {
