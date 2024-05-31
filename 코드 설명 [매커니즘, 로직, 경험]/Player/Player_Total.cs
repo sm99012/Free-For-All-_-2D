@@ -1093,6 +1093,8 @@ public class Player_Total : MonoBehaviour
 
                 GUIManager_Total.Instance.Update_Itemslot(); // 인벤토리GUI 업데이트
                 GUIManager_Total.Instance.Update_Equipslot(); // 상태창(장비창)GUI 업데이트, 
+                CheckSetItemEffect();
+                m_pm_Move.SetAttackSpeed(Player_Total.Instance.m_ps_Status.Return_AttackSpeed());
                 GUIManager_Total.Instance.Update_SS();
 
                 if (GUIManager_Total.Instance.m_GUI_Status.m_gPanel_DetailStatus.activeSelf == true)
@@ -1435,6 +1437,8 @@ public class Player_Total : MonoBehaviour
 
                 GUIManager_Total.Instance.Update_Itemslot();
                 GUIManager_Total.Instance.Update_Equipslot();
+                CheckSetItemEffect();
+                m_pm_Move.SetAttackSpeed(Player_Total.Instance.m_ps_Status.Return_AttackSpeed());
                 GUIManager_Total.Instance.Update_SS();
                 m_pq_Quest.QuestUpdate_Collect(item);
 
@@ -1469,9 +1473,11 @@ public class Player_Total : MonoBehaviour
                 {
                     int Item_Use_Code = m_ps_Status.ApplyPotion(item);
                     m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed());
-                    GUIManager_Total.Instance.Update_SS();
                     GUIManager_Total.Instance.Update_Itemslot();
                     GUIManager_Total.Instance.Update_Equipslot();
+                    CheckSetItemEffect();
+                    m_pm_Move.SetAttackSpeed(Player_Total.Instance.m_ps_Status.Return_AttackSpeed());
+                    GUIManager_Total.Instance.Update_SS();
 
                     return Item_Use_Code;
                 }
@@ -2287,6 +2293,8 @@ public class Player_Total : MonoBehaviour
 
             GUIManager_Total.Instance.Update_Itemslot();
             GUIManager_Total.Instance.Update_Equipslot();
+            CheckSetItemEffect();
+            m_pm_Move.SetAttackSpeed(Player_Total.Instance.m_ps_Status.Return_AttackSpeed());
             GUIManager_Total.Instance.Update_SS();
 
             if (GUIManager_Total.Instance.m_GUI_Itemslot_Equip_Information.m_gPanel_Itemslot_Equip_Information.activeSelf == true)
@@ -2402,9 +2410,11 @@ public class Player_Total : MonoBehaviour
                 }
             }
 
-            GUIManager_Total.Instance.Update_SS();
             GUIManager_Total.Instance.Update_Itemslot();
             GUIManager_Total.Instance.Update_Equipslot();
+            CheckSetItemEffect();
+            m_pm_Move.SetAttackSpeed(Player_Total.Instance.m_ps_Status.Return_AttackSpeed());
+            GUIManager_Total.Instance.Update_SS();
         }
     }
 
@@ -2421,9 +2431,11 @@ public class Player_Total : MonoBehaviour
     {
         ReTry_Lost(retrynumber, retryprice);
 
-        GUIManager_Total.Instance.Update_SS();
         GUIManager_Total.Instance.Update_Itemslot();
         GUIManager_Total.Instance.Update_Equipslot();
+        CheckSetItemEffect();
+        m_pm_Move.SetAttackSpeed(Player_Total.Instance.m_ps_Status.Return_AttackSpeed());
+        GUIManager_Total.Instance.Update_SS();
         GUIManager_Total.Instance.Update_Quickslot();
         m_pq_Quest.QuestUpdate_Collect_NoDisplay();
         //GUIManager_Total.Instance.Update_ChangeMap();
