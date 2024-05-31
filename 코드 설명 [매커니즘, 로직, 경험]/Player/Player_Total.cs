@@ -1042,7 +1042,7 @@ public class Player_Total : MonoBehaviour
     {
         m_pq_Quest.GetQuestReward(quest); // 퀘스트 완료
         m_ps_Status.GetQuestReward(quest); // 퀘스트 완료 보상(능력치, 평판) 수령
-        m_pi_Itemslot.GetQuestReward_Item_Equip(quest); // 퀘스트 완료 보상(장비아이템) 수령
+        m_pi_Itemslot.GetQuestReward_Item_Equip(quest); // 퀘스트 완료 보상(장비아이템) 수령 
         m_pi_Itemslot.GetQuestReward_Item_Use(quest); // 퀘스트 완료 보상(소비아이템) 수령
         m_pi_Itemslot.GetQuestReward_Item_Etc(quest); // 퀘스트 완료 보상(기타아이템) 수령
         m_pq_Quest.QuestUpdate_Collect_NoDisplay(); // 퀘스트(수집 타입) 현황 업데이트
@@ -1052,18 +1052,18 @@ public class Player_Total : MonoBehaviour
         GUIManager_Total.Instance.Update_Itemslot(); // 인벤토리GUI 업데이트
     }
 
-    // 장비 착용 관련.(장비 착용 제한 체크 + 장비 착용)
+    // 플레이어 장비아이템 착용 관련 함수(장비아이템 착용 조건 판단 + 장비아이템 착용)
+    // return true : 장비아이템 착용 성공 / return false : 장비아이템 착용 실패(플레이어 사망 시, 장비아이템 착용 조건 불만)
     public bool CheckCondition_Item_Equip(Item_Equip item, STATUS playerstatus, SOC playersoc)
     {
-        if (m_pm_Move.m_ePlayerMoveState != Player_Move.E_PLAYER_MOVE_STATE.DEATH)
+        if (m_pm_Move.m_ePlayerMoveState != Player_Move.E_PLAYER_MOVE_STATE.DEATH) // 플레이어 동작 FSM이 사망상태가 아닐 경우(플레이어 사망 상태가 아닐때)
         {
-            if (m_ps_Status.CheckCondition_Item_Equip(item, playerstatus, playersoc) == true)
+            if (m_ps_Status.CheckCondition_Item_Equip(item, playerstatus, playersoc) == true) // 장비아이템 착용 조건 판단, 장비아이템 착용 시 스탯(능력치, 평판) 업데이트
             {
-                m_pe_Equipment.Equip(item);
-                m_pm_Move.Equip();
-                //CheckSetItemEffect();
-                //m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed());
+                m_pe_Equipment.Equip(item); // 장비아이템 착용
+                m_pm_Move.Equip(); // 플레이어 장비아이템 변경 시 연계 공격 초기화 함수
 
+                // 플레이어 착용 무기(Sword(검), Axe(도끼), Knife(단검))별 애니메이션 FSM 변경 함수
                 if (item.m_eItemEquipType == E_ITEM_EQUIP_TYPE.MAINWEAPON)
                 {
                     switch (m_pe_Equipment.Get_MainWeaponType())
@@ -1091,8 +1091,8 @@ public class Player_Total : MonoBehaviour
                     }
                 }
 
-                GUIManager_Total.Instance.Update_Itemslot();
-                GUIManager_Total.Instance.Update_Equipslot();
+                GUIManager_Total.Instance.Update_Itemslot(); // 인벤토리GUI 업데이트
+                GUIManager_Total.Instance.Update_Equipslot(); // 상태창(장비창)GUI 업데이트, 
                 GUIManager_Total.Instance.Update_SS();
 
                 if (GUIManager_Total.Instance.m_GUI_Status.m_gPanel_DetailStatus.activeSelf == true)
