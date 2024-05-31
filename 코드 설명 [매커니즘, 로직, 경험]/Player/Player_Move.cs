@@ -619,7 +619,7 @@ public class Player_Move : MonoBehaviour
             return false;
     }
 
-    // 플레이어 장비 변경 시 연계 공격 초기화 함수
+    // 플레이어 장비아이템 변경 시 연계 공격 초기화 함수
     public void Equip()
     {
         if (m_cProcess_Attack_Duration != null)
