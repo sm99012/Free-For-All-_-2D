@@ -177,7 +177,7 @@ public class Player_Total : MonoBehaviour
                 // 플레이어 정보GUI
                 InputKey_GUI_Quest();             // 퀘스트창GUI 키입력(Q)
                 InputKey_GUI_Itemslot();          // 인벤토리GUI 키입력(I)
-                InputKey_GUI_ES();                // 상태창(능력치창 + 장비창)GUI. 키입력(E) InputKey_GUI_Equipslot() + InputKey_GUI_Status()
+                InputKey_GUI_ES();                // 상태창(능력치창 + 장비창 + 아이템 세트효과창)GUI. 키입력(E) InputKey_GUI_Equipslot() + InputKey_GUI_Status()
                 InputKey_GUI_MonsterDictionary(); // 몬스터 도감GUI 키입력(M)
             }
             else // NPC와 상호작용 하거나, 맵 변경이 끝나지 않았을때
@@ -836,12 +836,12 @@ public class Player_Total : MonoBehaviour
         }
     }
 
-    // 상태창(능력치창 + 장비창)GUI 키입력(E)
+    // 상태창(능력치창 + 장비창 + 아이템 세트효과창)GUI 키입력(E)
     public void InputKey_GUI_ES()
     {
         if (Input.GetKeyUp(KeyCode.E))
         {
-            GUIManager_Total.Instance.Display_GUI_ES(); // 상태창(능력치창 + 장비창)GUI 활성화
+            GUIManager_Total.Instance.Display_GUI_ES(); // 상태창(능력치창 + 장비창 + 아이템 세트효과창)GUI 활성화
         }
     }
 
@@ -1053,10 +1053,10 @@ public class Player_Total : MonoBehaviour
     }
 
     // 플레이어 장비아이템 착용 관련 함수(장비아이템 착용 조건 판단 + 장비아이템 착용)
-    // return true : 장비아이템 착용 성공 / return false : 장비아이템 착용 실패(플레이어 사망 시, 장비아이템 착용 조건 불만)
+    // return true : 장비아이템 착용 성공 / return false : 장비아이템 착용 실패(플레이어 사망 시, 장비아이템 착용 조건 불만족)
     public bool CheckCondition_Item_Equip(Item_Equip item, STATUS playerstatus, SOC playersoc)
     {
-        if (m_pm_Move.m_ePlayerMoveState != Player_Move.E_PLAYER_MOVE_STATE.DEATH) // 플레이어 동작 FSM이 사망상태가 아닐 경우(플레이어 사망 상태가 아닐때)
+        if (m_pm_Move.m_ePlayerMoveState != Player_Move.E_PLAYER_MOVE_STATE.DEATH) // 플레이어 동작 FSM이 사망상태가 아닌 경우(플레이어 사망 상태가 아닐때)
         {
             if (m_ps_Status.CheckCondition_Item_Equip(item, playerstatus, playersoc) == true) // 장비아이템 착용 조건 판단, 장비아이템 착용 시 스탯(능력치, 평판) 업데이트
             {
@@ -1092,14 +1092,14 @@ public class Player_Total : MonoBehaviour
                 }
 
                 GUIManager_Total.Instance.Update_Itemslot(); // 인벤토리GUI 업데이트
-                GUIManager_Total.Instance.Update_Equipslot(); // 상태창(장비창)GUI 업데이트, 
-                CheckSetItemEffect();
-                m_pm_Move.SetAttackSpeed(Player_Total.Instance.m_ps_Status.Return_AttackSpeed());
-                GUIManager_Total.Instance.Update_SS();
+                GUIManager_Total.Instance.Update_Equipslot(); // 상태창(장비창)GUI 업데이트
+                CheckSetItemEffect(); // 아이템 세트효과 판단(적용)
+                m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed()); // 플레이어 공격 속도 설정(기본 공격(연계 공격)을 위해 Player_Status.cs의 공격 속도를 Player_Move.cs로 넘겨준다.)
+                GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
 
-                if (GUIManager_Total.Instance.m_GUI_Status.m_gPanel_DetailStatus.activeSelf == true)
+                if (GUIManager_Total.Instance.m_GUI_Status.m_gPanel_DetailStatus.activeSelf == true) // 상태창(능력치창)GUI가 활성화된 상태일 경우(능력치창, 장비창, 아이템 세트효과창은 상태창으로 통합)
                 {
-                    GUIManager_Total.Instance.m_GUI_Status.UpdateStatus_SetItemEffect(CheckSetItemEffect_UI());
+                    GUIManager_Total.Instance.m_GUI_Status.UpdateStatus_SetItemEffect(CheckSetItemEffect_UI()); // 상태창(아이템 세트효과창)GUI 업데이트
                 }
 
                 return true;
@@ -1108,216 +1108,155 @@ public class Player_Total : MonoBehaviour
 
         return false;
     }
-    // 장착중인 장비 아이템 조건 체크.
+    // 착용중인 장비아이템의 조건 판단
+    // return true : 현재 착용중인 장비아이템 착용 조건 충족 / return false : 현재 착용중인 장비아이템 착용 조건 불만족
     public bool CheckCondition_Item_Equip_Hat()
     {
-        if (Player_Equipment.m_bEquipment_Hat == true)
+        if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Hat, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true) // 장비아이템 착용 조건 판단, 장비아이템 착용 시 스탯(능력치, 평판) 업데이트
         {
-            if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Hat, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true)
-            {
-                m_ps_Status.m_sStatus_Extra_Equip_Hat = Player_Equipment.m_gEquipment_Hat.m_sStatus_Effect;
-                m_ps_Status.m_sSoc_Extra_Equip_Hat = Player_Equipment.m_gEquipment_Hat.m_sSoc_Effect;
-                m_ps_Status.UpdateStatus_Equip();
-                m_ps_Status.UpdateSOC();
-                GUIManager_Total.Instance.Update_SS();
+            CheckSetItemEffect();
+            m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed());
+            GUIManager_Total.Instance.Update_SS();
 
-                return true;
-            }
-            else
-            {
-                m_ps_Status.m_sStatus_Extra_Equip_Hat = m_ps_Status.m_sStatus_Null;
-                m_ps_Status.m_sSoc_Extra_Equip_Hat = m_ps_Status.m_sSoc_Null;
-                m_ps_Status.UpdateStatus_Equip();
-                m_ps_Status.UpdateSOC();
-                GUIManager_Total.Instance.Update_SS();
-
-                return false;
-            }
+            return true;
         }
+        else
+        {
+            m_ps_Status.m_sStatus_Extra_Equip_Hat = m_ps_Status.m_sStatus_Null;
+            m_ps_Status.m_sSoc_Extra_Equip_Hat = m_ps_Status.m_sSoc_Null;
+            CheckSetItemEffect();
+            m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed());
+            m_ps_Status.UpdateStatus_Equip();
+            m_ps_Status.UpdateSOC();
+            GUIManager_Total.Instance.Update_SS();
 
-        return true;
+            return false;
+        }
     }
     public bool CheckCondition_Item_Equip_Top()
     {
-        if (Player_Equipment.m_bEquipment_Top == true)
+        if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Top, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true)
         {
-            if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Top, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true)
-            {
-                m_ps_Status.m_sStatus_Extra_Equip_Top = Player_Equipment.m_gEquipment_Top.m_sStatus_Effect;
-                m_ps_Status.m_sSoc_Extra_Equip_Top = Player_Equipment.m_gEquipment_Top.m_sSoc_Effect;
-                m_ps_Status.UpdateStatus_Equip();
-                m_ps_Status.UpdateSOC();
-                GUIManager_Total.Instance.Update_SS();
+            GUIManager_Total.Instance.Update_SS();
 
-                return true;
-            }
-            else
-            {
-                m_ps_Status.m_sStatus_Extra_Equip_Top = m_ps_Status.m_sStatus_Null;
-                m_ps_Status.m_sSoc_Extra_Equip_Top = m_ps_Status.m_sSoc_Null;
-                m_ps_Status.UpdateStatus_Equip();
-                m_ps_Status.UpdateSOC();
-                GUIManager_Total.Instance.Update_SS();
-
-                return false;
-            }
+            return true;
         }
+        else
+        {
+            GUIManager_Total.Instance.Update_SS();
 
-        return true;
+            return false;
+        }
     }
     public bool CheckCondition_Item_Equip_Bottoms()
     {
-        if (Player_Equipment.m_bEquipment_Bottoms == true)
+        if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Bottoms, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true)
         {
-            if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Bottoms, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true)
-            {
-                m_ps_Status.m_sStatus_Extra_Equip_Bottoms = Player_Equipment.m_gEquipment_Bottoms.m_sStatus_Effect;
-                m_ps_Status.m_sSoc_Extra_Equip_Bottoms = Player_Equipment.m_gEquipment_Bottoms.m_sSoc_Effect;
-                m_ps_Status.UpdateStatus_Equip();
-                m_ps_Status.UpdateSOC();
-                GUIManager_Total.Instance.Update_SS();
 
-                return true;
-            }
-            else
-            {
-                m_ps_Status.m_sStatus_Extra_Equip_Bottoms = m_ps_Status.m_sStatus_Null;
-                m_ps_Status.m_sSoc_Extra_Equip_Bottoms = m_ps_Status.m_sSoc_Null;
-                CheckSetItemEffect();
-                m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed());
-                m_ps_Status.UpdateStatus_Equip();
-                m_ps_Status.UpdateSOC();
-                GUIManager_Total.Instance.Update_SS();
+            GUIManager_Total.Instance.Update_SS();
 
-                return false;
-            }
+            return true;
         }
+        else
+        {
+            m_ps_Status.m_sStatus_Extra_Equip_Bottoms = m_ps_Status.m_sStatus_Null;
+            m_ps_Status.m_sSoc_Extra_Equip_Bottoms = m_ps_Status.m_sSoc_Null;
+            CheckSetItemEffect();
+            m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed());
+            m_ps_Status.UpdateStatus_Equip();
+            m_ps_Status.UpdateSOC();
+            GUIManager_Total.Instance.Update_SS();
 
-        return true;
+            return false;
+        }
     }
     public bool CheckCondition_Item_Equip_Shose()
     {
-        if (Player_Equipment.m_bEquipment_Shose == true)
+        if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Shose, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true)
         {
-            if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Shose, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true)
-            {
-                m_ps_Status.m_sStatus_Extra_Equip_Shose = Player_Equipment.m_gEquipment_Shose.m_sStatus_Effect;
-                m_ps_Status.m_sSoc_Extra_Equip_Shose = Player_Equipment.m_gEquipment_Shose.m_sSoc_Effect;
-                m_ps_Status.UpdateStatus_Equip();
-                m_ps_Status.UpdateSOC();
-                GUIManager_Total.Instance.Update_SS();
+            GUIManager_Total.Instance.Update_SS();
 
-                return true;
-            }
-            else
-            {
-                m_ps_Status.m_sStatus_Extra_Equip_Shose = m_ps_Status.m_sStatus_Null;
-                m_ps_Status.m_sSoc_Extra_Equip_Shose = m_ps_Status.m_sSoc_Null;
-                CheckSetItemEffect();
-                m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed());
-                m_ps_Status.UpdateStatus_Equip();
-                m_ps_Status.UpdateSOC();
-                GUIManager_Total.Instance.Update_SS();
-
-                return false;
-            }
+            return true;
         }
+        else
+        {
+            m_ps_Status.m_sStatus_Extra_Equip_Shose = m_ps_Status.m_sStatus_Null;
+            m_ps_Status.m_sSoc_Extra_Equip_Shose = m_ps_Status.m_sSoc_Null;
+            CheckSetItemEffect();
+            m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed());
+            m_ps_Status.UpdateStatus_Equip();
+            m_ps_Status.UpdateSOC();
+            GUIManager_Total.Instance.Update_SS();
 
-        return true;
+            return false;
+        }
     }
     public bool CheckCondition_Item_Equip_Gloves()
     {
-        if (Player_Equipment.m_bEquipment_Gloves == true)
+        if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Gloves, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true)
         {
-            if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Gloves, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true)
-            {
-                m_ps_Status.m_sStatus_Extra_Equip_Gloves = Player_Equipment.m_gEquipment_Gloves.m_sStatus_Effect;
-                m_ps_Status.m_sSoc_Extra_Equip_Gloves = Player_Equipment.m_gEquipment_Gloves.m_sSoc_Effect;
-                m_ps_Status.UpdateStatus_Equip();
-                m_ps_Status.UpdateSOC();
-                GUIManager_Total.Instance.Update_SS();
+            GUIManager_Total.Instance.Update_SS();
 
-                return true;
-            }
-            else
-            {
-                m_ps_Status.m_sStatus_Extra_Equip_Gloves = m_ps_Status.m_sStatus_Null;
-                m_ps_Status.m_sSoc_Extra_Equip_Gloves = m_ps_Status.m_sSoc_Null;
-                CheckSetItemEffect();
-                m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed());
-                m_ps_Status.UpdateStatus_Equip();
-                m_ps_Status.UpdateSOC();
-                GUIManager_Total.Instance.Update_SS();
-
-                return false;
-            }
+            return true;
         }
+        else
+        {
+            m_ps_Status.m_sStatus_Extra_Equip_Gloves = m_ps_Status.m_sStatus_Null;
+            m_ps_Status.m_sSoc_Extra_Equip_Gloves = m_ps_Status.m_sSoc_Null;
+            CheckSetItemEffect();
+            m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed());
+            m_ps_Status.UpdateStatus_Equip();
+            m_ps_Status.UpdateSOC();
+            GUIManager_Total.Instance.Update_SS();
 
-        return true;
+            return false;
+        }
     }
     public bool CheckCondition_Item_Equip_MainWeapon()
     {
-        if (Player_Equipment.m_bEquipment_Mainweapon == true)
+        if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Mainweapon, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true)
         {
-            if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Mainweapon, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true)
-            {
-                m_ps_Status.m_sStatus_Extra_Equip_Mainweapon = Player_Equipment.m_gEquipment_Mainweapon.m_sStatus_Effect;
-                m_ps_Status.m_sSoc_Extra_Equip_Mainweapon = Player_Equipment.m_gEquipment_Mainweapon.m_sSoc_Effect;
-                m_ps_Status.UpdateStatus_Equip();
-                m_ps_Status.UpdateSOC();
-                GUIManager_Total.Instance.Update_SS();
+            GUIManager_Total.Instance.Update_SS();
 
-                return true;
-            }
-            else
-            {
-                m_ps_Status.m_sStatus_Extra_Equip_Mainweapon = m_ps_Status.m_sStatus_Null;
-                m_ps_Status.m_sSoc_Extra_Equip_Mainweapon = m_ps_Status.m_sSoc_Null;
-                CheckSetItemEffect();
-                m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed());
-                m_ps_Status.UpdateStatus_Equip();
-                m_ps_Status.UpdateSOC();
-                GUIManager_Total.Instance.Update_SS();
-
-                return false;
-            }
+            return true;
         }
+        else
+        {
+            m_ps_Status.m_sStatus_Extra_Equip_Mainweapon = m_ps_Status.m_sStatus_Null;
+            m_ps_Status.m_sSoc_Extra_Equip_Mainweapon = m_ps_Status.m_sSoc_Null;
+            CheckSetItemEffect();
+            m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed());
+            m_ps_Status.UpdateStatus_Equip();
+            m_ps_Status.UpdateSOC();
+            GUIManager_Total.Instance.Update_SS();
 
-        return true;
+            return false;
+        }
     }
     public bool CheckCondition_Item_Equip_SubWeapon()
     {
-        if (Player_Equipment.m_bEquipment_Subweapon == true)
+        if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Subweapon, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true)
         {
-            if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Subweapon, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true)
-            {
-                m_ps_Status.m_sStatus_Extra_Equip_Subweapon = Player_Equipment.m_gEquipment_Subweapon.m_sStatus_Effect;
-                m_ps_Status.m_sSoc_Extra_Equip_Subweapon = Player_Equipment.m_gEquipment_Subweapon.m_sSoc_Effect;
-                m_ps_Status.UpdateStatus_Equip();
-                m_ps_Status.UpdateSOC();
-                GUIManager_Total.Instance.Update_SS();
+            GUIManager_Total.Instance.Update_SS();
 
-                return true;
-            }
-            else
-            {
-                m_ps_Status.m_sStatus_Extra_Equip_Subweapon = m_ps_Status.m_sStatus_Null;
-                m_ps_Status.m_sSoc_Extra_Equip_Subweapon = m_ps_Status.m_sSoc_Null;
-                CheckSetItemEffect();
-                m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed());
-                m_ps_Status.UpdateStatus_Equip();
-                m_ps_Status.UpdateSOC();
-                GUIManager_Total.Instance.Update_SS();
-
-                return false;
-            }
+            return true;
         }
+        else
+        {
+            m_ps_Status.m_sStatus_Extra_Equip_Subweapon = m_ps_Status.m_sStatus_Null;
+            m_ps_Status.m_sSoc_Extra_Equip_Subweapon = m_ps_Status.m_sSoc_Null;
+            CheckSetItemEffect();
+            m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed());
+            m_ps_Status.UpdateStatus_Equip();
+            m_ps_Status.UpdateSOC();
+            GUIManager_Total.Instance.Update_SS();
 
-        return true;
+            return false;
+        }
     }
 
     // Player 세트아이템 효과 체크. Dictionary 형태로 저장.
-    void CheckSetItemEffect_Dictionary()
+       void CheckSetItemEffect_Dictionary()
     {
         m_Dictionary_SerItemEffect.Clear();
 
@@ -1330,77 +1269,98 @@ public class Player_Total : MonoBehaviour
         int nsubweapon = m_pe_Equipment.CheckSetItemEffect(E_ITEM_EQUIP_TYPE.SUBWEAPON);
 
         // Hat
-        if (CheckCondition_Item_Equip_Hat() == true)
-            m_Dictionary_SerItemEffect.Add(nhat, 1);
-        else
-            m_Dictionary_SerItemEffect.Add(0, 1);
-        // Top
-        if (m_Dictionary_SerItemEffect.ContainsKey(ntop) == true)
+        if (Player_Equipment.m_bEquipment_Hat == true)
         {
-            if (CheckCondition_Item_Equip_Top() == true)
-                m_Dictionary_SerItemEffect[ntop] += 1;
+            if (CheckCondition_Item_Equip_Hat() == true)
+                m_Dictionary_SerItemEffect.Add(nhat, 1);
+            else
+                m_Dictionary_SerItemEffect.Add(0, 1);
         }
-        else
+        // Top
+        if (Player_Equipment.m_bEquipment_Top == true)
         {
-            if (CheckCondition_Item_Equip_Top() == true)
-                m_Dictionary_SerItemEffect.Add(ntop, 1);
+            if (m_Dictionary_SerItemEffect.ContainsKey(ntop) == true)
+            {
+                if (CheckCondition_Item_Equip_Top() == true)
+                    m_Dictionary_SerItemEffect[ntop] += 1;
+            }
+            else
+            {
+                if (CheckCondition_Item_Equip_Top() == true)
+                    m_Dictionary_SerItemEffect.Add(ntop, 1);
+            }
         }
         // Bottomse
-        if (m_Dictionary_SerItemEffect.ContainsKey(nbottoms) == true)
+        if (Player_Equipment.m_bEquipment_Bottoms == true)
         {
-            if (CheckCondition_Item_Equip_Bottoms() == true)
-                m_Dictionary_SerItemEffect[nbottoms] += 1;
-        }
-        else
-        {
-            if (CheckCondition_Item_Equip_Bottoms() == true)
+            if (m_Dictionary_SerItemEffect.ContainsKey(nbottoms) == true)
+            {
+                if (CheckCondition_Item_Equip_Bottoms() == true)
+                    m_Dictionary_SerItemEffect[nbottoms] += 1;
+            }
+            else
+            {
+                if (CheckCondition_Item_Equip_Bottoms() == true)
 
-                m_Dictionary_SerItemEffect.Add(nbottoms, 1);
+                    m_Dictionary_SerItemEffect.Add(nbottoms, 1);
+            }
         }
         // Shoes
-        if (m_Dictionary_SerItemEffect.ContainsKey(nshose) == true)
+        if (Player_Equipment.m_bEquipment_Shose == true)
         {
-            if (CheckCondition_Item_Equip_Shose() == true)
-                m_Dictionary_SerItemEffect[nshose] += 1;
-        }
-        else
-        {
-            if (CheckCondition_Item_Equip_Shose() == true)
+            if (m_Dictionary_SerItemEffect.ContainsKey(nshose) == true)
+            {
+                if (CheckCondition_Item_Equip_Shose() == true)
+                    m_Dictionary_SerItemEffect[nshose] += 1;
+            }
+            else
+            {
+                if (CheckCondition_Item_Equip_Shose() == true)
 
-                m_Dictionary_SerItemEffect.Add(nshose, 1);
+                    m_Dictionary_SerItemEffect.Add(nshose, 1);
+            }
         }
         // Gloves
-        if (m_Dictionary_SerItemEffect.ContainsKey(ngloves) == true)
+        if (Player_Equipment.m_bEquipment_Gloves == true)
         {
-            if (CheckCondition_Item_Equip_Gloves() == true)
-                m_Dictionary_SerItemEffect[ngloves] += 1;
-        }
-        else
-        {
-            if (CheckCondition_Item_Equip_Gloves() == true)
-                m_Dictionary_SerItemEffect.Add(ngloves, 1);
+            if (m_Dictionary_SerItemEffect.ContainsKey(ngloves) == true)
+            {
+                if (CheckCondition_Item_Equip_Gloves() == true)
+                    m_Dictionary_SerItemEffect[ngloves] += 1;
+            }
+            else
+            {
+                if (CheckCondition_Item_Equip_Gloves() == true)
+                    m_Dictionary_SerItemEffect.Add(ngloves, 1);
+            }
         }
         // Mainweapon
-        if (m_Dictionary_SerItemEffect.ContainsKey(nmainwaepon) == true)
+        if (Player_Equipment.m_bEquipment_Mainweapon == true)
         {
-            if (CheckCondition_Item_Equip_MainWeapon() == true)
-                m_Dictionary_SerItemEffect[nmainwaepon] += 1;
-        }
-        else
-        {
-            if (CheckCondition_Item_Equip_MainWeapon() == true)
-                m_Dictionary_SerItemEffect.Add(nmainwaepon, 1);
+            if (m_Dictionary_SerItemEffect.ContainsKey(nmainwaepon) == true)
+            {
+                if (CheckCondition_Item_Equip_MainWeapon() == true)
+                    m_Dictionary_SerItemEffect[nmainwaepon] += 1;
+            }
+            else
+            {
+                if (CheckCondition_Item_Equip_MainWeapon() == true)
+                    m_Dictionary_SerItemEffect.Add(nmainwaepon, 1);
+            }
         }
         // Subweapon
-        if (m_Dictionary_SerItemEffect.ContainsKey(nsubweapon) == true)
+        if (Player_Equipment.m_bEquipment_Subweapon == true)
         {
-            if (CheckCondition_Item_Equip_SubWeapon() == true)
-                m_Dictionary_SerItemEffect[nsubweapon] += 1;
-        }
-        else
-        {
-            if (CheckCondition_Item_Equip_SubWeapon() == true)
-                m_Dictionary_SerItemEffect.Add(nsubweapon, 1);
+            if (m_Dictionary_SerItemEffect.ContainsKey(nsubweapon) == true)
+            {
+                if (CheckCondition_Item_Equip_SubWeapon() == true)
+                    m_Dictionary_SerItemEffect[nsubweapon] += 1;
+            }
+            else
+            {
+                if (CheckCondition_Item_Equip_SubWeapon() == true)
+                    m_Dictionary_SerItemEffect.Add(nsubweapon, 1);
+            }
         }
     }
     // Player 세트아이템 효과 체크. - 능력치 적용 용도.
