@@ -722,6 +722,7 @@ public class DataManager : MonoBehaviour
         }
 
         GUIManager_Total.Instance.Update_Equipslot();
+        GUIManager_Total.Instance.Update_SS();
 
         //Debug.Log("[플레이어가 착용한 장비 아이템 데이터 로드 완료.]");
         return true;
