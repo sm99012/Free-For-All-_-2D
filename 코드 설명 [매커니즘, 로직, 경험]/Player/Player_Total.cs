@@ -2141,6 +2141,9 @@ public class Player_Total : MonoBehaviour
     }
 
     // 퀵슬롯 전용 장비 아이템 사용 조건 체크.
+    //
+    // ※ 함수이름 변경 예정. CheckCondition_Item_Use -> CheckCondition_Quickslot_Item_Equip
+    //
     public bool CheckCondition_Item_Use(Item_Equip item, int arynumber)
     {
         Item_Equip switchingitem;
