@@ -1269,8 +1269,9 @@ public class Player_Total : MonoBehaviour
         }
     }
 
-    // 적용중인 아이템 세트효과 판단. m_Dictionary_SerItemEffect(플레이어에게 적용중인 아이템 세트효과 딕셔너리) 에 저장
+    // 플레이어에게 적용할 아이템 세트효과 판단. m_Dictionary_SerItemEffect(플레이어에게 적용중인 아이템 세트효과 딕셔너리) 에 저장
     // Dictionary <Key : 아이템 세트효과 코드 , Value : 아이템 세트효과 코드(Key)를 가진 아이템 개수> Key == 0 : 세트효과 없음
+    // 장비아이템의 순서(모자, 상의, 하의, 신발, 장갑, 주무기, 보조무기)에 따라 플레이어에게 적용할 아이템 세트효과를 판단한다.
    void CheckSetItemEffect_Dictionary()
     {
         m_Dictionary_SerItemEffect.Clear(); // 플레이어에게 적용중인 아이템 세트효과 딕셔너리 초기화
@@ -1283,6 +1284,7 @@ public class Player_Total : MonoBehaviour
         int nmainwaepon = m_pe_Equipment.CheckSetItemEffect(E_ITEM_EQUIP_TYPE.MAINWEAPON); // 착용중인 장비아이템(주무기)이 가진 아이템 세트효과 코드(세트효과 없을 시 0)
         int nsubweapon = m_pe_Equipment.CheckSetItemEffect(E_ITEM_EQUIP_TYPE.SUBWEAPON);   // 착용중인 장비아이템(보조무기)이 가진 아이템 세트효과 코드(세트효과 없을 시 0)
 
+        // 장비아이템 순서대로 아이템 세트효과 확인
         // 장비아이템(모자)
         if (Player_Equipment.m_bEquipment_Hat == true) // 착용중인 장비아이템(모자)가 존재할 경우
         {
@@ -1297,132 +1299,130 @@ public class Player_Total : MonoBehaviour
             if (m_Dictionary_SerItemEffect.ContainsKey(ntop) == true) // 착용중인 장비아이템(상의)과 동일한 아이템 세트효과 코드를 가진 장비아이템(모자)이 존재할 경우
             {
                 if (CheckCondition_Item_Equip_Top() == true) // 착용중인 장비아이템(상의) 착용 조건 판단
-                    m_Dictionary_SerItemEffect[ntop] += 1; // m_Dictionary_SerItemEffect<Key(==), Value(+=1)> Key : 동일한 아이템 세트효과 코드, Value : 장비아이템 개수
+                    m_Dictionary_SerItemEffect[ntop] += 1; // m_Dictionary_SerItemEffect<Key, Value> Key : 동일한 아이템 세트효과 코드, Value : 장비아이템 개수 += 1
             }
             else // 착용중인 장비아이템(상의)과 동일한 아이템 세트효과 코드를 가진 장비아이템(모자)이 존재하지 않을 경우
             {
                 if (CheckCondition_Item_Equip_Top() == true) // 착용중인 장비아이템(상의) 착용 조건 판단
-                    m_Dictionary_SerItemEffect.Add(ntop, 1); // m_Dictionary_SerItemEffect<Key(!=), Value(=1)> Key : 동일한 아이템 세트효과 코드, Value : 장비아이템 개수
+                    m_Dictionary_SerItemEffect.Add(ntop, 1); // m_Dictionary_SerItemEffect<Key, Value> Key : 새로운 아이템 세트효과 코드, Value : 장비아이템 개수 = 1
             }
         }
         // 장비아이템(하의)
         if (Player_Equipment.m_bEquipment_Bottoms == true) // 착용중인 장비아이템(하의)가 존재할 경우
         {
-            if (m_Dictionary_SerItemEffect.ContainsKey(nbottoms) == true)
+            if (m_Dictionary_SerItemEffect.ContainsKey(nbottoms) == true) // 착용중인 장비아이템(하의)과 동일한 아이템 세트효과 코드를 가진 장비아이템(모자, 상의)이 존재할 경우
             {
                 if (CheckCondition_Item_Equip_Bottoms() == true) // 착용중인 장비아이템(하의) 착용 조건 판단
-                    m_Dictionary_SerItemEffect[nbottoms] += 1;
+                    m_Dictionary_SerItemEffect[nbottoms] += 1; // m_Dictionary_SerItemEffect<Key, Value> Key : 동일한 아이템 세트효과 코드, Value : 장비아이템 개수 += 1
             }
-            else
+            else // 착용중인 장비아이템(하의)과 동일한 아이템 세트효과 코드를 가진 장비아이템(모자, 상의)이 존재하지 않을 경우
             {
                 if (CheckCondition_Item_Equip_Bottoms() == true) // 착용중인 장비아이템(하의) 착용 조건 판단
-
-                    m_Dictionary_SerItemEffect.Add(nbottoms, 1);
+                    m_Dictionary_SerItemEffect.Add(nbottoms, 1); // m_Dictionary_SerItemEffect<Key, Value> Key : 새로운 아이템 세트효과 코드, Value : 장비아이템 개수 = 1
             }
         }
         // 장비아이템(신발)
         if (Player_Equipment.m_bEquipment_Shose == true) // 착용중인 장비아이템(신발)가 존재할 경우
         {
-            if (m_Dictionary_SerItemEffect.ContainsKey(nshose) == true)
+            if (m_Dictionary_SerItemEffect.ContainsKey(nshose) == true) // 착용중인 장비아이템(하의)과 동일한 아이템 세트효과 코드를 가진 장비아이템(모자, 상의, 하의)이 존재할 경우
             {
                 if (CheckCondition_Item_Equip_Shose() == true) // 착용중인 장비아이템(신발) 착용 조건 판단
-                    m_Dictionary_SerItemEffect[nshose] += 1;
+                    m_Dictionary_SerItemEffect[nshose] += 1; // m_Dictionary_SerItemEffect<Key, Value> Key : 동일한 아이템 세트효과 코드, Value : 장비아이템 개수 += 1
             }
-            else
+            else // 착용중인 장비아이템(신발)과 동일한 아이템 세트효과 코드를 가진 장비아이템(모자, 상의, 하의)이 존재하지 않을 경우
             {
                 if (CheckCondition_Item_Equip_Shose() == true) // 착용중인 장비아이템(신발) 착용 조건 판단
-
-                    m_Dictionary_SerItemEffect.Add(nshose, 1);
+                    m_Dictionary_SerItemEffect.Add(nshose, 1); // m_Dictionary_SerItemEffect<Key, Value> Key : 새로운 아이템 세트효과 코드, Value : 장비아이템 개수 = 1
             }
         }
         // 장비아이템(장갑)
         if (Player_Equipment.m_bEquipment_Gloves == true) // 착용중인 장비아이템(장갑)가 존재할 경우
         {
-            if (m_Dictionary_SerItemEffect.ContainsKey(ngloves) == true)
+            if (m_Dictionary_SerItemEffect.ContainsKey(ngloves) == true) // 착용중인 장비아이템(하의)과 동일한 아이템 세트효과 코드를 가진 장비아이템(모자, 상의, 하의, 신발)이 존재할 경우
             {
                 if (CheckCondition_Item_Equip_Gloves() == true) // 착용중인 장비아이템(장갑) 착용 조건 판단
-                    m_Dictionary_SerItemEffect[ngloves] += 1;
+                    m_Dictionary_SerItemEffect[ngloves] += 1; // m_Dictionary_SerItemEffect<Key, Value> Key : 동일한 아이템 세트효과 코드, Value : 장비아이템 개수 += 1
             }
-            else
+            else // 착용중인 장비아이템(장갑)과 동일한 아이템 세트효과 코드를 가진 장비아이템(모자, 상의, 하의, 신발)이 존재하지 않을 경우
             {
                 if (CheckCondition_Item_Equip_Gloves() == true) // 착용중인 장비아이템(장갑) 착용 조건 판단
-                    m_Dictionary_SerItemEffect.Add(ngloves, 1);
+                    m_Dictionary_SerItemEffect.Add(ngloves, 1); // m_Dictionary_SerItemEffect<Key, Value> Key : 새로운 아이템 세트효과 코드, Value : 장비아이템 개수 = 1
             }
         }
         // 장비아이템(주무기)
         if (Player_Equipment.m_bEquipment_Mainweapon == true) // 착용중인 장비아이템(주무기)가 존재할 경우
         {
-            if (m_Dictionary_SerItemEffect.ContainsKey(nmainwaepon) == true)
+            if (m_Dictionary_SerItemEffect.ContainsKey(nmainwaepon) == true) // 착용중인 장비아이템(하의)과 동일한 아이템 세트효과 코드를 가진 장비아이템(모자, 상의, 하의, 신발, 장갑)이 존재할 경우
             {
                 if (CheckCondition_Item_Equip_MainWeapon() == true) // 착용중인 장비아이템(주무기) 착용 조건 판단
-                    m_Dictionary_SerItemEffect[nmainwaepon] += 1;
+                    m_Dictionary_SerItemEffect[nmainwaepon] += 1; // m_Dictionary_SerItemEffect<Key, Value> Key : 동일한 아이템 세트효과 코드, Value : 장비아이템 개수 += 1
             }
-            else
+            else // 착용중인 장비아이템(주무기)과 동일한 아이템 세트효과 코드를 가진 장비아이템(모자, 상의, 하의, 신발, 장갑)이 존재하지 않을 경우
             {
                 if (CheckCondition_Item_Equip_MainWeapon() == true) // 착용중인 장비아이템(주무기) 착용 조건 판단
-                    m_Dictionary_SerItemEffect.Add(nmainwaepon, 1);
+                    m_Dictionary_SerItemEffect.Add(nmainwaepon, 1); // m_Dictionary_SerItemEffect<Key, Value> Key : 새로운 아이템 세트효과 코드, Value : 장비아이템 개수 = 1
             }
         }
         // 장비아이템(보조무기)
         if (Player_Equipment.m_bEquipment_Subweapon == true) // 착용중인 장비아이템(보조무기)가 존재할 경우
         {
-            if (m_Dictionary_SerItemEffect.ContainsKey(nsubweapon) == true)
+            if (m_Dictionary_SerItemEffect.ContainsKey(nsubweapon) == true) // 착용중인 장비아이템(하의)과 동일한 아이템 세트효과 코드를 가진 장비아이템(모자, 상의, 하의, 신발, 장갑, 주무기)이 존재할 경우
             {
                 if (CheckCondition_Item_Equip_SubWeapon() == true) // 착용중인 장비아이템(보조무기) 착용 조건 판단
-                    m_Dictionary_SerItemEffect[nsubweapon] += 1;
+                    m_Dictionary_SerItemEffect[nsubweapon] += 1; // m_Dictionary_SerItemEffect<Key, Value> Key : 동일한 아이템 세트효과 코드, Value : 장비아이템 개수 += 1
             }
-            else
+            else // 착용중인 장비아이템(보조무기)과 동일한 아이템 세트효과 코드를 가진 장비아이템(모자, 상의, 하의, 신발, 장갑, 주무기)이 존재하지 않을 경우
             {
                 if (CheckCondition_Item_Equip_SubWeapon() == true) // 착용중인 장비아이템(보조무기) 착용 조건 판단
-                    m_Dictionary_SerItemEffect.Add(nsubweapon, 1);
+                    m_Dictionary_SerItemEffect.Add(nsubweapon, 1); // m_Dictionary_SerItemEffect<Key, Value> Key : 새로운 아이템 세트효과 코드, Value : 장비아이템 개수 = 1
             }
         }
     }
-    // Player 세트아이템 효과 체크. - 능력치 적용 용도.
+    // 아이템 세트효과 판단 - 능력치 적용 용도
     public void CheckSetItemEffect()
     {
-        CheckSetItemEffect_Dictionary();
+        CheckSetItemEffect_Dictionary(); // 플레이어에게 적용할 아이템 세트효과 판단
 
-        m_ps_Status.CheckSetItemEffect(m_Dictionary_SerItemEffect);
+        m_ps_Status.CheckSetItemEffect(m_Dictionary_SerItemEffect); // 장비아이템 세트효과 적용
     }
 
-    // Player 세트아이템 효과 체크. - UI 표시 용도.
+    // 아이템 세트효과 판단 - GUI 출력 용도
+    // 플레이어에게 적용중인 아이템 세트효과 딕셔너리 반환
     public Dictionary<int, int> CheckSetItemEffect_UI()
     {
-        CheckSetItemEffect_Dictionary();
+        CheckSetItemEffect_Dictionary(); // 플레이어에게 적용할 아이템 세트효과 판단
 
         return m_Dictionary_SerItemEffect;
     }
 
-    // 장비 착용 해제 관련.
-    // 장비 슬롯에 빈칸이 있으면 장비 해제 가능.
-    public bool Remove_Item_Equip(Item_Equip item)
+    // 장비아이템 착용 해제 관련 함수. 인벤토리에 빈칸이 있어야 장비 해제 가능
+    // return true : 장비아이템 착용 해제 성공 / return false : 장비아이템 착용 해제 실패
+    public bool Remove_Item_Equip(Item_Equip item) // item : 착용 해제할 장비아이템
     {
-        if (m_pm_Move.m_ePlayerMoveState != Player_Move.E_PLAYER_MOVE_STATE.DEATH)
+        if (m_pm_Move.m_ePlayerMoveState != Player_Move.E_PLAYER_MOVE_STATE.DEATH) // 플레이어 동작 FSM이 사망상태가 아닌 경우(플레이어 사망 상태가 아닐때)
         {
-            if (m_pi_Itemslot.Get_Item_Equip(item) != -1)
+            if (m_pi_Itemslot.Get_Item_Equip(item) != -1) // 장비아이템 획득 함수(return -1 : 인벤토리에 빈칸이 없어 장비아이템을 획득(해제)하지 못함)
             {
-                m_ps_Status.Remove_Item_Equip(item);
-                m_pe_Equipment.Remove_Equip(item.m_eItemEquipType);
-                m_pm_Move.Equip();
-                //CheckSetItemEffect();
-                //m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed());
-                if (item.m_eItemEquipType == E_ITEM_EQUIP_TYPE.MAINWEAPON)
-                    m_pm_Move.SetAnimation_Weapon(E_ITEM_EQUIP_MAINWEAPON_TYPE.SWORD);
+                // 장비아이템 착용 해제 관련 함수 실행
+                m_ps_Status.Remove_Item_Equip(item); // 스탯(능력치, 평판) 업데이트
+                m_pe_Equipment.Remove_Equip(item.m_eItemEquipType); // 장비아이템 해제
+                m_pm_Move.Equip(); // 플레이어 장비아이템 변경 시 연계 공격 초기화 함수
+                if (item.m_eItemEquipType == E_ITEM_EQUIP_TYPE.MAINWEAPON) // 해제할 장비아이템의 분류가 주무기일 경우
+                    m_pm_Move.SetAnimation_Weapon(E_ITEM_EQUIP_MAINWEAPON_TYPE.SWORD); // 플레이어 착용 무기별 애니메이션 FSM 변경 함수
 
-                GUIManager_Total.Instance.Update_Itemslot();
-                GUIManager_Total.Instance.Update_Equipslot();
-                CheckSetItemEffect();
-                m_pm_Move.SetAttackSpeed(Player_Total.Instance.m_ps_Status.Return_AttackSpeed());
-                GUIManager_Total.Instance.Update_SS();
-                m_pq_Quest.QuestUpdate_Collect(item);
+                GUIManager_Total.Instance.Update_Itemslot(); // 인벤토리GUI 업데이트
+                GUIManager_Total.Instance.Update_Equipslot(); // 상태창(장비창)GUI 업데이트
+                CheckSetItemEffect(); // 아이템 세트효과 판단(적용)
+                m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed()); // 플레이어 공격 속도 설정(기본 공격(연계 공격)을 위해 Player_Status.cs의 공격 속도를 Player_Move.cs로 넘겨준다.)
+                GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
+                m_pq_Quest.QuestUpdate_Collect(item); // 진행중인 퀘스트 현황을 업데이트하는 함수(퀘스트 타입 : 수집)
 
-                if (GUIManager_Total.Instance.m_GUI_Status.m_gPanel_DetailStatus.activeSelf == true)
+                if (GUIManager_Total.Instance.m_GUI_Status.m_gPanel_DetailStatus.activeSelf == true) // 상태창(능력치창 + 장비창 + 아이템 세트효과창)GUI가 활성화 되어 있을 경우
                 {
-                    GUIManager_Total.Instance.m_GUI_Status.UpdateStatus_SetItemEffect(CheckSetItemEffect_UI());
+                    GUIManager_Total.Instance.m_GUI_Status.UpdateStatus_SetItemEffect(CheckSetItemEffect_UI()); // 아이템 세트효과GUI(상태창GUI에 포함) 업데이트
                 }
 
-                m_ps_Status.CheckLogic();
+                m_ps_Status.CheckLogic(); // 능력치 논리(조건) 판단
 
                 return true;
             }
