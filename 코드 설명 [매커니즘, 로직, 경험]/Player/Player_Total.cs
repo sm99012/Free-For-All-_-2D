@@ -1469,7 +1469,7 @@ public class Player_Total : MonoBehaviour
                     // 획득할 아이템 종류 Dictionary <Key : 아이템 획득 순서, Value ; 아이템 코드>
                     // 획득할 아이템 종류에 해당하는 아이템 개수 Dictionary <Key : 아이템 획득 순서, Value ; 아이템 개수>
                     // 플레이어는 소비아이템(기프트) 사용 시 '아이템 획득 순서'에 따라 해당하는 '아이템 코드'의 아이템을 '아이템 개수'만큼 획득한다.
-                    Dictionary<int, int> Dictionary_GetItem_Equip = new Dictionary<int, int>();       // 획득할 장비아이템 종류(아이템 코드)
+                    Dictionary<int, int> Dictionary_GetItem_Equip = new Dictionary<int, int>();       // 획득할 장비아이템 종류(인벤토리 배열 번호)
                     Dictionary<int, int> Dictionary_GetItem_Equip_Count = new Dictionary<int, int>(); // 종류별 획득할 장비아이템 개수
                     Dictionary<int, int> Dictionary_GetItem_Use = new Dictionary<int, int>();         // 획득할 소비아이템 종류(아이템 코드)
                     Dictionary<int, int> Dictionary_GetItem_Use_Count = new Dictionary<int, int>();   // 종류별 획득할 소비아이템 개수
@@ -1477,10 +1477,10 @@ public class Player_Total : MonoBehaviour
                     Dictionary<int, int> Dictionary_GetItem_Etc_Count = new Dictionary<int, int>();   // 종류별 획득할 기타아이템 개수
                     int tempnumber;
 
-                    // 3_1. 소비아이템(기프트_고정형) 사용 시 아이템 획득(기프트 구성물품 전부를 획득한다.)
+                    // 3_1. 소비아이템(기프트_고정형(전체 확정 지급형)) 사용 시 아이템 획득(기프트 구성물품 전부를 획득한다.)
                     if (item.m_eItemUseGiftType == E_ITEM_USE_GIFT_TYPE.FIXEDBOX)
                     {
-                        if (CheckCondition_Item_Use_Gift(item, arynumber) == true) // 소비아이템(기프트) 사용 조건 판단(획득할 아이템 만큼 인벤토리에 여유가 있는지 판단)
+                        if (CheckCondition_Item_Use_Gift(item, arynumber) == true) // 소비아이템(기프트) 사용 조건(획득할 아이템 만큼 인벤토리에 여유가 있는지 판단)을 충족한 경우
                         {
                             // 장비아이템 획득
                             for (int i = 0; i < item.m_nDictionary_Gift_Item_Equip_Code.Count; i++) // 획득할 장비아이템 종류
@@ -1496,285 +1496,328 @@ public class Player_Total : MonoBehaviour
                                                         //    그래서 유니티 상의 오브젝트는 삭제하되 데이터는 보존한 후 사용한다.
                                                         //
                                     tempnumber = m_pi_Itemslot.Get_Item_Equip(itemequip); // 장비아이템 획득 함수
+                                    // 소비아이템(기프트) 사용으로인해 획득한 아이템 정보GUI 활성화를 위해 임시 저장소에 획득한 장비아이템, 개수 저장.
                                     if (j == 0)
                                     {
-                                        Dictionary_GetItem_Equip.Add(Dictionary_GetItem_Equip.Count, tempnumber);
-                                        Dictionary_GetItem_Equip_Count.Add(Dictionary_GetItem_Equip_Count.Count, item.m_nDictionary_Gift_Item_Equip_Count[i]);
+                                        Dictionary_GetItem_Equip.Add(Dictionary_GetItem_Equip.Count, tempnumber); // Dictionary <Key : 아이템 획득 순서, Value : 인벤토리 배열 번호>
+                                        Dictionary_GetItem_Equip_Count.Add(Dictionary_GetItem_Equip_Count.Count, item.m_nDictionary_Gift_Item_Equip_Count[i]); // Dictionary <Key : 아이템 획득 순서, Value : 종류별 획득할 장비아이템 개수>
                                     }
                                 }
                             }
-                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Use_Code.Count; i++)
+                            // 소비아이템 획득
+                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Use_Code.Count; i++) // 획득할 소비아이템 종류
                             {
-                                for (int j = 0; j < item.m_nDictionary_Gift_Item_Use_Count[i]; j++)
+                                for (int j = 0; j < item.m_nDictionary_Gift_Item_Use_Count[i]; j++) // 종류별 획득할 소비아이템 개수
                                 {
-                                    itemuse = ItemManager.instance.m_Dictionary_MonsterDrop_Use[item.m_nDictionary_Gift_Item_Use_Code[i]].CreateItem(ItemManager.instance.m_Dictionary_MonsterDrop_Use[item.m_nDictionary_Gift_Item_Use_Code[i]]);
-                                    Destroy(itemuse);
-                                    tempnumber = m_pi_Itemslot.Get_Item_Use(itemuse);
-                                    //if (Dictionary_GetItem_Use_Count.ContainsKey(Dictionary_GetItem_Use_Count.Count) == false)
-                                    //    Dictionary_GetItem_Use_Count.Add(Dictionary_GetItem_Use_Count.Count, 1);
-                                    //else
-                                    //    Dictionary_GetItem_Use_Count[Dictionary_GetItem_Use_Count.Count] += 1;
+                                    itemuse = ItemManager.instance.m_Dictionary_MonsterDrop_Use[item.m_nDictionary_Gift_Item_Use_Code[i]].CreateItem(ItemManager.instance.m_Dictionary_MonsterDrop_Use[item.m_nDictionary_Gift_Item_Use_Code[i]]); // 획득할 소비아이템 생성, 임시 변수에 저장
+                                    Destroy(itemuse); // 생성된 소비아이템 오브젝트 삭제
+                                                      // 
+                                                      // ※ 아이템은 생성 시 오브젝트 형태로 게임내에 생성 된다.
+                                                      //    그러나 소비아이템(기프트) 사용으로 획득할 아이템의 경우 해당 아이템의 데이터만 가지고 있으면 된다.(인벤토리에 바로 생성되기 때문)
+                                                      //    굳이 인게임 내에 오브젝트 형태로 존재 해 메모리를 낭비할 필요가 없는것이다.
+                                                      //    그래서 유니티 상의 오브젝트는 삭제하되 데이터는 보존한 후 사용한다.
+                                                      //
+                                    tempnumber = m_pi_Itemslot.Get_Item_Use(itemuse); // 소비아이템 획득 함수
+                                    // 소비아이템(기프트) 사용으로인해 획득한 아이템 정보GUI 활성화를 위해 임시 저장소에 획득한 소비아이템, 개수 저장.
                                     if (j == 0)
                                     {
-                                        Dictionary_GetItem_Use.Add(Dictionary_GetItem_Use.Count, tempnumber);
-                                        Dictionary_GetItem_Use_Count.Add(Dictionary_GetItem_Use_Count.Count, item.m_nDictionary_Gift_Item_Use_Count[i]);
+                                        Dictionary_GetItem_Use.Add(Dictionary_GetItem_Use.Count, tempnumber); // Dictionary <Key : 아이템 획득 순서, Value : 인벤토리 배열 번호>
+                                        Dictionary_GetItem_Use_Count.Add(Dictionary_GetItem_Use_Count.Count, item.m_nDictionary_Gift_Item_Use_Count[i]); // Dictionary <Key : 아이템 획득 순서, Value : 종류별 획득할 소비아이템 개수>
                                     }
                                 }
                             }
-                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Etc_Code.Count; i++)
+                            // 기타아이템 획득
+                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Etc_Code.Count; i++) // 획득할 기타아이템 종류
                             {
-                                for (int j = 0; j < item.m_nDictionary_Gift_Item_Etc_Count[i]; j++)
+                                for (int j = 0; j < item.m_nDictionary_Gift_Item_Etc_Count[i]; j++) // 종류별 획득할 기타아이템 개수
                                 {
-                                    itemetc = ItemManager.instance.m_Dictionary_MonsterDrop_Etc[item.m_nDictionary_Gift_Item_Etc_Code[i]].CreateItem(ItemManager.instance.m_Dictionary_MonsterDrop_Etc[item.m_nDictionary_Gift_Item_Etc_Code[i]]);
-                                    Destroy(itemetc);
-                                    tempnumber = m_pi_Itemslot.Get_Item_Etc(itemetc);
-                                    //if (Dictionary_GetItem_Etc_Count.ContainsKey(Dictionary_GetItem_Etc_Count.Count) == false)
-                                    //    Dictionary_GetItem_Etc_Count.Add(Dictionary_GetItem_Etc_Count.Count, 1);
-                                    //else
-                                    //    Dictionary_GetItem_Etc_Count[Dictionary_GetItem_Etc_Count.Count] += 1;
+                                    itemetc = ItemManager.instance.m_Dictionary_MonsterDrop_Etc[item.m_nDictionary_Gift_Item_Etc_Code[i]].CreateItem(ItemManager.instance.m_Dictionary_MonsterDrop_Etc[item.m_nDictionary_Gift_Item_Etc_Code[i]]); // 획득할 기타아이템 생성, 임시 변수에 저장
+                                    Destroy(itemetc); // 생성된 기타아이템 오브젝트 삭제
+                                                      // 
+                                                      // ※ 아이템은 생성 시 오브젝트 형태로 게임내에 생성 된다.
+                                                      //    그러나 소비아이템(기프트) 사용으로 획득할 아이템의 경우 해당 아이템의 데이터만 가지고 있으면 된다.(인벤토리에 바로 생성되기 때문)
+                                                      //    굳이 인게임 내에 오브젝트 형태로 존재 해 메모리를 낭비할 필요가 없는것이다.
+                                                      //    그래서 유니티 상의 오브젝트는 삭제하되 데이터는 보존한 후 사용한다.
+                                                      //
+                                    tempnumber = m_pi_Itemslot.Get_Item_Etc(itemetc); // 기타아이템 획득 함수
+                                    // 소비아이템(기프트) 사용으로인해 획득한 아이템 정보GUI 활성화를 위해 임시 저장소에 획득한 기타아이템, 개수 저장.
                                     if (j == 0)
                                     {
-                                        Dictionary_GetItem_Etc.Add(Dictionary_GetItem_Etc.Count, tempnumber);
-                                        Dictionary_GetItem_Etc_Count.Add(Dictionary_GetItem_Etc_Count.Count, item.m_nDictionary_Gift_Item_Etc_Count[i]);
+                                        Dictionary_GetItem_Etc.Add(Dictionary_GetItem_Etc.Count, tempnumber); // Dictionary <Key : 아이템 획득 순서, Value : 인벤토리 배열 번호>
+                                        Dictionary_GetItem_Etc_Count.Add(Dictionary_GetItem_Etc_Count.Count, item.m_nDictionary_Gift_Item_Etc_Count[i]); // Dictionary <Key : 아이템 획득 순서, Value : 종류별 획득할 기타아이템 개수>
                                     }
                                 }
                             }
 
-                            GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 사용.");
-
+                            GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 사용."); // 로그GUI에 사용한 소비아이템 정보 출력
                             GUIManager_Total.Instance.Display_GUI_Gift_GetItem_Info(Dictionary_GetItem_Equip, Dictionary_GetItem_Equip_Count,
                                                                                     Dictionary_GetItem_Use, Dictionary_GetItem_Use_Count,
-                                                                                    Dictionary_GetItem_Etc, Dictionary_GetItem_Etc_Count);
+                                                                                    Dictionary_GetItem_Etc, Dictionary_GetItem_Etc_Count); //소비아이템(기프트) 사용으로인해 획득한 아이템 정보GUI 활성화
 
                             return 0;
                         }
-                        else
+                        else // 소비아이템(기프트) 사용 조건(획득할 아이템 만큼 인벤토리에 여유가 있는지 판단)을 충족하지 못한 경우
                         {
-                            GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 사용 불가.");
+                            GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 사용 불가."); // 로그GUI에 사용하지 못한 소비아이템(기프트) 정보 출력
                             return 2;
                         }
                     }
+                    // 3_2. 소비아이템(기프트_랜덤 독립형(랜덤 지급 A타입 : 아이템 중복 획득 가능)) 사용 시 아이템 획득(기프트 구성물품중 정해진 개수만큼 랜덤으로 획득한다. 이때 아이템 중복 획득이 가능하다.)
                     else if (item.m_eItemUseGiftType == E_ITEM_USE_GIFT_TYPE.RANDOMBOX_INDEPENDENTTRIAL)
                     {
-                        if (CheckCondition_Item_Use_Gift(item, arynumber) == true)
+                        if (CheckCondition_Item_Use_Gift(item, arynumber) == true) // 소비아이템(기프트) 사용 조건(획득할 아이템 만큼 인벤토리에 여우가 있는지 판단)을 충족한 경우
                         {
-                            int pickcount = Random.Range(item.m_nRandomBox_PickCount_Min, item.m_nRandomBox_PickCount_Max + 1);
+                            int pickcount = Random.Range(item.m_nRandomBox_PickCount_Min, item.m_nRandomBox_PickCount_Max + 1); // 획득할 아이템 개수 결정
 
-                            List<int> ItemList = new List<int>();
-                            List<int> ItemCountList = new List<int>();
-                            List<int> ItemProbabilityList = new List<int>();
+                            // 소비아이템(기프트) 사용 시 획득할 수 있는 모든 아이템 정보의 임시 저장소(List)
+                            List<int> ItemList = new List<int>();            // 획득 가능한 모든 아이템(아이템 코드) 저장
+                            List<int> ItemCountList = new List<int>();       // 종류별(아이템 코드별) 획득할 아이템 개수
+                            List<int> ItemProbabilityList = new List<int>(); // 종류별(아이템 코드별) 아이템 획득(누적) 확률(범위)
+                                                                             //
+                                                                             // ※ 아이템 획득 확률은 순서대로 0 ~ 10000 사이의 값을 가진다.
+                                                                             //    현재 아이템의 획득 확률(누적) += 이전 아이템의 획득 확률(누적)
+                                                                             //    현재 아이템의 획득 확률(실제) = 현재 아이템의 획득 확률(누적) - 이전 아이템의 획득 확률(누적)
+                                                                             //    Ex) 순서 0, ItemList : 낡은 목검, ItemCountList : 1개, ItemProbabilityList : 7500 + 0 = 7500 (획득 확률 : (7500 - 0) / 10000 = 75%)
+                                                                             //        순서 1, ItemList : 평범한 목검, ItemCountList : 1개, ItemProbabilityList : 2000 + 7500 = 9500 (획득 확률 : (9500 - 7500) / 10000 = 20%)
+                                                                             //        순서 2, ItemList : 좀 깔쌈한 목검, ItemCountList : 1개, ItemProbabilityList : 500 + 9500 = 10000(획득 확률 : (10000 - 9500) / 10000 = 5%)
+                                                                             //
+                                                                             //    ItemProbabilityList의 제일 마지막 배열값은 반드시 10000이다. 아이템 획득 확률의 총 합은 10000
+                                                                             // 
+                            int num = 0; // 아이템 획득 확률(누적) 계산 관련 변수
 
-                            int num = 0;
-
-                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Equip_Code.Count; i++)
+                            // 획득 가능한 모든 아이템, 개수, 획득 확률(누적)을 임시 저장소에 저장한다.
+                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Equip_Code.Count; i++) // 획득 가능한 장비아이템 종류 만큼 반복
                             {
-                                ItemList.Add(item.m_nDictionary_Gift_Item_Equip_Code[i]);
-                                ItemCountList.Add(item.m_nDictionary_Gift_Item_Equip_Count[i]);
-                                if (ItemProbabilityList.Count == 0)
+                                ItemList.Add(item.m_nDictionary_Gift_Item_Equip_Code[i]); // 임시 저장소에 획득 가능한 장비아이템(아이템 코드) 저장
+                                ItemCountList.Add(item.m_nDictionary_Gift_Item_Equip_Count[i]); // 임시 저장소에 획득 가능한 장비아이템 개수 저장
+                                // 임시 저장소에 장비아이템 획득 확률(누적) 저장
+                                if (ItemProbabilityList.Count == 0) // 종류별(아이템 코드별) 누적 아이템 획득 확률 최초 저장
                                 {
-                                    ItemProbabilityList.Add(item.m_nDictionary_Gift_Item_Equip_Probability[i]);
+                                    ItemProbabilityList.Add(item.m_nDictionary_Gift_Item_Equip_Probability[i]); // 현재 아이템의 획득 확률 =  현재 아이템의 획득 확률
                                 }
-                                else
+                                else // 종류별(아이템 코드별) 아이템 획득 확률 누적 저장
                                 {
-                                    ItemProbabilityList.Add(ItemProbabilityList[num - 1] + item.m_nDictionary_Gift_Item_Equip_Probability[i]);
+                                    ItemProbabilityList.Add(ItemProbabilityList[num - 1] + item.m_nDictionary_Gift_Item_Equip_Probability[i]); // 현재 아이템의 획득 확률 += 이전 아이템의 획득 확률
                                 }
                                 num += 1;
                             }
-                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Use_Code.Count; i++)
+                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Use_Code.Count; i++) // 획득 가능한 소비아이템 종류 만큼 반복
                             {
-                                ItemList.Add(item.m_nDictionary_Gift_Item_Use_Code[i]);
-                                ItemCountList.Add(item.m_nDictionary_Gift_Item_Use_Count[i]);
-                                if (ItemProbabilityList.Count == 0)
+                                ItemList.Add(item.m_nDictionary_Gift_Item_Use_Code[i]); // 임시 저장소에 획득 가능한 소비아이템(아이템 코드) 저장
+                                ItemCountList.Add(item.m_nDictionary_Gift_Item_Use_Count[i]); // 임시 저장소에 획득 가능한 소비아이템 개수 저장
+                                // 임시 저장소에 소비아이템 획득 확률(누적) 저장
+                                if (ItemProbabilityList.Count == 0) // 종류별(아이템 코드별) 누적 아이템 획득 확률 최초 저장
                                 {
-                                    ItemProbabilityList.Add(item.m_nDictionary_Gift_Item_Use_Probability[i]);
+                                    ItemProbabilityList.Add(item.m_nDictionary_Gift_Item_Use_Probability[i]); // 현재 아이템의 획득 확률 =  현재 아이템의 획득 확률
                                 }
-                                else
+                                else // 종류별(아이템 코드별) 아이템 획득 확률 누적 저장
                                 {
-                                    ItemProbabilityList.Add(ItemProbabilityList[num - 1] + item.m_nDictionary_Gift_Item_Use_Probability[i]);
+                                    ItemProbabilityList.Add(ItemProbabilityList[num - 1] + item.m_nDictionary_Gift_Item_Use_Probability[i]); // 현재 아이템의 획득 확률 += 이전 아이템의 획득 확률
                                 }
                                 num += 1;
                             }
-                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Etc_Code.Count; i++)
+                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Etc_Code.Count; i++) // 획득 가능한 기타아이템 종류 만큼 반복
                             {
-                                ItemList.Add(item.m_nDictionary_Gift_Item_Etc_Code[i]);
-                                ItemCountList.Add(item.m_nDictionary_Gift_Item_Etc_Count[i]);
-                                if (ItemProbabilityList.Count == 0)
+                                ItemList.Add(item.m_nDictionary_Gift_Item_Etc_Code[i]); // 임시 저장소에 획득 가능한 기타아이템(아이템 코드) 저장
+                                ItemCountList.Add(item.m_nDictionary_Gift_Item_Etc_Count[i]); // 임시 저장소에 획득 가능한 기타아이템 개수 저장
+                                if (ItemProbabilityList.Count == 0) // 종류별(아이템 코드별) 누적 아이템 획득 확률 최초 저장
                                 {
-                                    ItemProbabilityList.Add(item.m_nDictionary_Gift_Item_Etc_Probability[i]);
+                                    ItemProbabilityList.Add(item.m_nDictionary_Gift_Item_Etc_Probability[i]); // 현재 아이템의 획득 확률 =  현재 아이템의 획득 확률
                                 }
-                                else
+                                else // 종류별(아이템 코드별) 아이템 획득 확률 누적 저장
                                 {
-                                    ItemProbabilityList.Add(ItemProbabilityList[num - 1] + item.m_nDictionary_Gift_Item_Etc_Probability[i]);
+                                    ItemProbabilityList.Add(ItemProbabilityList[num - 1] + item.m_nDictionary_Gift_Item_Etc_Probability[i]); // 현재 아이템의 획득 확률 += 이전 아이템의 획득 확률
                                 }
                                 num += 1;
                             }
 
-                            for (int i = 0; i < pickcount; i++)
+                            // 위의 임시 저장소를 이용해 획득할 아이템 선별
+                            for (int i = 0; i < pickcount; i++) // 획득할 아이템 개수 만큼 반복
                             {
-                                int randomnum = Random.Range(1, 10001);
-                                int arynum = 0;
-                                for (int j = 0; j < ItemList.Count; j++)
+                                int randomnum = Random.Range(1, 10001); // 획득할 아이템의 확률 범위(0 ~ 10000)
+                                int arynum = 0; // 획득할 아이템 종류(아이템 코드)
+                                for (int j = 0; j < ItemList.Count; j++) // 획득 가능한 모든 아이템(아이템 코드) 개수 만큼 반복
                                 {
-                                    if (ItemProbabilityList[j] < randomnum)
+                                    if (ItemProbabilityList[j] < randomnum) // 종류별(아이템 코드별) 아이템 획득 확률(누적) 범위에 randomnum이 포함되지 않은 경우
                                     {
                                         continue;
                                     }
-                                    else
+                                    else // 종류별(아이템 코드별) 아이템 획득 확률(누적) 범위에 randomnum이 포함된 경우
                                     {
                                         arynum = j;
-                                        break;
+                                        break; // 해당 아이템을 획득한다.
                                     }
                                 }
 
-                                //Debug.Log("아이템 획득: " + ItemList[arynum] + " / " + ItemProbabilityList[arynum]);
-                                if (ItemList[arynum] / 1000 >= 1 && ItemList[arynum] / 1000 <= 7)
+                                // 아이템 분류(장비아이템, 소비아이템, 기타아이템)별 코드에 따라 아이템 획득
+                                if (ItemList[arynum] / 1000 >= 1 && ItemList[arynum] / 1000 <= 7) // 장비아이템 획득
                                 {
-                                    for (int j = 0; j < ItemCountList[arynum]; j++)
+                                    for (int j = 0; j < ItemCountList[arynum]; j++) // 종류별(아이템 코드별) 획득할 아이템 개수 만큼 반복(획득)
                                     {
-                                        itemequip = ItemManager.instance.m_Dictionary_MonsterDrop_Equip[ItemList[arynum]].CreateItem(ItemManager.instance.m_Dictionary_MonsterDrop_Equip[ItemList[arynum]]);
-                                        Destroy(itemequip);
-                                        tempnumber = m_pi_Itemslot.Get_Item_Equip(itemequip);
-                                        //Dictionary_GetItem_Equip.Add(Dictionary_GetItem_Equip.Count, m_pi_Itemslot.GetItem_Equip(itemequip));
-                                        //if (Dictionary_GetItem_Equip_Count.ContainsKey(Dictionary_GetItem_Equip_Count.Count) == false)
-                                        //    Dictionary_GetItem_Equip_Count.Add(Dictionary_GetItem_Equip_Count.Count, 1);
-                                        //else
-                                        //    Dictionary_GetItem_Equip_Count[Dictionary_GetItem_Equip_Count.Count] += 1;
+                                        itemequip = ItemManager.instance.m_Dictionary_MonsterDrop_Equip[ItemList[arynum]].CreateItem(ItemManager.instance.m_Dictionary_MonsterDrop_Equip[ItemList[arynum]]); // 획득할 장비아이템 생성, 임시 변수에 저장
+                                        Destroy(itemequip); // 생성된 장비아이템 오브젝트 삭제
+                                                            // 
+                                                            // ※ 아이템은 생성 시 오브젝트 형태로 게임내에 생성 된다.
+                                                            //    그러나 소비아이템(기프트) 사용으로 획득할 아이템의 경우 해당 아이템의 데이터만 가지고 있으면 된다.(인벤토리에 바로 생성되기 때문)
+                                                            //    굳이 인게임 내에 오브젝트 형태로 존재 해 메모리를 낭비할 필요가 없는것이다.
+                                                            //    그래서 유니티 상의 오브젝트는 삭제하되 데이터는 보존한 후 사용한다.
+                                                            //
+                                        tempnumber = m_pi_Itemslot.Get_Item_Equip(itemequip); // 장비아이템 획득 함수
+                                        // 소비아이템(기프트) 사용으로인해 획득한 아이템 정보GUI 활성화를 위해 임시 저장소에 획득한 장비아이템, 개수 저장.
                                         if (j == 0)
                                         {
-                                            Dictionary_GetItem_Equip.Add(Dictionary_GetItem_Equip.Count, tempnumber);
-                                            Dictionary_GetItem_Equip_Count.Add(Dictionary_GetItem_Equip_Count.Count, item.m_nDictionary_Gift_Item_Equip_Count[i]);
+                                            Dictionary_GetItem_Equip.Add(Dictionary_GetItem_Equip.Count, tempnumber); // Dictionary <Key : 아이템 획득 순서, Value : 인벤토리 배열 번호>
+                                            Dictionary_GetItem_Equip_Count.Add(Dictionary_GetItem_Equip_Count.Count, item.m_nDictionary_Gift_Item_Equip_Count[i]); // Dictionary <Key : 아이템 획득 순서, Value : 종류별(아이템 코드별) 획득할 장비아이템 개수>
                                         }
                                     }
                                 }
-                                else if (ItemList[arynum] / 1000 >= 8 && ItemList[arynum] / 1000 <= 12)
+                                else if (ItemList[arynum] / 1000 >= 8 && ItemList[arynum] / 1000 <= 12) // 소비아이템 획득
                                 {
-                                    for (int j = 0; j < ItemCountList[arynum]; j++)
+                                    for (int j = 0; j < ItemCountList[arynum]; j++) // 종류별(아이템 코드별) 획득할 아이템 개수 만큼 반복(획득)
                                     {
-                                        itemuse = ItemManager.instance.m_Dictionary_MonsterDrop_Use[ItemList[arynum]].CreateItem(ItemManager.instance.m_Dictionary_MonsterDrop_Use[ItemList[arynum]]);
-                                        Destroy(itemuse);
-                                        tempnumber = m_pi_Itemslot.Get_Item_Use(itemuse);
-                                        //Dictionary_GetItem_Use.Add(Dictionary_GetItem_Use.Count, m_pi_Itemslot.GetItem_Use(itemuse));
-                                        //if (Dictionary_GetItem_Use_Count.ContainsKey(Dictionary_GetItem_Use_Count.Count) == false)
-                                        //    Dictionary_GetItem_Use_Count.Add(Dictionary_GetItem_Use_Count.Count, 1);
-                                        //else
-                                        //    Dictionary_GetItem_Use_Count[Dictionary_GetItem_Use_Count.Count] += 1;
+                                        itemuse = ItemManager.instance.m_Dictionary_MonsterDrop_Use[ItemList[arynum]].CreateItem(ItemManager.instance.m_Dictionary_MonsterDrop_Use[ItemList[arynum]]);; // 획득할 소비아이템 생성, 임시 변수에 저장
+                                        Destroy(itemuse); // 생성된 소비아이템 오브젝트 삭제
+                                                          // 
+                                                          // ※ 아이템은 생성 시 오브젝트 형태로 게임내에 생성 된다.
+                                                          //    그러나 소비아이템(기프트) 사용으로 획득할 아이템의 경우 해당 아이템의 데이터만 가지고 있으면 된다.(인벤토리에 바로 생성되기 때문)
+                                                          //    굳이 인게임 내에 오브젝트 형태로 존재 해 메모리를 낭비할 필요가 없는것이다.
+                                                          //    그래서 유니티 상의 오브젝트는 삭제하되 데이터는 보존한 후 사용한다.
+                                                          //
+                                        tempnumber = m_pi_Itemslot.Get_Item_Use(itemuse); // 소비아이템 획득 함수
+                                        // 소비아이템(기프트) 사용으로인해 획득한 아이템 정보GUI 활성화를 위해 임시 저장소에 획득한 소비아이템, 개수 저장.
                                         if (j == 0)
                                         {
-                                            Dictionary_GetItem_Use.Add(Dictionary_GetItem_Use.Count, tempnumber);
-                                            Dictionary_GetItem_Use_Count.Add(Dictionary_GetItem_Use_Count.Count, item.m_nDictionary_Gift_Item_Use_Count[i]);
+                                            Dictionary_GetItem_Use.Add(Dictionary_GetItem_Use.Count, tempnumber); // Dictionary <Key : 아이템 획득 순서, Value : 인벤토리 배열 번호>
+                                            Dictionary_GetItem_Use_Count.Add(Dictionary_GetItem_Use_Count.Count, item.m_nDictionary_Gift_Item_Use_Count[i]); // Dictionary <Key : 아이템 획득 순서, Value : 종류별(아이템 코드별) 획득할 소비아이템 개수>
                                         }
                                     }
                                 }
-                                else if (ItemList[arynum] / 1000 == 0)
+                                else if (ItemList[arynum] / 1000 == 0) // 기타아이템 획득
                                 {
-                                    for (int j = 0; j < ItemCountList[arynum]; j++)
+                                    for (int j = 0; j < ItemCountList[arynum]; j++) // 종류별(아이템 코드별) 획득할 아이템 개수 만큼 반복(획득)
                                     {
-                                        itemetc = ItemManager.instance.m_Dictionary_MonsterDrop_Etc[ItemList[arynum]].CreateItem(ItemManager.instance.m_Dictionary_MonsterDrop_Etc[ItemList[arynum]]);
-                                        Destroy(itemetc);
-                                        tempnumber = m_pi_Itemslot.Get_Item_Etc(itemetc);
-                                        //Dictionary_GetItem_Etc.Add(Dictionary_GetItem_Etc.Count, m_pi_Itemslot.GetItem_Etc(itemetc));
-                                        //if (Dictionary_GetItem_Etc_Count.ContainsKey(Dictionary_GetItem_Etc_Count.Count) == false)
-                                        //    Dictionary_GetItem_Etc_Count.Add(Dictionary_GetItem_Etc_Count.Count, 1);
-                                        //else
-                                        //    Dictionary_GetItem_Etc_Count[Dictionary_GetItem_Etc_Count.Count] += 1;
+                                        itemetc = ItemManager.instance.m_Dictionary_MonsterDrop_Etc[ItemList[arynum]].CreateItem(ItemManager.instance.m_Dictionary_MonsterDrop_Etc[ItemList[arynum]]);; // 획득할 기타아이템 생성, 임시 변수에 저장
+                                        Destroy(itemetc); // 생성된 기타아이템 오브젝트 삭제
+                                                          // 
+                                                          // ※ 아이템은 생성 시 오브젝트 형태로 게임내에 생성 된다.
+                                                          //    그러나 소비아이템(기프트) 사용으로 획득할 아이템의 경우 해당 아이템의 데이터만 가지고 있으면 된다.(인벤토리에 바로 생성되기 때문)
+                                                          //    굳이 인게임 내에 오브젝트 형태로 존재 해 메모리를 낭비할 필요가 없는것이다.
+                                                          //    그래서 유니티 상의 오브젝트는 삭제하되 데이터는 보존한 후 사용한다.
+                                                          //
+                                        tempnumber = m_pi_Itemslot.Get_Item_Etc(itemetc); // 기타아이템 획득 함수
+                                        // 소비아이템(기프트) 사용으로인해 획득한 아이템 정보GUI 활성화를 위해 임시 저장소에 획득한 기타아이템, 개수 저장.
                                         if (j == 0)
                                         {
-                                            Dictionary_GetItem_Etc.Add(Dictionary_GetItem_Etc.Count, tempnumber);
-                                            Dictionary_GetItem_Etc_Count.Add(Dictionary_GetItem_Etc_Count.Count, item.m_nDictionary_Gift_Item_Etc_Count[i]);
+                                            Dictionary_GetItem_Etc.Add(Dictionary_GetItem_Etc.Count, tempnumber); // Dictionary <Key : 아이템 획득 순서, Value : 인벤토리 배열 번호>
+                                            Dictionary_GetItem_Etc_Count.Add(Dictionary_GetItem_Etc_Count.Count, item.m_nDictionary_Gift_Item_Etc_Count[i]); // Dictionary <Key : 아이템 획득 순서, Value : 종류별(아이템 코드별) 획득할 기타아이템 개수>
                                         }
                                     }
                                 }
                             }
-                            GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 사용.");
-
+                            
+                            GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 사용."); // 로그GUI에 사용한 소비아이템 정보 출력
                             GUIManager_Total.Instance.Display_GUI_Gift_GetItem_Info(Dictionary_GetItem_Equip, Dictionary_GetItem_Equip_Count,
                                                                  Dictionary_GetItem_Use, Dictionary_GetItem_Use_Count,
-                                                                 Dictionary_GetItem_Etc, Dictionary_GetItem_Etc_Count);
+                                                                 Dictionary_GetItem_Etc, Dictionary_GetItem_Etc_Count); // 소비아이템(기프트) 사용으로인해 획득한 아이템 정보GUI 활성화
 
                             return 0;
                         }
-                        else
+                        else // 소비아이템(기프트) 사용 조건(획득할 아이템 만큼 인벤토리에 여유가 있는지 판단)을 충족하지 못한 경우
                         {
-                            GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 사용 불가.");
+                            GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 사용 불가."); // 로그GUI에 사용하지 못한 소비아이템(기프트) 정보 출력
                             return 2;
                         }
                     }
+                    // 3_3. 소비아이템(기프트_랜덤 종속형(랜덤 지급 B타입 : 아이템 중복 획득 불가능)) 사용 시 아이템 획득(기프트 구성물품중 정해진 개수만큼 랜덤으로 획득한다. 이때 아이템 중복 획득이 불가능하다.)
                     else if (item.m_eItemUseGiftType == E_ITEM_USE_GIFT_TYPE.RANDOMBOX_DEPENDENTTRIAL)
                     {
-                        if (CheckCondition_Item_Use_Gift(item, arynumber) == true)
+                        if (CheckCondition_Item_Use_Gift(item, arynumber) == true) // 소비아이템(기프트) 사용 조건(획득할 아이템 만큼 인벤토리에 여유가 있는지 판단)을 충족한 경우
                         {
-                            int pickcount = Random.Range(item.m_nRandomBox_PickCount_Min, item.m_nRandomBox_PickCount_Max + 1);
+                            int pickcount = Random.Range(item.m_nRandomBox_PickCount_Min, item.m_nRandomBox_PickCount_Max + 1); // 획득할 아이템 개수 결정
 
-                            List<int> ItemList = new List<int>();
-                            List<int> ItemCountList = new List<int>();
-                            List<int> ItemProbabilityList = new List<int>();
+                            // 소비아이템(기프트) 사용 시 획득할 수 있는 모든 아이템 정보의 임시 저장소(List)
+                            List<int> ItemList = new List<int>();            // 획득 가능한 모든 아이템(아이템 코드) 저장
+                            List<int> ItemCountList = new List<int>();       // 종류별(아이템 코드별) 획득할 아이템 개수
+                            List<int> ItemProbabilityList = new List<int>(); // 종류별(아이템 코드별) 아이템 획득(누적) 확률(범위)
+                                                                             //
+                                                                             // ※ 아이템 획득 확률은 순서대로 0 ~ 10000 사이의 값을 가진다.
+                                                                             //    현재 아이템의 획득 확률(누적) += 이전 아이템의 획득 확률(누적)
+                                                                             //    현재 아이템의 획득 확률(실제) = 현재 아이템의 획득 확률(누적) - 이전 아이템의 획득 확률(누적)
+                                                                             //    Ex) 순서 0, ItemList : 낡은 목검, ItemCountList : 1개, ItemProbabilityList : 7500 + 0 = 7500 (획득 확률 : (7500 - 0) / 10000 = 75%)
+                                                                             //        순서 1, ItemList : 평범한 목검, ItemCountList : 1개, ItemProbabilityList : 2000 + 7500 = 9500 (획득 확률 : (9500 - 7500) / 10000 = 20%)
+                                                                             //        순서 2, ItemList : 좀 깔쌈한 목검, ItemCountList : 1개, ItemProbabilityList : 500 + 9500 = 10000(획득 확률 : (10000 - 9500) / 10000 = 5%)
+                                                                             //
+                                                                             //    ItemProbabilityList의 제일 마지막 배열값은 반드시 10000이다. 아이템 획득 확률의 총 합은 10000
+                                                                             // 
 
-                            int num = 0;
+                            int num = 0; // 아이템 획득 확률(누적) 계산 관련 변수
 
-                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Equip_Code.Count; i++)
+                            // 획득 가능한 모든 아이템, 개수, 획득 확률(누적)을 임시 저장소에 저장한다.
+                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Equip_Code.Count; i++) // 획득 가능한 장비아이템 종류 만큼 반복
                             {
-                                ItemList.Add(item.m_nDictionary_Gift_Item_Equip_Code[i]);
-                                ItemCountList.Add(item.m_nDictionary_Gift_Item_Equip_Count[i]);
-                                if (ItemProbabilityList.Count == 0)
+                                ItemList.Add(item.m_nDictionary_Gift_Item_Equip_Code[i]); // 임시 저장소에 획득 가능한 장비아이템(아이템 코드) 저장
+                                ItemCountList.Add(item.m_nDictionary_Gift_Item_Equip_Count[i]); // 임시 저장소에 획득 가능한 장비아이템 개수 저장
+                                // 임시 저장소에 장비아이템 획득 확률(누적) 저장
+                                if (ItemProbabilityList.Count == 0) // 종류별(아이템 코드별) 누적 아이템 획득 확률 최초 저장
                                 {
-                                    ItemProbabilityList.Add(item.m_nDictionary_Gift_Item_Equip_Probability[i]);
+                                    ItemProbabilityList.Add(item.m_nDictionary_Gift_Item_Equip_Probability[i]); // 현재 아이템의 획득 확률 =  현재 아이템의 획득 확률
                                 }
-                                else
+                                else // 종류별(아이템 코드별) 아이템 획득 확률 누적 저장
                                 {
-                                    ItemProbabilityList.Add(ItemProbabilityList[num - 1] + item.m_nDictionary_Gift_Item_Equip_Probability[i]);
+                                    ItemProbabilityList.Add(ItemProbabilityList[num - 1] + item.m_nDictionary_Gift_Item_Equip_Probability[i]); // 현재 아이템의 획득 확률 += 이전 아이템의 획득 확률
                                 }
                                 num += 1;
                             }
-                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Use_Code.Count; i++)
+                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Use_Code.Count; i++) // 획득 가능한 소비아이템 종류 만큼 반복
                             {
-                                ItemList.Add(item.m_nDictionary_Gift_Item_Use_Code[i]);
-                                ItemCountList.Add(item.m_nDictionary_Gift_Item_Use_Count[i]);
-                                if (ItemProbabilityList.Count == 0)
+                                ItemList.Add(item.m_nDictionary_Gift_Item_Use_Code[i]); // 임시 저장소에 획득 가능한 소비아이템(아이템 코드) 저장
+                                ItemCountList.Add(item.m_nDictionary_Gift_Item_Use_Count[i]); // 임시 저장소에 획득 가능한 소비아이템 개수 저장
+                                if (ItemProbabilityList.Count == 0) // 종류별(아이템 코드별) 누적 아이템 획득 확률 최초 저장
                                 {
-                                    ItemProbabilityList.Add(item.m_nDictionary_Gift_Item_Use_Probability[i]);
+                                    ItemProbabilityList.Add(item.m_nDictionary_Gift_Item_Use_Probability[i]); // 현재 아이템의 획득 확률 =  현재 아이템의 획득 확률
                                 }
-                                else
+                                else // 종류별(아이템 코드별) 아이템 획득 확률 누적 저장
                                 {
-                                    ItemProbabilityList.Add(ItemProbabilityList[num - 1] + item.m_nDictionary_Gift_Item_Use_Probability[i]);
+                                    ItemProbabilityList.Add(ItemProbabilityList[num - 1] + item.m_nDictionary_Gift_Item_Use_Probability[i]); // 현재 아이템의 획득 확률 += 이전 아이템의 획득 확률
                                 }
                                 num += 1;
                             }
-                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Etc_Code.Count; i++)
+                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Etc_Code.Count; i++) // 획득 가능한 기타아이템 종류 만큼 반복
                             {
-                                ItemList.Add(item.m_nDictionary_Gift_Item_Etc_Code[i]);
-                                ItemCountList.Add(item.m_nDictionary_Gift_Item_Etc_Count[i]);
-                                if (ItemProbabilityList.Count == 0)
+                                ItemList.Add(item.m_nDictionary_Gift_Item_Etc_Code[i]); // 임시 저장소에 획득 가능한 기타아이템(아이템 코드) 저장
+                                ItemCountList.Add(item.m_nDictionary_Gift_Item_Etc_Count[i]); // 임시 저장소에 획득 가능한 기타아이템 개수 저장
+                                if (ItemProbabilityList.Count == 0) // 종류별(아이템 코드별) 누적 아이템 획득 확률 최초 저장
                                 {
-                                    ItemProbabilityList.Add(item.m_nDictionary_Gift_Item_Etc_Probability[i]);
+                                    ItemProbabilityList.Add(item.m_nDictionary_Gift_Item_Etc_Probability[i]); // 현재 아이템의 획득 확률 =  현재 아이템의 획득 확률
                                 }
-                                else
+                                else // 종류별(아이템 코드별) 아이템 획득 확률 누적 저장
                                 {
-                                    ItemProbabilityList.Add(ItemProbabilityList[num - 1] + item.m_nDictionary_Gift_Item_Etc_Probability[i]);
+                                    ItemProbabilityList.Add(ItemProbabilityList[num - 1] + item.m_nDictionary_Gift_Item_Etc_Probability[i]); // 현재 아이템의 획득 확률 += 이전 아이템의 획득 확률
                                 }
                                 num += 1;
                             }
 
-                            List<int> List_Already_get = new List<int>();
-                            Debug.Log(pickcount + " 번 아이템을 획득합니다.");
-                            for (int i = 0; i < pickcount; i++)
+                            // 위의 임시 저장소를 이용해 획득할 아이템 선별
+                            List<int> List_Already_get = new List<int>(); // 이미 획득한 아이템 정보(아이템 코드). 아이템 중복 획득 불가능을 위해
+                            for (int i = 0; i < pickcount; i++) // 획득할 아이템 개수 만큼 반복
                             {
-                                int randomnum = Random.Range(1, 10001);
-                                int arynum = -1;
-                                for (int j = 0; j < ItemList.Count;)
+                                int randomnum = Random.Range(1, 10001); // 획득할 아이템의 확률 범위(0 ~ 10000)
+                                int arynum = -1; // 획득할 아이템 종류(아이템 코드)
+                                for (int j = 0; j < ItemList.Count;) // 획득 가능한 모든 아이템(아이템 코드) 개수 만큼 반복
                                 {
-                                    if (ItemProbabilityList[j] < randomnum)
+                                    if (ItemProbabilityList[j] < randomnum) // 종류별(아이템 코드별) 아이템 획득 확률(누적) 범위에 randomnum이 포함되지 않은 경우
                                     {
                                         j++;
                                         continue;
                                     }
-                                    else
+                                    else // 종류별(아이템 코드별) 아이템 획득 확률(누적) 범위에 randomnum이 포함된 경우
                                     {
-                                        if (List_Already_get.Contains(j) == false)
+                                        if (List_Already_get.Contains(j) == false) // 해당 아이템을 처음 획득한 경우
                                         {
                                             arynum = j;
-                                            break;
+                                            break; // 해당 아이템을 획득한다.
                                         }
-                                        else
+                                        else // 해당 아이템을 처음 획득하지 않은 경우(해당 아이템을 이미 획득한 경우. 중복)
                                         {
                                             randomnum = Random.Range(1, 10001);
                                             j = 0;
@@ -1782,78 +1825,83 @@ public class Player_Total : MonoBehaviour
                                     }
                                 }
 
-                                Debug.Log("아이템 획득: " + ItemList[arynum] + " / " + ItemCountList[arynum] + " / " + ItemProbabilityList[arynum]);
-                                if (ItemList[arynum] / 1000 >= 1 && ItemList[arynum] / 1000 <= 7)
+                                // 아이템 분류(장비아이템, 소비아이템, 기타아이템)별 코드에 따라 아이템 획득
+                                if (ItemList[arynum] / 1000 >= 1 && ItemList[arynum] / 1000 <= 7) // 장비아이템 획득
                                 {
-                                    for (int j = 0; j < ItemCountList[arynum]; j++)
+                                    for (int j = 0; j < ItemCountList[arynum]; j++) // 종류별(아이템 코드별) 획득할 아이템 개수 만큼 반복(획득)
                                     {
-                                        itemequip = ItemManager.instance.m_Dictionary_MonsterDrop_Equip[ItemList[arynum]].CreateItem(ItemManager.instance.m_Dictionary_MonsterDrop_Equip[ItemList[arynum]]);
-                                        Destroy(itemequip);
-                                        tempnumber = m_pi_Itemslot.Get_Item_Equip(itemequip);
-                                        //Dictionary_GetItem_Equip.Add(Dictionary_GetItem_Equip.Count, m_pi_Itemslot.GetItem_Equip(itemequip));
-                                        //if (Dictionary_GetItem_Equip_Count.ContainsKey(Dictionary_GetItem_Equip_Count.Count) == false)
-                                        //    Dictionary_GetItem_Equip_Count.Add(Dictionary_GetItem_Equip_Count.Count, 1);
-                                        //else
-                                        //    Dictionary_GetItem_Equip_Count[Dictionary_GetItem_Equip_Count.Count] += 1;
+                                        itemequip = ItemManager.instance.m_Dictionary_MonsterDrop_Equip[ItemList[arynum]].CreateItem(ItemManager.instance.m_Dictionary_MonsterDrop_Equip[ItemList[arynum]]); // 획득할 장비아이템 생성, 임시 변수에 저장
+                                        Destroy(itemequip); // 생성된 장비아이템 오브젝트 삭제
+                                                            // 
+                                                            // ※ 아이템은 생성 시 오브젝트 형태로 게임내에 생성 된다.
+                                                            //    그러나 소비아이템(기프트) 사용으로 획득할 아이템의 경우 해당 아이템의 데이터만 가지고 있으면 된다.(인벤토리에 바로 생성되기 때문)
+                                                            //    굳이 인게임 내에 오브젝트 형태로 존재 해 메모리를 낭비할 필요가 없는것이다.
+                                                            //    그래서 유니티 상의 오브젝트는 삭제하되 데이터는 보존한 후 사용한다.
+                                                            //
+                                        tempnumber = m_pi_Itemslot.Get_Item_Equip(itemequip); // 장비아이템 획득 함수
+                                        // 소비아이템(기프트) 사용으로인해 획득한 아이템 정보GUI 활성화를 위해 임시 저장소에 획득한 장비아이템, 개수 저장.
                                         if (j == 0)
                                         {
-                                            Dictionary_GetItem_Equip.Add(Dictionary_GetItem_Equip.Count, tempnumber);
-                                            Dictionary_GetItem_Equip_Count.Add(Dictionary_GetItem_Equip_Count.Count, ItemCountList[arynum]);
+                                            Dictionary_GetItem_Equip.Add(Dictionary_GetItem_Equip.Count, tempnumber); // Dictionary <Key : 아이템 획득 순서, Value : 인벤토리 배열 번호>
+                                            Dictionary_GetItem_Equip_Count.Add(Dictionary_GetItem_Equip_Count.Count, ItemCountList[arynum]); // Dictionary <Key : 아이템 획득 순서, Value : 종류별(아이템 코드별) 획득할 장비아이템 개수>
                                         }
                                     }
                                 }
-                                else if (ItemList[arynum] / 1000 >= 8 && ItemList[arynum] / 1000 <= 12)
+                                else if (ItemList[arynum] / 1000 >= 8 && ItemList[arynum] / 1000 <= 12) // 소비아이템 획득
                                 {
                                     for (int j = 0; j < ItemCountList[arynum]; j++)
                                     {
-                                        itemuse = ItemManager.instance.m_Dictionary_MonsterDrop_Use[ItemList[arynum]].CreateItem(ItemManager.instance.m_Dictionary_MonsterDrop_Use[ItemList[arynum]]);
-                                        Destroy(itemuse);
-                                        tempnumber = m_pi_Itemslot.Get_Item_Use(itemuse);
-                                        //Dictionary_GetItem_Use.Add(Dictionary_GetItem_Use.Count, m_pi_Itemslot.GetItem_Use(itemuse));
-                                        //if (Dictionary_GetItem_Use_Count.ContainsKey(Dictionary_GetItem_Use_Count.Count) == false)
-                                        //    Dictionary_GetItem_Use_Count.Add(Dictionary_GetItem_Use_Count.Count, 1);
-                                        //else
-                                        //    Dictionary_GetItem_Use_Count[Dictionary_GetItem_Use_Count.Count] += 1;
+                                        itemuse = ItemManager.instance.m_Dictionary_MonsterDrop_Use[ItemList[arynum]].CreateItem(ItemManager.instance.m_Dictionary_MonsterDrop_Use[ItemList[arynum]]); // 획득할 소비아이템 생성, 임시 변수에 저장
+                                        Destroy(itemuse); // 생성된 소비아이템 오브젝트 삭제
+                                                          // 
+                                                          // ※ 아이템은 생성 시 오브젝트 형태로 게임내에 생성 된다.
+                                                          //    그러나 소비아이템(기프트) 사용으로 획득할 아이템의 경우 해당 아이템의 데이터만 가지고 있으면 된다.(인벤토리에 바로 생성되기 때문)
+                                                          //    굳이 인게임 내에 오브젝트 형태로 존재 해 메모리를 낭비할 필요가 없는것이다.
+                                                          //    그래서 유니티 상의 오브젝트는 삭제하되 데이터는 보존한 후 사용한다.
+                                                          //
+                                        tempnumber = m_pi_Itemslot.Get_Item_Use(itemuse); // 소비아이템 획득 함수
+                                        // 소비아이템(기프트) 사용으로인해 획득한 아이템 정보GUI 활성화를 위해 임시 저장소에 획득한 소비아이템, 개수 저장.
                                         if (j == 0)
                                         {
-                                            Dictionary_GetItem_Use.Add(Dictionary_GetItem_Use.Count, tempnumber);
-                                            Dictionary_GetItem_Use_Count.Add(Dictionary_GetItem_Use_Count.Count, ItemCountList[arynum]);
+                                            Dictionary_GetItem_Use.Add(Dictionary_GetItem_Use.Count, tempnumber); // Dictionary <Key : 아이템 획득 순서, Value : 인벤토리 배열 번호>
+                                            Dictionary_GetItem_Use_Count.Add(Dictionary_GetItem_Use_Count.Count, ItemCountList[arynum]); // Dictionary <Key : 아이템 획득 순서, Value : 종류별(아이템 코드별) 획득할 장비아이템 개수>
                                         }
                                     }
                                 }
-                                else if (ItemList[arynum] / 1000 == 0)
+                                else if (ItemList[arynum] / 1000 == 0) // 기타아이템 획득
                                 {
                                     for (int j = 0; j < ItemCountList[arynum]; j++)
                                     {
-                                        itemetc = ItemManager.instance.m_Dictionary_MonsterDrop_Etc[ItemList[arynum]].CreateItem(ItemManager.instance.m_Dictionary_MonsterDrop_Etc[ItemList[arynum]]);
-                                        Destroy(itemetc);
-                                        tempnumber = m_pi_Itemslot.Get_Item_Etc(itemetc);
-                                        //Dictionary_GetItem_Etc.Add(Dictionary_GetItem_Etc.Count, m_pi_Itemslot.GetItem_Etc(itemetc));
-                                        //if (Dictionary_GetItem_Etc_Count.ContainsKey(Dictionary_GetItem_Etc_Count.Count) == false)
-                                        //    Dictionary_GetItem_Etc_Count.Add(Dictionary_GetItem_Etc_Count.Count, 1);
-                                        //else
-                                        //    Dictionary_GetItem_Etc_Count[Dictionary_GetItem_Etc_Count.Count] += 1;
+                                        itemetc = ItemManager.instance.m_Dictionary_MonsterDrop_Etc[ItemList[arynum]].CreateItem(ItemManager.instance.m_Dictionary_MonsterDrop_Etc[ItemList[arynum]]); // 획득할 기타아이템 생성, 임시 변수에 저장
+                                        Destroy(itemetc); // 생성된 기타아이템 오브젝트 삭제
+                                                          // 
+                                                          // ※ 아이템은 생성 시 오브젝트 형태로 게임내에 생성 된다.
+                                                          //    그러나 소비아이템(기프트) 사용으로 획득할 아이템의 경우 해당 아이템의 데이터만 가지고 있으면 된다.(인벤토리에 바로 생성되기 때문)
+                                                          //    굳이 인게임 내에 오브젝트 형태로 존재 해 메모리를 낭비할 필요가 없는것이다.
+                                                          //    그래서 유니티 상의 오브젝트는 삭제하되 데이터는 보존한 후 사용한다.
+                                                          //
+                                        tempnumber = m_pi_Itemslot.Get_Item_Etc(itemetc); // 기타아이템 획득 함수
+                                        // 소비아이템(기프트) 사용으로인해 획득한 아이템 정보GUI 활성화를 위해 임시 저장소에 획득한 기타아이템, 개수 저장.
                                         if (j == 0)
                                         {
-                                            Dictionary_GetItem_Etc.Add(Dictionary_GetItem_Etc.Count, tempnumber);
-                                            Dictionary_GetItem_Etc_Count.Add(Dictionary_GetItem_Etc_Count.Count, ItemCountList[arynum]);
+                                            Dictionary_GetItem_Etc.Add(Dictionary_GetItem_Etc.Count, tempnumber); // Dictionary <Key : 아이템 획득 순서, Value : 인벤토리 배열 번호>
+                                            Dictionary_GetItem_Etc_Count.Add(Dictionary_GetItem_Etc_Count.Count, ItemCountList[arynum]); // Dictionary <Key : 아이템 획득 순서, Value : 종류별(아이템 코드별) 획득할 장비아이템 개수>
                                         }
                                     }
                                 }
 
-                                List_Already_get.Add(arynum);
+                                List_Already_get.Add(arynum); // 이미 획득한 아이템 정보(아이템 코드)List에 해당 아이템 추가. 아이템 중복 획득 불가능을 위해
                             }
-                            GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 사용.");
-
+                            GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 사용."); // 로그GUI에 사용한 소비아이템 정보 출력
                             GUIManager_Total.Instance.Display_GUI_Gift_GetItem_Info(Dictionary_GetItem_Equip, Dictionary_GetItem_Equip_Count,
                                                                Dictionary_GetItem_Use, Dictionary_GetItem_Use_Count,
-                                                               Dictionary_GetItem_Etc, Dictionary_GetItem_Etc_Count);
+                                                               Dictionary_GetItem_Etc, Dictionary_GetItem_Etc_Count); // 소비아이템(기프트) 사용으로인해 획득한 아이템 정보GUI 활성화
 
                             return 0;
                         }
                         else
                         {
-                            GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 사용 불가.");
+                            GUIManager_Total.Instance.UpdateLog("[소비아이템][" + item.m_sItemName + "] 사용 불가."); // 로그GUI에 사용하지 못한 소비아이템(기프트) 정보 출력
                             return 2;
                         }
 
@@ -1866,12 +1914,6 @@ public class Player_Total : MonoBehaviour
 
         return 0;
     }
-
-// GUIManager_Total.Instance.UpdateLog("[재화]" + co2_4[i].gameObject.GetComponent<Item>().m_sItemName + " 을(를) 획득 하였습니다.");
-// GUIManager_Total.Instance.UpdateLog("[기타 아이템]" + co2_4[i].gameObject.GetComponent<Item>().m_sItemName + " 을(를) 획득 하였습니다.");
-// GUIManager_Total.Instance.UpdateLog("[장비 아이템]" + co2_4[i].gameObject.GetComponent<Item>().m_sItemName + " 을(를) 획득 할 수 없습니다.");
-// GUIManager_Total.Instance.UpdateLog("[소비 아이템]" + co2_4[i].gameObject.GetComponent<Item>().m_sItemName + " 을(를) 획득 하였습니다.");
-
 
     // 소비 아이템 중 기프트타입 사용 조건만 체크. 사용하지 않음.
     public bool CheckCondition_Item_Use_Gift(Item_Use item, int arynumber)
