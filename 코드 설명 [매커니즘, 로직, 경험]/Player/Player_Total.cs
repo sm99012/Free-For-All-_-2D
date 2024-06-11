@@ -1055,7 +1055,7 @@ public class Player_Total : MonoBehaviour
 
     // 플레이어 장비아이템 착용 관련 함수(장비아이템 착용 조건 판단 + 장비아이템 착용)
     // return true : 장비아이템 착용 성공 / return false : 장비아이템 착용 실패(플레이어 사망 시, 장비아이템 착용 조건 불만족)
-    public bool CheckCondition_Item_Equip(Item_Equip item, STATUS playerstatus, SOC playersoc)
+    public bool CheckCondition_Item_Equip(Item_Equip item, STATUS playerstatus, SOC playersoc) // item : 착용할 장비아이템, playerstatus : 플레이어 능력치, playersoc : 플레이어 평판
     {
         if (m_pm_Move.m_ePlayerMoveState != Player_Move.E_PLAYER_MOVE_STATE.DEATH) // 플레이어 동작 FSM이 사망상태가 아닌 경우(플레이어 사망 상태가 아닐때)
         {
@@ -1270,7 +1270,7 @@ public class Player_Total : MonoBehaviour
     }
 
     // 플레이어에게 적용할 아이템 세트효과 판단. m_Dictionary_SerItemEffect(플레이어에게 적용중인 아이템 세트효과 딕셔너리) 에 저장
-    // Dictionary <Key : 아이템 세트효과 코드 , Value : 아이템 세트효과 코드(Key)를 가진 아이템 개수> Key == 0 : 세트효과 없음
+    // Dictionary <Key : 아이템 세트효과 코드 , Value : 아이템 세트효과 코드(Key)를 가진 아이템 개수> Key == 0 (아이템 세트효과 코드 == 0) : 세트효과 없음
     // 장비아이템의 순서(모자, 상의, 하의, 신발, 장갑, 주무기, 보조무기)에 따라 플레이어에게 적용할 아이템 세트효과를 판단한다.
    void CheckSetItemEffect_Dictionary()
     {
@@ -1431,63 +1431,71 @@ public class Player_Total : MonoBehaviour
         return false;
     }
 
-    // 소비 아이템 사용 조건 체크 + 사용
-    // return 0: 아이템 사용.
-    // return 1: 아이템 사용 조건 불만족. - STATUS, SOC
-    // return 2: 상자 사용 시 인벤토리에 필요한 자리가 없을때.
-    // 
-    public int CheckCondition_Item_Use(Item_Use item, int arynumber)
+    // 플레이어 소비아이템 사용 관련 함수(소비아이템 사용 조건 판단 + 소비아이템 사용)
+    // return 0 : 소비아이템 사용 성공 / return 1 : 소비아이템 사용 실패(소비아이템 사용 조건(스탯(능력치, 평판), 쿨타임) 불만족) / return 2 : 소비아이템(기프트) 사용 실패(인벤토리에 빈칸이 없음)
+    public int CheckCondition_Item_Use(Item_Use item, int arynumber) // item : 사용할 소비아이템, arynumber : 사용할 소비아이템의 인벤토리 배열 번호
     {
-        if (m_pm_Move.m_ePlayerMoveState != Player_Move.E_PLAYER_MOVE_STATE.DEATH)
+        if (m_pm_Move.m_ePlayerMoveState != Player_Move.E_PLAYER_MOVE_STATE.DEATH) // 플레이어 동작 FSM이 사망상태가 아닌 경우(플레이어 사망 상태가 아닐때)
         {
-            if (m_ps_Status.CheckCondition_Item_Use(item) == 0)
+            if (m_ps_Status.CheckCondition_Item_Use(item) == 0) // 소비아이템 사용 조건 판단
             {
+                // 1. 소비아이템의 분류가 회복포션, 일시적 버프포션, 영구적 버프포션 일 경우
                 if (item.m_eItemUseType == E_ITEM_USE_TYPE.RECOVERPOTION ||
                     item.m_eItemUseType == E_ITEM_USE_TYPE.TEMPORARYBUFFPOTION ||
                     item.m_eItemUseType == E_ITEM_USE_TYPE.ETERNALBUFFPOTION)
                 {
-                    int Item_Use_Code = m_ps_Status.ApplyPotion(item);
-                    m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed());
-                    GUIManager_Total.Instance.Update_Itemslot();
-                    GUIManager_Total.Instance.Update_Equipslot();
-                    CheckSetItemEffect();
-                    m_pm_Move.SetAttackSpeed(Player_Total.Instance.m_ps_Status.Return_AttackSpeed());
-                    GUIManager_Total.Instance.Update_SS();
+                    int Item_Use_Code = m_ps_Status.ApplyPotion(item); // 소비아이템 사용 시 스탯(능력치, 평판), 버프ㆍ디버프 업데이트
+                    GUIManager_Total.Instance.Update_Itemslot(); // 인벤토리GUI 업데이트
+                    GUIManager_Total.Instance.Update_Equipslot(); // 상태창(장비창)GUI 업데이트
+                    CheckSetItemEffect(); // 아이템 세트효과 판단(적용)
+                    m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed()); // 플레이어 공격 속도 설정(기본 공격(연계 공격)을 위해 Player_Status.cs의 공격 속도를 Player_Move.cs로 넘겨준다.)
+                    GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
 
                     return Item_Use_Code;
                 }
+                // 2. 소비아이템의 분류가 강화서 일 경우
                 else if (item.m_eItemUseType == E_ITEM_USE_TYPE.REINFORCEMENT)
                 {
-                    GUIManager_Total.Instance.Display_GUI_Reinforcement(arynumber, item);
+                    GUIManager_Total.Instance.Display_GUI_Reinforcement(arynumber, item); // 장비아이템 강화GUI 활성화
                 }
+                // 3. 소비아이템의 분류가 기프트 일 경우
                 else if (item.m_eItemUseType == E_ITEM_USE_TYPE.GIFT)
                 {
+                    // 소비아이템(기프트) 사용 시 획득할 아이템의 임시 저장소(변수)
                     Item_Equip itemequip;
                     Item_Use itemuse;
                     Item_Etc itemetc;
-                    Dictionary<int, int> Dictionary_GetItem_Equip = new Dictionary<int, int>();
-                    Dictionary<int, int> Dictionary_GetItem_Equip_Count = new Dictionary<int, int>();
-                    Dictionary<int, int> Dictionary_GetItem_Use = new Dictionary<int, int>();
-                    Dictionary<int, int> Dictionary_GetItem_Use_Count = new Dictionary<int, int>();
-                    Dictionary<int, int> Dictionary_GetItem_Etc = new Dictionary<int, int>();
-                    Dictionary<int, int> Dictionary_GetItem_Etc_Count = new Dictionary<int, int>();
+                    // 소비아이템(기프트) 사용 시 획득할 아이템의 임시 저장소(Dictionary)
+                    // 획득할 아이템 종류 Dictionary <Key : 아이템 획득 순서, Value ; 아이템 코드>
+                    // 획득할 아이템 종류에 해당하는 아이템 개수 Dictionary <Key : 아이템 획득 순서, Value ; 아이템 개수>
+                    // 플레이어는 소비아이템(기프트) 사용 시 '아이템 획득 순서'에 따라 해당하는 '아이템 코드'의 아이템을 '아이템 개수'만큼 획득한다.
+                    Dictionary<int, int> Dictionary_GetItem_Equip = new Dictionary<int, int>();       // 획득할 장비아이템 종류(아이템 코드)
+                    Dictionary<int, int> Dictionary_GetItem_Equip_Count = new Dictionary<int, int>(); // 종류별 획득할 장비아이템 개수
+                    Dictionary<int, int> Dictionary_GetItem_Use = new Dictionary<int, int>();         // 획득할 소비아이템 종류(아이템 코드)
+                    Dictionary<int, int> Dictionary_GetItem_Use_Count = new Dictionary<int, int>();   // 종류별 획득할 소비아이템 개수
+                    Dictionary<int, int> Dictionary_GetItem_Etc = new Dictionary<int, int>();         // 획득할 기타아이템 종류(아이템 코드)
+                    Dictionary<int, int> Dictionary_GetItem_Etc_Count = new Dictionary<int, int>();   // 종류별 획득할 기타아이템 개수
                     int tempnumber;
 
+                    // 3_1. 소비아이템(기프트_고정형) 사용 시 아이템 획득(기프트 구성물품 전부를 획득한다.)
                     if (item.m_eItemUseGiftType == E_ITEM_USE_GIFT_TYPE.FIXEDBOX)
                     {
-                        if (CheckCondition_Item_Use_Gift(item, arynumber) == true)
+                        if (CheckCondition_Item_Use_Gift(item, arynumber) == true) // 소비아이템(기프트) 사용 조건 판단(획득할 아이템 만큼 인벤토리에 여유가 있는지 판단)
                         {
-                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Equip_Code.Count; i++)
+                            // 장비아이템 획득
+                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Equip_Code.Count; i++) // 획득할 장비아이템 종류
                             {
-                                for (int j = 0; j < item.m_nDictionary_Gift_Item_Equip_Count[i]; j++)
+                                for (int j = 0; j < item.m_nDictionary_Gift_Item_Equip_Count[i]; j++) // 종류별 획득할 장비아이템 개수
                                 {
-                                    itemequip = ItemManager.instance.m_Dictionary_MonsterDrop_Equip[item.m_nDictionary_Gift_Item_Equip_Code[i]].CreateItem(ItemManager.instance.m_Dictionary_MonsterDrop_Equip[item.m_nDictionary_Gift_Item_Equip_Code[i]]);
-                                    Destroy(itemequip);
-                                    tempnumber = m_pi_Itemslot.Get_Item_Equip(itemequip);
-                                    //if (Dictionary_GetItem_Equip_Count.ContainsKey(Dictionary_GetItem_Equip_Count.Count) == false)
-                                    //    Dictionary_GetItem_Equip_Count.Add(Dictionary_GetItem_Equip_Count.Count, 1);
-                                    //else
-                                    //    Dictionary_GetItem_Equip_Count[Dictionary_GetItem_Equip_Count.Count] += 1;
+                                    itemequip = ItemManager.instance.m_Dictionary_MonsterDrop_Equip[item.m_nDictionary_Gift_Item_Equip_Code[i]].CreateItem(ItemManager.instance.m_Dictionary_MonsterDrop_Equip[item.m_nDictionary_Gift_Item_Equip_Code[i]]); // 획득할 장비아이템 생성, 임시 변수에 저장
+                                    Destroy(itemequip); // 생성된 장비아이템 오브젝트 삭제
+                                                        // 
+                                                        // ※ 아이템은 생성 시 오브젝트 형태로 게임내에 생성 된다.
+                                                        //    그러나 소비아이템(기프트) 사용으로 획득할 아이템의 경우 해당 아이템의 데이터만 가지고 있으면 된다.(인벤토리에 바로 생성되기 때문)
+                                                        //    굳이 인게임 내에 오브젝트 형태로 존재 해 메모리를 낭비할 필요가 없는것이다.
+                                                        //    그래서 유니티 상의 오브젝트는 삭제하되 데이터는 보존한 후 사용한다.
+                                                        //
+                                    tempnumber = m_pi_Itemslot.Get_Item_Equip(itemequip); // 장비아이템 획득 함수
                                     if (j == 0)
                                     {
                                         Dictionary_GetItem_Equip.Add(Dictionary_GetItem_Equip.Count, tempnumber);
