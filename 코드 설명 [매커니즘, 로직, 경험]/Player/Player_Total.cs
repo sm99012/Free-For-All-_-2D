@@ -95,7 +95,7 @@ public class Player_Total : MonoBehaviour
     
     int m_nRandomRatio; // 플레이어가 상태이상(암흑) 상태일때 제대로된 공격을 할 수 있을지 결정하는 난수.(상태이상(암흑) 상태에서는 일정 확률로 공격 시 데미지를 1밖에 주지 못한다.)
 
-    Dictionary<int, int> m_Dictionary_SerItemEffect = new Dictionary<int, int>(); // 플레이어에게 적용중인 아이템 세트효과. Dictionary <Key : 아이템 세트효과 코드 , Value : 아이템 세트효과 코드(Key)를 가진 아이템 개수>
+    Dictionary<int, int> m_Dictionary_SerItemEffect = new Dictionary<int, int>(); // 플레이어에게 적용중인 아이템 세트효과. Dictionary <Key : 아이템 세트효과 코드, Value : 아이템 세트효과 코드(Key)를 가진 아이템 개수>
                                                                                   //  Key == 0 : 세트효과 없음
     
     // 변수 초기화
