@@ -1915,12 +1915,12 @@ public class Player_Total : MonoBehaviour
         return 0;
     }
 
-    // 소비 아이템 중 기프트타입 사용 조건만 체크. 사용하지 않음.
+    // 소비아이템(기프트) 사용 조건(획득할 아이템 만큼 인벤토리에 여유가 있는지 판단) 판단
     public bool CheckCondition_Item_Use_Gift(Item_Use item, int arynumber)
     {
-        if (m_pm_Move.m_ePlayerMoveState != Player_Move.E_PLAYER_MOVE_STATE.DEATH)
+        if (m_pm_Move.m_ePlayerMoveState != Player_Move.E_PLAYER_MOVE_STATE.DEATH) // 플레이어 동작 FSM이 사망상태가 아닌 경우(플레이어 사망 상태가 아닐때)
         {
-            if (m_ps_Status.CheckCondition_Item_Use(item) == 0)
+            if (m_ps_Status.CheckCondition_Item_Use(item) == 0) // 소비아이템 사용 조건 판단
             {
                 bool item_equip_get_possible = true, item_use_get_possible = true, item_etc_get_possible = true;
                 if (item.m_eItemUseGiftType == E_ITEM_USE_GIFT_TYPE.FIXEDBOX)
