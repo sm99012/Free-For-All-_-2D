@@ -1562,17 +1562,17 @@ public class Player_Total : MonoBehaviour
                             return 2;
                         }
                     }
-                    // 3_2. 소비아이템(기프트_랜덤 독립형(랜덤 지급 A타입 : 아이템 중복 획득 가능)) 사용 시 아이템 획득(기프트 구성물품중 정해진 개수만큼 랜덤으로 획득한다. 이때 아이템 중복 획득이 가능하다.)
+                    // 3_2. 소비아이템(기프트_랜덤 독립형(랜덤 지급 A타입 : 아이템 중복 획득 가능)) 사용 시 아이템 획득(기프트 구성물품중 정해진 품목 개수만큼 랜덤으로 획득한다. 이때 아이템 중복 획득이 가능하다.)
                     else if (item.m_eItemUseGiftType == E_ITEM_USE_GIFT_TYPE.RANDOMBOX_INDEPENDENTTRIAL)
                     {
                         if (CheckCondition_Item_Use_Gift(item, arynumber) == true) // 소비아이템(기프트) 사용 조건(획득할 아이템 만큼 인벤토리에 여우가 있는지 판단)을 충족한 경우
                         {
-                            int pickcount = Random.Range(item.m_nRandomBox_PickCount_Min, item.m_nRandomBox_PickCount_Max + 1); // 획득할 아이템 개수 결정
+                            int pickcount = Random.Range(item.m_nRandomBox_PickCount_Min, item.m_nRandomBox_PickCount_Max + 1); // 획득할 품목 개수 결정
 
                             // 소비아이템(기프트) 사용 시 획득할 수 있는 모든 아이템 정보의 임시 저장소(List)
                             List<int> ItemList = new List<int>();            // 획득 가능한 모든 아이템(아이템 코드) 저장
-                            List<int> ItemCountList = new List<int>();       // 종류별(아이템 코드별) 획득할 아이템 개수
-                            List<int> ItemProbabilityList = new List<int>(); // 종류별(아이템 코드별) 아이템 획득(누적) 확률(범위)
+                            List<int> ItemCountList = new List<int>();       // 품목별(아이템 코드별) 획득할 아이템 개수
+                            List<int> ItemProbabilityList = new List<int>(); // 품목별(아이템 코드별) 아이템 획득(누적) 확률(범위)
                                                                              //
                                                                              // ※ 아이템 획득 확률은 순서대로 0 ~ 10000 사이의 값을 가진다.
                                                                              //    현재 아이템의 획득 확률(누적) += 이전 아이템의 획득 확률(누적)
@@ -1586,45 +1586,45 @@ public class Player_Total : MonoBehaviour
                             int num = 0; // 아이템 획득 확률(누적) 계산 관련 변수
 
                             // 획득 가능한 모든 아이템, 개수, 획득 확률(누적)을 임시 저장소에 저장한다.
-                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Equip_Code.Count; i++) // 획득 가능한 장비아이템 종류 만큼 반복
+                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Equip_Code.Count; i++) // 획득 가능한 장비아이템 품목 만큼 반복
                             {
-                                ItemList.Add(item.m_nDictionary_Gift_Item_Equip_Code[i]); // 임시 저장소에 획득 가능한 장비아이템(아이템 코드) 저장
+                                ItemList.Add(item.m_nDictionary_Gift_Item_Equip_Code[i]); // 임시 저장소에 획득 가능한 장비아이템(아이템 코드) 품목 저장
                                 ItemCountList.Add(item.m_nDictionary_Gift_Item_Equip_Count[i]); // 임시 저장소에 획득 가능한 장비아이템 개수 저장
                                 // 임시 저장소에 장비아이템 획득 확률(누적) 저장
-                                if (ItemProbabilityList.Count == 0) // 종류별(아이템 코드별) 누적 아이템 획득 확률 최초 저장
+                                if (ItemProbabilityList.Count == 0) // 품목별(아이템 코드별) 누적 아이템 획득 확률 최초 저장
                                 {
                                     ItemProbabilityList.Add(item.m_nDictionary_Gift_Item_Equip_Probability[i]); // 현재 아이템의 획득 확률 =  현재 아이템의 획득 확률
                                 }
-                                else // 종류별(아이템 코드별) 아이템 획득 확률 누적 저장
+                                else // 품목별(아이템 코드별) 아이템 획득 확률 누적 저장
                                 {
                                     ItemProbabilityList.Add(ItemProbabilityList[num - 1] + item.m_nDictionary_Gift_Item_Equip_Probability[i]); // 현재 아이템의 획득 확률 += 이전 아이템의 획득 확률
                                 }
                                 num += 1;
                             }
-                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Use_Code.Count; i++) // 획득 가능한 소비아이템 종류 만큼 반복
+                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Use_Code.Count; i++) // 획득 가능한 소비아이템 품목 만큼 반복
                             {
-                                ItemList.Add(item.m_nDictionary_Gift_Item_Use_Code[i]); // 임시 저장소에 획득 가능한 소비아이템(아이템 코드) 저장
+                                ItemList.Add(item.m_nDictionary_Gift_Item_Use_Code[i]); // 임시 저장소에 획득 가능한 소비아이템(아이템 코드) 품목 저장
                                 ItemCountList.Add(item.m_nDictionary_Gift_Item_Use_Count[i]); // 임시 저장소에 획득 가능한 소비아이템 개수 저장
                                 // 임시 저장소에 소비아이템 획득 확률(누적) 저장
-                                if (ItemProbabilityList.Count == 0) // 종류별(아이템 코드별) 누적 아이템 획득 확률 최초 저장
+                                if (ItemProbabilityList.Count == 0) // 품목별(아이템 코드별) 누적 아이템 획득 확률 최초 저장
                                 {
                                     ItemProbabilityList.Add(item.m_nDictionary_Gift_Item_Use_Probability[i]); // 현재 아이템의 획득 확률 =  현재 아이템의 획득 확률
                                 }
-                                else // 종류별(아이템 코드별) 아이템 획득 확률 누적 저장
+                                else // 품목별(아이템 코드별) 아이템 획득 확률 누적 저장
                                 {
                                     ItemProbabilityList.Add(ItemProbabilityList[num - 1] + item.m_nDictionary_Gift_Item_Use_Probability[i]); // 현재 아이템의 획득 확률 += 이전 아이템의 획득 확률
                                 }
                                 num += 1;
                             }
-                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Etc_Code.Count; i++) // 획득 가능한 기타아이템 종류 만큼 반복
+                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Etc_Code.Count; i++) // 획득 가능한 기타아이템 품목 만큼 반복
                             {
-                                ItemList.Add(item.m_nDictionary_Gift_Item_Etc_Code[i]); // 임시 저장소에 획득 가능한 기타아이템(아이템 코드) 저장
+                                ItemList.Add(item.m_nDictionary_Gift_Item_Etc_Code[i]); // 임시 저장소에 획득 가능한 기타아이템(아이템 코드) 품목 저장
                                 ItemCountList.Add(item.m_nDictionary_Gift_Item_Etc_Count[i]); // 임시 저장소에 획득 가능한 기타아이템 개수 저장
-                                if (ItemProbabilityList.Count == 0) // 종류별(아이템 코드별) 누적 아이템 획득 확률 최초 저장
+                                if (ItemProbabilityList.Count == 0) // 품목별(아이템 코드별) 누적 아이템 획득 확률 최초 저장
                                 {
                                     ItemProbabilityList.Add(item.m_nDictionary_Gift_Item_Etc_Probability[i]); // 현재 아이템의 획득 확률 =  현재 아이템의 획득 확률
                                 }
-                                else // 종류별(아이템 코드별) 아이템 획득 확률 누적 저장
+                                else // 품목별(아이템 코드별) 아이템 획득 확률 누적 저장
                                 {
                                     ItemProbabilityList.Add(ItemProbabilityList[num - 1] + item.m_nDictionary_Gift_Item_Etc_Probability[i]); // 현재 아이템의 획득 확률 += 이전 아이템의 획득 확률
                                 }
@@ -1632,17 +1632,17 @@ public class Player_Total : MonoBehaviour
                             }
 
                             // 위의 임시 저장소를 이용해 획득할 아이템 선별
-                            for (int i = 0; i < pickcount; i++) // 획득할 아이템 개수 만큼 반복
+                            for (int i = 0; i < pickcount; i++) // 획득할 품목 개수 만큼 반복
                             {
-                                int randomnum = Random.Range(1, 10001); // 획득할 아이템의 확률 범위(0 ~ 10000)
-                                int arynum = 0; // 획득할 아이템 종류(아이템 코드)
-                                for (int j = 0; j < ItemList.Count; j++) // 획득 가능한 모든 아이템(아이템 코드) 개수 만큼 반복
+                                int randomnum = Random.Range(1, 10001); // 획득할 품목의 확률 범위(0 ~ 10000)
+                                int arynum = 0; // 획득할 아이템 정류(아이템 코드)
+                                for (int j = 0; j < ItemList.Count; j++) // 획득 가능한 모든 품목(아이템 코드) 개수 만큼 반복
                                 {
-                                    if (ItemProbabilityList[j] < randomnum) // 종류별(아이템 코드별) 아이템 획득 확률(누적) 범위에 randomnum이 포함되지 않은 경우
+                                    if (ItemProbabilityList[j] < randomnum) // 품목별(아이템 코드별) 아이템 획득 확률(누적) 범위에 randomnum이 포함되지 않은 경우
                                     {
                                         continue;
                                     }
-                                    else // 종류별(아이템 코드별) 아이템 획득 확률(누적) 범위에 randomnum이 포함된 경우
+                                    else // 품목별(아이템 코드별) 아이템 획득 확률(누적) 범위에 randomnum이 포함된 경우
                                     {
                                         arynum = j;
                                         break; // 해당 아이템을 획득한다.
@@ -1728,17 +1728,17 @@ public class Player_Total : MonoBehaviour
                             return 2;
                         }
                     }
-                    // 3_3. 소비아이템(기프트_랜덤 종속형(랜덤 지급 B타입 : 아이템 중복 획득 불가능)) 사용 시 아이템 획득(기프트 구성물품중 정해진 개수만큼 랜덤으로 획득한다. 이때 아이템 중복 획득이 불가능하다.)
+                    // 3_3. 소비아이템(기프트_랜덤 종속형(랜덤 지급 B타입 : 아이템 중복 획득 불가능)) 사용 시 아이템 획득(기프트 구성물품중 정해진 품목 개수만큼 랜덤으로 획득한다. 이때 아이템 중복 획득이 불가능하다.)
                     else if (item.m_eItemUseGiftType == E_ITEM_USE_GIFT_TYPE.RANDOMBOX_DEPENDENTTRIAL)
                     {
                         if (CheckCondition_Item_Use_Gift(item, arynumber) == true) // 소비아이템(기프트) 사용 조건(획득할 아이템 만큼 인벤토리에 여유가 있는지 판단)을 충족한 경우
                         {
-                            int pickcount = Random.Range(item.m_nRandomBox_PickCount_Min, item.m_nRandomBox_PickCount_Max + 1); // 획득할 아이템 개수 결정
+                            int pickcount = Random.Range(item.m_nRandomBox_PickCount_Min, item.m_nRandomBox_PickCount_Max + 1); // 획득할 품목 개수 결정
 
                             // 소비아이템(기프트) 사용 시 획득할 수 있는 모든 아이템 정보의 임시 저장소(List)
-                            List<int> ItemList = new List<int>();            // 획득 가능한 모든 아이템(아이템 코드) 저장
-                            List<int> ItemCountList = new List<int>();       // 종류별(아이템 코드별) 획득할 아이템 개수
-                            List<int> ItemProbabilityList = new List<int>(); // 종류별(아이템 코드별) 아이템 획득(누적) 확률(범위)
+                            List<int> ItemList = new List<int>();            // 획득 가능한 모든 아이템(아이템 코드) 품목 저장
+                            List<int> ItemCountList = new List<int>();       // 품목별(아이템 코드별) 획득할 아이템 개수
+                            List<int> ItemProbabilityList = new List<int>(); // 품목별(아이템 코드별) 아이템 획득(누적) 확률(범위)
                                                                              //
                                                                              // ※ 아이템 획득 확률은 순서대로 0 ~ 10000 사이의 값을 가진다.
                                                                              //    현재 아이템의 획득 확률(누적) += 이전 아이템의 획득 확률(누적)
@@ -1753,44 +1753,44 @@ public class Player_Total : MonoBehaviour
                             int num = 0; // 아이템 획득 확률(누적) 계산 관련 변수
 
                             // 획득 가능한 모든 아이템, 개수, 획득 확률(누적)을 임시 저장소에 저장한다.
-                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Equip_Code.Count; i++) // 획득 가능한 장비아이템 종류 만큼 반복
+                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Equip_Code.Count; i++) // 획득 가능한 장비아이템 품목 종류 만큼 반복
                             {
-                                ItemList.Add(item.m_nDictionary_Gift_Item_Equip_Code[i]); // 임시 저장소에 획득 가능한 장비아이템(아이템 코드) 저장
+                                ItemList.Add(item.m_nDictionary_Gift_Item_Equip_Code[i]); // 임시 저장소에 획득 가능한 장비아이템(아이템 코드) 품목 저장
                                 ItemCountList.Add(item.m_nDictionary_Gift_Item_Equip_Count[i]); // 임시 저장소에 획득 가능한 장비아이템 개수 저장
                                 // 임시 저장소에 장비아이템 획득 확률(누적) 저장
-                                if (ItemProbabilityList.Count == 0) // 종류별(아이템 코드별) 누적 아이템 획득 확률 최초 저장
+                                if (ItemProbabilityList.Count == 0) // 품목별(아이템 코드별) 누적 아이템 획득 확률 최초 저장
                                 {
                                     ItemProbabilityList.Add(item.m_nDictionary_Gift_Item_Equip_Probability[i]); // 현재 아이템의 획득 확률 =  현재 아이템의 획득 확률
                                 }
-                                else // 종류별(아이템 코드별) 아이템 획득 확률 누적 저장
+                                else // 품목별(아이템 코드별) 아이템 획득 확률 누적 저장
                                 {
                                     ItemProbabilityList.Add(ItemProbabilityList[num - 1] + item.m_nDictionary_Gift_Item_Equip_Probability[i]); // 현재 아이템의 획득 확률 += 이전 아이템의 획득 확률
                                 }
                                 num += 1;
                             }
-                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Use_Code.Count; i++) // 획득 가능한 소비아이템 종류 만큼 반복
+                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Use_Code.Count; i++) // 획득 가능한 소비아이템 품목 종류 만큼 반복
                             {
-                                ItemList.Add(item.m_nDictionary_Gift_Item_Use_Code[i]); // 임시 저장소에 획득 가능한 소비아이템(아이템 코드) 저장
+                                ItemList.Add(item.m_nDictionary_Gift_Item_Use_Code[i]); // 임시 저장소에 획득 가능한 소비아이템(아이템 코드) 품목 저장
                                 ItemCountList.Add(item.m_nDictionary_Gift_Item_Use_Count[i]); // 임시 저장소에 획득 가능한 소비아이템 개수 저장
-                                if (ItemProbabilityList.Count == 0) // 종류별(아이템 코드별) 누적 아이템 획득 확률 최초 저장
+                                if (ItemProbabilityList.Count == 0) // 품목별(아이템 코드별) 누적 아이템 획득 확률 최초 저장
                                 {
                                     ItemProbabilityList.Add(item.m_nDictionary_Gift_Item_Use_Probability[i]); // 현재 아이템의 획득 확률 =  현재 아이템의 획득 확률
                                 }
-                                else // 종류별(아이템 코드별) 아이템 획득 확률 누적 저장
+                                else // 품목별(아이템 코드별) 아이템 획득 확률 누적 저장
                                 {
                                     ItemProbabilityList.Add(ItemProbabilityList[num - 1] + item.m_nDictionary_Gift_Item_Use_Probability[i]); // 현재 아이템의 획득 확률 += 이전 아이템의 획득 확률
                                 }
                                 num += 1;
                             }
-                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Etc_Code.Count; i++) // 획득 가능한 기타아이템 종류 만큼 반복
+                            for (int i = 0; i < item.m_nDictionary_Gift_Item_Etc_Code.Count; i++) // 획득 가능한 기타아이템 품목 종류 만큼 반복
                             {
-                                ItemList.Add(item.m_nDictionary_Gift_Item_Etc_Code[i]); // 임시 저장소에 획득 가능한 기타아이템(아이템 코드) 저장
+                                ItemList.Add(item.m_nDictionary_Gift_Item_Etc_Code[i]); // 임시 저장소에 획득 가능한 기타아이템(아이템 코드) 품목 저장
                                 ItemCountList.Add(item.m_nDictionary_Gift_Item_Etc_Count[i]); // 임시 저장소에 획득 가능한 기타아이템 개수 저장
-                                if (ItemProbabilityList.Count == 0) // 종류별(아이템 코드별) 누적 아이템 획득 확률 최초 저장
+                                if (ItemProbabilityList.Count == 0) // 품목별(아이템 코드별) 누적 아이템 획득 확률 최초 저장
                                 {
                                     ItemProbabilityList.Add(item.m_nDictionary_Gift_Item_Etc_Probability[i]); // 현재 아이템의 획득 확률 =  현재 아이템의 획득 확률
                                 }
-                                else // 종류별(아이템 코드별) 아이템 획득 확률 누적 저장
+                                else // 품목별(아이템 코드별) 아이템 획득 확률 누적 저장
                                 {
                                     ItemProbabilityList.Add(ItemProbabilityList[num - 1] + item.m_nDictionary_Gift_Item_Etc_Probability[i]); // 현재 아이템의 획득 확률 += 이전 아이템의 획득 확률
                                 }
@@ -1799,18 +1799,18 @@ public class Player_Total : MonoBehaviour
 
                             // 위의 임시 저장소를 이용해 획득할 아이템 선별
                             List<int> List_Already_get = new List<int>(); // 이미 획득한 아이템 정보(아이템 코드). 아이템 중복 획득 불가능을 위해
-                            for (int i = 0; i < pickcount; i++) // 획득할 아이템 개수 만큼 반복
+                            for (int i = 0; i < pickcount; i++) // 획득할 품목 개수 만큼 반복
                             {
-                                int randomnum = Random.Range(1, 10001); // 획득할 아이템의 확률 범위(0 ~ 10000)
+                                int randomnum = Random.Range(1, 10001); // 획득할 품목의 확률 범위(0 ~ 10000)
                                 int arynum = -1; // 획득할 아이템 종류(아이템 코드)
-                                for (int j = 0; j < ItemList.Count;) // 획득 가능한 모든 아이템(아이템 코드) 개수 만큼 반복
+                                for (int j = 0; j < ItemList.Count;) // 획득 가능한 모든 품목(아이템 코드) 개수 만큼 반복
                                 {
-                                    if (ItemProbabilityList[j] < randomnum) // 종류별(아이템 코드별) 아이템 획득 확률(누적) 범위에 randomnum이 포함되지 않은 경우
+                                    if (ItemProbabilityList[j] < randomnum) // 품목별(아이템 코드별) 아이템 획득 확률(누적) 범위에 randomnum이 포함되지 않은 경우
                                     {
                                         j++;
                                         continue;
                                     }
-                                    else // 종류별(아이템 코드별) 아이템 획득 확률(누적) 범위에 randomnum이 포함된 경우
+                                    else // 품목별(아이템 코드별) 아이템 획득 확률(누적) 범위에 randomnum이 포함된 경우
                                     {
                                         if (List_Already_get.Contains(j) == false) // 해당 아이템을 처음 획득한 경우
                                         {
@@ -1927,43 +1927,43 @@ public class Player_Total : MonoBehaviour
                 // 1. 소비아이템(기프트_고정형(전체 확정 지급형)) 사용 조건(획득할 아이템 만큼 인벤토리에 여유가 있는지) 판단
                 if (item.m_eItemUseGiftType == E_ITEM_USE_GIFT_TYPE.FIXEDBOX)
                 {
-                    // 장비아이템을 획득할 인벤토리에 여유가 있는지 판단
-                    int item_equip_count = 0;
-                    // item_equip_count = 소비아이템(기프트_고정형) 사용 시 획득할 아이템 수량
+                    // 장비아이템을 획득할 인벤토리(장비아이템)에 여유가 있는지 판단
+                    int item_equip_count = 0; // item_equip_count = 소비아이템(기프트_고정형) 사용 했을때 획득 가능한 품목 최대 개수
                     for (int i = 0; i < item.m_nDictionary_Gift_Item_Equip_Count.Count; i++)
                     {
                         item_equip_count += item.m_nDictionary_Gift_Item_Equip_Count[i];
                     }
-                    if (m_pi_Itemslot.Check_Get_Item_Itemslot_Equip(item_equip_count) == true) // item_equip_count만큼의 인벤토리(장비아이템) 여유 공간 판단
+                    // item_equip_count만큼의 인벤토리(장비아이템) 여유 공간 판단
+                    if (m_pi_Itemslot.Check_Get_Item_Itemslot_Equip(item_equip_count) == true)
                     {
-                        //Debug.Log("장비 아이템을 획득할 수 있습니다.");
+                        // item_equip_get_possible = true;
                     }
                     else
                     {
-                        //Debug.Log("장비 아이템 슬롯이 부족합니다.");
                         item_equip_get_possible = false;
                     }
-                    // 소비아이템을 획득할 인벤토리에 여유가 있는지 판단
+                    
+                    // 소비아이템을 획득할 인벤토리(소비아이템)에 여유가 있는지 판단
                     if (m_pi_Itemslot.Check_Get_Item_Itemslot_Use(item.m_nDictionary_Gift_Item_Use_Code, item.m_nDictionary_Gift_Item_Use_Count) == true)
                     {
-                        //Debug.Log("소비 아이템을 획득할 수 있습니다.");
+                        // item_use_get_possible = true;
                     }
                     else
                     {
-                        //Debug.Log("소비 아이템 슬롯이 부족합니다.");
                         item_use_get_possible = false;
                     }
+                    
                     // 기타아이텝을 획득할 인벤토리에 여유가 있는지 판단
                     if (m_pi_Itemslot.Check_Get_Item_Itemslot_Etc(item.m_nDictionary_Gift_Item_Etc_Code, item.m_nDictionary_Gift_Item_Etc_Count) == true)
                     {
-                        //Debug.Log("기타 아이템을 획득할 수 있습니다.");
+                       // item_use_get_possible = true;
                     }
                     else
                     {
-                        //Debug.Log("기타 아이템 슬롯이 부족합니다.");
                         item_etc_get_possible = false;
                     }
 
+                    // 인벤토리(장비아이템, 소비아이템, 기타아이템)에 모두 여유가 있을 경우에만 소비아이템(기프트_고정형(전체 확정 지급형)) 사용 가능
                     if (item_equip_get_possible == false || item_use_get_possible == false || item_etc_get_possible == false)
                     {
                         return false;
@@ -1973,98 +1973,95 @@ public class Player_Total : MonoBehaviour
                         return true;
                     }
                 }
+                // 2. 소비아이템(기프트_랜덤 독립형(랜덤 지급 A타입 : 아이템 중복 획득 가능)) 사용 조건(획득할 아이템 만큼 인벤토리에 여유가 있는지) 판단
                 else if (item.m_eItemUseGiftType == E_ITEM_USE_GIFT_TYPE.RANDOMBOX_INDEPENDENTTRIAL)
                 {
-                    int maxcount = item.m_nRandomBox_PickCount_Max;
-                    // 장비 아이템을 획득할 장비 아이템 슬롯 공간이 있는지 판단.
-                    // 아이템 슬롯 하나당 장비 아이템 1개.
+                    // 장비아이템을 획득할 인벤토리(장비아이템)에 여유가 있는지 판단. 장비아이템 1개당 인벤토리(장비아이템) 1개의 공간을 필요로 한다.
+                    int maxcount = item.m_nRandomBox_PickCount_Max; // maxcount = 소비아이템(기프트_랜덤 독립형)을 사용 했을때 획득 가능한 아이템 최대 개수
+                                                                    // (최대 아이템 개수 = 품목별 획득 가능한 아이템 최대 개수 * 획득할 품목 수)
+                    int item_equip_count = 0; // item_equip_count = 소비아이템(기프트_랜덤 독립형) 사용 시 획득 가능한 장비아이템 최대 수량(장비아이템 품목별 최대 개수)
+                                              //
+                                              // Ex) A기프트에서는 최대 2개 품목을 획득할 수 있다.
+                                              //     A기프트는 '평범한 목검1개', '평범한 목검2개', '흔한 목검1개' 로 구성되어있다.
+                                              //     이때 '평범한 목검2개'를 2번 획득할 경우를 대비해 인벤토리(장비아이템) 2 * 2 = 4개의 여유 공간을 필요로 한다.
+                                              //
+                    for (int i = 0; i < item.m_nDictionary_Gift_Item_Equip_Count.Count; i++)
                     {
-                        int item_equip_count = 0;
-                        for (int i = 0; i < item.m_nDictionary_Gift_Item_Equip_Count.Count; i++)
-                        {
-                            if (item_equip_count < item.m_nDictionary_Gift_Item_Equip_Count[i])
-                                item_equip_count = item.m_nDictionary_Gift_Item_Equip_Count[i];
-                        }
-
-                        maxcount *= item_equip_count;
-                        //Debug.Log("최대 획득 가능한 장비 아이템 개수: " + maxcount);
-                        if (m_pi_Itemslot.Check_Get_Item_Itemslot_Equip(maxcount) == true)
-                        {
-                            //Debug.Log("장비 아이템을 획득할 수 있습니다.");
-                        }
-                        else
-                        {
-                            //Debug.Log("장비 아이템 슬롯이 부족합니다.");
-                            item_equip_get_possible = false;
-                        }
+                        if (item_equip_count < item.m_nDictionary_Gift_Item_Equip_Count[i])
+                            item_equip_count = item.m_nDictionary_Gift_Item_Equip_Count[i];
                     }
-                    maxcount = item.m_nRandomBox_PickCount_Max;
-                    // 소비 아이템을 획득할 소비 아이템 슬롯 공간이 있는지 판단.
-                    // 아이템 슬롯 하나당 소비 아이템 10개.
+                    maxcount *= item_equip_count; // 아이템 중복 획득이 가능 하기에 maxcount = 획득 가능한 품목 최대 개수 * 획득 가능한 장비아이템 최대 수량(장비아이템 품목별 최대 개수)
+                    // 장비아이템을 획득할 인벤토리(장비아이템)에 여유가 있는지 판단
+                    if (m_pi_Itemslot.Check_Get_Item_Itemslot_Equip(maxcount) == true)
                     {
-                        int item_use_count = 0;
-                        for (int i = 0; i < item.m_nDictionary_Gift_Item_Use_Code.Count; i++)
-                        {
-                            if (item_use_count < item.m_nDictionary_Gift_Item_Use_Count[i])
-                                item_use_count = item.m_nDictionary_Gift_Item_Use_Count[i];
-                        }
-
-                        if (item_use_count % 10 == 0)
-                        {
-                            item_use_count /= 10;
-                        }
-                        else
-                        {
-                            item_use_count /= 10;
-                            item_use_count += 1;
-                        }
-
-                        maxcount *= item_use_count;
-                        //Debug.Log("최대 획득 가능한 소비 아이템 개수: " + maxcount);
-                        if (m_pi_Itemslot.Check_Get_Item_Itemslot_Use(maxcount) == true)
-                        {
-                            //Debug.Log("소비 아이템을 획득할 수 있습니다.");
-                        }
-                        else
-                        {
-                            //Debug.Log("소비 아이템 슬롯이 부족합니다.");
-                            item_use_get_possible = false;
-                        }
+                        // item_equip_get_possible = true;
                     }
-                    maxcount = item.m_nRandomBox_PickCount_Max;
-                    // 기타 아이텝을 획득할 기타 아이템 슬롯 공간이 있는지 판단.
-                    // 아이템 슬롯 하나당 기타 아이템 10개.
+                    else
                     {
-                        int item_etc_count = 0;
-                        for (int i = 0; i < item.m_nDictionary_Gift_Item_Etc_Code.Count; i++)
-                        {
-                            if (item_etc_count < item.m_nDictionary_Gift_Item_Etc_Count[i])
-                                item_etc_count = item.m_nDictionary_Gift_Item_Etc_Count[i];
-                        }
-
-                        if (item_etc_count % 10 == 0)
-                        {
-                            item_etc_count /= 10;
-                        }
-                        else
-                        {
-                            item_etc_count /= 10;
-                            item_etc_count += 1;
-                        }
-
-                        maxcount *= item_etc_count;
-                        //Debug.Log("최대 획득 가능한 기타 아이템 개수: " + maxcount);
-                        if (m_pi_Itemslot.Check_Get_Item_Itemslot_Etc(maxcount) == true)
-                        {
-                            //Debug.Log("기타 아이템을 획득할 수 있습니다.");
-                        }
-                        else
-                        {
-                            //Debug.Log("기타 아이템 슬롯이 부족합니다.");
-                            item_etc_get_possible = false;
-                        }
+                        item_equip_get_possible = false;
+                    }
+                    
+                    // 소비아이템을 획득할 인벤토리(소비아이템)에 여유가 있는지 판단. 소비아이템 10개당 인벤토리(소비아이템) 1개의 공간을 필요로 한다.
+                    maxcount = item.m_nRandomBox_PickCount_Max; // maxcount = 소비아이템(기프트_랜덤 독립형)을 사용 했을때 획득 가능한 품목 최대 개수
+                                                                // (최대 아이템 개수 = 품목별 획득 가능한 아이템 최대 개수 * 획득할 품목 수)
+                    int item_use_count = 0; // item_use_count = 소비아이템(기프트_랜덤 독립형) 사용 시 획득 가능한 소비아이템 최대 수량(소비아이템 품목별 최대 개수)
+                    for (int i = 0; i < item.m_nDictionary_Gift_Item_Use_Code.Count; i++)
+                    {
+                        if (item_use_count < item.m_nDictionary_Gift_Item_Use_Count[i])
+                            item_use_count = item.m_nDictionary_Gift_Item_Use_Count[i];
+                    }
+                    // 소비아이템 10개당 인벤토리(소비아이템) 1개의 공간을 차지한다. 그렇기에 10을 기준으로 인벤토리(소비아이템) 공간에 몇개의 여유가 있어야 하는지 계산한다.
+                    if (item_use_count % 10 == 0)
+                    {
+                        item_use_count /= 10;
+                    }
+                    else
+                    {
+                        item_use_count /= 10;
+                        item_use_count += 1;
+                    }
+                    maxcount *= item_use_count; // 아이템 중복 획득이 가능 하기에 maxcount = 획득 가능한 품목 최대 개수 * 획득 가능한 소비아이템 최대 수량(소비아이템 품목별 최대 개수)
+                    // 소비아이템을 획득할 인벤토리(소비아이템)에 여유가 있는지 판단
+                    if (m_pi_Itemslot.Check_Get_Item_Itemslot_Use(maxcount) == true)
+                    {
+                        // item_use_get_possible = true;
+                    }
+                    else
+                    {
+                        item_use_get_possible = false;
+                    }
+                    
+                    // 기타아이템을 획득할 인벤토리(기타아이템)에 여유가 있는지 판단. 기타아이템 10개당 인벤토리(기타아이템) 1개의 공간을 필요로 한다.
+                    maxcount = item.m_nRandomBox_PickCount_Max; // maxcount = 기타아이템(기프트_랜덤 독립형)을 사용 했을때 획득 가능한 품목 최대 개수
+                                                                // (최대 아이템 개수 = 품목별 획득 가능한 아이템 최대 개수 * 획득할 품목 수)
+                    int item_etc_count = 0; // item_etc_count = 기타아이템(기프트_랜덤 독립형) 사용 시 획득 가능한 기타아이템 최대 수량(기타아이템 품목별 최대 개수)
+                    for (int i = 0; i < item.m_nDictionary_Gift_Item_Etc_Code.Count; i++)
+                    {
+                        if (item_etc_count < item.m_nDictionary_Gift_Item_Etc_Count[i])
+                            item_etc_count = item.m_nDictionary_Gift_Item_Etc_Count[i];
+                    }
+                    // 기타아이템 10개당 인벤토리(기타아이템) 1개의 공간을 차지한다. 그렇기에 10을 기준으로 인벤토리(기타아이템) 공간에 몇개의 여유가 있어야 하는지 계산한다.
+                    if (item_etc_count % 10 == 0)
+                    {
+                        item_etc_count /= 10;
+                    }
+                    else
+                    {
+                        item_etc_count /= 10;
+                        item_etc_count += 1;
+                    }
+                    maxcount *= item_etc_count; // 아이템 중복 획득이 가능 하기에 maxcount = 획득 가능한 품목 최대 개수 * 획득 가능한 기타아이템 최대 수량(기타아이템 품목별 최대 개수)
+                    // 기타아이템을 획득할 인벤토리(기타아이템)에 여유가 있는지 판단
+                    if (m_pi_Itemslot.Check_Get_Item_Itemslot_Etc(maxcount) == true)
+                    {
+                        // item_etc_get_possible = true;
+                    }
+                    else
+                    {
+                        item_etc_get_possible = false;
                     }
 
+                    // 인벤토리(장비아이템, 소비아이템, 기타아이템)에 모두 여유가 있을 경우에만 소비아이템(기프트_랜덤 독립형(랜덤 지급 A타입 : 아이템 중복 획득 가능)) 사용 가능
                     if (item_equip_get_possible == false || item_use_get_possible == false || item_etc_get_possible == false)
                     {
                         return false;
@@ -2074,99 +2071,98 @@ public class Player_Total : MonoBehaviour
                         return true;
                     }
                 }
+                // 3. 소비아이템(기프트_랜덤 종속형(랜덤 지급 B타입 : 아이템 중복 획득 불가능)) 사용 조건(획득할 아이템 만큼 인벤토리에 여유가 있는지) 판단
                 else if (item.m_eItemUseGiftType == E_ITEM_USE_GIFT_TYPE.RANDOMBOX_DEPENDENTTRIAL)
                 {
-                    int maxcount = item.m_nRandomBox_PickCount_Max;
-                    // 장비 아이템을 획득할 장비 아이템 슬롯 공간이 있는지 판단.
-                    // 아이템 슬롯 하나당 장비 아이템 1개.
+                    // 장비아이템을 획득할 인벤토리(장비아이템)에 여유가 있는지 판단. 장비아이템 1개당 인벤토리(장비아이템) 1개의 공간을 필요로 한다.
+                    int maxcount = item.m_nRandomBox_PickCount_Max; // maxcount = 소비아이템(기프트_랜덤 종속형)을 사용 했을때 획득 가능한 아이템 품목 최대 개수(아이템 개수의 최대치가 아니다.)
+                                                                    // (아이템 개수 = 아이템 품목 최대 개수 * 각각의 아이템 품목별 개수)
+                                                                    //
+                                                                    // ※ 아이템의 분류별(장비아이템, 소비아이템, 기타아이템), 개수별 별도의 인벤토리(장비아이템, 소비아이템, 기타아이템) 여유 판단 로직이 필요하다.
+                                                                    //    현재 획득 가능한 아이템 품목의 최대치와 소비아이템(기프트)의 구성물품의 분류(장비아이템, 소비아이템, 기타아이템) 품목별 개수를 고려하지 않은채 구현되었다.
+                                                                    //    Ex) B기프트에서 최대 3개 품목을 획득할 수 있다.
+                                                                    //        B기프트는 '5종의 장비아이템(각 1개)', '2종의 소비아이템(각 5개)', '5종의 기타아이템(각 5개)'으로 구성되어 있다.
+                                                                    //        B기프트를 사용했을때 소비아이템은 2종밖에 획득하지 못한다.
+                                                                    //        그러나 현재 구현된 로직으로는 최대 아이템 획득 개수인 인벤토리(소비아이템)에 3개의 여유 공간이 없다면 해당 B기프트를 사용할 수 없다.
+                                                                    //
+                    int item_equip_count = 0; // item_equip_count = 소비아이템(기프트_랜덤 종속형) 사용 시 획득 가능한 장비아이템 최대 수량(장비아이템 품목별 최대 개수)
+                    for (int i = 0; i < item.m_nDictionary_Gift_Item_Equip_Count.Count; i++)
                     {
-                        int item_equip_count = 0;
-                        for (int i = 0; i < item.m_nDictionary_Gift_Item_Equip_Count.Count; i++)
-                        {
-                            if (item_equip_count < item.m_nDictionary_Gift_Item_Equip_Count[i])
-                                item_equip_count = item.m_nDictionary_Gift_Item_Equip_Count[i];
-                        }
-
-                        maxcount *= item_equip_count;
-                        //Debug.Log("최대 획득 가능한 장비 아이템 개수: " + maxcount);
-                        if (m_pi_Itemslot.Check_Get_Item_Itemslot_Equip(maxcount) == true)
-                        {
-                            //Debug.Log("장비 아이템을 획득할 수 있습니다.");
-                        }
-                        else
-                        {
-                            //Debug.Log("장비 아이템 슬롯이 부족합니다.");
-                            item_equip_get_possible = false;
-                        }
+                        if (item_equip_count < item.m_nDictionary_Gift_Item_Equip_Count[i])
+                            item_equip_count = item.m_nDictionary_Gift_Item_Equip_Count[i];
                     }
-                    maxcount = item.m_nRandomBox_PickCount_Max;
-                    // 소비 아이템을 획득할 소비 아이템 슬롯 공간이 있는지 판단.
-                    // 아이템 슬롯 하나당 소비 아이템 10개.
+                    maxcount *= item_equip_count; // 아이템 중복 획득이 불가능 함에도 maxcount = 획득 가능한 품목 최대 개수 * 획득 가능한 장비아이템 최대 수량(장비아이템 품목별 최대 개수)
+                    // 장비아이템을 획득할 인벤토리(장비아이템)에 여유가 있는지 판단
+                    if (m_pi_Itemslot.Check_Get_Item_Itemslot_Equip(maxcount) == true)
                     {
-                        int item_use_count = 0;
-                        for (int i = 0; i < item.m_nDictionary_Gift_Item_Use_Code.Count; i++)
-                        {
-                            if (item_use_count < item.m_nDictionary_Gift_Item_Use_Count[i])
-                                item_use_count = item.m_nDictionary_Gift_Item_Use_Count[i];
-                        }
-
-                        if (item_use_count % 10 == 0)
-                        {
-                            item_use_count /= 10;
-                        }
-                        else
-                        {
-                            item_use_count /= 10;
-                            item_use_count += 1;
-                        }
-
-                        maxcount *= item_use_count;
-
-                        //Debug.Log("최대 획득 가능한 소비 아이템 개수: " + maxcount);
-                        if (m_pi_Itemslot.Check_Get_Item_Itemslot_Use(maxcount) == true)
-                        {
-                            //Debug.Log("소비 아이템을 획득할 수 있습니다.");
-                        }
-                        else
-                        {
-                            //Debug.Log("소비 아이템 슬롯이 부족합니다.");
-                            item_use_get_possible = false;
-                        }
+                        // item_equip_get_possible = true;
                     }
-                    maxcount = item.m_nRandomBox_PickCount_Max;
-                    // 기타 아이텝을 획득할 기타 아이템 슬롯 공간이 있는지 판단.
-                    // 아이템 슬롯 하나당 기타 아이템 10개.
+                    else
                     {
-                        int item_etc_count = 0;
-                        for (int i = 0; i < item.m_nDictionary_Gift_Item_Etc_Code.Count; i++)
-                        {
-                            if (item_etc_count < item.m_nDictionary_Gift_Item_Etc_Count[i])
-                                item_etc_count = item.m_nDictionary_Gift_Item_Etc_Count[i];
-                        }
-
-                        if (item_etc_count % 10 == 0)
-                        {
-                            item_etc_count /= 10;
-                        }
-                        else
-                        {
-                            item_etc_count /= 10;
-                            item_etc_count += 1;
-                        }
-
-                        maxcount *= item_etc_count;
-                        //Debug.Log("최대 획득 가능한 기타 아이템 개수: " + maxcount);
-                        if (m_pi_Itemslot.Check_Get_Item_Itemslot_Etc(maxcount) == true)
-                        {
-                            //Debug.Log("기타 아이템을 획득할 수 있습니다.");
-                        }
-                        else
-                        {
-                            //Debug.Log("기타 아이템 슬롯이 부족합니다.");
-                            item_etc_get_possible = false;
-                        }
+                        item_equip_get_possible = false;
                     }
 
+                    // 소비아이템을 획득할 인벤토리(소비아이템)에 여유가 있는지 판단. 소비아이템 10개당 인벤토리(소비아이템) 1개의 공간을 필요로 한다.
+                    maxcount = item.m_nRandomBox_PickCount_Max; // maxcount = 소비아이템(기프트_랜덤 독립형)을 사용 했을때 획득 가능한 아이템 최대 개수
+															    // (최대 아이템 개수 = 품목별 획득 가능한 아이템 최대 개수 * 획득할 품목 수)
+                    int item_use_count = 0; // item_use_count = 소비아이템(기프트_랜덤 독립형) 사용 시 획득 가능한 소비아이템 최대 수량(소비아이템 품목별 최대 개수)
+                    for (int i = 0; i < item.m_nDictionary_Gift_Item_Use_Code.Count; i++)
+                    {
+                        if (item_use_count < item.m_nDictionary_Gift_Item_Use_Count[i])
+                            item_use_count = item.m_nDictionary_Gift_Item_Use_Count[i];
+                    }
+                    // 소비아이템 10개당 인벤토리(소비아이템) 1개의 공간을 차지한다. 그렇기에 10을 기준으로 인벤토리(소비아이템) 공간에 몇개의 여유가 있어야 하는지 계산한다.
+                    if (item_use_count % 10 == 0)
+                    {
+                        item_use_count /= 10;
+                    }
+                    else
+                    {
+                        item_use_count /= 10;
+                        item_use_count += 1;
+                    }
+                    maxcount *= item_use_count; // 아이템 중복 획득이 가능 하기에 maxcount = 획득 가능한 품목 최대 개수 * 획득 가능한 소비아이템 최대 수량(소비아이템 품목별 최대 개수)
+                    // 소비아이템을 획득할 인벤토리(소비아이템)에 여유가 있는지 판단
+                    if (m_pi_Itemslot.Check_Get_Item_Itemslot_Use(maxcount) == true)
+                    {
+                        // item_use_get_possible = true;
+                    }
+                    else
+                    {
+                        item_use_get_possible = false;
+                    }
+
+                    // 기타아이템을 획득할 인벤토리(기타아이템)에 여유가 있는지 판단. 기타아이템 10개당 인벤토리(기타아이템) 1개의 공간을 필요로 한다.
+                    maxcount = item.m_nRandomBox_PickCount_Max; // maxcount = 기타아이템(기프트_랜덤 독립형)을 사용 했을때 획득 가능한 품목 최대 개수
+											                    // (최대 아이템 개수 = 품목별 획득 가능한 아이템 최대 개수 * 획득할 품목 수)
+                    int item_etc_count = 0; // item_etc_count = 기타아이템(기프트_랜덤 독립형) 사용 시 획득 가능한 기타아이템 최대 수량(기타아이템 품목별 최대 개수)
+                    for (int i = 0; i < item.m_nDictionary_Gift_Item_Etc_Code.Count; i++)
+                    {
+                        if (item_etc_count < item.m_nDictionary_Gift_Item_Etc_Count[i])
+                            item_etc_count = item.m_nDictionary_Gift_Item_Etc_Count[i];
+                    }
+                    // 기타아이템 10개당 인벤토리(기타아이템) 1개의 공간을 차지한다. 그렇기에 10을 기준으로 인벤토리(기타아이템) 공간에 몇개의 여유가 있어야 하는지 계산한다.
+                    if (item_etc_count % 10 == 0)
+                    {
+                        item_etc_count /= 10;
+                    }
+                    else
+                    {
+                        item_etc_count /= 10;
+                        item_etc_count += 1;
+                    }
+                    maxcount *= item_etc_count; // 아이템 중복 획득이 가능 하기에 maxcount = 획득 가능한 품목 최대 개수 * 획득 가능한 기타아이템 최대 수량(기타아이템 품목별 최대 개수)
+                    // 기타아이템을 획득할 인벤토리(기타아이템)에 여유가 있는지 판단
+                    if (m_pi_Itemslot.Check_Get_Item_Itemslot_Etc(maxcount) == true)
+                    {
+                        // item_etc_get_possible = true;
+                    }
+                    else
+                    {
+                        item_etc_get_possible = false;
+                    }
+
+                    // 인벤토리(장비아이템, 소비아이템, 기타아이템)에 모두 여유가 있을 경우에만 소비아이템(기프트_랜덤 종속형(랜덤 지급 B타입 : 아이템 중복 획득 불가능)) 사용 가능
                     if (item_equip_get_possible == false || item_use_get_possible == false || item_etc_get_possible == false)
                     {
                         return false;
@@ -2176,6 +2172,7 @@ public class Player_Total : MonoBehaviour
                         return true;
                     }
                 }
+                // 4. 소비아이템(기프트_랜덤 혼합형(랜덤 지급 C타입) 사용 조건(획득할 아이템 만큼 인벤토리에 여유가 있는지) 판단(미구현)
                 else if (item.m_eItemUseGiftType == E_ITEM_USE_GIFT_TYPE.FUSION)
                 {
 
