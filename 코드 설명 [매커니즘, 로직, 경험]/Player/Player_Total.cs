@@ -2183,24 +2183,23 @@ public class Player_Total : MonoBehaviour
         return false;
     }
 
-    // 퀵슬롯 전용 장비 아이템 사용 조건 체크.
-    //
-    // ※ 함수이름 변경 예정. CheckCondition_Item_Use -> CheckCondition_Quickslot_Item_Equip
-    //
-    public bool CheckCondition_Item_Use(Item_Equip item, int arynumber)
+    // 퀵슬롯을 이용한 아이템(장비아이템, 소비아이템) 착용ㆍ사용 조건 판단
+    // 퀵슬롯을 이용한 장비아이템 착용 조건 판단. 퀵슬롯을 이용해 장비아이템 착용 및 장비아이템 교체(스위칭)가 가능하다.
+    public bool CheckCondition_Quickslot_Item_Equip(Item_Equip item, int arynumber) // item : 착용할 장비아이템 정보, arynumber : 착용할 장비아이템의 인벤토리(장비아이템) 배열 번호
     {
-        Item_Equip switchingitem;
-        bool itemexit = true;
+        Item_Equip switchingitem; // 착용 해제할 장비아이템
+        bool itemexit = true; // 착용 해제할 장비아이템의 존재 유무. 해당 변수의 상태에 따라 장비아이템 착용 및 장비아이템 교체(스위칭)가 이루어진다.
 
+	// 장비아이템 분류에 따라 착용 해제할 장비아이템(switchingitem)의 정보를 임시로 저장
         switch (item.m_eItemEquipType)
         {
             case E_ITEM_EQUIP_TYPE.HAT:
                 {
-                    if (Player_Equipment.m_bEquipment_Hat == true)
+                    if (Player_Equipment.m_bEquipment_Hat == true) // 착용중인 장비아이템(모자)가 존재할 경우
                     {
                         switchingitem = Player_Equipment.m_gEquipment_Hat;
                     }
-                    else
+                    else // 착용중인 장비아이템(모자)가 존재하지 않을 경우
                     {
                         switchingitem = null;
                         itemexit = false;
@@ -2209,11 +2208,11 @@ public class Player_Total : MonoBehaviour
                 break;
             case E_ITEM_EQUIP_TYPE.TOP:
                 {
-                    if (Player_Equipment.m_bEquipment_Top == true)
+                    if (Player_Equipment.m_bEquipment_Top == true) // 착용중인 장비아이템(상의)가 존재할 경우
                     {
                         switchingitem = Player_Equipment.m_gEquipment_Top;
                     }
-                    else
+                    else // 착용중인 장비아이템(상의)가 존재하지 않을 경우
                     {
                         switchingitem = null;
                         itemexit = false;
@@ -2222,11 +2221,11 @@ public class Player_Total : MonoBehaviour
                 break;
             case E_ITEM_EQUIP_TYPE.BOTTOMS:
                 {
-                    if (Player_Equipment.m_bEquipment_Bottoms == true)
+                    if (Player_Equipment.m_bEquipment_Bottoms == true) // 착용중인 장비아이템(하의)가 존재할 경우
                     {
                         switchingitem = Player_Equipment.m_gEquipment_Bottoms;
                     }
-                    else
+                    else // 착용중인 장비아이템(하의)가 존재하지 않을 경우
                     {
                         switchingitem = null;
                         itemexit = false;
@@ -2235,10 +2234,10 @@ public class Player_Total : MonoBehaviour
                 break;
             case E_ITEM_EQUIP_TYPE.SHOSE:
                 {
-                    if (Player_Equipment.m_bEquipment_Shose == true)
+                    if (Player_Equipment.m_bEquipment_Shose == true) // 착용중인 장비아이템(신발)가 존재할 경우
                     {
                         switchingitem = Player_Equipment.m_gEquipment_Shose;
-                    }
+                    } // 착용중인 장비아이템(신발)가 존재하지 않을 경우
                     else
                     {
                         switchingitem = null;
@@ -2248,11 +2247,11 @@ public class Player_Total : MonoBehaviour
                 break;
             case E_ITEM_EQUIP_TYPE.GLOVES:
                 {
-                    if (Player_Equipment.m_bEquipment_Gloves == true)
+                    if (Player_Equipment.m_bEquipment_Gloves == true) // 착용중인 장비아이템(장갑)가 존재할 경우
                     {
                         switchingitem = Player_Equipment.m_gEquipment_Gloves;
                     }
-                    else
+                    else // 착용중인 장비아이템(장갑)가 존재하지 않을 경우
                     {
                         switchingitem = null;
                         itemexit = false;
@@ -2261,11 +2260,11 @@ public class Player_Total : MonoBehaviour
                 break;
             case E_ITEM_EQUIP_TYPE.MAINWEAPON:
                 {
-                    if (Player_Equipment.m_bEquipment_Mainweapon == true)
+                    if (Player_Equipment.m_bEquipment_Mainweapon == true) // 착용중인 장비아이템(주무기)가 존재할 경우
                     {
                         switchingitem = Player_Equipment.m_gEquipment_Mainweapon;
                     }
-                    else
+                    else // 착용중인 장비아이템(주무기)가 존재하지 않을 경우
                     {
                         switchingitem = null;
                         itemexit = false;
@@ -2274,11 +2273,11 @@ public class Player_Total : MonoBehaviour
                 break;
             case E_ITEM_EQUIP_TYPE.SUBWEAPON:
                 {
-                    if (Player_Equipment.m_bEquipment_Subweapon == true)
+                    if (Player_Equipment.m_bEquipment_Subweapon == true) // 착용중인 장비아이템(보조무기)가 존재할 경우
                     {
                         switchingitem = Player_Equipment.m_gEquipment_Subweapon;
                     }
-                    else
+                    else // 착용중인 장비아이템(보조무기)가 존재하지 않을 경우
                     {
                         switchingitem = null;
                         itemexit = false;
@@ -2293,100 +2292,89 @@ public class Player_Total : MonoBehaviour
                 break;
         }
 
-        if (CheckCondition_Item_Equip(item, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true)
+        if (CheckCondition_Item_Equip(item, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true) // 플레이어 장비아이템 착용 관련 함수(장비아이템 착용 조건 판단 + 장비아이템 착용)
         {
-            m_pe_Equipment.Equip(item);
-            m_pm_Move.Equip();
-
-            //Player_Itemslot.m_gary_Itemslot_Equip[arynumber] = switchingitem;
-
-            if (itemexit == true)
+            if (itemexit == true) // 착용 해제할 장비아이템이 존재하는 경우 : 퀵슬롯에 등록된 장비아이템과 현재 착용중인 장비아이템 교체(스위칭)
             {
                 Player_Itemslot.m_gary_Itemslot_Equip[arynumber] = switchingitem;
                 Player_Itemslot.m_nary_Itemslot_Equip_Count[arynumber] = 1;
             }
-            else
+            else // 착용 해제할 장비아이템이 존재하지 않는 경우 : 퀵슬롯에 등록된 장비아이템 장착
             {
                 Player_Itemslot.m_gary_Itemslot_Equip[arynumber] = null;
                 Player_Itemslot.m_nary_Itemslot_Equip_Count[arynumber] = 0;
-                //GUIManager_Total.Instance.Update_Quickslot_Equip(arynumber);
             }
 
-            GUIManager_Total.Instance.Update_Itemslot();
-            GUIManager_Total.Instance.Update_Equipslot();
-            CheckSetItemEffect();
-            m_pm_Move.SetAttackSpeed(Player_Total.Instance.m_ps_Status.Return_AttackSpeed());
-            GUIManager_Total.Instance.Update_SS();
+            GUIManager_Total.Instance.Update_Itemslot(); // 인벤토리GUI 업데이트
+	    GUIManager_Total.Instance.Update_Equipslot(); // 상태창(장비창)GUI 업데이트
+	    CheckSetItemEffect(); // 아이템 세트효과 판단(적용)
+	    m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed()); // 플레이어 공격 속도 설정(기본 공격(연계 공격)을 위해 Player_Status.cs의 공격 속도를 Player_Move.cs로 넘겨준다.)
+	    GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
 
+  	    // 관련 GUI 비활성화
             if (GUIManager_Total.Instance.m_GUI_Itemslot_Equip_Information.m_gPanel_Itemslot_Equip_Information.activeSelf == true)
-                GUIManager_Total.Instance.m_GUI_Itemslot_Equip_Information.m_gPanel_Itemslot_Equip_Information.SetActive(false);
+                GUIManager_Total.Instance.m_GUI_Itemslot_Equip_Information.m_gPanel_Itemslot_Equip_Information.SetActive(false); // 인벤토리GUI의 장비아이템 정보GUI 비활성화
             if (GUIManager_Total.Instance.m_GUI_Equipslot_Equip_Information.m_gPanel_Equipslot_Equip_Information.activeSelf == true)
-                GUIManager_Total.Instance.m_GUI_Equipslot_Equip_Information.m_gPanel_Equipslot_Equip_Information.SetActive(false);
+                GUIManager_Total.Instance.m_GUI_Equipslot_Equip_Information.m_gPanel_Equipslot_Equip_Information.SetActive(false); // 상태창(장비창)GUI의 장비아이템 정보GUI 비활성화
 
             if (GUIManager_Total.Instance.m_GUI_Status.m_gPanel_DetailStatus.activeSelf == true)
             {
-                GUIManager_Total.Instance.m_GUI_Status.UpdateStatus_SetItemEffect(CheckSetItemEffect_UI());
+                GUIManager_Total.Instance.m_GUI_Status.UpdateStatus_SetItemEffect(CheckSetItemEffect_UI()); // 아이템 세트효과GUI(상태창GUI에 포함) 업데이트
             }
 
             return true;
         }
         else
         {
-
-
             return false;
         }
     }
 
-    // 퀵슬롯 전용 소비 아이템 사용 조건 체크.
-    public bool CheckCondition_Item_Use(Item_Use item)
+    // 퀵슬롯을 이용한 소비아이템 착용 조건 판단. 퀵슬롯을 이용해 소비아이템 사용 및 소비아이템 잔여 쿨타임 확인이 가능하다.
+    public bool CheckCondition_Quickslot_Item_Use(Item_Use item) // item : 사용할 소비아이템 정보
     {
-        if (m_ps_Status.CheckCondition_Item_Use(item) == 0)
+        if (m_ps_Status.CheckCondition_Item_Use(item) == 0) // 소비아이템 사용 조건 판단
         {
+	    // 소비아이템의 분류가 회복포션, 일시적 버프포션, 영구적 버프포션 일 경우
             if (item.m_eItemUseType == E_ITEM_USE_TYPE.RECOVERPOTION ||
                 item.m_eItemUseType == E_ITEM_USE_TYPE.TEMPORARYBUFFPOTION ||
                 item.m_eItemUseType == E_ITEM_USE_TYPE.ETERNALBUFFPOTION)
             {
-                int Item_Use_Code = m_ps_Status.ApplyPotion(item);
-                m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed());
+                int Item_Use_Code = m_ps_Status.ApplyPotion(item); // 소비아이템 사용 시 스탯(능력치, 평판), 버프ㆍ디버프 업데이트
+                m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed()); // 플레이어 공격 속도 설정(기본 공격(연계 공격)을 위해 Player_Status.cs의 공격 속도를 Player_Move.cs로 넘겨준다.)
 
-                if (Item_Use_Code == 1)
+                if (Item_Use_Code == 1) // 소비아이템 사용 실패(잔여 쿨타임 존재)
                 {
                     return false;
                 }
-                else
+                else // 소비아이템 사용 성공
                 {
                     return true;
                 }
-
-                //GUIManager_Total.Instance.Update_SS();
-                //GUIManager_Total.Instance.Update_Itemslot();
-                //GUIManager_Total.Instance.Update_Equipslot();
             }
-            else if (item.m_eItemUseType == E_ITEM_USE_TYPE.GIFT)
-            {
-
-            }
-
+	    //
+	    // ※ 소비아이템의 분류가 강화서, 기프트일 경우 퀵슬롯을 이용해 해당 소비아이템을 사용할 수 없다.
+	    //
+     
             return true;
         }
 
         return false;
     }
 
-    // 퀵슬롯.
-    // 퀵슬롯에 등록된 아이템의 총 수량 확인.
-    public bool Check_Quickslot_Item(E_QUICKSLOT_CATEGORY eqc, int itemcode)
+    // 퀵슬롯에 등록된 아이템 수량 현황 확인(장비아이템 : 1개(고정), 소비아이템 : 퀵슬롯에 등록된 소비아이템의 인벤토리(소비아이템) 내 보유 총량, 기타아이템 : 퀵슬롯에 등록된 기타아이템의 인벤토리(기타아이템) 내 보유 총량)
+    // return true : 아이템 개수 > 0 / return false : 아이템 개수 = 0
+    public bool Check_Quickslot_Item(E_QUICKSLOT_CATEGORY eqc, int itemcode) // eqc : 퀵슬롯에 등록된 아이템 분류(장비아이템, 소비아이템, 기타아이템), itemcode : 퀵슬롯에 등록된 아이템 코드
     {
-        if (m_pi_Itemslot.Check_Quickslot_Item(eqc, itemcode) > 0)
+        if (m_pi_Itemslot.Check_Quickslot_Item(eqc, itemcode) > 0) // 퀵슬롯에 등록된 아이템의 수량 현황 확인
             return true;
         else
             return false;
     }
-    // 퀵슬롯에 등록된 아이템 수 반환
-    public int Return_Quickslot_Item_Count(E_QUICKSLOT_CATEGORY eqc, int itemcode)
+    // 퀵슬롯에 등록된 아이템 수량 반환
+    public int Return_Quickslot_Item_Count(E_QUICKSLOT_CATEGORY eqc, int itemcode) // eqc : 퀵슬롯에 등록된 아이템 분류(장비아이템, 소비아이템, 기타아이템), itemcode : 퀵슬롯에 등록된 아이템 코드
     {
-        return m_pi_Itemslot.Check_Quickslot_Item(eqc, itemcode);
+        return m_pi_Itemslot.Check_Quickslot_Item(eqc, itemcode); // 퀵슬롯에 등록된 아이템의 수량 현황 확인
     }
 
     // 퀵슬롯에 등록된 아이템 사용.
