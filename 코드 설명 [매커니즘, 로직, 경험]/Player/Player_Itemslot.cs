@@ -296,7 +296,7 @@ public class Player_Itemslot : MonoBehaviour
         return ReturnITem;
     }
 
-    // 퀵슬롯에 등록된 아이템의 수량 현황을 확인하는 함수
+    // 퀵슬롯에 등록된 아이템의 수량 현황 확인
     public int Check_Quickslot_Item(E_QUICKSLOT_CATEGORY eqc, int itemcode)
     {
         int itemcount = 0;
