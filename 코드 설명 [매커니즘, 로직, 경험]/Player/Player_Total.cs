@@ -1915,57 +1915,53 @@ public class Player_Total : MonoBehaviour
         return 0;
     }
 
-    // 소비아이템(기프트) 사용 조건(획득할 아이템 만큼 인벤토리에 여유가 있는지 판단) 판단
+    // 소비아이템(기프트) 사용 조건(획득할 아이템 만큼 인벤토리에 여유가 있는지) 판단
     public bool CheckCondition_Item_Use_Gift(Item_Use item, int arynumber)
     {
         if (m_pm_Move.m_ePlayerMoveState != Player_Move.E_PLAYER_MOVE_STATE.DEATH) // 플레이어 동작 FSM이 사망상태가 아닌 경우(플레이어 사망 상태가 아닐때)
         {
             if (m_ps_Status.CheckCondition_Item_Use(item) == 0) // 소비아이템 사용 조건 판단
             {
-                bool item_equip_get_possible = true, item_use_get_possible = true, item_etc_get_possible = true;
+                bool item_equip_get_possible = true, item_use_get_possible = true, item_etc_get_possible = true; // 인벤토리에 여유가 있는지 판단할때 사용되는 변수
+
+                // 1. 소비아이템(기프트_고정형(전체 확정 지급형)) 사용 조건(획득할 아이템 만큼 인벤토리에 여유가 있는지) 판단
                 if (item.m_eItemUseGiftType == E_ITEM_USE_GIFT_TYPE.FIXEDBOX)
                 {
-                    // 장비 아이템을 획득할 장비 아이템 슬롯 공간이 있는지 판단.
+                    // 장비아이템을 획득할 인벤토리에 여유가 있는지 판단
+                    int item_equip_count = 0;
+                    // item_equip_count = 소비아이템(기프트_고정형) 사용 시 획득할 아이템 수량
+                    for (int i = 0; i < item.m_nDictionary_Gift_Item_Equip_Count.Count; i++)
                     {
-                        int item_equip_count = 0;
-                        for (int i = 0; i < item.m_nDictionary_Gift_Item_Equip_Count.Count; i++)
-                        {
-                            item_equip_count += item.m_nDictionary_Gift_Item_Equip_Count[i];
-                        }
-
-                        if (m_pi_Itemslot.Check_Get_Item_Itemslot_Equip(item_equip_count) == true)
-                        {
-                            //Debug.Log("장비 아이템을 획득할 수 있습니다.");
-                        }
-                        else
-                        {
-                            //Debug.Log("장비 아이템 슬롯이 부족합니다.");
-                            item_equip_get_possible = false;
-                        }
+                        item_equip_count += item.m_nDictionary_Gift_Item_Equip_Count[i];
                     }
-                    // 소비 아이템을 획득할 소비 아이템 슬롯 공간이 있는지 판단.
+                    if (m_pi_Itemslot.Check_Get_Item_Itemslot_Equip(item_equip_count) == true) // item_equip_count만큼의 인벤토리(장비아이템) 여유 공간 판단
                     {
-                        if (m_pi_Itemslot.Check_Get_Item_Itemslot_Use(item.m_nDictionary_Gift_Item_Use_Code, item.m_nDictionary_Gift_Item_Use_Count) == true)
-                        {
-                            //Debug.Log("소비 아이템을 획득할 수 있습니다.");
-                        }
-                        else
-                        {
-                            //Debug.Log("소비 아이템 슬롯이 부족합니다.");
-                            item_use_get_possible = false;
-                        }
+                        //Debug.Log("장비 아이템을 획득할 수 있습니다.");
                     }
-                    // 기타 아이텝을 획득할 기타 아이템 슬롯 공간이 있는지 판단.
+                    else
                     {
-                        if (m_pi_Itemslot.Check_Get_Item_Itemslot_Etc(item.m_nDictionary_Gift_Item_Etc_Code, item.m_nDictionary_Gift_Item_Etc_Count) == true)
-                        {
-                            //Debug.Log("기타 아이템을 획득할 수 있습니다.");
-                        }
-                        else
-                        {
-                            //Debug.Log("기타 아이템 슬롯이 부족합니다.");
-                            item_etc_get_possible = false;
-                        }
+                        //Debug.Log("장비 아이템 슬롯이 부족합니다.");
+                        item_equip_get_possible = false;
+                    }
+                    // 소비아이템을 획득할 인벤토리에 여유가 있는지 판단
+                    if (m_pi_Itemslot.Check_Get_Item_Itemslot_Use(item.m_nDictionary_Gift_Item_Use_Code, item.m_nDictionary_Gift_Item_Use_Count) == true)
+                    {
+                        //Debug.Log("소비 아이템을 획득할 수 있습니다.");
+                    }
+                    else
+                    {
+                        //Debug.Log("소비 아이템 슬롯이 부족합니다.");
+                        item_use_get_possible = false;
+                    }
+                    // 기타아이텝을 획득할 인벤토리에 여유가 있는지 판단
+                    if (m_pi_Itemslot.Check_Get_Item_Itemslot_Etc(item.m_nDictionary_Gift_Item_Etc_Code, item.m_nDictionary_Gift_Item_Etc_Count) == true)
+                    {
+                        //Debug.Log("기타 아이템을 획득할 수 있습니다.");
+                    }
+                    else
+                    {
+                        //Debug.Log("기타 아이템 슬롯이 부족합니다.");
+                        item_etc_get_possible = false;
                     }
 
                     if (item_equip_get_possible == false || item_use_get_possible == false || item_etc_get_possible == false)
