@@ -497,7 +497,7 @@ public class Player_Itemslot : MonoBehaviour
     }
 
     // 소비아이템_기프트(랜덤박스, 선물상자 등) 사용 관련 함수
-    // 인벤토리(장비아이템)의 남은 공간 확인. itemcount 만큼의 소비아이템을 획득할 여분의 인벤토리 공간이 남아 있는지 판단
+    // 인벤토리(장비아이템)의 남은(여유) 공간 확인. itemcount 만큼의 장비아이템을 획득할 여분의 인벤토리 공간이 남아 있는지 판단
     public bool Check_Get_Item_Itemslot_Equip(int itemcount)
     {
         int value = 0;
@@ -512,7 +512,7 @@ public class Player_Itemslot : MonoBehaviour
         else
             return false;
     }
-    // 인벤토리(소비아이템)의 남은 공간 확인. itemcount 만큼의 소비아이템을 획득할 여분의 인벤토리 공간이 남아 있는지 판단
+    // 인벤토리(소비아이템)의 남은(여유) 공간 확인. itemcount 만큼의 소비아이템을 획득할 여분의 인벤토리 공간이 남아 있는지 판단
     public bool Check_Get_Item_Itemslot_Use(int itemcount)
     {
         int value = 0;
@@ -563,7 +563,7 @@ public class Player_Itemslot : MonoBehaviour
 
         return true;
     }
-    // 인벤토리(기타아이템)의 남은 공간 확인. itemcount 만큼의 기타아이템을 획득할 여분의 인벤토리 공간이 남아 있는지 판단
+    // 인벤토리(기타아이템)의 남은(여유) 공간 확인. itemcount 만큼의 기타아이템을 획득할 여분의 인벤토리 공간이 남아 있는지 판단
     public bool Check_Get_Item_Itemslot_Etc(int itemcount)
     {
         int value = 0;
