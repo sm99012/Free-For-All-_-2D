@@ -867,6 +867,7 @@ public class Player_Status : MonoBehaviour
     }
 
     // 소비아이템 사용 조건 판단
+    // return 0 : 사용 가능 / return 1 : 사용 불가능
     public int CheckCondition_Item_Use(Item_Use item) // item : 사용할 소비아이템 정보
     {
         if (m_sStatus.CheckCondition_Max(item.m_sStatus_Limit_Max) == false) // 소비아이템 사용 조건 : 최대 능력치(플레이어의 능력치 합계가 소비아이템 사용 조건(최대 능력치)를 초과한 경우 제한)
