@@ -346,33 +346,7 @@ public class GUIManager_Total : MonoBehaviour
     {
         yield return new WaitForSeconds(1.5f);
 
-        int randomnumber;
-        Map offmap = Player_Total.Instance.m_pm_Map.m_Map;
-        Map onmap;
-
-        if (Total_Manager.Instance.m_nSceneNumber == 0)
-        {
-            Player_Total.Instance.m_pm_Map.ChangeMap(MapManager.Instance.m_List_ReTryArea_Tutorial[0].m_Map_ReTry);
-            Player_Total.Instance.gameObject.transform.position = MapManager.Instance.m_List_ReTryArea_Tutorial[0].m_vReTryPos;
-            onmap = MapManager.Instance.m_List_ReTryArea_Tutorial[0].m_Map_ReTry;
-        }
-        else if (Total_Manager.Instance.m_nSceneNumber == 1)
-        {
-            randomnumber = Random.Range(0, MapManager.Instance.m_List_ReTryArea_Chapter1.Count);
-
-            Player_Total.Instance.m_pm_Map.ChangeMap(MapManager.Instance.m_List_ReTryArea_Chapter1[randomnumber].m_Map_ReTry);
-            Player_Total.Instance.gameObject.transform.position = MapManager.Instance.m_List_ReTryArea_Chapter1[randomnumber].m_vReTryPos;
-            onmap = MapManager.Instance.m_List_ReTryArea_Chapter1[randomnumber].m_Map_ReTry;
-        }
-        else
-        {
-            onmap = null;
-        }
-
-        Player_Total.Instance.m_ps_Status.ReTry();
-        Player_Total.Instance.m_pm_Move.ReTry();
-
-        MapManager.Instance.Update_Map_Object(offmap, onmap);
+        Player_Total.Instance.ReTry_Success();
 
         Update_MapName(Player_Total.Instance.m_pm_Map.m_Map);
         Update_SS();
