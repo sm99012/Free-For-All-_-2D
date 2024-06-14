@@ -1096,7 +1096,7 @@ public class Player_Total : MonoBehaviour
                 GUIManager_Total.Instance.Update_Equipslot(); // 상태창(장비창)GUI 업데이트
                 CheckSetItemEffect(); // 아이템 세트효과 판단(적용)
                 m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed()); // 플레이어 공격 속도 설정(기본 공격(연계 공격)을 위해 Player_Status.cs의 공격 속도를 Player_Move.cs로 넘겨준다.)
-                GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
+                GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
 
                 if (GUIManager_Total.Instance.m_GUI_Status.m_gPanel_DetailStatus.activeSelf == true) // 상태창(능력치창)GUI가 활성화된 상태일 경우(능력치창, 장비창, 아이템 세트효과창은 상태창으로 통합)
                 {
@@ -1120,7 +1120,7 @@ public class Player_Total : MonoBehaviour
         if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Hat, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true) // 장비아이템(모자) 착용 조건 판단, 조건 충족 시 스탯(능력치, 평판) 업데이트
                                                                                                                                          // 장비아이템(모자) 착용 조건을 만족 했을 경우
         {
-            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
+            GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
 
             return true;
         }
@@ -1131,7 +1131,7 @@ public class Player_Total : MonoBehaviour
             m_ps_Status.m_sSoc_Extra_Equip_Hat = m_ps_Status.m_sSoc_Null;
             m_ps_Status.UpdateStatus_Equip(); // 장비아이템 해제로인한 능력치 업데이트
             m_ps_Status.UpdateSOC(); // 장비아이템 해제로인한 평판 업데이트 
-            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
+            GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
 
             return false;
         }
@@ -1142,7 +1142,7 @@ public class Player_Total : MonoBehaviour
         if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Top, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true) // 장비아이템(상의) 착용 조건 판단, 조건 충족 시 스탯(능력치, 평판) 업데이트
                                                                                                                                          // 장비아이템 착용 조건을 만족 했을 경우
         {
-            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
+            GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
 
             return true;
         }
@@ -1153,7 +1153,7 @@ public class Player_Total : MonoBehaviour
             m_ps_Status.m_sSoc_Extra_Equip_Hat = m_ps_Status.m_sSoc_Null;
             m_ps_Status.UpdateStatus_Equip(); // 장비아이템 해제로인한 능력치 업데이트
             m_ps_Status.UpdateSOC(); // 장비아이템 해제로인한 평판 업데이트 
-            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
+            GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
 
             return false;
         }
@@ -1164,7 +1164,7 @@ public class Player_Total : MonoBehaviour
         if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Bottoms, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true) // 장비아이템(하의) 착용 조건 판단, 조건 충족 시 스탯(능력치, 평판) 업데이트
                                                                                                                                              // 장비아이템(하의) 착용 조건을 만족 했을 경우
         {
-            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
+            GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
 
             return true;
         }
@@ -1175,7 +1175,7 @@ public class Player_Total : MonoBehaviour
             m_ps_Status.m_sSoc_Extra_Equip_Bottoms = m_ps_Status.m_sSoc_Null;
             m_ps_Status.UpdateStatus_Equip(); // 장비아이템 해제로인한 능력치 업데이트
             m_ps_Status.UpdateSOC(); // 장비아이템 해제로인한 평판 업데이트 
-            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
+            GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
 
             return false;
         }
@@ -1186,7 +1186,7 @@ public class Player_Total : MonoBehaviour
         if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Shose, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true) // 장비아이템(신발) 착용 조건 판단, 조건 충족 시 스탯(능력치, 평판) 업데이트
                                                                                                                                            // 장비아이템(신발) 착용 조건을 만족 했을 경우
         {
-            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
+            GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
 
             return true;
         }
@@ -1197,7 +1197,7 @@ public class Player_Total : MonoBehaviour
             m_ps_Status.m_sSoc_Extra_Equip_Shose = m_ps_Status.m_sSoc_Null;
             m_ps_Status.UpdateStatus_Equip(); // 장비아이템 해제로인한 능력치 업데이트
             m_ps_Status.UpdateSOC(); // 장비아이템 해제로인한 평판 업데이트 
-            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
+            GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
 
             return false;
         }
@@ -1208,7 +1208,7 @@ public class Player_Total : MonoBehaviour
         if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Gloves, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true) // 장비아이템(장갑) 착용 조건 판단, 조건 충족 시 스탯(능력치, 평판) 업데이트
                                                                                                                                             // 장비아이템(장갑) 착용 조건을 만족 했을 경우
         {
-            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
+            GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
 
             return true;
         }
@@ -1219,7 +1219,7 @@ public class Player_Total : MonoBehaviour
             m_ps_Status.m_sSoc_Extra_Equip_Gloves = m_ps_Status.m_sSoc_Null;
             m_ps_Status.UpdateStatus_Equip(); // 장비아이템 해제로인한 능력치 업데이트
             m_ps_Status.UpdateSOC(); // 장비아이템 해제로인한 평판 업데이트 
-            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
+            GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
 
             return false;
         }
@@ -1230,7 +1230,7 @@ public class Player_Total : MonoBehaviour
         if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Mainweapon, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true) // 장비아이템(주무기) 착용 조건 판단, 조건 충족 시 스탯(능력치, 평판) 업데이트
                                                                                                                                                 // 장비아이템(주무기) 착용 조건을 만족 했을 경우
         {
-            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
+            GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
 
             return true;
         }
@@ -1241,7 +1241,7 @@ public class Player_Total : MonoBehaviour
             m_ps_Status.m_sSoc_Extra_Equip_Mainweapon = m_ps_Status.m_sSoc_Null;
             m_ps_Status.UpdateStatus_Equip(); // 장비아이템 해제로인한 능력치 업데이트
             m_ps_Status.UpdateSOC(); // 장비아이템 해제로인한 평판 업데이트 
-            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
+            GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
 
             return false;
         }
@@ -1252,7 +1252,7 @@ public class Player_Total : MonoBehaviour
         if (m_ps_Status.CheckCondition_Item_Equip(Player_Equipment.m_gEquipment_Subweapon, m_ps_Status.m_sStatus, m_ps_Status.m_sSoc) == true) // 장비아이템(보조무기) 착용 조건 판단, 조건 충족 시 스탯(능력치, 평판) 업데이트
                                                                                                                                                // 장비아이템(보조무기) 착용 조건을 불만족 했을 경우
         {
-            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
+            GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
 
             return true;
         }
@@ -1263,7 +1263,7 @@ public class Player_Total : MonoBehaviour
             m_ps_Status.m_sSoc_Extra_Equip_Subweapon = m_ps_Status.m_sSoc_Null;
             m_ps_Status.UpdateStatus_Equip(); // 장비아이템 해제로인한 능력치 업데이트
             m_ps_Status.UpdateSOC(); // 장비아이템 해제로인한 평판 업데이트 
-            GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
+            GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
 
             return false;
         }
@@ -1414,7 +1414,7 @@ public class Player_Total : MonoBehaviour
                 GUIManager_Total.Instance.Update_Equipslot(); // 상태창(장비창)GUI 업데이트
                 CheckSetItemEffect(); // 아이템 세트효과 판단(적용)
                 m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed()); // 플레이어 공격 속도 설정(기본 공격(연계 공격)을 위해 Player_Status.cs의 공격 속도를 Player_Move.cs로 넘겨준다.)
-                GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
+                GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
                 m_pq_Quest.QuestUpdate_Collect(item); // 진행중인 퀘스트 현황을 업데이트하는 함수(퀘스트 타입 : 수집)
 
                 if (GUIManager_Total.Instance.m_GUI_Status.m_gPanel_DetailStatus.activeSelf == true) // 상태창(능력치창 + 장비창 + 아이템 세트효과창)GUI가 활성화 되어 있을 경우
@@ -1449,7 +1449,7 @@ public class Player_Total : MonoBehaviour
                     GUIManager_Total.Instance.Update_Equipslot(); // 상태창(장비창)GUI 업데이트
                     CheckSetItemEffect(); // 아이템 세트효과 판단(적용)
                     m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed()); // 플레이어 공격 속도 설정(기본 공격(연계 공격)을 위해 Player_Status.cs의 공격 속도를 Player_Move.cs로 넘겨준다.)
-                    GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
+                    GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
 
                     return Item_Use_Code;
                 }
@@ -1914,7 +1914,7 @@ public class Player_Total : MonoBehaviour
 
         return 0;
     }
-
+    
     // 소비아이템(기프트) 사용 조건(획득할 아이템 만큼 인벤토리에 여유가 있는지) 판단
     public bool CheckCondition_Item_Use_Gift(Item_Use item, int arynumber)
     {
@@ -2183,7 +2183,7 @@ public class Player_Total : MonoBehaviour
         return false;
     }
 
-    // 퀵슬롯을 이용한 아이템(장비아이템, 소비아이템) 착용ㆍ사용 조건 판단
+    // 퀵슬롯을 이용한 아이템(장비아이템, 소비아이템) 착용ㆍ사용 관련 함수 (장비아이템 착용, 소비아이템 사용 조건 판단 + 장비아이템 착용, 소비아이템 사용)
     // 퀵슬롯을 이용한 장비아이템 착용 조건 판단. 퀵슬롯을 이용해 장비아이템 착용 및 장비아이템 교체(스위칭)가 가능하다.
     public bool CheckCondition_Quickslot_Item_Equip(Item_Equip item, int arynumber) // item : 착용할 장비아이템 정보, arynumber : 착용할 장비아이템의 인벤토리(장비아이템) 배열 번호
     {
@@ -2309,7 +2309,7 @@ public class Player_Total : MonoBehaviour
 	    GUIManager_Total.Instance.Update_Equipslot(); // 상태창(장비창)GUI 업데이트
 	    CheckSetItemEffect(); // 아이템 세트효과 판단(적용)
 	    m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed()); // 플레이어 공격 속도 설정(기본 공격(연계 공격)을 위해 Player_Status.cs의 공격 속도를 Player_Move.cs로 넘겨준다.)
-	    GUIManager_Total.Instance.Update_SS(); // 스탯 GUI 업데이트
+	    GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
 
   	    // 관련 GUI 비활성화
             if (GUIManager_Total.Instance.m_GUI_Itemslot_Equip_Information.m_gPanel_Itemslot_Equip_Information.activeSelf == true)
@@ -2330,7 +2330,7 @@ public class Player_Total : MonoBehaviour
         }
     }
 
-    // 퀵슬롯을 이용한 소비아이템 착용 조건 판단. 퀵슬롯을 이용해 소비아이템 사용 및 소비아이템 잔여 쿨타임 확인이 가능하다.
+    // 퀵슬롯을 이용한 소비아이템 사용 조건 판단. 퀵슬롯을 이용해 소비아이템 사용 및 소비아이템 잔여 쿨타임 확인이 가능하다.
     public bool CheckCondition_Quickslot_Item_Use(Item_Use item) // item : 사용할 소비아이템 정보
     {
         if (m_ps_Status.CheckCondition_Item_Use(item) == 0) // 소비아이템 사용 조건 판단
@@ -2362,7 +2362,7 @@ public class Player_Total : MonoBehaviour
         return false;
     }
 
-    // 퀵슬롯에 등록된 아이템 수량 현황 확인(장비아이템 : 1개(고정), 소비아이템 : 퀵슬롯에 등록된 소비아이템의 인벤토리(소비아이템) 내 보유 총량, 기타아이템 : 퀵슬롯에 등록된 기타아이템의 인벤토리(기타아이템) 내 보유 총량)
+    // 퀵슬롯에 등록된 아이템 수량 현황 확인(장비아이템 : 1개(고정), 소비아이템 : 퀵슬롯에 등록된 소비아이템의 인벤토리(소비아이템) 내 소유 총량, 기타아이템 : 퀵슬롯에 등록된 기타아이템의 인벤토리(기타아이템) 내 소유 총량)
     // return true : 아이템 개수 > 0 / return false : 아이템 개수 = 0
     public bool Check_Quickslot_Item(E_QUICKSLOT_CATEGORY eqc, int itemcode) // eqc : 퀵슬롯에 등록된 아이템 분류(장비아이템, 소비아이템, 기타아이템), itemcode : 퀵슬롯에 등록된 아이템 코드
     {
@@ -2376,328 +2376,243 @@ public class Player_Total : MonoBehaviour
     {
         return m_pi_Itemslot.Check_Quickslot_Item(eqc, itemcode); // 퀵슬롯에 등록된 아이템의 수량 현황 확인
     }
-
-    // 퀵슬롯에 등록된 아이템 사용.
-    public bool Use_Quickslot_Item_Use(E_QUICKSLOT_CATEGORY eqc, int itemcode)
+    
+    // 퀵슬롯에 등록된 장비아이템 착용 및 교체(스위칭)
+    public void Use_Quickslot_Item_Equip(E_QUICKSLOT_CATEGORY eqc, int arynumber, int quickslotarynumber) // eqc : 퀵슬롯에 등록된 아이템 분류(장비아이템, 소비아이템, 기타아이템), arynumber : 퀵슬롯에 등록된 장비아이템의 인벤토리(장비아이템) 배열 번호, quickslotarynumber : 사용할 퀵슬롯 배열 번호
     {
-        if (Check_Quickslot_Item(eqc, itemcode) == true)
+        if (Check_Quickslot_Item(eqc, arynumber) == true) // 퀵슬롯에 등록된 아이템 수량 현황 확인
         {
-            if (CheckCondition_Item_Use(ItemManager.instance.m_Dictionary_MonsterDrop_Use[itemcode]) == true)
+            if (GUIManager_Total.Instance.m_GUI_Quickslot.m_qsList_Quickslot[quickslotarynumber].m_nItem_Equip_AryNumber != -1) // 착용할 장비아이템의 인벤토리(장비아이템) 배열 번호가 -1이 아닐때(존재할때)
             {
-                m_pi_Itemslot.Use_Quickslot_Item(eqc, itemcode);
-
-                if (Return_Quickslot_Item_Count(E_QUICKSLOT_CATEGORY.USE, itemcode) == 0)
+                if (CheckCondition_Quickslot_Item_Equip(Player_Itemslot.m_gary_Itemslot_Equip[arynumber], arynumber) == true) // 퀵슬롯을 이용한 장비아이템 착용 조건 판단 + 장비아이템 착용
                 {
+                    GUIManager_Total.Instance.Set_Quickslot(quickslotarynumber, eqc, arynumber); // 퀵슬롯GUI 업데이트
+
+                    m_pi_Itemslot.Use_Quickslot_Item(eqc, arynumber); // 퀵슬롯에 등록된 아이템의 수량 현황을 갱신하는 용도
+                }
+            }
+	    
+     	    GUIManager_Total.Instance.Update_Itemslot(); // 인벤토리GUI 업데이트
+	    GUIManager_Total.Instance.Update_Equipslot(); // 상태창(장비창)GUI 업데이트
+	    CheckSetItemEffect(); // 아이템 세트효과 판단(적용)
+	    m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed()); // 플레이어 공격 속도 설정(기본 공격(연계 공격)을 위해 Player_Status.cs의 공격 속도를 Player_Move.cs로 넘겨준다.)
+	    GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
+        }
+    }
+    // 퀵슬롯에 등록된 소비아이템 사용
+    public bool Use_Quickslot_Item_Use(E_QUICKSLOT_CATEGORY eqc, int itemcode) // eqc : 퀵슬롯에 등록된 아이템 분류(장비아이템, 소비아이템, 기타아이템), itemcode : 퀵슬롯에 등록된 아이템 코드
+    {
+        if (Check_Quickslot_Item(eqc, itemcode) == true) // 퀵슬롯에 등록된 아이템 수량 현황 확인
+        {
+            if (CheckCondition_Quickslot_Item_Use(ItemManager.instance.m_Dictionary_MonsterDrop_Use[itemcode]) == true) // 퀵슬롯을 이용한 소비아이템 사용 조건 판단 + 소비아이템 사용
+            {
+                m_pi_Itemslot.Use_Quickslot_Item(eqc, itemcode); // 퀵슬롯에 등록된 아이템의 수량 현황을 갱신하는 용도
+
+                if (Return_Quickslot_Item_Count(E_QUICKSLOT_CATEGORY.USE, itemcode) == 0) // 퀵슬롯에 등록된 아이템 수량 반환
+                {
+		    // 관련 GUI 비활성화
                     if (GUIManager_Total.Instance.m_GUI_Itemslot_Use_Information.m_gPanel_Itemslot_Use_Information.activeSelf == true)
-                        GUIManager_Total.Instance.m_GUI_Itemslot_Use_Information.m_gPanel_Itemslot_Use_Information.SetActive(false);
+                        GUIManager_Total.Instance.m_GUI_Itemslot_Use_Information.m_gPanel_Itemslot_Use_Information.SetActive(false); // 인벤토리GUI의 소비아이템 정보GUI 비활성화
                 }
 
                 return true;
             }
             else
                 return false;
-
-            //GUIManager_Total.Instance.Update_SS();
-            //GUIManager_Total.Instance.Update_Itemslot();
-            //GUIManager_Total.Instance.Update_Equipslot();
         }
         else
             return false;
     }
-    // 퀵슬롯에 등록된 장비아이템 착용(스위칭).
-    public void Use_Quickslot_Item_Equip(E_QUICKSLOT_CATEGORY eqc, int arynumber, int quickslotarynumber)
+
+    // 리트라이(부활) 관련 함수(아이템 소실 + 스탯(능력치, 평판) 초기화(버프ㆍ디버프, 스킬 해제) + 플레이어 위치 변경(안전한 곳으로))
+    public void ReTry(int retrynumber, int retryprice) // retrynumber : 리트라이(부활) 단계(1단계, 2단계, 3단계, 4단계), retryprice : 리트라이(부활) 단계별 필요 골드(재화)
     {
-        if (Check_Quickslot_Item(eqc, arynumber) == true)
-        {
-            if (GUIManager_Total.Instance.m_GUI_Quickslot.m_qsList_Quickslot[quickslotarynumber].m_nItem_Equip_AryNumber != -1)
-            {
-                if (CheckCondition_Item_Use(Player_Itemslot.m_gary_Itemslot_Equip[arynumber], arynumber) == true)
-                {
-                    GUIManager_Total.Instance.Set_Quickslot(quickslotarynumber, eqc, arynumber);
+        ReTry_Lost(retrynumber, retryprice); //리트라이(부활) 시 아이템 소실
 
-                    m_pi_Itemslot.Use_Quickslot_Item(eqc, arynumber);
-                }
-            }
-
-            GUIManager_Total.Instance.Update_Itemslot();
-            GUIManager_Total.Instance.Update_Equipslot();
-            CheckSetItemEffect();
-            m_pm_Move.SetAttackSpeed(Player_Total.Instance.m_ps_Status.Return_AttackSpeed());
-            GUIManager_Total.Instance.Update_SS();
-        }
+	GUIManager_Total.Instance.Update_Itemslot(); // 인벤토리GUI 업데이트
+	GUIManager_Total.Instance.Update_Equipslot(); // 상태창(장비창)GUI 업데이트
+	CheckSetItemEffect(); // 아이템 세트효과 판단(적용)
+	m_pm_Move.SetAttackSpeed(m_ps_Status.Return_AttackSpeed()); // 플레이어 공격 속도 설정(기본 공격(연계 공격)을 위해 Player_Status.cs의 공격 속도를 Player_Move.cs로 넘겨준다.)
+	GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
+        GUIManager_Total.Instance.Update_Quickslot(); // 퀵슬롯GUI 업데이트
+        m_pq_Quest.QuestUpdate_Collect_NoDisplay(); // 진행중인 퀘스트 현황을 업데이트하는 함수(퀘스트 타입 : 수집)
     }
-
-    //// Test_Respone
-    //public void InputKey_F1()
-    //{
-    //    if (Input.GetKeyUp(KeyCode.F1))
-    //    {
-
-    //    }
-    //}
-
-    public void ReTry(int retrynumber, int retryprice)
+    // 리트라이(부활) 시 아이템 소실, 소실된 아이템 정보 출력
+    void ReTry_Lost(int retrynumber, int retryprice) // retrynumber : 리트라이(부활) 단계(1단계, 2단계, 3단계, 4단계), retryprice : 리트라이(부활) 단계별 필요 골드(재화)
     {
-        ReTry_Lost(retrynumber, retryprice);
+        m_pi_Itemslot.ReTry_Pay_Gold(retryprice); // 리트라이(부활) 시 골드(재화) 지불
+        int item_equip_count, item_use_count, item_etc_count; // 리트라이(부활) 직전 플레이어가 소유한 아이템 개수
+        Dictionary<int, int> dictionary_item_equip, dictionary_item_use, dictionary_item_etc; // 리트라이(부활) 직전 플레이어가 소유한 모든 아이템 목록
+											      // dictionary_item_equip(장비아이템) Dictionary <Key : 아이템 고유 코드(아이템 생성 순서), Value : 아이템 코드>
+		 									      // dictionary_item_use(소비아이템) Dictionary <Key : 아이템 코드, Value : 아이템 개수>
+											      // dictionary_item_etc(기타아이템) Dictionary <Key : 아이템 코드, Value : 아이템 개수>
+        Dictionary<int, int> dictionary_lost_item_equip, dictionary_lost_item_use, dictionary_lost_item_etc; // 리트라이(부활) 시 소실되는 아이템 목록
+													     // dictionary_lost_item_equip(장비아이템) Dictionary <Key : 아이템 고유 코드(아이템 생성 순서), Value : 아이템 코드>
+		  											     // dictionary_lost_item_use(소비아이템) Dictionary <Key : 아이템 코드, Value : 아이템 개수>
+													     // dictionary_lost_item_etc(기타아이템) Dictionary <Key : 아이템 코드, Value : 아이템 개수>
+        List<int> list_lost_item_equip, list_lost_item_use, list_lost_item_etc; // 아이템 소실 로직 계산 변수
+										// list_lost_item_equip List<아이템 고유 코드(아이템 생성 순서)>
+	  									// list_lost_item_use List<아이템 코드>
+	    									// list_lost_item_etc List<아이템 코드>
 
-        GUIManager_Total.Instance.Update_Itemslot();
-        GUIManager_Total.Instance.Update_Equipslot();
-        CheckSetItemEffect();
-        m_pm_Move.SetAttackSpeed(Player_Total.Instance.m_ps_Status.Return_AttackSpeed());
-        GUIManager_Total.Instance.Update_SS();
-        GUIManager_Total.Instance.Update_Quickslot();
-        m_pq_Quest.QuestUpdate_Collect_NoDisplay();
-        //GUIManager_Total.Instance.Update_ChangeMap();
-    }
-    void ReTry_Lost(int retrynumber, int retryprice)
-    {
-        m_pi_Itemslot.ReTry_Pay_Gold(retryprice);
-        int item_equip_count, item_use_count, item_etc_count;
-        // 플레이어 리트라이 시 가지고 있는 모든 아이템 목록.
-        Dictionary<int, int> dictionary_item_equip, dictionary_item_use, dictionary_item_etc;
-        // 플레이어 리트라이 시 잃어버리는 아이템 목록.
-        Dictionary<int, int> dictionary_lost_item_equip, dictionary_lost_item_use, dictionary_lost_item_etc;
-        // 플레이어 리트라이 시 잃어버리는 아이템 로직 관련.
-        List<int> list_lost_item_equip, list_lost_item_use, list_lost_item_etc;
-
-        item_equip_count = 0;
-
-        // 장착중인 장비 아이템 정보.
-        // Dictionary <int, int> dictionary_item_etc: <arynumber, itemcount>
-        // List <int> list_lost_item_etc: <itemnumber>
-        {
-            dictionary_item_equip = new Dictionary<int, int>();
-            list_lost_item_equip = new List<int>();
-            item_use_count = 0;
-
-            // 소유중인 장비 아이템 정보.
-            // <int, int> : <itemnumber, itemcode>
-            for (int i = 0; i < Player_Itemslot.m_nary_Itemslot_Equip_Count.Length; i++)
-            {
-                if (Player_Itemslot.m_nary_Itemslot_Equip_Count[i] != 0)
-                {
-                    item_equip_count += 1;
-                    dictionary_item_equip.Add(Player_Itemslot.m_gary_Itemslot_Equip[i].m_nItemNumber, Player_Itemslot.m_gary_Itemslot_Equip[i].m_nItemCode);
-                    list_lost_item_equip.Add(Player_Itemslot.m_gary_Itemslot_Equip[i].m_nItemNumber);
-                }
-            }
-
-            if (Player_Equipment.m_bEquipment_Hat == true)
-            {
-                item_equip_count += 1;
-                dictionary_item_equip.Add(Player_Equipment.m_gEquipment_Hat.m_nItemNumber, Player_Equipment.m_gEquipment_Hat.m_nItemCode);
-                list_lost_item_equip.Add(Player_Equipment.m_gEquipment_Hat.m_nItemNumber);
-            }
-            if (Player_Equipment.m_bEquipment_Top == true)
-            {
-                item_equip_count += 1;
-                dictionary_item_equip.Add(Player_Equipment.m_gEquipment_Top.m_nItemNumber, Player_Equipment.m_gEquipment_Top.m_nItemCode);
-                list_lost_item_equip.Add(Player_Equipment.m_gEquipment_Top.m_nItemNumber);
-            }
-            if (Player_Equipment.m_bEquipment_Bottoms == true)
-            {
-                item_equip_count += 1;
-                dictionary_item_equip.Add(Player_Equipment.m_gEquipment_Bottoms.m_nItemNumber, Player_Equipment.m_gEquipment_Bottoms.m_nItemCode);
-                list_lost_item_equip.Add(Player_Equipment.m_gEquipment_Bottoms.m_nItemNumber);
-            }
-            if (Player_Equipment.m_bEquipment_Gloves == true)
-            {
-                item_equip_count += 1;
-                dictionary_item_equip.Add(Player_Equipment.m_gEquipment_Gloves.m_nItemNumber, Player_Equipment.m_gEquipment_Gloves.m_nItemCode);
-                list_lost_item_equip.Add(Player_Equipment.m_gEquipment_Gloves.m_nItemNumber);
-            }
-            if (Player_Equipment.m_bEquipment_Shose == true)
-            {
-                item_equip_count += 1;
-                dictionary_item_equip.Add(Player_Equipment.m_gEquipment_Shose.m_nItemNumber, Player_Equipment.m_gEquipment_Shose.m_nItemCode);
-                list_lost_item_equip.Add(Player_Equipment.m_gEquipment_Shose.m_nItemNumber);
-            }
-            if (Player_Equipment.m_bEquipment_Mainweapon == true)
-            {
-                item_equip_count += 1;
-                dictionary_item_equip.Add(Player_Equipment.m_gEquipment_Mainweapon.m_nItemNumber, Player_Equipment.m_gEquipment_Mainweapon.m_nItemCode);
-                list_lost_item_equip.Add(Player_Equipment.m_gEquipment_Mainweapon.m_nItemNumber);
-            }
-            if (Player_Equipment.m_bEquipment_Subweapon == true)
-            {
-                item_equip_count += 1;
-                dictionary_item_equip.Add(Player_Equipment.m_gEquipment_Subweapon.m_nItemNumber, Player_Equipment.m_gEquipment_Subweapon.m_nItemCode);
-                list_lost_item_equip.Add(Player_Equipment.m_gEquipment_Subweapon.m_nItemNumber);
-            }
+	// 플레이어가 소유한 아이템 목록 설정
+	// 플레이어가 소유한 장비아이템 목록
+	dictionary_item_equip = new Dictionary<int, int>();
+	list_lost_item_equip = new List<int>();
+	item_equip_count = 0; // 플레이어가 소유한 장비아이템 개수
+	// 착용중인 장비아이템
+    	if (Player_Equipment.m_bEquipment_Hat == true)
+    	{
+	    item_equip_count += 1;
+	    dictionary_item_equip.Add(Player_Equipment.m_gEquipment_Hat.m_nItemNumber, Player_Equipment.m_gEquipment_Hat.m_nItemCode);
+	    list_lost_item_equip.Add(Player_Equipment.m_gEquipment_Hat.m_nItemNumber);
         }
-
-        // 소유중인 소비 아이템 정보.
-        // Dictionary <int, int> dictionary_item_use: <itemcode, itemcount>
-        // List <int> list_lost_item_use: <itemcode>
+        if (Player_Equipment.m_bEquipment_Top == true)
         {
-            dictionary_item_use = new Dictionary<int, int>();
-            list_lost_item_use = new List<int>();
-            item_use_count = 0;
-            for (int i = 0; i < Player_Itemslot.m_nary_Itemslot_Use_Count.Length; i++)
-            {
-                if (Player_Itemslot.m_nary_Itemslot_Use_Count[i] != 0)
-                {
-                    item_use_count += Player_Itemslot.m_nary_Itemslot_Use_Count[i];
-                    if (dictionary_item_use.ContainsKey(Player_Itemslot.m_gary_Itemslot_Use[i].m_nItemCode) == true)
-                    {
-                        dictionary_item_use[Player_Itemslot.m_gary_Itemslot_Use[i].m_nItemCode] += Player_Itemslot.m_nary_Itemslot_Use_Count[i];
-                    }
-                    else
-                    {
-                        dictionary_item_use.Add(Player_Itemslot.m_gary_Itemslot_Use[i].m_nItemCode, Player_Itemslot.m_nary_Itemslot_Use_Count[i]);
-                    }
-                    for (int j = 0; j < Player_Itemslot.m_nary_Itemslot_Use_Count[i]; j++)
-                    {
-                        list_lost_item_use.Add(Player_Itemslot.m_gary_Itemslot_Use[i].m_nItemCode);
-                    }
-                }
-            }
+	    item_equip_count += 1;
+	    dictionary_item_equip.Add(Player_Equipment.m_gEquipment_Top.m_nItemNumber, Player_Equipment.m_gEquipment_Top.m_nItemCode);
+	    list_lost_item_equip.Add(Player_Equipment.m_gEquipment_Top.m_nItemNumber);
         }
-
-        // 소유중인 기타 아이템 정보.
-        // Dictionary <int, int> dictionary_item_etc: <itemcode, itemcount>
-        // List <int> list_lost_item_etc: <itemcode>
+        if (Player_Equipment.m_bEquipment_Bottoms == true)
         {
-            dictionary_item_etc = new Dictionary<int, int>();
-            list_lost_item_etc = new List<int>();
-            item_etc_count = 0;
-            for (int i = 0; i < Player_Itemslot.m_nary_Itemslot_Etc_Count.Length; i++)
-            {
-                if (Player_Itemslot.m_nary_Itemslot_Etc_Count[i] != 0)
-                {
-                    item_etc_count += Player_Itemslot.m_nary_Itemslot_Etc_Count[i];
-                    if (dictionary_item_etc.ContainsKey(Player_Itemslot.m_gary_Itemslot_Etc[i].m_nItemCode) == true)
-                    {
-                        dictionary_item_etc[Player_Itemslot.m_gary_Itemslot_Etc[i].m_nItemCode] += Player_Itemslot.m_nary_Itemslot_Etc_Count[i];
-                    }
-                    else
-                    {
-                        dictionary_item_etc.Add(Player_Itemslot.m_gary_Itemslot_Etc[i].m_nItemCode, Player_Itemslot.m_nary_Itemslot_Etc_Count[i]);
-                    }
-                    for (int j = 0; j < Player_Itemslot.m_nary_Itemslot_Etc_Count[i]; j++)
-                    {
-                        list_lost_item_etc.Add(Player_Itemslot.m_gary_Itemslot_Etc[i].m_nItemCode);
-                    }
-                }
-            }
+    	    item_equip_count += 1;
+	    dictionary_item_equip.Add(Player_Equipment.m_gEquipment_Bottoms.m_nItemNumber, Player_Equipment.m_gEquipment_Bottoms.m_nItemCode);
+	    list_lost_item_equip.Add(Player_Equipment.m_gEquipment_Bottoms.m_nItemNumber);
         }
+        if (Player_Equipment.m_bEquipment_Gloves == true)
+        {
+	    item_equip_count += 1;
+	    dictionary_item_equip.Add(Player_Equipment.m_gEquipment_Gloves.m_nItemNumber, Player_Equipment.m_gEquipment_Gloves.m_nItemCode);
+	    list_lost_item_equip.Add(Player_Equipment.m_gEquipment_Gloves.m_nItemNumber);
+        }
+        if (Player_Equipment.m_bEquipment_Shose == true)
+        {
+	    item_equip_count += 1;
+	    dictionary_item_equip.Add(Player_Equipment.m_gEquipment_Shose.m_nItemNumber, Player_Equipment.m_gEquipment_Shose.m_nItemCode);
+	    list_lost_item_equip.Add(Player_Equipment.m_gEquipment_Shose.m_nItemNumber);
+        }
+        if (Player_Equipment.m_bEquipment_Mainweapon == true)
+        {
+	    item_equip_count += 1;
+	    dictionary_item_equip.Add(Player_Equipment.m_gEquipment_Mainweapon.m_nItemNumber, Player_Equipment.m_gEquipment_Mainweapon.m_nItemCode);
+	    list_lost_item_equip.Add(Player_Equipment.m_gEquipment_Mainweapon.m_nItemNumber);
+        }
+        if (Player_Equipment.m_bEquipment_Subweapon == true)
+        {
+	    item_equip_count += 1;
+	    dictionary_item_equip.Add(Player_Equipment.m_gEquipment_Subweapon.m_nItemNumber, Player_Equipment.m_gEquipment_Subweapon.m_nItemCode);
+	    list_lost_item_equip.Add(Player_Equipment.m_gEquipment_Subweapon.m_nItemNumber);
+        }
+	// 인벤토리(장비아이템) 내 장비아이템
+	for (int i = 0; i < Player_Itemslot.m_nary_Itemslot_Equip_Count.Length; i++) // 인벤토리(장비아이템) 60칸 존재
+	{
+	    if (Player_Itemslot.m_nary_Itemslot_Equip_Count[i] != 0)
+	    {
+		item_equip_count += 1;
+		dictionary_item_equip.Add(Player_Itemslot.m_gary_Itemslot_Equip[i].m_nItemNumber, Player_Itemslot.m_gary_Itemslot_Equip[i].m_nItemCode);
+		list_lost_item_equip.Add(Player_Itemslot.m_gary_Itemslot_Equip[i].m_nItemNumber);
+	    }
+	}
+        // 플레이어가 소유한 소비아이템 목록
+        dictionary_item_use = new Dictionary<int, int>();
+        list_lost_item_use = new List<int>();
+        item_use_count = 0; // 플레이어가 소유한 소비아이템 개수
+        for (int i = 0; i < Player_Itemslot.m_nary_Itemslot_Use_Count.Length; i++) // 인벤토리(소비아이템) 60칸 존재
+        {
+	    if (Player_Itemslot.m_nary_Itemslot_Use_Count[i] != 0)
+	    {
+	        item_use_count += Player_Itemslot.m_nary_Itemslot_Use_Count[i];
+	        if (dictionary_item_use.ContainsKey(Player_Itemslot.m_gary_Itemslot_Use[i].m_nItemCode) == true)
+	        {
+		    dictionary_item_use[Player_Itemslot.m_gary_Itemslot_Use[i].m_nItemCode] += Player_Itemslot.m_nary_Itemslot_Use_Count[i];
+	        }
+	        else
+	        {
+		    dictionary_item_use.Add(Player_Itemslot.m_gary_Itemslot_Use[i].m_nItemCode, Player_Itemslot.m_nary_Itemslot_Use_Count[i]);
+	        }
+	        for (int j = 0; j < Player_Itemslot.m_nary_Itemslot_Use_Count[i]; j++) // 인벤토리(소비아이템) 1칸에 10개 소비아이템 저장 가능
+	        {
+		    list_lost_item_use.Add(Player_Itemslot.m_gary_Itemslot_Use[i].m_nItemCode);
+	        }
+	    }
+        }
+        // 플레이어가 소유한 기타아이템 목록
+	dictionary_item_etc = new Dictionary<int, int>();
+	list_lost_item_etc = new List<int>();
+	item_etc_count = 0; // 플레이어가 소유한 기타아이템 개수
+	for (int i = 0; i < Player_Itemslot.m_nary_Itemslot_Etc_Count.Length; i++) // 인벤토리(기타아이템) 60칸 존재
+	{
+ 	    if (Player_Itemslot.m_nary_Itemslot_Etc_Count[i] != 0)
+	    {
+	        item_etc_count += Player_Itemslot.m_nary_Itemslot_Etc_Count[i];
+	        if (dictionary_item_etc.ContainsKey(Player_Itemslot.m_gary_Itemslot_Etc[i].m_nItemCode) == true)
+	        {
+	    	    dictionary_item_etc[Player_Itemslot.m_gary_Itemslot_Etc[i].m_nItemCode] += Player_Itemslot.m_nary_Itemslot_Etc_Count[i];
+	        }
+	        else
+	        {
+		    dictionary_item_etc.Add(Player_Itemslot.m_gary_Itemslot_Etc[i].m_nItemCode, Player_Itemslot.m_nary_Itemslot_Etc_Count[i]);
+	        }
+	        for (int j = 0; j < Player_Itemslot.m_nary_Itemslot_Etc_Count[i]; j++) // 인벤토리(기타아이템) 1칸에 10개 기타아이템 저장 가능
+	        {
+		    list_lost_item_etc.Add(Player_Itemslot.m_gary_Itemslot_Etc[i].m_nItemCode);
+		}
+	    }
+	}
 
-        int lostcount_item_equip, lostcount_item_use, lostcount_item_etc, arynumber, itemcode;
-        int lostgold_min, lostgold_max;
-        int randomnumber;
-
-        // 로스트.
+	// 플레이어가 소유한 아이템 소실. 리트라이(부활) 단계별 아이템 소실 비율이 다르다.
+        int lostcount_item_equip, lostcount_item_use, lostcount_item_etc, arynumber, itemcode; // 리트라이(부활) 시 소실되는 아이템 개수
+        int lostgold_min, lostgold_max;// 리트라이(부활) 시 소실되는 골드(재화) 최솟값ㆍ최댓값
+	// 리트라이(부활) 1단계 아이템 소실
         if (retrynumber == 1)
         {
-            lostcount_item_equip = item_equip_count / 5;
-            //if (lostcount_item_equip == 0 && item_equip_count != 0)
-            //{
-            //    randomnumber = Random.RandomRange(0, 5);
-            //    if (randomnumber < item_equip_count)
-            //    {
-            //        lostcount_item_equip = 1;
-            //    }
-            //}
-            lostcount_item_use = item_use_count / 3;
-            //if (lostcount_item_use == 0 && item_use_count != 0)
-            //{
-            //    randomnumber = Random.RandomRange(0, 3);
-            //    if (randomnumber < item_use_count)
-            //    {
-            //        lostcount_item_use = 1;
-            //    }
-            //}
-            lostcount_item_etc = item_etc_count / 3;
-            //if (lostcount_item_etc == 0 && item_etc_count != 0)
-            //{
-            //    randomnumber = Random.RandomRange(0, 3);
-            //    if (randomnumber < item_etc_count)
-            //    {
-            //        lostcount_item_etc = 1;
-            //    }
-            //}
-            lostgold_min = 1; lostgold_max = 10;
+            lostcount_item_equip = item_equip_count / 5;  // 소유한 장비아이템의 1/5(20%) 소실
+            lostcount_item_use = item_use_count / 3;      // 소유한 소비아이템의 1/3(33%) 소실
+            lostcount_item_etc = item_etc_count / 3;      // 소유한 기타아이템의 1/3(33%) 소실
+            lostgold_min = 1; lostgold_max = 10;	  // 소유한 골드(재화)의 1/100 ~ 10/100(1 ~ 10%) 소실
         }
+	// 리트라이(부활) 2단계 아이템 소실
         else if (retrynumber == 2)
         {
-            lostcount_item_equip = item_equip_count / 10;
-            //if (lostcount_item_equip == 0 && item_equip_count != 0)
-            //{
-            //    randomnumber = Random.RandomRange(0, 10);
-            //    if (randomnumber < item_equip_count)
-            //    {
-            //        lostcount_item_equip = 1;
-            //    }
-            //}
-            lostcount_item_use = item_use_count / 5;
-            //if (lostcount_item_use == 0 && item_use_count != 0)
-            //{
-            //    randomnumber = Random.RandomRange(0, 5);
-            //    if (randomnumber < item_use_count)
-            //    {
-            //        lostcount_item_use = 1;
-            //    }
-            //}
-            lostcount_item_etc = item_etc_count / 5;
-            //if (lostcount_item_etc == 0 && item_etc_count != 0)
-            //{
-            //    randomnumber = Random.RandomRange(0, 5);
-            //    if (randomnumber < item_etc_count)
-            //    {
-            //        lostcount_item_etc = 1;
-            //    }
-            //}
-            lostgold_min = 1; lostgold_max = 5;
+            lostcount_item_equip = item_equip_count / 10; // 소유한 장비아이템의 1/10(10%) 소실
+            lostcount_item_use = item_use_count / 5;      // 소유한 소비아이템의 1/5(20%) 소실
+            lostcount_item_etc = item_etc_count / 5;      // 소유한 기타아이템의 1/5(20%) 소실
+            lostgold_min = 1; lostgold_max = 5;	 	  // 소유한 골드(재화)의 1/100 ~ 5/100(1 ~ 5%) 소실
         }
+	// 리트라이(부활) 3단계 아이템 소실
         else if (retrynumber == 3)
         {
-            lostcount_item_equip = 0;
-            lostcount_item_use = item_use_count / 10;
-            //if (lostcount_item_use == 0 && item_use_count != 0)
-            //{
-            //    randomnumber = Random.RandomRange(0, 10);
-            //    if (randomnumber < item_use_count)
-            //    {
-            //        lostcount_item_use = 1;
-            //    }
-            //}
-            lostcount_item_etc = item_etc_count / 10;
-            //if (lostcount_item_etc == 0 && item_etc_count != 0)
-            //{
-            //    randomnumber = Random.RandomRange(0, 10);
-            //    if (randomnumber < item_etc_count)
-            //    {
-            //        lostcount_item_etc = 1;
-            //    }
-            //}
-            lostgold_min = 1; lostgold_max = 1;
+            lostcount_item_equip = 0; 		     	  // 장비아이템 소실되지 않음
+            lostcount_item_use = item_use_count / 10;	  // 소유한 소비아이템의 1/10(10%) 소실
+            lostcount_item_etc = item_etc_count / 10;     // 소유한 기타아이템의 1/10(10%) 소실
+            lostgold_min = 1; lostgold_max = 1;	      	  // 소유한 골드(재화)의 1/100(1%) 소실
         }
+	// 리트라이(부활) 4단계 아이템 소실
         else
         {
-            lostcount_item_equip = 0;
-            lostcount_item_use = 0;
-            lostcount_item_etc = 0;
-            lostgold_min = 0; lostgold_max = 0;
+            lostcount_item_equip = 0; 			  // 장비아이템 소실되지 않음
+            lostcount_item_use = 0;   			  // 소비아이템 소실되지 않음
+            lostcount_item_etc = 0;  			  // 기타아이템 소실되지 않음
+            lostgold_min = 0; lostgold_max = 0; 	  // 골드(재화) 소실되지 않음
         }
 
-
-
+	// 리트라이(부활) 시 소실되는 아이템 목록 설정
         dictionary_lost_item_equip = new Dictionary<int, int>();
         dictionary_lost_item_use = new Dictionary<int, int>();
         dictionary_lost_item_etc = new Dictionary<int, int>();
-
-        for (int i = 0; i < lostcount_item_equip; i++)
+	// 리트라이(부활) 시 소실되는 장비아이템 목록 설정
+        for (int i = 0; i < lostcount_item_equip; i++) // 소실되는 장비아이템 개수 만큼 반복
         {
-            arynumber = Random.Range(0, list_lost_item_equip.Count);
-
-            dictionary_lost_item_equip.Add(list_lost_item_equip[arynumber], dictionary_item_equip[list_lost_item_equip[arynumber]]);
-
-            list_lost_item_equip.RemoveAt(arynumber);
+            arynumber = Random.Range(0, list_lost_item_equip.Count); // arynumber = list_lost_item_equip(아이템 소실 로직 계산 변수)의 임의의 배열 번호(list_lost_item_equip[arynumber] : 아이템 고유 코드(아이템 생성 순서))
+								     // arynumber에 해당하는 장비아이템이 소실된다.
+            dictionary_lost_item_equip.Add(list_lost_item_equip[arynumber], dictionary_item_equip[list_lost_item_equip[arynumber]]); // 리트라이(부활) 시 소실되는 장비아이템 목록 추가
+            list_lost_item_equip.RemoveAt(arynumber); // list_lost_item_equip(아이템 소실 로직 계산 변수)에서 해당 장비아이템 제거(이미 소실된 장비아이템을 제거)
         }
-        for (int i = 0; i < lostcount_item_use; i++)
+	// 리트라이(부활) 시 소실되는 소비아이템 목록 설정
+        for (int i = 0; i < lostcount_item_use; i++) // 소실되는 소비아이템 개수 만큼 반복
         {
-            itemcode = Random.Range(0, list_lost_item_use.Count);
-
+            itemcode = Random.Range(0, list_lost_item_use.Count); // itemcode = list_lost_item_use(아이템 소실 로직 계산 변수)의 임의의 배열 번호(list_lost_item_use[itemcode] : 아이템 코드)
+								  // itemcode에 해당하는 소비아이템이 소실된다.
             if (dictionary_lost_item_use.ContainsKey(list_lost_item_use[itemcode]) == true)
             {
                 dictionary_lost_item_use[list_lost_item_use[itemcode]] += 1;
@@ -2706,13 +2621,13 @@ public class Player_Total : MonoBehaviour
             {
                 dictionary_lost_item_use.Add(list_lost_item_use[itemcode], 1);
             }
-
-            list_lost_item_use.RemoveAt(itemcode);
+            list_lost_item_use.RemoveAt(itemcode); // list_lost_item_use(아이템 소실 로직 계산 변수)에서 해당 소비아이템 제거(이미 소실된 소비아이템을 제거)
         }
-        for (int i = 0; i < lostcount_item_etc; i++)
+	// 리트라이(부활) 시 소실되는 기타아이템 목록 설정
+        for (int i = 0; i < lostcount_item_etc; i++) // 소실되는 기타아이템 개수 만큼 반복
         {
-            itemcode = Random.Range(0, list_lost_item_etc.Count);
-
+            itemcode = Random.Range(0, list_lost_item_etc.Count); // itemcode = list_lost_item_etc(아이템 소실 로직 계산 변수)의 임의의 배열 번호(list_lost_item_etc[itemcode] : 아이템 코드)
+								  // itemcode에 해당하는 기타아이템이 소실된다.
             if (dictionary_lost_item_etc.ContainsKey(list_lost_item_etc[itemcode]) == true)
             {
                 dictionary_lost_item_etc[list_lost_item_etc[itemcode]] += 1;
@@ -2721,66 +2636,58 @@ public class Player_Total : MonoBehaviour
             {
                 dictionary_lost_item_etc.Add(list_lost_item_etc[itemcode], 1);
             }
-
-            list_lost_item_etc.RemoveAt(itemcode);
+            list_lost_item_etc.RemoveAt(itemcode); // list_lost_item_etc(아이템 소실 로직 계산 변수)에서 해당 기타아이템 제거(이미 소실된 기타아이템을 제거)
         }
 
-        m_pi_Itemslot.ReTry_Lost_Item_Equip(dictionary_lost_item_equip);
-        m_pe_Equipment.ReTry_Lost_Item_Equip(dictionary_lost_item_equip);
-        m_pi_Itemslot.ReTry_Lost_Item_Use(dictionary_lost_item_use);
-        m_pi_Itemslot.ReTry_Lost_Item_Etc(dictionary_lost_item_etc);
-        int lostgold = m_pi_Itemslot.ReTry_Lost_Gold(lostgold_min, lostgold_max);
+ 	//
+  	// Ex) 소비아이템 소실 과정(기타아이템 소실 과정과 동일하다.)
+   	//     1. 플레이어가 '하급 회복 포션'8개, '초 고단백 굼뱅이'2개를 가지고 있다.
+    	//     2. 플레이어가 죽었다. 리트라이(부활) 단계를 2단계(소비아이템, 기타아이템 20% 소실)로 선택한다.
+        //     3. dictionary_item_use {<8005('하급 회복 포션'), 8>, <8013('초 고단백 굼뱅이'), 2>} 저장
+     	//     3. list_lost_item_use {'하급 회복 포션', '하급 회복 포션', '하급 회복 포션', '하급 회복 포션', '하급 회복 포션', '하급 회복 포션', '하급 회복 포션', '하급 회복 포션', '초 고단백 굼뱅이', '초 고단백 굼뱅이'} 저장
+        //     4. list_lost_item_use에서 임의의 배열 번호를 선택한다. dictionary_lost_item_use에 list_lost_item_use에서 선택된 임의의 배열 번호에 해당하는 소비아이템을 저장한다.
+	//     5. dictionary_lost_item_use을 이용해(함수 호출 시 매개변수로 이용) 해당 배열 번호의 소비아이템이 소실된다.(2번(플레이어가 소유한 소비아이템 10개 * 20%(리트라이(부활) 2단계 소비아이템 소실 비율)) 반복)
+      	//
 
-        //if (Total_Manager.Instance.m_nSceneNumber == 0)
-        //{
-        //    m_pm_Map.ChangeMap(MapManager.Instance.m_List_ReTryArea_Tutorial[0].m_Map_ReTry);
-        //    this.gameObject.transform.position = MapManager.Instance.m_List_ReTryArea_Tutorial[0].m_vReTryPos;
-        //}
-        //else if (Total_Manager.Instance.m_nSceneNumber == 1)
-        //{
-        //    randomnumber = Random.Range(0, MapManager.Instance.m_List_ReTryArea_Chapter1.Count);
+        m_pi_Itemslot.ReTry_Lost_Item_Equip(dictionary_lost_item_equip);  	  // 리트라이(부활) 시 장비아이템 소실에 관한 함수
+        m_pe_Equipment.ReTry_Lost_Item_Equip(dictionary_lost_item_equip);	  // 리트라이(부활) 시 장비아이템 소실에 관한 함수(장비아이템 소실 + 장비아이템 해제)
+        m_pi_Itemslot.ReTry_Lost_Item_Use(dictionary_lost_item_use);      	  // 리트라이(부활) 시 소비아이템 소실에 관한 함수
+        m_pi_Itemslot.ReTry_Lost_Item_Etc(dictionary_lost_item_etc);	  	  // 리트라이(부활) 시 기타아이템 소실에 관한 함수
+        int lostgold = m_pi_Itemslot.ReTry_Lost_Gold(lostgold_min, lostgold_max); // 리트라이(부활) 시 골드(재화) 소실에 관한 함수
 
-        //    m_pm_Map.ChangeMap(MapManager.Instance.m_List_ReTryArea_Chapter1[randomnumber].m_Map_ReTry);
-        //    this.gameObject.transform.position = MapManager.Instance.m_List_ReTryArea_Chapter1[randomnumber].m_vReTryPos;
-        //}
-        //GUIManager_Total.Instance.Update_ChangeMap();
-        GUIManager_Total.Instance.Display_GUI_ReTry_Information(dictionary_lost_item_equip, dictionary_lost_item_use, dictionary_lost_item_etc, lostgold);
+        GUIManager_Total.Instance.Display_GUI_ReTry_Information(dictionary_lost_item_equip, dictionary_lost_item_use, dictionary_lost_item_etc, lostgold); // 리트라이 관련GUI 활성화
+    }
 
-        //Debug.Log("잃어버리는 아이템 목록");
-        //foreach (KeyValuePair<int, int> item in dictionary_lost_item_equip)
-        //{
-        //    Debug.Log(item.Key + ": " + item.Value);
-        //}
-        //foreach (KeyValuePair<int, int> item in dictionary_lost_item_use)
-        //{
-        //    Debug.Log(item.Key + ": " + ItemManager.instance.m_Dictionary_MonsterDrop_Use[item.Key].m_sItemName + " / " + item.Value);
-        //}
-        //foreach (KeyValuePair<int, int> item in dictionary_lost_item_etc)
-        //{
-        //    Debug.Log(item.Key + ": " + ItemManager.instance.m_Dictionary_MonsterDrop_Etc[item.Key].m_sItemName + " / " + item.Value);
-        //}
+    // 리트라이(부활) 시 스탯(능력치, 평판) 초기화(버프ㆍ디버프, 스킬 해제) + 플레이어 위치 변경(안전한 곳으로)
+    public void ReTry_Success()
+    {
+        int randomnumber;
+        Map offmap = m_pm_Map.m_Map;
+        Map onmap;
 
-        //foreach (KeyValuePair<int, int> item in dictionary_item_equip_es)
-        //{
-        //    Debug.Log(item.Key + ": " + ItemManager.instance.m_Dictionary_MonsterDrop_Equip[item.Key].m_sItemName);
-        //}
-        //foreach (KeyValuePair<int, int> item in dictionary_item_equip_is)
-        //{
-        //    Debug.Log(item.Value + ": " + ItemManager.instance.m_Dictionary_MonsterDrop_Equip[item.Key].m_sItemName);
-        //}
-        //foreach (KeyValuePair<int, int> item in dictionary_item_use)
-        //{
-        //    Debug.Log(item.Key + ": " + ItemManager.instance.m_Dictionary_MonsterDrop_Use[item.Key].m_sItemName + " / " + item.Value);
-        //}
-        //foreach (KeyValuePair<int, int> item in dictionary_item_etc)
-        //{
-        //    Debug.Log(item.Key + ": " + ItemManager.instance.m_Dictionary_MonsterDrop_Etc[item.Key].m_sItemName + " / " + item.Value);
-        //}
+        if (Total_Manager.Instance.m_nSceneNumber == 0)
+        {
+            m_pm_Map.ChangeMap(MapManager.Instance.m_List_ReTryArea_Tutorial[0].m_Map_ReTry);
+            gameObject.transform.position = MapManager.Instance.m_List_ReTryArea_Tutorial[0].m_vReTryPos;
+            onmap = MapManager.Instance.m_List_ReTryArea_Tutorial[0].m_Map_ReTry;
+        }
+        else if (Total_Manager.Instance.m_nSceneNumber == 1)
+        {
+            randomnumber = Random.Range(0, MapManager.Instance.m_List_ReTryArea_Chapter1.Count);
 
-        dictionary_item_equip.Clear();
-        dictionary_item_use.Clear();
-        dictionary_item_etc.Clear();
+            m_pm_Map.ChangeMap(MapManager.Instance.m_List_ReTryArea_Chapter1[randomnumber].m_Map_ReTry);
+            gameObject.transform.position = MapManager.Instance.m_List_ReTryArea_Chapter1[randomnumber].m_vReTryPos;
+            onmap = MapManager.Instance.m_List_ReTryArea_Chapter1[randomnumber].m_Map_ReTry;
+        }
+        else
+        {
+            onmap = null;
+        }
 
+        m_ps_Status.ReTry();
+        m_pm_Move.ReTry();
+
+        MapManager.Instance.Update_Map_Object(offmap, onmap);
     }
 
     // CameraMove
@@ -2828,56 +2735,6 @@ public class Player_Total : MonoBehaviour
         else
         {
             return false;
-        }
-    }
-
-    // Animation Test
-    void AnimationTest()
-    {
-        if (Input.GetKeyUp(KeyCode.Alpha1))
-        {
-            Debug.Log("Test: Player: IDLE");
-            m_pm_Move.SetAnimatorParameters("Idle");
-        }
-        if (Input.GetKeyUp(KeyCode.Alpha2))
-        {
-            Debug.Log("Test: Player: RUN");
-            m_pm_Move.SetAnimatorParameters("Run");
-        }
-        if (Input.GetKeyUp(KeyCode.Alpha3))
-        {
-            Debug.Log("Test: Player: ATTACK1_1");
-            m_pm_Move.SetAnimatorParameters("Attack1_1");
-        }
-        if (Input.GetKeyUp(KeyCode.Alpha4))
-        {
-            Debug.Log("Test: Player: ATTACK1_2");
-            m_pm_Move.SetAnimatorParameters("Attack1_2");
-        }
-        if (Input.GetKeyUp(KeyCode.Alpha5))
-        {
-            Debug.Log("Test: Player: ATTACK1_3");
-            m_pm_Move.SetAnimatorParameters("Attack1_3");
-        }
-        if (Input.GetKeyUp(KeyCode.Alpha6))
-        {
-            Debug.Log("Test: Player: ATTACKED");
-            m_pm_Move.SetAnimatorParameters("Attacked");
-        }
-        if (Input.GetKeyUp(KeyCode.Alpha7))
-        {
-            Debug.Log("Test: Player: DEATH");
-            m_pm_Move.SetAnimatorParameters("Death");
-        }
-        if (Input.GetKeyUp(KeyCode.Alpha8))
-        {
-            Debug.Log("Test: Player: ROLL");
-            m_pm_Move.SetAnimatorParameters("Roll");
-        }
-        if (Input.GetKeyUp(KeyCode.Alpha9))
-        {
-            Debug.Log("Test: Player: GOAWAY");
-            m_pm_Move.SetAnimatorParameters("Goaway");
         }
     }
 }
