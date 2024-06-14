@@ -334,7 +334,7 @@ public class Player_Itemslot : MonoBehaviour
 
         return itemcount;
     }
-    // 퀵슬롯에 등록된 아이템을 사용하는 함수. 아이템의 수량 현황을 갱신하는 용도
+    // 퀵슬롯에 등록된 아이템의 수량 현황을 갱신하는 용도
     public void Use_Quickslot_Item(E_QUICKSLOT_CATEGORY eqc, int itemcode)
     {
         if (eqc == E_QUICKSLOT_CATEGORY.EQUIP)
