@@ -365,7 +365,7 @@ public class Player_Itemslot : MonoBehaviour
         }
     }
 
-    // 리트라이(부활) 시 지불할 골드(재화)
+    // 리트라이(부활) 시 골드(재화) 지불
     public void ReTry_Pay_Gold(int gold)
     {
         m_nGold -= gold;
