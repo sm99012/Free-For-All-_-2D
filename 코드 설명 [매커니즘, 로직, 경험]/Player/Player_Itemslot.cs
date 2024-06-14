@@ -15,6 +15,10 @@ public class Player_Itemslot : MonoBehaviour
     public static Item_Etc[] m_gary_Itemslot_Etc;      // 기타아이템 데이터. 60칸 제공
     public static int[] m_nary_Itemslot_Etc_Count;     // 기타아이템 개수. 최대 10개 아이템 소지 가능
 
+    //
+    // ※ Item(Item_Equip, Item_Use, Item_Etc)라는 클래스를 만들어 인벤토리를 구현했다. 그 과정에서 Unity의 null 기능을 사용할 수 없었기에(Item클래스가 할당되어 있어도 Unity엔진이 null로 인식) 추가로 int 배열을 이용했다.
+    //
+
     int m_nMaxCount = 10; // 아이템 보유 최대치
 
     public int m_nGold; // 보유 골드(재화)
