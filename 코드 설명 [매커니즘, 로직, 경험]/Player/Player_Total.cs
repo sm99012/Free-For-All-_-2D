@@ -2665,18 +2665,19 @@ public class Player_Total : MonoBehaviour
         Map offmap = m_pm_Map.m_Map;
         Map onmap;
 
-        if (Total_Manager.Instance.m_nSceneNumber == 0)
+	// 리트라이(부활) 시 임의의 지정된 위치로 플레이어 위치 변경
+        if (Total_Manager.Instance.m_nSceneNumber == 0) // 플레이어가 튜토리얼 챕터에 위치했을 경우
         {
-            m_pm_Map.ChangeMap(MapManager.Instance.m_List_ReTryArea_Tutorial[0].m_Map_ReTry);
-            gameObject.transform.position = MapManager.Instance.m_List_ReTryArea_Tutorial[0].m_vReTryPos;
+            m_pm_Map.ChangeMap(MapManager.Instance.m_List_ReTryArea_Tutorial[0].m_Map_ReTry); // 맵 변경 함수
+            gameObject.transform.position = MapManager.Instance.m_List_ReTryArea_Tutorial[0].m_vReTryPos; // 플레이어 위치 변경
             onmap = MapManager.Instance.m_List_ReTryArea_Tutorial[0].m_Map_ReTry;
         }
-        else if (Total_Manager.Instance.m_nSceneNumber == 1)
+        else if (Total_Manager.Instance.m_nSceneNumber == 1) // 챕터1에 위치했을 경우
         {
             randomnumber = Random.Range(0, MapManager.Instance.m_List_ReTryArea_Chapter1.Count);
 
-            m_pm_Map.ChangeMap(MapManager.Instance.m_List_ReTryArea_Chapter1[randomnumber].m_Map_ReTry);
-            gameObject.transform.position = MapManager.Instance.m_List_ReTryArea_Chapter1[randomnumber].m_vReTryPos;
+            m_pm_Map.ChangeMap(MapManager.Instance.m_List_ReTryArea_Chapter1[randomnumber].m_Map_ReTry); // 맵 변경 함수
+            gameObject.transform.position = MapManager.Instance.m_List_ReTryArea_Chapter1[randomnumber].m_vReTryPos; // 플레이어 위치 변경
             onmap = MapManager.Instance.m_List_ReTryArea_Chapter1[randomnumber].m_Map_ReTry;
         }
         else
@@ -2684,18 +2685,51 @@ public class Player_Total : MonoBehaviour
             onmap = null;
         }
 
-        m_ps_Status.ReTry();
-        m_pm_Move.ReTry();
+        m_ps_Status.ReTry(); // 리트라이(부활) 시 스탯(능력치, 평판) 초기화
+        m_pm_Move.ReTry();   // 리트라이(부활) 시 플레이어 동작 관련 변수, FSM 등 초기화
 
-        MapManager.Instance.Update_Map_Object(offmap, onmap);
+        MapManager.Instance.Update_Map_Object(offmap, onmap); // 맵 변경 시 이전 맵의 오브젝트 비활성화, 이동 후 맵의 오브젝트 비활성화
     }
 
-    // CameraMove
+    // 카메라 설정 관련 함수
     public void CameraMove(Vector2 pos)
     {
-        m_pc_Camera.CameraMove(pos);
+        m_pc_Camera.CameraMove(pos); // 카메라 설정 관련 함수(카메라 중심점 판단ㆍ설정)
     }
 
+    // 플레이어 맵 변경 관련 함수
+    // return true : 맵 변경 성공 / return false : 맵 변경 실패
+    public bool ChangeMap(bool condiiton, Map map) // condition : 맵 변경 여부, map : 이동할 맵
+    {
+        if (condiiton == true)
+        {
+            m_pm_Map.ChangeMap(map); // 맵 변경 함수
+            GUIManager_Total.Instance.Update_MapName(map); // 맵GUI 업데이트
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    public bool ChangeMap(bool condiiton, Map map, Vector3 pos) // condition : 맵 변경 여부, map : 이동할 맵, pos : 이동 후 플레이어 위치
+    {
+        if (condiiton == true)
+        {
+            m_pm_Map.ChangeMap(map); // 맵 변경 함수
+            m_pm_Move.ChangeMap(pos); // 맵 변경 후 플레이어의 위치 설정(포탈로 이동 시)
+            GUIManager_Total.Instance.Update_MapName(map); // 맵GUI 업데이트
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    // 기즈모
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
@@ -2705,36 +2739,5 @@ public class Player_Total : MonoBehaviour
             Gizmos.DrawWireCube(this.transform.position + new Vector3(-0.125f, 0.15f, 0), m_vSize);
 
         Gizmos.DrawWireSphere(this.transform.position, 0.5f);
-    }
-
-    // Player Map 변경
-    public bool ChangeMap(bool condiiton, Map map)
-    {
-        if (condiiton == true)
-        {
-            m_pm_Map.ChangeMap(map);
-            GUIManager_Total.Instance.Update_MapName(map);
-
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    public bool ChangeMap(bool condiiton, Map map, Vector3 pos)
-    {
-        if (condiiton == true)
-        {
-            m_pm_Map.ChangeMap(map);
-            m_pm_Move.ChangeMap(pos);
-            GUIManager_Total.Instance.Update_MapName(map);
-
-            return true;
-        }
-        else
-        {
-            return false;
-        }
     }
 }
