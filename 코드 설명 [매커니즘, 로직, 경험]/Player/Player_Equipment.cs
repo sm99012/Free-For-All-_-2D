@@ -225,7 +225,7 @@ public class Player_Equipment : MonoBehaviour
         return 0;
     }
 
-    // 리트라이(부활) 시 아이템 소실 + 장비아이템 해제
+    // 리트라이(부활) 시 장비아이템 소실에 관한 함수(장비아이템 소실 + 장비아이템 해제)
     public bool ReTry_Lost_Item_Equip(Dictionary<int, int> dictionary) // 매개변수 dictionary에 잃어버리는 아이템 정보가 존재.
     {
         foreach (KeyValuePair<int, int> item in dictionary)
