@@ -42,9 +42,8 @@ public class Player_Itemslot : MonoBehaviour
     }
 
     // 장비아이템 획득 함수
-    // return 0 ~ 59 : 장비아이템을 획득하여 저장하고 저장된 배열 넘버를 반환한다.
-    // return -1 : 인벤토리에 빈칸이 없어 아이템을 획득하지 못함.
-    public int Get_Item_Equip(Item_Equip item)
+    // return 0 ~ 59 : 장비아이템을 획득하여 저장하고 저장된 배열 넘버를 반환한다. / return -1 : 인벤토리에 빈칸이 없어 아이템을 획득하지 못함
+    public int Get_Item_Equip(Item_Equip item) // item : 획득할 장비아이템
     {
         for (int i = 0; i < 60; i++)
         {
@@ -64,14 +63,13 @@ public class Player_Itemslot : MonoBehaviour
         return -1;
     }
     // 소비아이템 획득 함수
-    // return 0 ~ 59 : 소비아이템을 획득하여 저장하고 저장된 배열 넘버를 반환한다.
-    // return -1 : 인벤토리에 빈칸이 없어 아이템을 획득하지 못함.
+    // return 0 ~ 59 : 소비아이템을 획득하여 저장하고 저장된 배열 넘버를 반환한다. / return -1 : 인벤토리에 빈칸이 없어 아이템을 획득하지 못함
     // 소비아이템 획득 매커니즘 : 중복 아이템 획득
     // 1. 획득할 소비아이템과 동일한 소비아이템이 이미 인벤토리에 존재 하는지 판단한다.
     // 2. 아이템 보유 최대치(m_nMaxCount)보다 적게 가지고 있는지 판단한다. (Have = true / Have = false)
     // Have == true : 인벤토리에 이미 존재하는 소비아이템의 배열 넘버의 개수에 +1을 해준다.
     // Have == false : 인벤토리의 빈칸에 소비아이템을 할당한다.
-    public int Get_Item_Use(Item_Use item)
+    public int Get_Item_Use(Item_Use item) // item : 획득할 소비아이템
     {
         bool Have = false;
         int arynum_have = -1;
@@ -130,14 +128,13 @@ public class Player_Itemslot : MonoBehaviour
         }
     }
     // 기타아이템 획득 함수
-    // return 0 ~ 59 : 기타아이템을 획득하여 저장하고 저장된 배열 넘버를 반환한다.
-    // return -1 : 인벤토리에 빈칸이 없어 아이템을 획득하지 못함.
+    // return 0 ~ 59 : 기타아이템을 획득하여 저장하고 저장된 배열 넘버를 반환한다. / return -1 : 인벤토리에 빈칸이 없어 아이템을 획득하지 못함
     // 기타아이템 획득 매커니즘 : 중복 아이템 획득
     // 1. 획득할 기타아이템과 동일한 기타아이템이 이미 인벤토리에 존재 하는지 판단한다.
     // 2. 아이템 보유 최대치(m_nMaxCount)보다 적게 가지고 있는지 판단한다. (Have = true / false)
     // Have == true : 인벤토리에 이미 존재하는 기타아이템의 배열 넘버의 개수에 +1을 해준다.
     // Have == false : 인벤토리의 빈칸에 기타아이템을 할당한다.
-    public int Get_Item_Etc(Item_Etc item)
+    public int Get_Item_Etc(Item_Etc item) // item : 획득할 기타아이템
     {
         bool Have = false;
         int arynum_have = -1;
@@ -280,7 +277,7 @@ public class Player_Itemslot : MonoBehaviour
         }
     }
 
-    // 아이템의 원본 데이터를 반환
+    // 아이템의 원본 데이터를 반환. Unity의 프리팹 기능 사용. 오브젝트 형태로 불러온다.
     public GameObject GetCloneItem(GameObject item)
     {
         GameObject ReturnITem;
@@ -301,7 +298,7 @@ public class Player_Itemslot : MonoBehaviour
     }
 
     // 퀵슬롯에 등록된 아이템의 수량 현황 확인
-    public int Check_Quickslot_Item(E_QUICKSLOT_CATEGORY eqc, int itemcode)
+    public int Check_Quickslot_Item(E_QUICKSLOT_CATEGORY eqc, int itemcode) // eqc : 퀵슬롯에 등록된 아이템 분류(장비아이템, 소비아이템, 기타아이템), itemcode : 퀵슬롯에 등록된 아이템 코드
     {
         int itemcount = 0;
 
@@ -339,7 +336,7 @@ public class Player_Itemslot : MonoBehaviour
         return itemcount;
     }
     // 퀵슬롯에 등록된 아이템의 수량 현황을 갱신하는 용도
-    public void Use_Quickslot_Item(E_QUICKSLOT_CATEGORY eqc, int itemcode)
+    public void Use_Quickslot_Item(E_QUICKSLOT_CATEGORY eqc, int itemcode) // eqc : 퀵슬롯에 등록된 아이템 분류(장비아이템, 소비아이템, 기타아이템), itemcode : 퀵슬롯에 등록된 아이템 코드
     {
         if (eqc == E_QUICKSLOT_CATEGORY.EQUIP)
         {
@@ -376,7 +373,7 @@ public class Player_Itemslot : MonoBehaviour
     }
 
     // 리트라이(부활) 시 장비아이템 소실에 관한 함수
-    public bool ReTry_Lost_Item_Equip(Dictionary<int, int> dictionary)
+    public bool ReTry_Lost_Item_Equip(Dictionary<int, int> dictionary) // dictionary : 소실되는 장비아이템 목록. Dictionary <Key : 아이템 고유 코드(아이템 생성 순서), Value : 아이템 코드>
     {
         foreach(KeyValuePair<int, int> item in dictionary)
         {
@@ -404,7 +401,7 @@ public class Player_Itemslot : MonoBehaviour
         }
     }
     // 리트라이(부활) 시 소비아이템 소실에 관한 함수
-    public bool ReTry_Lost_Item_Use(Dictionary<int, int> dictionary)
+    public bool ReTry_Lost_Item_Use(Dictionary<int, int> dictionary) // dictionary : 소실되는 소비아이템 목록. Dictionary <Key : 아이템 코드, Value : 아이템 개수>
     {
         foreach (KeyValuePair<int, int> item in dictionary)
         {
@@ -447,7 +444,7 @@ public class Player_Itemslot : MonoBehaviour
         }
     }
     // 리트라이(부활) 시 기타아이템 소실에 관한 함수
-    public bool ReTry_Lost_Item_Etc(Dictionary<int, int> dictionary)
+    public bool ReTry_Lost_Item_Etc(Dictionary<int, int> dictionary) // dictionary : 소실되는 기타아이템 목록. Dictionary <Key : 아이템 코드, Value : 아이템 개수>
     {
         foreach (KeyValuePair<int, int> item in dictionary)
         {
