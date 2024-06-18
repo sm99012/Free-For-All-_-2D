@@ -152,12 +152,11 @@ public class PlayerCameraBox : MonoBehaviour
     }
 
     Vector3 m_vCameraCenterPosition; // 카메라 박스의 중심점
-    public Vector3 GetCameraCenterPosition()
+    public Vector3 GetCameraCenterPosition() // 카메라 박스의 중심점 반환
     {
         return m_vCameraCenterPosition;
     }
-    // 카메라 박스의 중심점 설정
-    public Vector3 SetCameraCenterPosition()
+    public Vector3 SetCameraCenterPosition() // 카메라 박스의 중심점 설정
     {
         // 카메라 박스가 충돌하지 않을때 카메라 박스의 중심점은 플레이어의 위치와 동일하다.
         if (m_eCP == E_CAMERA_POSITION.BLANK)
