@@ -5,60 +5,39 @@ using UnityEngine;
 public enum E_QUEST_LEVEL { S1, S2, S3, S4, S5, S6, S7, S8, S9, S10 } // 퀘스트 난이도
 public enum E_QUEST_REPEAT { ONCE, FINITE, INFINITE } // 퀘스트 반복 여부 { 단 한번만 수행, 무제한 수행, 제한 수행 }
 public enum E_QUEST_TYPE { NULL, MOVE, ATTACK, ATTACK1_1, ATTACK1_2, ATTACK1_3, ATTACKED, GOAWAY_MONSTER, GOAWAY_TYPE, KILL_MONSTER, KILL_TYPE, COLLECT, CONVERSATION, ROLL, ELIMINATE_MONSTER, ELIMINATE_TYPE }
-// 퀘스트 타입 개발 현황
-// KILL_MONSTER(특정 몬스터 토벌) : 0 ~ 999
-// KILL_TYPE(특정 타입의 몬스터 토벌) : 1000 ~ 1999
-// GOAWAY_MONSTER(특정 몬스터 놓아주기) : 2000 ~ 2999
-// GOAWAY_TYPE(특정 타입의 몬스터 놓아주기) : 3000 ~ 3999
-// COLLECT(수집) : 4000 ~ 4999
-// CONVERSATION(대화) : 5000 ~ 5999
-// ROLL(구르기) : 6000 ~ 6999
-// ELIMINATE_MONSTER(특정 몬스터 제거) : 7000 ~ 7999
-// ELIMINATE_TYPE(특정 타입의 몬스터 제거) : 8000 ~ 8999
+// 퀘스트 타입 개발 현황(퀘스트 코드)
+// KILL_MONSTER(특정 몬스터 토벌) : 0 ~ 999(퀘스트 코드)
+// KILL_TYPE(특정 타입의 몬스터 토벌) : 1000 ~ 1999(퀘스트 코드)
+// GOAWAY_MONSTER(특정 몬스터 놓아주기) : 2000 ~ 2999(퀘스트 코드)
+// GOAWAY_TYPE(특정 타입의 몬스터 놓아주기) : 3000 ~ 3999(퀘스트 코드)
+// COLLECT(수집) : 4000 ~ 4999(퀘스트 코드)
+// CONVERSATION(대화) : 5000 ~ 5999(퀘스트 코드)
+// ROLL(구르기) : 6000 ~ 6999(퀘스트 코드)
+// ELIMINATE_MONSTER(특정 몬스터 제거) : 7000 ~ 7999(퀘스트 코드)
+// ELIMINATE_TYPE(특정 타입의 몬스터 제거) : 8000 ~ 8999(퀘스트 코드)
 
+// 가장 공들여 설계한 파트가 퀘스트 파트이다.
+// 상속과 가상함수(오버라이딩)를 이용해 다양한 퀘스트를 구현했다. 그러나 여전히 낭비되는 메모리가 존재한다. 인터페이스(추상 클래스)를 사용해 본다면 어떨까 한다.
 public class Quest : MonoBehaviour
 {
-    //// KILL, GOAWAY 타입 퀘스트
-    //public List<int> m_nl_MonsterCode;
-    //public List<int> m_nl_Count_Max;
-    //public List<int> m_nl_Count_Current;
-    // m_nNPC 은 퀘스트 발행인
-    public int m_nNPC;
-    // 퀘스트 클리어 가능 NPC
-    public int m_nNPC_Clear;
-    //// COLLECT 타입 퀘스트
-    //public List<int> m_nl_ItemCode;
-    //public List<int> m_nl_ItemCount_Max;
-    //public List<int> m_nl_ItemCount_Current;
-
-    public int m_nQuest_Code;
-
-    // 퀘스트 로드맵 순서(추천 퀘스트 로드맵 출력 순서)
-    public int m_nQuest_Loadmap_Code;
-
-    public string m_sQuest_Title;
-    // 퀘스트 부여 대사
-    public List<string> m_sl_QuestDescription_Context;
-    // 퀘스트 간단 정보
-    public List<string> m_sl_QuestDescription_Simple;
-    // 퀘스트 수락시 대사
-    public List<string> m_sl_QuestOk_Context;
-    // 퀘스트 거절시 대사
-    public List<string> m_sl_QuestNo_Context;
-    // 퀘스트 도중 대사
-    public List<string> m_sl_QuestProgress_Context;
-    // 퀘스트 클리어 대사
-    public List<string> m_sl_QuestClear_Context;
-
-    public E_QUEST_LEVEL m_eQuestLevel;
-
-    // 퀘스트 타입
-    // KILL_TYPE: m_nl_Count_Max, m_nl_Count_Current 의 크기는 1로 한정.
-    // KILL_MONSTER: 조건에 맞게 m_nl_Count_Max, m_nl_Count_Current 크기 리스트로 지정. 
-    public E_QUEST_TYPE m_eQuestType;
-
-    // 퀘스트 진행, 클리어 순서.
-    public int m_nQuestOrder;
+    public string m_sQuest_Title; // 퀘스트 제목
+    
+    public E_QUEST_LEVEL m_eQuestLevel; // 퀘스트 난이도
+    public E_QUEST_TYPE m_eQuestType;   // 퀘스트 타입
+    
+    public int m_nNPC;       // 퀘스트 발행 NPC
+    public int m_nNPC_Clear; // 퀘스트 완료 NPC
+    
+    public int m_nQuest_Code;         // 퀘스트 코드
+    public int m_nQuestOrder; // 퀘스트 진행 및 퀘스트 완료 순서(순서에 따라 퀘스트GUI가 업데이트 된다.)
+    public int m_nQuest_Loadmap_Code; // 퀘스트 로드맵 순서(추천 퀘스트 로드맵 출력 순서)
+    
+    public List<string> m_sl_QuestDescription_Context; // 퀘스트 발행 시 대화 스크립트(리스트)
+    public List<string> m_sl_QuestDescription_Simple;  // 퀘스트의 간단한 정보(리스트)
+    public List<string> m_sl_QuestOk_Context;          // 퀘스트 수락 시 대화 스크립트(리스트)
+    public List<string> m_sl_QuestNo_Context;          // 퀘스트 거절 시 대화 스크립트(리스트)
+    public List<string> m_sl_QuestProgress_Context;    // 퀘스트 진행중일 시 대화 스크립트(리스트). 퀘스트 완료 조건을 충족하지 않은 경우
+    public List<string> m_sl_QuestClear_Context;       // 퀘스트 완료 시 대화 스크립트(리스트)
 
     // 플레이어가 퀘스트를 진행중인지?
     public bool m_bProcess;
