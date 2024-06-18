@@ -37,11 +37,15 @@ public class Player_Status : MonoBehaviour
     
     public static Condition m_cCondition;   // 플레이어에게 적용중인 상태이상(속박, 기절, 암흑, 둔화, 혼란) 정보
     GameObject m_gCondition;
+    
     public GameObject m_gCondition_Bind;    // 속박 이펙트(애니메이션)
     public GameObject m_gCondition_Shock;   // 기절 이펙트(애니메이션)
     public GameObject m_gCondition_Dark;    // 암흑 이펙트(애니메이션)
     public GameObject m_gCondition_Slow;    // 둔화 이펙트(애니메이션)
     public GameObject m_gCondition_Confuse; // 혼란 이펙트(애니메이션)
+    //
+    // ※ 이펙트 관련 오브젝트 위치 변경 필요. Player_Status.cs -> Player_Effect.cs
+    //
     
     // 플레이어에게 적용되고있는 소비아이템 정보
     public static Dictionary <int, Item_Use> m_Dictionary_Item_Use_Buff;                // 소비아이템 효과 딕셔너리(버프 / 디버프). Dictionary <Key : 아이템코드 , Value : 소비아이템 정보>
