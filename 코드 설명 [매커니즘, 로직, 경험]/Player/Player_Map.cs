@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player_Map : MonoBehaviour
 {
-    // 현재 플레이어가 위치하고 있는 맵의 정보
+    // 현재 플레이어가 위치하고 있는 맵 정보
     public Map m_Map;
     public string m_sMapName;
 
@@ -14,7 +14,7 @@ public class Player_Map : MonoBehaviour
         m_sMapName = "튜토리얼맵";
     }
 
-    public void ChangeMap(Map map)
+    public void ChangeMap(Map map) // 변경할 맵 정보
     {
         m_Map = map;
         m_sMapName = map.GetMapName();
