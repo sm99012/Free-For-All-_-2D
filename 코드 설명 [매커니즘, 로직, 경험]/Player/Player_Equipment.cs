@@ -45,9 +45,9 @@ public class Player_Equipment : MonoBehaviour
     }
     
     // 장비아이템 착용
-    public void Equip(Item_Equip item)
+    public void Equip(Item_Equip item) // 착용할 장비아이템
     {
-        switch (item.m_eItemEquipType)
+        switch (item.m_eItemEquipType) // 착용할 장비아이템의 분류별 장비아이템 착용
         {
             case E_ITEM_EQUIP_TYPE.HAT:
                 {
@@ -95,7 +95,7 @@ public class Player_Equipment : MonoBehaviour
     }
 
     // 장비아이템 해제
-    public void Remove_Equip(E_ITEM_EQUIP_TYPE miet)
+    public void Remove_Equip(E_ITEM_EQUIP_TYPE miet) // 해제할 장비아이템 분류
     {
         switch(miet)
         {
@@ -152,7 +152,7 @@ public class Player_Equipment : MonoBehaviour
     }
 
     // 착용중인 장비아이템의 아이템 세트효과 코드 반환
-    public int CheckSetItemEffect(E_ITEM_EQUIP_TYPE eiet)
+    public int CheckSetItemEffect(E_ITEM_EQUIP_TYPE eiet) // 착용중인 장비아이템 분류
     {
         switch (eiet)
         {
@@ -225,16 +225,17 @@ public class Player_Equipment : MonoBehaviour
     }
 
     // 리트라이(부활) 시 장비아이템 소실에 관한 함수(장비아이템 소실 + 장비아이템 해제)
-    public bool ReTry_Lost_Item_Equip(Dictionary<int, int> dictionary) // 매개변수 dictionary에 잃어버리는 아이템 정보가 존재.
+    public bool ReTry_Lost_Item_Equip(Dictionary<int, int> dictionary) // 매개변수 Dictionary에 잃어버리는 아이템 정보가 존재
     {
         foreach (KeyValuePair<int, int> item in dictionary)
         {
-            Delete_Item_Equip(item.Key);
+            Delete_Item_Equip(item.Key); // 장비아이템 삭제
         }
 
         return true;
     }
-    void Delete_Item_Equip(int itemnumber)
+    // 착용중인 장비아이템 삭제 함수
+    void Delete_Item_Equip(int itemnumber) // 아이템 고유 코드(아이템 생성 순서)
     {
         if (m_bEquipment_Hat == true)
         {
