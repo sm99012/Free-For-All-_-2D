@@ -38,8 +38,7 @@ public class Player_Camera : MonoBehaviour
     }
 
     // 카메라 설정 관련 함수(카메라 중심점 판단ㆍ설정)
-    // true: Player 이동 시 Player가 카메라의 중심에 위치.
-    // false: 카메라 포지션 제한.
+    // return true : 카메라 이동 가능 / return false : 카메라 이동 불가능
     string m_sJudgeStr;
     public bool CameraMove(Vector2 playerpos)
     {
