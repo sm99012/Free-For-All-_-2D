@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum E_QUEST_LEVEL { S1, S2, S3, S4, S5, S6, S7, S8, S9, S10 }
-public enum E_QUEST_REPEAT { ONCE, FINITE, INFINITE }
+public enum E_QUEST_LEVEL { S1, S2, S3, S4, S5, S6, S7, S8, S9, S10 } // 퀘스트 난이도
+public enum E_QUEST_REPEAT { ONCE, FINITE, INFINITE } // 퀘스트 반복 여부 { 단 한번만 수행, 무제한 수행, 제한 수행 }
 public enum E_QUEST_TYPE { NULL, MOVE, ATTACK, ATTACK1_1, ATTACK1_2, ATTACK1_3, ATTACKED, GOAWAY_MONSTER, GOAWAY_TYPE, KILL_MONSTER, KILL_TYPE, COLLECT, CONVERSATION, ROLL, ELIMINATE_MONSTER, ELIMINATE_TYPE }
-// Quest_Type 개발 현황.
-// KILL_MONSTER 0 ~ 999
-// KILL_TYPE 1000 ~ 1999
-// GOAWAY_MONSTER 2000 ~ 2999
-// GOAWAY_TYPE 3000 ~ 3999
-// COLLECT 4000 ~ 4999
-// CONVERSATION 5000 ~ 5999
-// ROLL 6000 ~ 6999
-// ELIMINATE_MONSTER 7000 ~ 7999
-// ELIMINATE_TYPE 8000 ~ 8999
+// 퀘스트 타입 개발 현황
+// KILL_MONSTER(특정 몬스터 토벌) : 0 ~ 999
+// KILL_TYPE(특정 타입의 몬스터 토벌) : 1000 ~ 1999
+// GOAWAY_MONSTER(특정 몬스터 놓아주기) : 2000 ~ 2999
+// GOAWAY_TYPE(특정 타입의 몬스터 놓아주기) : 3000 ~ 3999
+// COLLECT(수집) : 4000 ~ 4999
+// CONVERSATION(대화) : 5000 ~ 5999
+// ROLL(구르기) : 6000 ~ 6999
+// ELIMINATE_MONSTER(특정 몬스터 제거) : 7000 ~ 7999
+// ELIMINATE_TYPE(특정 타입의 몬스터 제거) : 8000 ~ 8999
 
 public class Quest : MonoBehaviour
 {
