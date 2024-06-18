@@ -412,8 +412,8 @@ public class Player_Itemslot : MonoBehaviour
 
         return true;
     }
-    // 소비아이템을 삭제하는 함수. itemcode가 동일한 소비아이템을 Itemcount 만큼 삭제한다.
-    // 소비아이템 삭제 매커니즘 : 매개변수 Dictionary의 Key값(아이템 고유 코드(아이템 생성 순서))에 해당하는 아이템을 인벤토리(장비아이템)에서 삭제한다.
+    // 소비아이템을 삭제하는 함수
+    // 소비아이템 삭제 매커니즘 : 인벤토리(소비아이템)에서 itemcode가 동일한 소비아이템을 Itemcount 만큼 삭제한다.
     void Delete_Item_Use(int itemcode, int itemcount) // itemcode : 아이템 코드, itemcount : 아이템 개수
     {
         int ic = itemcount;
@@ -456,8 +456,9 @@ public class Player_Itemslot : MonoBehaviour
 
         return true;
     }
-    // 기타아이템을 삭제하는 함수. itemcode가 동일한 기타아이템을 Itemcount 만큼 삭제한다.
-    void Delete_Item_Etc(int itemcode, int itemcount)
+    // 기타아이템을 삭제하는 함수
+    // 기타아이템 삭제 매커니즘 : 인벤토리(기타아이템)에서 itemcode가 동일한 기타아이템을 Itemcount 만큼 삭제한다.
+    void Delete_Item_Etc(int itemcode, int itemcount) // itemcode : 아이템 코드, itemcount : 아이템 개수
     {
         int ic = itemcount;
         for (int i = m_gary_Itemslot_Etc.Length - 1; i >= 0;)
@@ -501,7 +502,8 @@ public class Player_Itemslot : MonoBehaviour
 
     // 소비아이템_기프트(랜덤박스, 선물상자 등) 사용 관련 함수
     // 인벤토리(장비아이템)의 남은(여유) 공간 확인. itemcount 만큼의 장비아이템을 획득할 여분의 인벤토리 공간이 남아 있는지 판단
-    public bool Check_Get_Item_Itemslot_Equip(int itemcount)
+    // return true : 인벤토리(장비아이템) 여유 공간 존재 / return false : 인벤토리(장비아이템) 여유 공간 미존재
+    public bool Check_Get_Item_Itemslot_Equip(int itemcount) // itemcount : 아이템 개수
     {
         int value = 0;
         for (int i = 0; i < m_nary_Itemslot_Equip_Count.Length; i++)
@@ -516,7 +518,9 @@ public class Player_Itemslot : MonoBehaviour
             return false;
     }
     // 인벤토리(소비아이템)의 남은(여유) 공간 확인. itemcount 만큼의 소비아이템을 획득할 여분의 인벤토리 공간이 남아 있는지 판단
-    public bool Check_Get_Item_Itemslot_Use(int itemcount)
+    // 아이템 중복 여부를 따지지 않은 단순 판단
+    // return true : 인벤토리(소비아이템) 여유 공간 존재 / return false : 인벤토리(소비아이템) 여유 공간 미존재
+    public bool Check_Get_Item_Itemslot_Use(int itemcount) // itemcount : 아이템 개수
     {
         int value = 0;
         for (int i = 0; i < m_nary_Itemslot_Use_Count.Length; i++)
@@ -530,24 +534,28 @@ public class Player_Itemslot : MonoBehaviour
         else
             return false;
     }
-    public bool Check_Get_Item_Itemslot_Use(Dictionary<int, int> Dictionary_itemcode, Dictionary<int, int> Dictionary_itemcount)
+    // 아이템 중복 여부를 따지는 복잡한 판단
+    // return true : 인벤토리(소비아이템) 여유 공간 존재 / return false : 인벤토리(소비아이템) 여유 공간 미존재
+    public bool Check_Get_Item_Itemslot_Use(Dictionary<int, int> Dictionary_itemcode, Dictionary<int, int> Dictionary_itemcount) // Dictionary_itemcode <Key : 순서, Value : 아이템 코드>
+                                                                                                                                 // Dictionary_itemcount <Key : 순서, Value : 아이템 개수>
     {
-        List<int> List_Exit = new List<int>();
+        List<int> List_Exit = new List<int>(); // 추가로 저장될 인벤토리(소비아이템) 배열 번호 리스트
 
         for (int i = 0; i < Dictionary_itemcode.Count; i++)
         {
-            int value = Dictionary_itemcount[i];
+            int value = Dictionary_itemcount[i]; // value = 소비아이템 종류(아이템 코드)별 획득할 소비아이템 개수
             
             for (int j = 0; j < m_gary_Itemslot_Use.Length; j++)
             {
-                if (m_nary_Itemslot_Use_Count[j] != 0)
+                if (m_nary_Itemslot_Use_Count[j] != 0) // 해당 인벤토리(소비아이템) 배열[j]에 아이템이 존재할 경우
                 {
-                    if (m_gary_Itemslot_Use[j].m_nItemCode == Dictionary_itemcode[i])
+                    if (m_gary_Itemslot_Use[j].m_nItemCode == Dictionary_itemcode[i]) // 해당 인벤토리(소비아이템) 배열[j]의 소비아이템이 새로 획득할 소비아이템과 동일할 경우
                     {
-                        value -= (10 - m_nary_Itemslot_Use_Count[j]);
+                        value -= (10 - m_nary_Itemslot_Use_Count[j]); // 인벤토리(소비아이템) 1개의 공간 당 10개의 소비아이템을 저장할 수 있기에 10을 기준으로 계산
+                                                                      // value 만큼의 인벤토리(소비아이템) 내 여유 공간이 필요
                     }
                 }
-                else
+                else // 해당 인벤토리(소비아이템) 배열[j]에 아이템이 존재하지 않을 경우
                 {
                     if (List_Exit.Contains(j) == false)
                     {
@@ -560,14 +568,16 @@ public class Player_Itemslot : MonoBehaviour
                     break;
             }
 
+            // value(획득할 소비아이템 개수) 가 0보다 클 경우 인벤토리(소비아이템)에 여유가 없다고 판단
             if (value > 0)
                 return false;
         }
 
         return true;
     }
-    // 인벤토리(기타아이템)의 남은(여유) 공간 확인. itemcount 만큼의 기타아이템을 획득할 여분의 인벤토리 공간이 남아 있는지 판단
-    public bool Check_Get_Item_Itemslot_Etc(int itemcount)
+    // 아이템 중복 여부를 따지지 않은 단순 판단
+    // return true : 인벤토리(기타아이템) 여유 공간 존재 / return false : 인벤토리(기타아이템) 여유 공간 미존재
+    public bool Check_Get_Item_Itemslot_Etc(int itemcount) // itemcount : 아이템 개수
     {
         int value = 0;
         for (int i = 0; i < m_nary_Itemslot_Etc_Count.Length; i++)
@@ -581,24 +591,28 @@ public class Player_Itemslot : MonoBehaviour
         else
             return false;
     }
-    public bool Check_Get_Item_Itemslot_Etc(Dictionary<int, int> Dictionary_itemcode, Dictionary<int, int> Dictionary_itemcount)
+    // 아이템 중복 여부를 따지는 복잡한 판단
+    // return true : 인벤토리(기타아이템) 여유 공간 존재 / return false : 인벤토리(기타아이템) 여유 공간 미존재
+    public bool Check_Get_Item_Itemslot_Etc(Dictionary<int, int> Dictionary_itemcode, Dictionary<int, int> Dictionary_itemcount) // Dictionary_itemcode <Key : 순서, Value : 아이템 코드>
+                                                                                                                                 // Dictionary_itemcount <Key : 순서, Value : 아이템 개수>
     {
-        List<int> List_Exit = new List<int>();
+        List<int> List_Exit = new List<int>(); // 추가로 저장될 인벤토리(기타아이템) 배열 번호 리스트
 
         for (int i = 0; i < Dictionary_itemcode.Count; i++)
         {
-            int value = Dictionary_itemcount[i];
+            int value = Dictionary_itemcount[i]; // value = 기타아이템 종류(아이템 코드)별 획득할 기타아이템 개수
 
             for (int j = 0; j < m_gary_Itemslot_Etc.Length; j++)
             {
-                if (m_nary_Itemslot_Etc_Count[j] != 0)
+                if (m_nary_Itemslot_Etc_Count[j] != 0) // 해당 인벤토리(기타아이템) 배열[j]에 아이템이 존재할 경우
                 {
-                    if (m_gary_Itemslot_Etc[j].m_nItemCode == Dictionary_itemcode[i])
+                    if (m_gary_Itemslot_Etc[j].m_nItemCode == Dictionary_itemcode[i]) // 해당 인벤토리(기타아이템) 배열[j]의 기타아이템이 새로 획득할 기타아이템과 동일할 경우
                     {
-                        value -= (10 - m_nary_Itemslot_Etc_Count[j]);
+                        value -= (10 - m_nary_Itemslot_Etc_Count[j]); // 인벤토리(기타아이템) 1개의 공간 당 10개의 기타아이템을 저장할 수 있기에 10을 기준으로 계산
+                                                                      // value 만큼의 인벤토리(기타아이템) 내 여유 공간이 필요
                     }
                 }
-                else
+                else // 해당 인벤토리(기타아이템) 배열[j]에 아이템이 존재하지 않을 경우
                 {
                     if (List_Exit.Contains(j) == false)
                     {
@@ -611,6 +625,7 @@ public class Player_Itemslot : MonoBehaviour
                     break;
             }
 
+            // value(획득할 기타아이템 개수) 가 0보다 클 경우 인벤토리(기타아이템)에 여유가 없다고 판단
             if (value > 0)
                 return false;
         }
