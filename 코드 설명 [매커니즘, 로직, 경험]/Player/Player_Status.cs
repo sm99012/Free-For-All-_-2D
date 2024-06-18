@@ -43,6 +43,7 @@ public class Player_Status : MonoBehaviour
     public GameObject m_gCondition_Dark;    // 암흑 이펙트(애니메이션)
     public GameObject m_gCondition_Slow;    // 둔화 이펙트(애니메이션)
     public GameObject m_gCondition_Confuse; // 혼란 이펙트(애니메이션)
+    
     //
     // ※ 이펙트 관련 오브젝트 위치 변경 필요. Player_Status.cs -> Player_Effect.cs
     //
