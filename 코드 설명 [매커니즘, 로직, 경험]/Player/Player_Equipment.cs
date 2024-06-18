@@ -21,7 +21,6 @@ public class Player_Equipment : MonoBehaviour
     public static bool m_bEquipment_Gloves;     // 장갑
     public static bool m_bEquipment_Mainweapon; // 주무기
     public static bool m_bEquipment_Subweapon;  // 보조무기
-
     //
     // ※ Item_Equip라는 클래스를 만들어 장비창을 구현했다. 그 과정에서 Unity의 null 기능을 사용할 수 없었기에(Item_Equip클래스가 할당되어 있어도 Unity엔진이 null로 인식) 추가로 bool변수를 이용했다.
     //
