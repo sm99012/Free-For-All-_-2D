@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player_Effect : MonoBehaviour
 {
-    public List<GameObject> m_l_EffectList;
+    public List<GameObject> m_l_EffectList; // 플레이어에게 적용 가능한 이펙트 리스트
 
     public void InitialSet()
     {
@@ -21,12 +21,13 @@ public class Player_Effect : MonoBehaviour
         m_l_EffectList.Add(Effect);
     }
 
-
-    public void Effect1(Vector3 pos)
+    // 이펙트 함수
+    // 타격 이펙트 연출
+    public void Effect1(Vector3 pos) // pos : 이펙트 위치
     {
         StartCoroutine(ProcessEffect1(pos));
     }
-    IEnumerator ProcessEffect1(Vector3 pos)
+    IEnumerator ProcessEffect1(Vector3 pos) // pos : 이펙트 위치
     {
         yield return new WaitForSeconds(0.1f);
         if (m_l_EffectList[0] != null)
@@ -35,12 +36,12 @@ public class Player_Effect : MonoBehaviour
             efc.transform.position = pos;
         }
     }
-
-    public void Effect2(Vector3 pos)
+    // 
+    public void Effect2(Vector3 pos) // pos : 이펙트 위치
     {
         StartCoroutine(ProcessEffect2(pos));
     }
-    IEnumerator ProcessEffect2(Vector3 pos)
+    IEnumerator ProcessEffect2(Vector3 pos) // pos : 이펙트 위치
     {
         yield return new WaitForSeconds(0.1f);
         if (m_l_EffectList[1] != null)
@@ -49,12 +50,12 @@ public class Player_Effect : MonoBehaviour
             efc.transform.position = pos;
         }
     }
-
-    public void Effect3(Vector3 pos)
+    // 
+    public void Effect3(Vector3 pos) // pos : 이펙트 위치
     {
         StartCoroutine(ProcessEffect3(pos));
     }
-    IEnumerator ProcessEffect3(Vector3 pos)
+    IEnumerator ProcessEffect3(Vector3 pos) // pos : 이펙트 위치
     {
         yield return new WaitForSeconds(0.1f);
         if (m_l_EffectList[1] != null)
@@ -63,12 +64,12 @@ public class Player_Effect : MonoBehaviour
             efc.transform.position = pos;
         }
     }
-
-    public void Effect4(Vector3 pos)
+    // 
+    public void Effect4(Vector3 pos) // pos : 이펙트 위치
     {
         StartCoroutine(ProcessEffect4(pos));
     }
-    IEnumerator ProcessEffect4(Vector3 pos)
+    IEnumerator ProcessEffect4(Vector3 pos) // pos : 이펙트 위치
     {
         yield return new WaitForSeconds(0.1f);
         if (m_l_EffectList[3] != null)
@@ -77,12 +78,12 @@ public class Player_Effect : MonoBehaviour
             efc.transform.position = pos;
         }
     }
-
-    public void Effect5(Vector3 pos)
+    // 
+    public void Effect5(Vector3 pos) // pos : 이펙트 위치
     {
         StartCoroutine(ProcessEffect5(pos));
     }
-    IEnumerator ProcessEffect5(Vector3 pos)
+    IEnumerator ProcessEffect5(Vector3 pos) // pos : 이펙트 위치
     {
         yield return new WaitForSeconds(0.1f);
         if (m_l_EffectList[4] != null)
