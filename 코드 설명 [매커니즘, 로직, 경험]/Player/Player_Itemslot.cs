@@ -344,7 +344,7 @@ public class Player_Itemslot : MonoBehaviour
         }
         else if (eqc == E_QUICKSLOT_CATEGORY.USE)
         {
-            // 사용 시 -1.
+            // 사용 시 -1
             for (int i = 0; i < 60; i++)
             {
                 if (m_nary_Itemslot_Use_Count[i] != 0)
@@ -373,18 +373,19 @@ public class Player_Itemslot : MonoBehaviour
     }
 
     // 리트라이(부활) 시 장비아이템 소실에 관한 함수
-    public bool ReTry_Lost_Item_Equip(Dictionary<int, int> dictionary) // dictionary : 소실되는 장비아이템 목록. Dictionary <Key : 아이템 고유 코드(아이템 생성 순서), Value : 아이템 코드>
+    public bool ReTry_Lost_Item_Equip(Dictionary<int, int> Dictionary) // Dictionary : 소실되는 장비아이템 목록. Dictionary <Key : 아이템 고유 코드(아이템 생성 순서), Value : 아이템 코드>
     {
-        foreach(KeyValuePair<int, int> item in dictionary)
+        foreach(KeyValuePair<int, int> item in Dictionary)
         {
-            Delete_Item_Equip(item.Key);
-            Player_Total.Instance.m_pq_Quest.QuestUpdate_Collect(ItemManager.instance.m_Dictionary_MonsterDrop_Equip[item.Key]);
+            Delete_Item_Equip(item.Key); // 장비아이템을 삭제하는 함수
+            Player_Total.Instance.m_pq_Quest.QuestUpdate_Collect(ItemManager.instance.m_Dictionary_MonsterDrop_Equip[item.Key]); // 진행중인 퀘스트 현황을 업데이트하는 함수(퀘스트 타입 : 수집)
         }
 
         return true;
     }
-    // 장비아이템을 삭제하는 함수. itemnumber는 아이템이 가지는 고유 코드(아이템 생성 순서)
-    void Delete_Item_Equip(int itemnumber)
+    // 장비아이템을 삭제하는 함수
+    // 장비아이템 삭제 매커니즘 : 매개변수 Dictionary의 Key값(아이템 고유 코드(아이템 생성 순서))에 해당하는 아이템을 인벤토리(장비아이템)에서 삭제한다.
+    void Delete_Item_Equip(int itemnumber) // itemnumber : 아이템 고유 코드(아이템 생성 순서)
     {
         for (int i = 0; i < m_gary_Itemslot_Equip.Length; i++)
         {
@@ -401,18 +402,19 @@ public class Player_Itemslot : MonoBehaviour
         }
     }
     // 리트라이(부활) 시 소비아이템 소실에 관한 함수
-    public bool ReTry_Lost_Item_Use(Dictionary<int, int> dictionary) // dictionary : 소실되는 소비아이템 목록. Dictionary <Key : 아이템 코드, Value : 아이템 개수>
+    public bool ReTry_Lost_Item_Use(Dictionary<int, int> Dictionary) // Dictionary : 소실되는 소비아이템 목록. Dictionary <Key : 아이템 코드, Value : 아이템 개수>
     {
-        foreach (KeyValuePair<int, int> item in dictionary)
+        foreach (KeyValuePair<int, int> item in Dictionary)
         {
-            Delete_Item_Use(item.Key, item.Value);
-            Player_Total.Instance.m_pq_Quest.QuestUpdate_Collect(ItemManager.instance.m_Dictionary_MonsterDrop_Use[item.Key]);
+            Delete_Item_Use(item.Key, item.Value); // 소비아이템을 삭제하는 함수
+            Player_Total.Instance.m_pq_Quest.QuestUpdate_Collect(ItemManager.instance.m_Dictionary_MonsterDrop_Use[item.Key]); // 진행중인 퀘스트 현황을 업데이트하는 함수(퀘스트 타입 : 수집)
         }
 
         return true;
     }
     // 소비아이템을 삭제하는 함수. itemcode가 동일한 소비아이템을 Itemcount 만큼 삭제한다.
-    void Delete_Item_Use(int itemcode, int itemcount)
+    // 소비아이템 삭제 매커니즘 : 매개변수 Dictionary의 Key값(아이템 고유 코드(아이템 생성 순서))에 해당하는 아이템을 인벤토리(장비아이템)에서 삭제한다.
+    void Delete_Item_Use(int itemcode, int itemcount) // itemcode : 아이템 코드, itemcount : 아이템 개수
     {
         int ic = itemcount;
         
@@ -444,9 +446,9 @@ public class Player_Itemslot : MonoBehaviour
         }
     }
     // 리트라이(부활) 시 기타아이템 소실에 관한 함수
-    public bool ReTry_Lost_Item_Etc(Dictionary<int, int> dictionary) // dictionary : 소실되는 기타아이템 목록. Dictionary <Key : 아이템 코드, Value : 아이템 개수>
+    public bool ReTry_Lost_Item_Etc(Dictionary<int, int> Dictionary) // Dictionary : 소실되는 기타아이템 목록. Dictionary <Key : 아이템 코드, Value : 아이템 개수>
     {
-        foreach (KeyValuePair<int, int> item in dictionary)
+        foreach (KeyValuePair<int, int> item in Dictionary)
         {
             Delete_Item_Etc(item.Key, item.Value);
             Player_Total.Instance.m_pq_Quest.QuestUpdate_Collect(ItemManager.instance.m_Dictionary_MonsterDrop_Etc[item.Key]);
@@ -528,19 +530,19 @@ public class Player_Itemslot : MonoBehaviour
         else
             return false;
     }
-    public bool Check_Get_Item_Itemslot_Use(Dictionary<int, int> dictionary_itemcode, Dictionary<int, int> dictionary_itemcount)
+    public bool Check_Get_Item_Itemslot_Use(Dictionary<int, int> Dictionary_itemcode, Dictionary<int, int> Dictionary_itemcount)
     {
         List<int> List_Exit = new List<int>();
 
-        for (int i = 0; i < dictionary_itemcode.Count; i++)
+        for (int i = 0; i < Dictionary_itemcode.Count; i++)
         {
-            int value = dictionary_itemcount[i];
+            int value = Dictionary_itemcount[i];
             
             for (int j = 0; j < m_gary_Itemslot_Use.Length; j++)
             {
                 if (m_nary_Itemslot_Use_Count[j] != 0)
                 {
-                    if (m_gary_Itemslot_Use[j].m_nItemCode == dictionary_itemcode[i])
+                    if (m_gary_Itemslot_Use[j].m_nItemCode == Dictionary_itemcode[i])
                     {
                         value -= (10 - m_nary_Itemslot_Use_Count[j]);
                     }
@@ -579,19 +581,19 @@ public class Player_Itemslot : MonoBehaviour
         else
             return false;
     }
-    public bool Check_Get_Item_Itemslot_Etc(Dictionary<int, int> dictionary_itemcode, Dictionary<int, int> dictionary_itemcount)
+    public bool Check_Get_Item_Itemslot_Etc(Dictionary<int, int> Dictionary_itemcode, Dictionary<int, int> Dictionary_itemcount)
     {
         List<int> List_Exit = new List<int>();
 
-        for (int i = 0; i < dictionary_itemcode.Count; i++)
+        for (int i = 0; i < Dictionary_itemcode.Count; i++)
         {
-            int value = dictionary_itemcount[i];
+            int value = Dictionary_itemcount[i];
 
             for (int j = 0; j < m_gary_Itemslot_Etc.Length; j++)
             {
                 if (m_nary_Itemslot_Etc_Count[j] != 0)
                 {
-                    if (m_gary_Itemslot_Etc[j].m_nItemCode == dictionary_itemcode[i])
+                    if (m_gary_Itemslot_Etc[j].m_nItemCode == Dictionary_itemcode[i])
                     {
                         value -= (10 - m_nary_Itemslot_Etc_Count[j]);
                     }
