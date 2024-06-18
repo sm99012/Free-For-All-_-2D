@@ -437,7 +437,7 @@ public class Player_Quest : MonoBehaviour
                 else
                 {
                     NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_ROLL[i].m_nNPC].UpdateIcon(); // 퀘스트 발행 NPC의 퀘스트 아이콘 : 퀘스트 진행중(해당 NPC를 통해 퀘스트 완료 불가능)
-                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_ROLL[i].m_nNPC_Clear].UpdateIcon(); // 퀘스트 클리어 NPC의 퀘스트 아이콘 : 퀘스트 완료 가능
+                    NPCManager_Total.m_Dictionary_NPC[m_lQuestList_Progress_ROLL[i].m_nNPC_Clear].UpdateIcon(); // 퀘스트 완료 NPC의 퀘스트 아이콘 : 퀘스트 완료 가능
                 }
             }
 
