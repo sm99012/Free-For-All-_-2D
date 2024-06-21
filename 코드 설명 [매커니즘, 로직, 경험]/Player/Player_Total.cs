@@ -47,7 +47,7 @@ public class Player_Total : MonoBehaviour
     public int vInput;      // 수직이동 값
     public int m_nPosValue; // 플레이어가 바라보는 방향(2D 탑다운 게임이지만 플레이어는 우측과 좌측만 바라보고 게임을 진행한다.)
     
-    // 플레이어가 착용한 무기분류에 따라 상이한 공격 패턴(공격범위, 공격력 계수, 공격 타이밍)을 가진다.
+    // 플레이어가 착용한 무기 분류에 따라 상이한 공격 패턴(공격범위, 공격력 계수, 공격 타이밍)을 가진다.
     // Sword(검) 공격범위
     GameObject m_gAttack_Area_Sword;
     GameObject m_gAttack1_1_Area_Sword;
@@ -309,7 +309,7 @@ public class Player_Total : MonoBehaviour
         }
     }
 
-    // 무기분류별 기본 공격 판정 관련 함수
+    // 무기 분류별 기본 공격 판정 관련 함수
     // 기본 공격 애니메이션의 특정 프레임에서 호출된다. 기본 공격의 종류별로 공격범위, 공격력 계수, 공격 타이밍이 다르다. 
     // Sword(검) 기본 공격 판정
     public void AttackCheck1_1_Sword()
@@ -354,9 +354,9 @@ public class Player_Total : MonoBehaviour
     // 기본 공격 판정 함수
     // 오버랩을 이용해 공격 범위내의 모든 오브젝트(몬스터, 파괴 가능한 오브젝트)에 특정 공격력 계수를 적용한 데미지를 가한다.
     // Physics2D.OverlapBoxAll(Vector2 point, Vector2 size, float angle, int layerMask) // point : 오버랩 지점, size : 오버랩 크기, angle : 각도, layerMask : 오버랩을 적용할 레이어 // return Collider2D[]
-    void AttackCheck(E_ITEM_EQUIP_MAINWEAPON_TYPE mt, int attacknumber, float percent) // mt : 무기분류, attacknumber : 기본 공격 단계(1, 2, 3), percent : 공격력 계수
+    void AttackCheck(E_ITEM_EQUIP_MAINWEAPON_TYPE mt, int attacknumber, float percent) // mt : 무기 분류, attacknumber : 기본 공격 단계(1, 2, 3), percent : 공격력 계수
     {
-        if (mt == E_ITEM_EQUIP_MAINWEAPON_TYPE.SWORD) // 무기분류 : Sword(검)
+        if (mt == E_ITEM_EQUIP_MAINWEAPON_TYPE.SWORD) // 무기 분류 : Sword(검)
         {
             if (attacknumber == 1) // 기본 공격1
             {
@@ -395,7 +395,7 @@ public class Player_Total : MonoBehaviour
                 }
             }
         }
-        else if (mt == E_ITEM_EQUIP_MAINWEAPON_TYPE.AXE) // 무기분류 : Axe(도끼)
+        else if (mt == E_ITEM_EQUIP_MAINWEAPON_TYPE.AXE) // 무기 분류 : Axe(도끼)
         {
             if (attacknumber == 1) // 기본 공격1
             {
@@ -434,7 +434,7 @@ public class Player_Total : MonoBehaviour
                 }
             }
         }
-        else if (mt == E_ITEM_EQUIP_MAINWEAPON_TYPE.KNIFE) // 무기분류 : Knife(단검)
+        else if (mt == E_ITEM_EQUIP_MAINWEAPON_TYPE.KNIFE) // 무기 분류 : Knife(단검)
         {
             if (attacknumber == 1) // 기본 공격1
             {
