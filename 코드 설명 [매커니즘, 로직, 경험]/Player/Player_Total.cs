@@ -567,11 +567,11 @@ public class Player_Total : MonoBehaviour
         GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
 
         // 스킬 적용 시 피격(넉백) 적용
-        if (skill.m_seSkillEffect.m_cCondition.ConditionCheck_Shock() == true) // 플레이어에게 적용할 스킬에 상태이상(기절)이 존재하는 경우
-        {
-            Attacked(0, this.gameObject.transform.position, 0.3f, skill.m_sSkillName); // 플레이어 피격(넉백)
-                                                                                       // 데미지 : 0, 피격(넉백) 방향 : 플레이어 현재 위치, 넉백 시간 : 0.3f초, 피격 이름(정보) : 해당 스킬 이름
-        }
+        // if (skill.m_seSkillEffect.m_cCondition.ConditionCheck_Shock() == true) // 플레이어에게 적용할 스킬에 상태이상(기절)이 존재하는 경우
+        // {
+            // Attacked(0, this.gameObject.transform.position, 0.3f, skill.m_sSkillName); // 플레이어 피격(넉백)
+                                                                                          // 데미지 : 0, 피격(넉백) 방향 : 플레이어 현재 위치, 넉백 시간 : 0.3f초, 피격 이름(정보) : 해당 스킬 이름
+        // }
     }
 
     // 플레이어 피격 함수
