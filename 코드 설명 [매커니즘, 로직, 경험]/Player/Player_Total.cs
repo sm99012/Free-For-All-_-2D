@@ -310,7 +310,7 @@ public class Player_Total : MonoBehaviour
     {
         if (Player_Status.m_cCondition.ConditionCheck_Shock() == false) // 플레이어에게 상태이상(기절)이 적용중이지 않을때
         {
-            m_nAtk = m_pm_Move.Attack(); // 플레이어 공격 함수 실행. 기본 공격 단계 반환
+            m_pm_Move.Attack(); // 플레이어 공격 함수 실행. 기본 공격 단계 반환
         }
     }
 
