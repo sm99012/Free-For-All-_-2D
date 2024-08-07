@@ -88,10 +88,10 @@ public class Player_Total : MonoBehaviour
 
     Vector2 m_vSize = new Vector2(0.25f, 0.35f); // 상호작용 범위
 
-    int nLayer1 = 1 << LayerMask.NameToLayer("Monster") | 1 << LayerMask.NameToLayer("RuinableObject"); // 공격 가능한 대상의 레이어
-    int nLayer2 = 1 << LayerMask.NameToLayer("Monster");                                                // 놓아주기 가능한 대상의 레이어
-    int nLayer3 = 1 << LayerMask.NameToLayer("NPC") | 1 << LayerMask.NameToLayer("Collection");         // 상호작용 가능한 대상의 레이어
-    int nLayer4 = 1 << LayerMask.NameToLayer("Item");                                                   // 아이템의 레이어
+    int nLayer1; // 공격 가능한 대상의 레이어
+    int nLayer2; // 놓아주기 가능한 대상의 레이어
+    int nLayer3; // 상호작용 가능한 대상의 레이어
+    int nLayer4; // 아이템의 레이어
     
     int m_nRandomRatio; // 플레이어가 상태이상(암흑) 상태일때 제대로된 공격을 할 수 있을지 결정하는 난수.(상태이상(암흑) 상태에서는 일정 확률로 공격 시 데미지를 1밖에 주지 못한다.)
 
@@ -122,6 +122,12 @@ public class Player_Total : MonoBehaviour
         m_ps_Skill.InitialSet();
         m_pc_Camera.InitialSet();
         m_pm_Map.InitialSet();
+
+         // 레이어 설정
+        nLayer1 = 1 << LayerMask.NameToLayer("Monster") | 1 << LayerMask.NameToLayer("RuinableObject"); // 공격 가능한 대상의 레이어
+        nLayer2 = 1 << LayerMask.NameToLayer("Monster");                                                // 놓아주기 가능한 대상의 레이어
+        nLayer3 = 1 << LayerMask.NameToLayer("NPC") | 1 << LayerMask.NameToLayer("Collection");         // 상호작용 가능한 대상의 레이어
+        nLayer4 = 1 << LayerMask.NameToLayer("Item");                                                   // 아이템의 레이어      
 
         // Sword(검) 공격범위 관련 변수 초기화
         m_gAttack_Area_Sword = transform.Find("Player_Attack_Sword").gameObject;
