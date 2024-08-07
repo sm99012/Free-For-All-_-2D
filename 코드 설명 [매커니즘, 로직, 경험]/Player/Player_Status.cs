@@ -1275,6 +1275,7 @@ public class Player_Status : MonoBehaviour
     Coroutine m_cProcessBind;
     IEnumerator ProcessBind(Skill skill) // skill : 상태이상(속박) 정보(등급, 지속시간)
     {
+    	m_sStatus.SetSTATUS_Speed(0); // 플레이어의 현재 이동속도를 0으로 설정
         GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
         m_cCondition.SetBindCondition(true); // 플레이어에게 적용중인 상태이상 업데이트 : 속박상태 true
         m_gCondition_Bind.SetActive(true); // 상태이상(속박) 이팩트 활성화
@@ -1392,6 +1393,8 @@ public class Player_Status : MonoBehaviour
     IEnumerator ProcessSlow(Skill skill) // skill : 상태이상(둔화) 정보(등급, 지속시간)
     {
     	// 코루틴 시작 시점
+     	m_sStatus.SetSTATUS_Speed((int)((float)m_sStatus.GetSTATUS_Speed() * ((100 - skill.m_seSkillEffect.m_cCondition.GetSlowRatio()) / 100))); // 상태이상(둔화) 비율에 따라 플레이어의 현재 이동속도 변화
+																		  // 상태이상(둔화) 비율 : 1% ~ 99%
         GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
         m_cCondition.SetSlowCondition(true); // 플레이어에게 적용중인 상태이상 업데이트 : 둔화상태 true
         m_gCondition_Slow.SetActive(true); // 상태이상(둔화) 이팩트 활성화
