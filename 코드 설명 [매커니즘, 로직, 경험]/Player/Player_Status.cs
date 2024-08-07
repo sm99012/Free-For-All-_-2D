@@ -1162,6 +1162,9 @@ public class Player_Status : MonoBehaviour
         m_sSoc_Origin.P_OperatorSOC(skill.m_seSkillEffect.m_sSoc_Effect_Eternal);
 	
 	m_List_Skill.Add(skill); // 플레이어에게 적용중인 스킬 추가
+
+        UpdateStatus_ApplySkill(); // 스킬 적용으로인한 능력치 업데이트
+        UpdateSoc_ApplySkill(); // 스킬 적용으로인한 평판 업데이트
  
         bool Check = false; // 상태이상 적용 여부
 	
@@ -1226,9 +1229,6 @@ public class Player_Status : MonoBehaviour
             ApplySkillEffect_Confuse(skill); // 플레이어에게 상태이상(혼란) 적용
             Check = true;
         }
-
-        UpdateStatus_ApplySkill(); // 스킬 적용으로인한 능력치 업데이트
-        UpdateSoc_ApplySkill(); // 스킬 적용으로인한 평판 업데이트
 
         if (Check == true)
             return true;
