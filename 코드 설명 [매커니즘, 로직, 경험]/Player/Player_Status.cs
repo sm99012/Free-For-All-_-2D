@@ -646,6 +646,8 @@ public class Player_Status : MonoBehaviour
 
         UpdateStatus_ReTry(); // 능력치 업데이트
         UpdateSoc_ReTry(); // 평판 업데이트
+
+ 	GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
     }
     // 리트라이(부활) 시 스탯(능력치, 평판) 업데이트 관련 함수.
     // 리트라이(부활) 시 능력치 업데이트
