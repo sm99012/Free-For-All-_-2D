@@ -252,13 +252,18 @@ public class Player_Total : MonoBehaviour
         }
         else
         {
-            if (Player_Status.m_cCondition.ConditionCheck_Shock() == true) // 플레이어에게 상태이상(기절)이 적용중일때
+	    if (Player_Status.m_cCondition.ConditionCheck_Shock() == true) // 플레이어에게 상태이상(기절)이 적용중일때
             {
                 epms = m_pm_Move.Move(0, 0, 0); // 이동 불가
             }
-            else if (Player_Status.m_cCondition.ConditionCheck_Bind() == true) // 플레이어에게 상태이상(기절)이 적용중이지 않을때 && 때플레이어에게 상태이상(속박)이 적용중일때
+            else if (Player_Status.m_cCondition.ConditionCheck_Bind() == true) // 플레이어에게 상태이상(속박)만 적용중일때
+            {
                 epms = m_pm_Move.Move(hInput, vInput, 0); // 이동 불가. 좌ㆍ우 전환만 가능
-
+            }
+            else if (Player_Status.m_cCondition.ConditionCheck_Slow() == true) // 플레이어에게 상태이상(둔화)만 적용중일때 
+            {
+                epms = m_pm_Move.Move(hInput, vInput, (int)((float)m_ps_Status.m_sStatus.GetSTATUS_Speed() * ((100 - Player_Status.m_cCondition.GetSlowRatio()) / 100))); // 둔화 비율에 따라 이동속도 감소
+            }
         }
 
         // 카메라 이동(카메라 중심점 설정)
