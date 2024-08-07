@@ -11,10 +11,12 @@ public class Player_Move : MonoBehaviour
     public Rigidbody2D m_rRigdbody;
     
     // 플레이어 착용 무기별 애니메이션 FSM. 플레이어가 착용한 무기분류에 따라 상이한 플레이어 애니메이션을 적용하기 위한 FSM
-    public enum E_PLAYER_WEAPON_STATE { SWORD(검), AXE(도끼), KNIFE(단검) }
+    public enum E_PLAYER_WEAPON_STATE { SWORD, AXE, KNIFE }
+    // { SWORD(검), AXE(도끼), KNIFE(단검) }
     public E_PLAYER_WEAPON_STATE m_ePlayerWeaponState;
     // 플레이어 동작 FSM
-    public enum E_PLAYER_MOVE_STATE { IDLE(가만히 있기), RUN(달리기), ATTACK1_1(기본 공격1), ATTACK1_2(기본 공격2), ATTACK1_3(기본 공격3), ATTACKED(피격), DEATH(사망), ROLL(구르기), GOAWAY(놓아주기), CONVERSATION(상호작용), NULL(ETC) }
+    public enum E_PLAYER_MOVE_STATE { IDLE, RUN, ATTACK1_1, ATTACK1_2, ATTACK1_3, ATTACKED, DEATH, ROLL, GOAWAY, CONVERSATION, NULL }
+    // { IDLE(가만히 있기), RUN(달리기), ATTACK1_1(기본 공격1), ATTACK1_2(기본 공격2), ATTACK1_3(기본 공격3), ATTACKED(피격), DEATH(사망), ROLL(구르기), GOAWAY(놓아주기), CONVERSATION(상호작용), NULL(ETC) }
     public E_PLAYER_MOVE_STATE m_ePlayerMoveState = E_PLAYER_MOVE_STATE.IDLE;
 
     // 이동
@@ -261,6 +263,7 @@ public class Player_Move : MonoBehaviour
         //    m_fAttack_DurationTime -= 0.1f;
         //    yield return new WaitForSeconds(0.1f);
         //}
+        yield return null;
         m_cProcess_Attack_Duration = null;
         m_bAttack1_1 = true;
         m_bAttack1_2 = false;
