@@ -280,25 +280,6 @@ public class Player_Total : MonoBehaviour
         // 플레이어 이동, 방향설정
         if (Player_Skill.m_Skill_Condition.ConditionCheck_Shock() == false) // 플레이어에게 상태이상(기절)이 적용중이지 않을때
             epms = m_pm_Move.Move(hInput, vInput, m_ps_Status.m_sStatus.GetSTATUS_Speed()); // 플레이어 이동 함수 실행. 플레이어 동작 FSM 상태 반환
-        //   if (Player_Skill.m_Skill_Condition.ConditionCheck_Bind() == false && Player_Skill.m_Skill_Condition.ConditionCheck_Shock() == false) // 플레이어에게 상태이상(속박, 기절)이 적용중이지 않을때
-        //   {
-        //       epms = m_pm_Move.Move(hInput, vInput, m_ps_Status.m_sStatus.GetSTATUS_Speed()); // 플레이어 이동 함수 실행. 플레이어 동작 FSM 상태 반환
-        //   }
-        //   else
-        //   {
-        //if (Player_Skill.m_Skill_Condition.ConditionCheck_Shock() == true) // 플레이어에게 상태이상(기절)이 적용중일때
-        //       {
-        //           epms = m_pm_Move.Move(0, 0, 0); // 이동 불가
-        //       }
-        //       else if (Player_Skill.m_Skill_Condition.ConditionCheck_Bind() == true) // 플레이어에게 상태이상(속박)만 적용중일때
-        //       {
-        //           epms = m_pm_Move.Move(hInput, vInput, 0); // 이동 불가. 좌ㆍ우 전환만 가능
-        //       }
-        //       else if (Player_Skill.m_Skill_Condition.ConditionCheck_Slow() == true) // 플레이어에게 상태이상(둔화)만 적용중일때 
-        //       {
-        //           epms = m_pm_Move.Move(hInput, vInput, (int)((float)m_ps_Status.m_sStatus.GetSTATUS_Speed() * ((100 - Player_Skill.m_Skill_Condition.GetSlowRatio()) / 100))); // 둔화 비율에 따라 이동속도 감소
-        //       }
-        //   }
 
         // 카메라 이동(카메라 중심점 설정)
         if (epms != Player_Move.E_PLAYER_MOVE_STATE.NULL) // 플레이어 동작 FSM { NULL(플레이어 이동 불가 상태(기절, 속박 등의 상태이상)) } 상태가 아닐때
@@ -515,8 +496,8 @@ public class Player_Total : MonoBehaviour
 
         AttackDamage = m_ps_Status.m_sStatus.GetSTATUS_Damage_Total(); // 데미지 = 플레이어의 능력치(데미지)
 
-        bool b_Skill_Condition_Dark = false;
         // 상태이상(암흑) 적용에따른 데미지 설정
+	bool b_Skill_Condition_Dark = false;
         if (Player_Skill.m_Skill_Condition.ConditionCheck_Dark() == true) // 플레이어에게 상태이상(암흑)이 적용중일때
         {
             m_nRandomRatio = Random.Range(1, 101); // 상태이상(암흑) 비율(등급) : 1% ~ 100% (1 <= m_nRandomRatio <= 100)
@@ -628,10 +609,10 @@ public class Player_Total : MonoBehaviour
         // 스킬 적용 가능 여부 판단(스킬 쿨타임)
         if (m_ps_Skill.CheckCondition_ApplySkill(skill.m_nSkillCode) == true)
         {
-            // 스킬 적용 가능 여부 판단(스탯(능력치, 평판))
+            // 스킬 적용 가능 여부 판단(스탯(능력치, 평판) 상한ㆍ하한, 소모 자원)
             if (m_ps_Status.CheckCondition_ApplySkill(skill.m_sStatus_Limit_Max, skill.m_sStatus_Limit_Min, skill.m_sSoc_Limit_Max, skill.m_sSoc_Limit_Min, skill.m_sStatus_Consume, skill.m_sSoc_Consume) == 0)
             {
-                m_ps_Skill.ApplySkill(skill); // 버프ㆍ디버프, 상태이상 업데이트, 지속시간, 쿨타임 업데이트
+                m_ps_Skill.ApplySkill(skill); // 스킬(버프ㆍ디버프, 상태이상) 업데이트, 지속시간ㆍ쿨타임 업데이트
                 m_ps_Status.ApplySkill(skill.m_nSkillCode, skill.m_Skill_SSEffect); // 스킬 적용 시 스탯(능력치, 평판)
                 m_pe_Effect.ApplySkill(skill.m_nSkillCode, skill.m_Skill_Effect); // 스킬 이펙트 연출
                 GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
