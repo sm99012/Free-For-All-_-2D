@@ -612,16 +612,16 @@ public class Player_Total : MonoBehaviour
             // 스킬 적용 가능 여부 판단(스탯(능력치, 평판) 상한ㆍ하한, 소모 자원)
             if (m_ps_Status.CheckCondition_ApplySkill(skill.m_sStatus_Limit_Max, skill.m_sStatus_Limit_Min, skill.m_sSoc_Limit_Max, skill.m_sSoc_Limit_Min, skill.m_sStatus_Consume, skill.m_sSoc_Consume) == 0)
             {
-                m_ps_Skill.ApplySkill(skill); // 스킬(버프ㆍ디버프, 상태이상) 업데이트, 지속시간ㆍ쿨타임 업데이트
-                m_ps_Status.ApplySkill(skill.m_nSkillCode, skill.m_Skill_SSEffect); // 스킬 적용 시 스탯(능력치, 평판)
-                m_pe_Effect.ApplySkill(skill.m_nSkillCode, skill.m_Skill_Effect); // 스킬 이펙트 연출
+                m_ps_Skill.ApplySkill(skill);                                       // 스킬(버프ㆍ디버프, 상태이상) 관련 정보 저장 및 적용
+                m_ps_Status.ApplySkill(skill.m_nSkillCode, skill.m_Skill_SSEffect); // 스킬(버프ㆍ디버프, 상태이상) 적용 시 스탯(능력치, 평판), 상태이상 업데이트
+                m_pe_Effect.ApplySkill(skill.m_nSkillCode, skill.m_Skill_Effect);   // 스킬(버프ㆍ디버프, 상태이상) 적용 시 이펙트 연출
                 GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
 
                 // 스킬 적용 시 피격(넉백) 적용
-                if (skill.m_Skill_Condition.ConditionCheck_Shock() == true) // 플레이어에게 적용할 스킬에 상태이상(기절)이 존재하는 경우
+                if (skill.m_Skill_Condition.ConditionCheck_Shock() == true) // 스킬(상태이상[기절]) 적용
                 {
                     Attacked(0, this.gameObject.transform.position, 0, skill.m_sSkillName); // 플레이어 피격(넉백)
-                                                                                            //데미지: 0, 피격(넉백) 방향: 플레이어 현재 위치, 넉백 시간 : 0초, 피격 이름(정보) : 해당 스킬 이름
+                                                                                            // 데미지: 0, 피격(넉백) 방향: 플레이어 현재 위치, 넉백 시간 : 0초, 피격 이름(정보) : 해당 스킬 이름
                 }
             }
         }
@@ -630,9 +630,10 @@ public class Player_Total : MonoBehaviour
     // 스킬은 다양하다. 양도 많다. 이런 스킬을 코루틴을 이용해 구현할 경우 가비지가 많이 생성되 메모리 성능이 저하되는 문제가 발생한다. 따라서 Update() 함수에서 실행되도록 구현했다.
     void Update_Skill()
     {
-        if (Player_Skill.m_sDictionary_Skill_Apply.Count > 0)
+        if (Player_Skill.m_sDictionary_Skill_Apply.Count > 0) // 플레이어에게 적용중인 스킬이 하나라도 있을 경우
         {
-            List<int> List_Remove = new List<int>();
+            List<int> List_Remove = new List<int>(); // foreach문 내에서는 반복자가 활동하는 자료구조에서의 요소 삭제가 불가하다. 따라서 따로 List를 만들고 foreach문이 끝난 이후 해당 요소를 삭제해 주었다.
+	    					     // foreach문 대신 for문을 이용하면 된다지만 Dictionary 자료구조를 이용해야 했기에 해당 방법을 따로 찾아냈다.
 
             foreach (KeyValuePair<int, Skill> set in Player_Skill.m_sDictionary_Skill_Apply)
             {
