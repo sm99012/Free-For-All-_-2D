@@ -170,7 +170,7 @@ public class Player_Effect : MonoBehaviour
         m_gCondition_Bind.SetActive(false);    // 스킬(상태이상[속박]) 이펙트 비활성화
         m_gCondition_Shock.SetActive(false);   // 스킬(상태이상[기절]) 이펙트 비활성화
         m_gCondition_Dark.SetActive(false);    // 스킬(상태이상[암흑]) 이펙트 비활성화
-        m_gCondition_Slow.SetActive(false);    // 스킬(상태이상[둔화] 이펙트 비활성화
+        m_gCondition_Slow.SetActive(false);    // 스킬(상태이상[둔화]) 이펙트 비활성화
         m_gCondition_Confuse.SetActive(false); // 스킬(상태이상[혼란]) 이펙트 비활성화
     }
 }
