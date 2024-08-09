@@ -377,8 +377,9 @@ public class Player_Itemslot : MonoBehaviour
     {
         foreach(KeyValuePair<int, int> item in Dictionary)
         {
-            Delete_Item_Equip(item.Key); // 장비아이템을 삭제하는 함수
-            Player_Total.Instance.m_pq_Quest.QuestUpdate_Collect(ItemManager.instance.m_Dictionary_MonsterDrop_Equip[item.Key]); // 진행중인 퀘스트 현황을 업데이트하는 함수(퀘스트 타입 : 수집)
+            Debug.Log(item.Value);
+            Delete_Item_Equip(item.Value); // 장비아이템을 삭제하는 함수
+            Player_Total.Instance.m_pq_Quest.QuestUpdate_Collect(ItemManager.instance.m_Dictionary_MonsterDrop_Equip[item.Value]); // 진행중인 퀘스트 현황을 업데이트하는 함수(퀘스트 타입 : 수집)
         }
 
         return true;
