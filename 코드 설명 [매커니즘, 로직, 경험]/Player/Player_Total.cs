@@ -123,11 +123,11 @@ public class Player_Total : MonoBehaviour
         m_pc_Camera.InitialSet();
         m_pm_Map.InitialSet();
 
-         // 레이어 설정
+        // 레이어 설정
         nLayer1 = 1 << LayerMask.NameToLayer("Monster") | 1 << LayerMask.NameToLayer("RuinableObject"); // 공격 가능한 대상의 레이어
         nLayer2 = 1 << LayerMask.NameToLayer("Monster");                                                // 놓아주기 가능한 대상의 레이어
         nLayer3 = 1 << LayerMask.NameToLayer("NPC") | 1 << LayerMask.NameToLayer("Collection");         // 상호작용 가능한 대상의 레이어
-        nLayer4 = 1 << LayerMask.NameToLayer("Item");                                                   // 아이템의 레이어      
+        nLayer4 = 1 << LayerMask.NameToLayer("Item");                                                   // 아이템의 레이어
 
         // Sword(검) 공격범위 관련 변수 초기화
         m_gAttack_Area_Sword = transform.Find("Player_Attack_Sword").gameObject;
@@ -160,7 +160,10 @@ public class Player_Total : MonoBehaviour
     void Update()
     {
         if (Total_Manager.Instance.m_bStart == true && Time.timeScale != 0) // 게임을 시작 했을때, 일시 정지가 아닐때
+        {
             Controller(); // 컨트롤러
+            Update_Skill(); // 스킬(버프ㆍ디버프, 상태이상) 적용, 지속시간 및 쿨타임 계산 함수
+        }
     }
 
     // 컨트롤러(키입력 + @) 함수
@@ -197,6 +200,29 @@ public class Player_Total : MonoBehaviour
 
             InputKey_Interaction(); // NPC와 상호작용ㆍ채집 키입력(SPACE)
             InputKey_GUI_ESC();     // GUI 닫기(비활성화), 일시중지GUI(옵션GUI) 키입력(ESC)
+
+            // 스킬 적용 테스트
+            //if (Input.GetKeyUp(KeyCode.F1))
+            //{
+            //    //ApplySkill(SkillManager.Instance.m_Dictionary_Skill["Skill Lv1 Bind"]);
+            //    ApplySkill(SkillManager.Instance.m_Dictionary_Skill["Skill Test"]);
+            //}
+            //if (Input.GetKeyUp(KeyCode.F2))
+            //{
+            //    ApplySkill(SkillManager.Instance.m_Dictionary_Skill["Skill Lv1 Shock"]);
+            //}
+            //if (Input.GetKeyUp(KeyCode.F3))
+            //{
+            //    ApplySkill(SkillManager.Instance.m_Dictionary_Skill["Skill Lv1 Dark"]);
+            //}
+            //if (Input.GetKeyUp(KeyCode.F4))
+            //{
+            //    ApplySkill(SkillManager.Instance.m_Dictionary_Skill["Skill Lv1 Slow"]);
+            //}
+            //if (Input.GetKeyUp(KeyCode.F5))
+            //{
+            //    m_ps_Status.ReTry_Initializing();
+            //}
         }
     }
 
@@ -252,25 +278,27 @@ public class Player_Total : MonoBehaviour
         Player_Move.E_PLAYER_MOVE_STATE epms = Player_Move.E_PLAYER_MOVE_STATE.NULL; // 플레이어 동작 FSM 임시 변수
 
         // 플레이어 이동, 방향설정
-        if (Player_Status.m_cCondition.ConditionCheck_Bind() == false && Player_Status.m_cCondition.ConditionCheck_Shock() == false) // 플레이어에게 상태이상(속박, 기절)이 적용중이지 않을때
-        {
+        if (Player_Skill.m_Skill_Condition.ConditionCheck_Shock() == false) // 플레이어에게 상태이상(기절)이 적용중이지 않을때
             epms = m_pm_Move.Move(hInput, vInput, m_ps_Status.m_sStatus.GetSTATUS_Speed()); // 플레이어 이동 함수 실행. 플레이어 동작 FSM 상태 반환
-        }
-        else
-        {
-	    if (Player_Status.m_cCondition.ConditionCheck_Shock() == true) // 플레이어에게 상태이상(기절)이 적용중일때
-            {
-                epms = m_pm_Move.Move(0, 0, 0); // 이동 불가
-            }
-            else if (Player_Status.m_cCondition.ConditionCheck_Bind() == true) // 플레이어에게 상태이상(속박)만 적용중일때
-            {
-                epms = m_pm_Move.Move(hInput, vInput, 0); // 이동 불가. 좌ㆍ우 전환만 가능
-            }
-            else if (Player_Status.m_cCondition.ConditionCheck_Slow() == true) // 플레이어에게 상태이상(둔화)만 적용중일때 
-            {
-                epms = m_pm_Move.Move(hInput, vInput, (int)((float)m_ps_Status.m_sStatus.GetSTATUS_Speed() * ((100 - Player_Status.m_cCondition.GetSlowRatio()) / 100))); // 둔화 비율에 따라 이동속도 감소
-            }
-        }
+        //   if (Player_Skill.m_Skill_Condition.ConditionCheck_Bind() == false && Player_Skill.m_Skill_Condition.ConditionCheck_Shock() == false) // 플레이어에게 상태이상(속박, 기절)이 적용중이지 않을때
+        //   {
+        //       epms = m_pm_Move.Move(hInput, vInput, m_ps_Status.m_sStatus.GetSTATUS_Speed()); // 플레이어 이동 함수 실행. 플레이어 동작 FSM 상태 반환
+        //   }
+        //   else
+        //   {
+        //if (Player_Skill.m_Skill_Condition.ConditionCheck_Shock() == true) // 플레이어에게 상태이상(기절)이 적용중일때
+        //       {
+        //           epms = m_pm_Move.Move(0, 0, 0); // 이동 불가
+        //       }
+        //       else if (Player_Skill.m_Skill_Condition.ConditionCheck_Bind() == true) // 플레이어에게 상태이상(속박)만 적용중일때
+        //       {
+        //           epms = m_pm_Move.Move(hInput, vInput, 0); // 이동 불가. 좌ㆍ우 전환만 가능
+        //       }
+        //       else if (Player_Skill.m_Skill_Condition.ConditionCheck_Slow() == true) // 플레이어에게 상태이상(둔화)만 적용중일때 
+        //       {
+        //           epms = m_pm_Move.Move(hInput, vInput, (int)((float)m_ps_Status.m_sStatus.GetSTATUS_Speed() * ((100 - Player_Skill.m_Skill_Condition.GetSlowRatio()) / 100))); // 둔화 비율에 따라 이동속도 감소
+        //       }
+        //   }
 
         // 카메라 이동(카메라 중심점 설정)
         if (epms != Player_Move.E_PLAYER_MOVE_STATE.NULL) // 플레이어 동작 FSM { NULL(플레이어 이동 불가 상태(기절, 속박 등의 상태이상)) } 상태가 아닐때
@@ -314,7 +342,7 @@ public class Player_Total : MonoBehaviour
     // 플레이어 공격 함수
     private void Attack()
     {
-        if (Player_Status.m_cCondition.ConditionCheck_Shock() == false) // 플레이어에게 상태이상(기절)이 적용중이지 않을때
+        if (Player_Skill.m_Skill_Condition.ConditionCheck_Shock() == false) // 플레이어에게 상태이상(기절)이 적용중이지 않을때
         {
             m_pm_Move.Attack(); // 플레이어 공격 함수 실행. 기본 공격 단계 반환
         }
@@ -485,23 +513,22 @@ public class Player_Total : MonoBehaviour
             }
         }
 
+        AttackDamage = m_ps_Status.m_sStatus.GetSTATUS_Damage_Total(); // 데미지 = 플레이어의 능력치(데미지)
+
+        bool b_Skill_Condition_Dark = false;
         // 상태이상(암흑) 적용에따른 데미지 설정
-        if (Player_Status.m_cCondition.ConditionCheck_Dark() == false) // 플레이어에게 상태이상(암흑)이 적용중이지 않을때
-        {
-            AttackDamage = m_ps_Status.m_sStatus.GetSTATUS_Damage_Total(); // 데미지 = 플레이어의 능력치(데미지)
-        }
-        else // 플레이어에게 상태이상(암흑)이 적용중일때
+        if (Player_Skill.m_Skill_Condition.ConditionCheck_Dark() == true) // 플레이어에게 상태이상(암흑)이 적용중일때
         {
             m_nRandomRatio = Random.Range(1, 101); // 상태이상(암흑) 비율(등급) : 1% ~ 100% (1 <= m_nRandomRatio <= 100)
 
             // 상태이상(암흑) 비율(등급)과 난수(m_nRandomRatio)에 따라 데미지 계산
-            if (m_nRandomRatio <= Player_Status.m_cCondition.GetDarkRatio())
+            if (m_nRandomRatio <= Player_Skill.m_Skill_Condition.GetDarkRatio())
             {
-                AttackDamage = 1; // 데미지 = 1
+                b_Skill_Condition_Dark = true;
             }
             else
             {
-                AttackDamage = m_ps_Status.m_sStatus.GetSTATUS_Damage_Total(); // 데미지 = 플레이어의 능력치(데미지)
+                b_Skill_Condition_Dark = false;
             }
         }
 
@@ -526,18 +553,41 @@ public class Player_Total : MonoBehaviour
                 // 오브젝트에 데미지 정산 (데미지를 가한다.)
                 if (co2_1[i].gameObject.tag == "Monster") // 몬스터일 경우
                 {
-                    if (co2_1[i].GetComponent<Monster_Total>().Attacked((int)(AttackDamage), percent, this.gameObject) == true) // 데미지를 정산하고 공격 여부를 반환
+                    if (b_Skill_Condition_Dark == true) // 상태이상(암흑) 적용에따른 데미지 1 고정
                     {
-                        m_pe_Effect.Effect1(co2_1[i].transform.position); // 타격 이펙트 연출
+                        if (co2_1[i].GetComponent<Monster_Total>().Attacked(1, 1, this.gameObject) == true) // 데미지를 정산하고 공격 여부를 반환
+                        {
+                            m_pe_Effect.Effect1(co2_1[i].transform.position); // 타격 이펙트 연출
+                        }
+                    }
+                    else
+                    {
+                        if (co2_1[i].GetComponent<Monster_Total>().Attacked((int)(AttackDamage), percent, this.gameObject) == true) // 데미지를 정산하고 공격 여부를 반환
+                        {
+                            m_pe_Effect.Effect1(co2_1[i].transform.position); // 타격 이펙트 연출
+                        }
                     }
                 }
                 else if (co2_1[i].gameObject.tag == "Boss") // 보스몬스터일 경우
                 {
-                    if (co2_1[i].gameObject.name == "TeSlime") // 보스몬스터(테 슬라임)일 경우
+                    if (b_Skill_Condition_Dark == true) // 상태이상(암흑) 적용에따른 데미지 1 고정
                     {
-                        if (co2_1[i].GetComponent<TeSlime_Total>().Attacked((int)(AttackDamage), percent, this.gameObject) == true) // 데미지를 정산하고 공격 여부를 반환
+                        if (co2_1[i].gameObject.name == "TeSlime") // 보스몬스터(테 슬라임)일 경우
                         {
-                            m_pe_Effect.Effect1(co2_1[i].transform.position); // 타격 이펙트 연출
+                            if (co2_1[i].GetComponent<TeSlime_Total>().Attacked((int)1, 1, this.gameObject) == true) // 데미지를 정산하고 공격 여부를 반환
+                            {
+                                m_pe_Effect.Effect1(co2_1[i].transform.position); // 타격 이펙트 연출
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (co2_1[i].gameObject.name == "TeSlime") // 보스몬스터(테 슬라임)일 경우
+                        {
+                            if (co2_1[i].GetComponent<TeSlime_Total>().Attacked((int)(AttackDamage), percent, this.gameObject) == true) // 데미지를 정산하고 공격 여부를 반환
+                            {
+                                m_pe_Effect.Effect1(co2_1[i].transform.position); // 타격 이펙트 연출
+                            }
                         }
                     }
                 }
@@ -574,15 +624,143 @@ public class Player_Total : MonoBehaviour
     // 스킬(버프ㆍ디버프, 상태이상) 적용 함수
     public void ApplySkill(Skill skill) // skill : 플레이어에게 적용할 스킬
     {
-        m_ps_Status.ApplySkill(skill); // 스킬 적용 시 스탯(능력치, 평판), 버프ㆍ디버프, 상태이상 업데이트.
-        GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
+        // 스킬(버프ㆍ디버프, 상태이상) 적용 조건 판단 추가 필요
+        // 스킬 적용 가능 여부 판단(스킬 쿨타임)
+        if (m_ps_Skill.CheckCondition_ApplySkill(skill.m_nSkillCode) == true)
+        {
+            // 스킬 적용 가능 여부 판단(스탯(능력치, 평판))
+            if (m_ps_Status.CheckCondition_ApplySkill(skill.m_sStatus_Limit_Max, skill.m_sStatus_Limit_Min, skill.m_sSoc_Limit_Max, skill.m_sSoc_Limit_Min, skill.m_sStatus_Consume, skill.m_sSoc_Consume) == 0)
+            {
+                m_ps_Skill.ApplySkill(skill); // 버프ㆍ디버프, 상태이상 업데이트, 지속시간, 쿨타임 업데이트
+                m_ps_Status.ApplySkill(skill.m_nSkillCode, skill.m_Skill_SSEffect); // 스킬 적용 시 스탯(능력치, 평판)
+                m_pe_Effect.ApplySkill(skill.m_nSkillCode, skill.m_Skill_Effect); // 스킬 이펙트 연출
+                GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
 
-        // 스킬 적용 시 피격(넉백) 적용
-        // if (skill.m_seSkillEffect.m_cCondition.ConditionCheck_Shock() == true) // 플레이어에게 적용할 스킬에 상태이상(기절)이 존재하는 경우
-        // {
-            // Attacked(0, this.gameObject.transform.position, 0.3f, skill.m_sSkillName); // 플레이어 피격(넉백)
-                                                                                          // 데미지 : 0, 피격(넉백) 방향 : 플레이어 현재 위치, 넉백 시간 : 0.3f초, 피격 이름(정보) : 해당 스킬 이름
-        // }
+                // 스킬 적용 시 피격(넉백) 적용
+                if (skill.m_Skill_Condition.ConditionCheck_Shock() == true) // 플레이어에게 적용할 스킬에 상태이상(기절)이 존재하는 경우
+                {
+                    Attacked(0, this.gameObject.transform.position, 0, skill.m_sSkillName); // 플레이어 피격(넉백)
+                                                                                            //데미지: 0, 피격(넉백) 방향: 플레이어 현재 위치, 넉백 시간 : 0초, 피격 이름(정보) : 해당 스킬 이름
+                }
+            }
+        }
+    }
+    // 스킬(버프ㆍ디버프, 상태이상) 적용, 지속시간 및 쿨타임 계산 함수
+    // 스킬은 다양하다. 양도 많다. 이런 스킬을 코루틴을 이용해 구현할 경우 가비지가 많이 생성되 메모리 성능이 저하되는 문제가 발생한다. 따라서 Update() 함수에서 실행되도록 구현했다.
+    void Update_Skill()
+    {
+        if (Player_Skill.m_sDictionary_Skill_Apply.Count > 0)
+        {
+            List<int> List_Remove = new List<int>();
+
+            foreach (KeyValuePair<int, Skill> set in Player_Skill.m_sDictionary_Skill_Apply)
+            {
+                if (set.Value.m_eSkillType == E_SKILL_TYPE.ACTIVE)
+                {
+                    if (Player_Skill.m_sDictionary_Skill_Apply_DurationTime.ContainsKey(set.Key) == true)
+                    {
+                        //Debug.Log("스킬 : " + Player_Skill.m_sDictionary_Skill_Apply[set.Key].m_sSkillName + " : " + Player_Skill.m_sDictionary_Skill_Apply_DurationTime[set.Key]);
+                        if (Player_Skill.m_sDictionary_Skill_Apply_DurationTime[set.Key] >= 0)
+                        {
+                            Player_Skill.m_sDictionary_Skill_Apply_DurationTime[set.Key] -= Time.deltaTime;
+                        }
+                        else
+                        {
+                            Player_Skill.m_sDictionary_Skill_Apply_DurationTime.Remove(set.Key);
+
+                            //m_ps_Skill.UnApplySkill(set.Key);
+                            m_ps_Status.UnApplySkill(set.Key);
+
+                            GUIManager_Total.Instance.Update_SS();
+                        }
+                    }
+                    if (Player_Skill.m_sDictionary_Skill_CoolTime.ContainsKey(set.Key) == true)
+                    {
+                        if (Player_Skill.m_sDictionary_Skill_CoolTime[set.Key] >= 0)
+                            Player_Skill.m_sDictionary_Skill_CoolTime[set.Key] -= Time.deltaTime;
+                        else
+                        {
+                            Player_Skill.m_sDictionary_Skill_CoolTime.Remove(set.Key);
+                        }
+                    }
+
+                    if (Player_Skill.m_sDictionary_Skill_Apply_DurationTime.ContainsKey(set.Key) == false && Player_Skill.m_sDictionary_Skill_CoolTime.ContainsKey(set.Key) == false)
+                        List_Remove.Add(set.Key);
+                }
+            }
+
+            for (int i = 0; i < List_Remove.Count; i++)
+            {
+                Player_Skill.m_sDictionary_Skill_Apply.Remove(List_Remove[i]);
+            }
+        }
+
+        // 상태이상 적용
+        if (Player_Skill.m_Skill_Condition.ConditionCheck_Bind() == true)
+        {
+            Player_Skill.m_Skill_Condition.SetBindTime(Player_Skill.m_Skill_Condition.GetBindTime() - Time.deltaTime);
+
+            if (Player_Skill.m_Skill_Condition.GetBindTime() <= 0)
+            {
+                Player_Skill.m_Skill_Condition.SetBindTime(0);
+                m_pe_Effect.UnApplySkill_Condition_Effect(10000);
+                m_ps_Skill.UnApplySkill_Condition_Effect(10000);
+                m_ps_Status.UnApplySkill_Condition_Effect(10000);
+                GUIManager_Total.Instance.Update_SS();
+            }
+        }
+        if (Player_Skill.m_Skill_Condition.ConditionCheck_Shock() == true)
+        {
+            Player_Skill.m_Skill_Condition.SetShockTime(Player_Skill.m_Skill_Condition.GetShockTime() - Time.deltaTime);
+
+            if (Player_Skill.m_Skill_Condition.GetShockTime() <= 0)
+            {
+                Player_Skill.m_Skill_Condition.SetShockTime(0);
+                m_pe_Effect.UnApplySkill_Condition_Effect(11000);
+                m_ps_Skill.UnApplySkill_Condition_Effect(11000);
+                m_ps_Status.UnApplySkill_Condition_Effect(11000);
+                GUIManager_Total.Instance.Update_SS();
+            }
+        }
+        if (Player_Skill.m_Skill_Condition.ConditionCheck_Dark() == true)
+        {
+            Player_Skill.m_Skill_Condition.SetDarkTime(Player_Skill.m_Skill_Condition.GetDarkTime() - Time.deltaTime);
+
+            if (Player_Skill.m_Skill_Condition.GetDarkTime() <= 0)
+            {
+                Player_Skill.m_Skill_Condition.SetDarkTime(0);
+                m_pe_Effect.UnApplySkill_Condition_Effect(12000);
+                m_ps_Skill.UnApplySkill_Condition_Effect(12000);
+                m_ps_Status.UnApplySkill_Condition_Effect(12000);
+                GUIManager_Total.Instance.Update_SS();
+            }
+        }
+        if (Player_Skill.m_Skill_Condition.ConditionCheck_Slow() == true)
+        {
+            Player_Skill.m_Skill_Condition.SetSlowTime(Player_Skill.m_Skill_Condition.GetSlowTime() - Time.deltaTime);
+
+            if (Player_Skill.m_Skill_Condition.GetSlowTime() <= 0)
+            {
+                Player_Skill.m_Skill_Condition.SetSlowTime(0);
+                m_pe_Effect.UnApplySkill_Condition_Effect(13000);
+                m_ps_Skill.UnApplySkill_Condition_Effect(13000);
+                m_ps_Status.UnApplySkill_Condition_Effect(13000);
+                GUIManager_Total.Instance.Update_SS();
+            }
+        }
+        if (Player_Skill.m_Skill_Condition.ConditionCheck_Confuse() == true)
+        {
+            Player_Skill.m_Skill_Condition.SetConfuseTime(Player_Skill.m_Skill_Condition.GetConfuseTime() - Time.deltaTime);
+
+            if (Player_Skill.m_Skill_Condition.GetConfuseTime() <= 0)
+            {
+                Player_Skill.m_Skill_Condition.SetConfuseTime(0);
+                m_pe_Effect.UnApplySkill_Condition_Effect(14000);
+                m_ps_Skill.UnApplySkill_Condition_Effect(14000);
+                m_ps_Status.UnApplySkill_Condition_Effect(14000);
+                GUIManager_Total.Instance.Update_SS();
+            }
+        }
     }
 
     // 플레이어 피격 함수
@@ -615,7 +793,7 @@ public class Player_Total : MonoBehaviour
     // 플레이어 놓아주기 함수
     private void Goaway()
     {
-        if (Player_Status.m_cCondition.ConditionCheck_Bind() == false)
+        if (Player_Skill.m_Skill_Condition.ConditionCheck_Bind() == false)
         {
             m_pm_Move.Goaway(); // 플레이어 놓아주기 함수 실행
         }
@@ -666,7 +844,7 @@ public class Player_Total : MonoBehaviour
     // 플레이어 구르기 함수
     public void Roll()
     {
-        if (Player_Status.m_cCondition.ConditionCheck_Shock() == false) // 플레이어에게 상태이상(기절)이 적용중이지 않을때
+        if (Player_Skill.m_Skill_Condition.ConditionCheck_Shock() == false) // 플레이어에게 상태이상(기절)이 적용중이지 않을때
         {
             if (m_pm_Move.Roll() == true) // 플레이어 구르기 함수 실행. 구르기 성공 여부 반환
                 m_pq_Quest.QuestUpdate_Roll(); // 진행중인 퀘스트 현황 업데이트
@@ -723,7 +901,7 @@ public class Player_Total : MonoBehaviour
     // Physics2D.OverlapBoxAll(Vector2 point, Vector2 size, float angle, int layerMask) // point : 오버랩 지점, size : 오버랩 크기, angle : 각도, layerMask : 오버랩을 적용할 레이어 // return Collider2D[]
     public void Interaction()
     {
-        if (Player_Status.m_cCondition.ConditionCheck_Bind() == false && Player_Status.m_cCondition.ConditionCheck_Shock() == false && // 플레이어에게 상태이상(속박, 기절)이 적용중이지 않을때
+        if (Player_Skill.m_Skill_Condition.ConditionCheck_Bind() == false && Player_Skill.m_Skill_Condition.ConditionCheck_Shock() == false && // 플레이어에게 상태이상(속박, 기절)이 적용중이지 않을때
             GUIManager_Total.Instance.m_nList_UI_Priority.Contains(4) == false && GUIManager_Total.Instance.m_nList_UI_Priority.Contains(29) == false) // 퀘스트GUI(4), 몬스터 도감GUI(29)가 비활성화 되었을때
         {
             // 상호작용ㆍ채집 방향 설정, 범위내의 모든 오브젝트(NPC, 채집물) 배열 반환(Collider2D[])
@@ -777,7 +955,7 @@ public class Player_Total : MonoBehaviour
     // Physics2D.OverlapBoxAll(Vector2 point, Vector2 size, float angle, int layerMask) // point : 오버랩 지점, size : 오버랩 크기, angle : 각도, layerMask : 오버랩을 적용할 레이어 // return Collider2D[]
     public void GetItem()
     {
-        if (Player_Status.m_cCondition.ConditionCheck_Bind() == false && Player_Status.m_cCondition.ConditionCheck_Shock() == false) // 플레이어에게 상태이상(속박, 기절)이 적용중이지 않을때
+        if (Player_Skill.m_Skill_Condition.ConditionCheck_Bind() == false && Player_Skill.m_Skill_Condition.ConditionCheck_Shock() == false) // 플레이어에게 상태이상(속박, 기절)이 적용중이지 않을때
         {
             // 상호작용ㆍ채집 방향 설정, 범위내의 모든 오브젝트(NPC, 채집물) 배열 반환(Collider2D[])
             co2_4 = Physics2D.OverlapBoxAll(this.transform.position + co2_4_Offset, co2_4_BoxSize, 0, nLayer4);
@@ -2697,7 +2875,9 @@ public class Player_Total : MonoBehaviour
         }
 
         m_ps_Status.ReTry(); // 리트라이(부활) 시 스탯(능력치, 평판) 초기화
+        m_ps_Skill.ReTry();  // 리트라이(부활) 시 플레이어에게 적용중인 스킬 초기화
         m_pm_Move.ReTry();   // 리트라이(부활) 시 플레이어 동작 관련 변수, FSM 등 초기화
+        m_pe_Effect.ReTry(); // 리트라이(부활) 시 플레이어에게 적용중인 이펙트 초기화
 
         MapManager.Instance.Update_Map_Object(offmap, onmap); // 맵 변경 시 이전 맵의 오브젝트 비활성화, 이동 후 맵의 오브젝트 비활성화
     }
