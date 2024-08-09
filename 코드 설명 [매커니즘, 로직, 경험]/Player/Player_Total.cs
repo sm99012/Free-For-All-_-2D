@@ -635,37 +635,37 @@ public class Player_Total : MonoBehaviour
             List<int> List_Remove = new List<int>(); // foreach문 내에서는 반복자가 활동하는 자료구조에서의 요소 삭제가 불가하다. 따라서 따로 List를 만들고 foreach문이 끝난 이후 해당 요소를 삭제해 주었다.
 	    					     // foreach문 대신 for문을 이용하면 된다지만 Dictionary 자료구조를 이용해야 했기에 해당 방법을 따로 찾아냈다.
 
-            foreach (KeyValuePair<int, Skill> set in Player_Skill.m_sDictionary_Skill_Apply)
+            foreach (KeyValuePair<int, Skill> set in Player_Skill.m_sDictionary_Skill_Apply) // 플레이어에게 적용중인 스킬 딕셔너리 조사
             {
-                if (set.Value.m_eSkillType == E_SKILL_TYPE.ACTIVE)
+                if (set.Value.m_eSkillType == E_SKILL_TYPE.ACTIVE) // 스킬 타입이 액티브인 경우
                 {
-                    if (Player_Skill.m_sDictionary_Skill_Apply_DurationTime.ContainsKey(set.Key) == true)
+                    if (Player_Skill.m_sDictionary_Skill_Apply_DurationTime.ContainsKey(set.Key) == true) // 플레이어에게 적용중인 스킬 지속시간 딕셔너리에 해당 스킬이 존재할 경우
                     {
-                        //Debug.Log("스킬 : " + Player_Skill.m_sDictionary_Skill_Apply[set.Key].m_sSkillName + " : " + Player_Skill.m_sDictionary_Skill_Apply_DurationTime[set.Key]);
-                        if (Player_Skill.m_sDictionary_Skill_Apply_DurationTime[set.Key] >= 0)
+                        if (Player_Skill.m_sDictionary_Skill_Apply_DurationTime[set.Key] >= 0) // 해당 스킬의 지속시간이 0 이상일 경우
                         {
-                            Player_Skill.m_sDictionary_Skill_Apply_DurationTime[set.Key] -= Time.deltaTime;
+                            Player_Skill.m_sDictionary_Skill_Apply_DurationTime[set.Key] -= Time.deltaTime; // 해당 스킬의 지속시간 Time.deltaTime 만큼 감소 
                         }
                         else
                         {
-                            Player_Skill.m_sDictionary_Skill_Apply_DurationTime.Remove(set.Key);
+                            Player_Skill.m_sDictionary_Skill_Apply_DurationTime.Remove(set.Key); // 플레이어에게 적용중인 스킬 지속시간 딕셔너리에서 해당 스킬 제거
 
-                            //m_ps_Skill.UnApplySkill(set.Key);
-                            m_ps_Status.UnApplySkill(set.Key);
+                            //m_ps_Skill.UnApplySkill(set.Key); // foreach문의 요소 제거 불가 문제로 인해 주석처리. 이후 새로운 방법 구현
+                            m_ps_Status.UnApplySkill(set.Key); // 스킬(버프ㆍ디버프) 해제 시 스탯(능력치, 평판) 업데이트
 
-                            GUIManager_Total.Instance.Update_SS();
+                            GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
                         }
                     }
-                    if (Player_Skill.m_sDictionary_Skill_CoolTime.ContainsKey(set.Key) == true)
+                    if (Player_Skill.m_sDictionary_Skill_CoolTime.ContainsKey(set.Key) == true) // 플레이어에게 적용중인 스킬 쿨타임 딕셔너리에 해당 스킬이 존재할 경우
                     {
-                        if (Player_Skill.m_sDictionary_Skill_CoolTime[set.Key] >= 0)
-                            Player_Skill.m_sDictionary_Skill_CoolTime[set.Key] -= Time.deltaTime;
+                        if (Player_Skill.m_sDictionary_Skill_CoolTime[set.Key] >= 0) // 해당 스킬의 쿨타임이 0 이상일 경우
+                            Player_Skill.m_sDictionary_Skill_CoolTime[set.Key] -= Time.deltaTime; // 해당 스킬의 쿨타임 Time.deltaTime 만큼 감소
                         else
                         {
-                            Player_Skill.m_sDictionary_Skill_CoolTime.Remove(set.Key);
+                            Player_Skill.m_sDictionary_Skill_CoolTime.Remove(set.Key); // 플레이어에게 적용중인 스킬 쿨타임 딕셔너리에서 해당 스킬 제거
                         }
                     }
 
+      		    // 해당 스킬의 지속시간과 쿨타임이 둘다 0이어서 각각의 딕셔너리(지속시간 딕셔너리, 쿨타임 딕셔너리)에 해당 스킬이 존재하지 않을 경우 해당 스킬 제거 대기(foreach문의 요소 제거 불가 문제)
                     if (Player_Skill.m_sDictionary_Skill_Apply_DurationTime.ContainsKey(set.Key) == false && Player_Skill.m_sDictionary_Skill_CoolTime.ContainsKey(set.Key) == false)
                         List_Remove.Add(set.Key);
                 }
@@ -673,14 +673,14 @@ public class Player_Total : MonoBehaviour
 
             for (int i = 0; i < List_Remove.Count; i++)
             {
-                Player_Skill.m_sDictionary_Skill_Apply.Remove(List_Remove[i]);
+                Player_Skill.m_sDictionary_Skill_Apply.Remove(List_Remove[i]); // 플레이어에게 적용중인 스킬 딕셔너리에서 해당 스킬 제거
             }
         }
 
         // 상태이상 적용
-        if (Player_Skill.m_Skill_Condition.ConditionCheck_Bind() == true)
+        if (Player_Skill.m_Skill_Condition.ConditionCheck_Bind() == true) // 플레이어에게 스킬(상태이상[속박]) 적용중일 경우
         {
-            Player_Skill.m_Skill_Condition.SetBindTime(Player_Skill.m_Skill_Condition.GetBindTime() - Time.deltaTime);
+            Player_Skill.m_Skill_Condition.SetBindTime(Player_Skill.m_Skill_Condition.GetBindTime() - Time.deltaTime); // 스킬(상태이상[속박]) 지속시간 Time.deltaTime 만큼 감소
 
             if (Player_Skill.m_Skill_Condition.GetBindTime() <= 0)
             {
@@ -688,12 +688,12 @@ public class Player_Total : MonoBehaviour
                 m_pe_Effect.UnApplySkill_Condition_Effect(10000);
                 m_ps_Skill.UnApplySkill_Condition_Effect(10000);
                 m_ps_Status.UnApplySkill_Condition_Effect(10000);
-                GUIManager_Total.Instance.Update_SS();
+                GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
             }
         }
-        if (Player_Skill.m_Skill_Condition.ConditionCheck_Shock() == true)
+        if (Player_Skill.m_Skill_Condition.ConditionCheck_Shock() == true) // 플레이어에게 스킬(상태이상[기절]) 적용중일 경우
         {
-            Player_Skill.m_Skill_Condition.SetShockTime(Player_Skill.m_Skill_Condition.GetShockTime() - Time.deltaTime);
+            Player_Skill.m_Skill_Condition.SetShockTime(Player_Skill.m_Skill_Condition.GetShockTime() - Time.deltaTime); // 스킬(상태이상[기절]) 지속시간 Time.deltaTime 만큼 감소
 
             if (Player_Skill.m_Skill_Condition.GetShockTime() <= 0)
             {
@@ -701,25 +701,26 @@ public class Player_Total : MonoBehaviour
                 m_pe_Effect.UnApplySkill_Condition_Effect(11000);
                 m_ps_Skill.UnApplySkill_Condition_Effect(11000);
                 m_ps_Status.UnApplySkill_Condition_Effect(11000);
-                GUIManager_Total.Instance.Update_SS();
+                GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
             }
         }
-        if (Player_Skill.m_Skill_Condition.ConditionCheck_Dark() == true)
+        if (Player_Skill.m_Skill_Condition.ConditionCheck_Dark() == true) // 플레이어에게 스킬(상태이상[암흑]) 적용중일 경우
         {
-            Player_Skill.m_Skill_Condition.SetDarkTime(Player_Skill.m_Skill_Condition.GetDarkTime() - Time.deltaTime);
+            Player_Skill.m_Skill_Condition.SetDarkTime(Player_Skill.m_Skill_Condition.GetDarkTime() - Time.deltaTime); // 스킬(상태이상[암흑]) 지속시간 Time.deltaTime 만큼 감소
 
-            if (Player_Skill.m_Skill_Condition.GetDarkTime() <= 0)
+	    // 스킬(상태이상[속박]) 제거
+            if (Player_Skill.m_Skill_Condition.GetDarkTime() <= 0) // 스킬(상태이상[암흑]) 지속시간이 0 이하인 경우
             {
-                Player_Skill.m_Skill_Condition.SetDarkTime(0);
+                Player_Skill.m_Skill_Condition.SetDarkTime(0); // 스킬(상태이상[암흑]) 지속시간 0 설정
                 m_pe_Effect.UnApplySkill_Condition_Effect(12000);
                 m_ps_Skill.UnApplySkill_Condition_Effect(12000);
                 m_ps_Status.UnApplySkill_Condition_Effect(12000);
-                GUIManager_Total.Instance.Update_SS();
+                GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
             }
         }
-        if (Player_Skill.m_Skill_Condition.ConditionCheck_Slow() == true)
+        if (Player_Skill.m_Skill_Condition.ConditionCheck_Slow() == true) // 플레이어에게 스킬(상태이상[둔화]) 적용중일 경우
         {
-            Player_Skill.m_Skill_Condition.SetSlowTime(Player_Skill.m_Skill_Condition.GetSlowTime() - Time.deltaTime);
+            Player_Skill.m_Skill_Condition.SetSlowTime(Player_Skill.m_Skill_Condition.GetSlowTime() - Time.deltaTime); // 스킬(상태이상[둔화]) 지속시간 Time.deltaTime 만큼 감소
 
             if (Player_Skill.m_Skill_Condition.GetSlowTime() <= 0)
             {
@@ -727,12 +728,12 @@ public class Player_Total : MonoBehaviour
                 m_pe_Effect.UnApplySkill_Condition_Effect(13000);
                 m_ps_Skill.UnApplySkill_Condition_Effect(13000);
                 m_ps_Status.UnApplySkill_Condition_Effect(13000);
-                GUIManager_Total.Instance.Update_SS();
+                GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
             }
         }
-        if (Player_Skill.m_Skill_Condition.ConditionCheck_Confuse() == true)
+        if (Player_Skill.m_Skill_Condition.ConditionCheck_Confuse() == true) // 플레이어에게 스킬(상태이상[혼란]) 적용중일 경우
         {
-            Player_Skill.m_Skill_Condition.SetConfuseTime(Player_Skill.m_Skill_Condition.GetConfuseTime() - Time.deltaTime);
+            Player_Skill.m_Skill_Condition.SetConfuseTime(Player_Skill.m_Skill_Condition.GetConfuseTime() - Time.deltaTime); // 스킬(상태이상[혼란]) 지속시간 Time.deltaTime 만큼 감소
 
             if (Player_Skill.m_Skill_Condition.GetConfuseTime() <= 0)
             {
@@ -740,7 +741,7 @@ public class Player_Total : MonoBehaviour
                 m_pe_Effect.UnApplySkill_Condition_Effect(14000);
                 m_ps_Skill.UnApplySkill_Condition_Effect(14000);
                 m_ps_Status.UnApplySkill_Condition_Effect(14000);
-                GUIManager_Total.Instance.Update_SS();
+                GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
             }
         }
     }
