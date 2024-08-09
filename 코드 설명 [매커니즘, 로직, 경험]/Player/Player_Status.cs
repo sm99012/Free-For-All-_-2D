@@ -41,8 +41,8 @@ public class Player_Status : MonoBehaviour
     // 플레이어에게 적용되고있는 소비아이템 효과(버프 / 디버프)의 지속시간, 소비아이템 쿨타임을 저장한다. 유니티에는 특정 코루틴의 잔여 시간을 알 수 있는 방법이 없기에 고안했다.
     public static Dictionary <int, float> m_Dictionary_Item_Use_Buff_RemainingTime;     // 소비아이템 효과(버프 / 디버프) 지속시간(float) 딕셔너리. Dictionary <Key : 아이템코드 , Value : 지속시간>
     public static Dictionary <int, float> m_Dictionary_Item_Use_CoolTime_RemainingTime; // 소비아이템 쿨타임(float) 딕셔너리. Dictionary <Key : 아이템코드 , Value : 쿨타임>
-
-    public static Dictionary<int, Skill_SSEffect> m_sDictionary_Skill_SSEffect_Apply; // 플레이어에게 적용중인 스킬 효과 딕셔너리
+    
+    public static Dictionary<int, Skill_SSEffect> m_sDictionary_Skill_SSEffect_Apply;   // 플레이어에게 적용중인 스킬(버프ㆍ디버프) 효과 딕셔너리
 
     protected Vector3 m_vDamageOffSet = new Vector3(0, 0.2f, 0); // 데미지 출력 오프셋
 
@@ -93,11 +93,7 @@ public class Player_Status : MonoBehaviour
         m_sSoc_Origin = new SOC();
         m_sSoc_Origin.SetSOC(m_sSoc);
     }
-
-    ////public void InitialSet_Skill()
-    ////{
-    ////    m_List_Skill = new List<Skill>();
-    ////}
+    
     public void InitialSet_Item_Use()
     {
         m_Dictionary_Item_Use_Buff = new Dictionary<int, Item_Use>();
@@ -218,13 +214,13 @@ public class Player_Status : MonoBehaviour
 
         m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_ItemSetEffect);    // 능력치 합계 += 적용중인 아이템 세트효과 능력치
 
-        // 스킬 적용으로 인한 반영구적 스탯(능력치) 변화 업데이트
-        foreach (KeyValuePair<int, Skill_SSEffect> set in m_sDictionary_Skill_SSEffect_Apply) // 플레이어에게 적용중인 모든 스킬 조사
+        // 스킬(버프ㆍ디버프) 적용으로 인한 일시적 스탯(능력치) 업데이트
+        foreach (KeyValuePair<int, Skill_SSEffect> set in m_sDictionary_Skill_SSEffect_Apply) // 플레이어에게 적용중인 모든 스킬(버프ㆍ디버프) 효과 조사
         {
             m_sStatus.P_OperatorSTATUS(set.Value.m_sStatus_Effect_Temporary); // 능력치 합계 += 적용중인 스킬 능력치
         }
 
-        CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로인한 능력치 업데이트
+        CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로인한 스탯(능력치) 업데이트
 
         CheckLogic(); // 능력치 논리 판단(현재체력, 현재마나)
     }
@@ -278,17 +274,17 @@ public class Player_Status : MonoBehaviour
 
         m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_ItemSetEffect);    // 능력치 합계 += 적용중인 아이템 세트효과 능력치
 
-        // 스킬 적용으로 인한 반영구적 스탯(능력치) 변화 업데이트
-        foreach (KeyValuePair<int, Skill_SSEffect> set in m_sDictionary_Skill_SSEffect_Apply) // 플레이어에게 적용중인 모든 스킬 조사
+        // 스킬(버프ㆍ디버프) 적용으로 인한 일시적 스탯(능력치) 업데이트
+        foreach (KeyValuePair<int, Skill_SSEffect> set in m_sDictionary_Skill_SSEffect_Apply) // 플레이어에게 적용중인 모든 스킬(버프ㆍ디버프) 효과 조사
         {
             m_sStatus.P_OperatorSTATUS(set.Value.m_sStatus_Effect_Temporary); // 능력치 합계 += 적용중인 스킬 능력치
         }
 
+        CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로인한 스탯(능력치) 업데이트
+
         m_sStatus.SetSTATUS_EXP_Current(m_nEXP_Current); // 현재경험치 설정
         m_sStatus.SetSTATUS_HP_Current(m_nHP_Current);   // 현재체력 설정
         m_sStatus.SetSTATUS_MP_Current(m_nMP_Current);   // 현재마나 설정
-
-        CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로인한 능력치 업데이트
 
         CheckLogic(); // 능력치 논리 판단(현재체력, 현재마나)
 
@@ -319,17 +315,17 @@ public class Player_Status : MonoBehaviour
 
         m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_ItemSetEffect);    // 능력치 합계 += 적용중인 아이템 세트효과 능력치
 
-        // 스킬 적용으로 인한 반영구적 스탯(능력치) 변화 업데이트
-        foreach (KeyValuePair<int, Skill_SSEffect> set in m_sDictionary_Skill_SSEffect_Apply) // 플레이어에게 적용중인 모든 스킬 조사
+        // 스킬(버프ㆍ디버프) 적용으로 인한 일시적 스탯(능력치) 업데이트
+        foreach (KeyValuePair<int, Skill_SSEffect> set in m_sDictionary_Skill_SSEffect_Apply) // 플레이어에게 적용중인 모든 스킬(버프ㆍ디버프) 효과 조사
         {
             m_sStatus.P_OperatorSTATUS(set.Value.m_sStatus_Effect_Temporary); // 능력치 합계 += 적용중인 스킬 능력치
         }
 
+        CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로인한 스탯(능력치) 업데이트
+
         m_sStatus.SetSTATUS_EXP_Current(m_nEXP_Current); // 현재경험치 설정
         m_sStatus.SetSTATUS_HP_Current(m_nHP_Current);   // 현재체력 설정
         m_sStatus.SetSTATUS_MP_Current(m_nMP_Current);   // 현재마나 설정
-
-        CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로인한 능력치 업데이트
     }
 
     // 퀘스트 완료로인한 능력치 업데이트
@@ -367,21 +363,21 @@ public class Player_Status : MonoBehaviour
 
         m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_ItemSetEffect);    // 능력치 합계 += 적용중인 아이템 세트효과 능력치
 
-        // 스킬 적용으로 인한 반영구적 스탯(능력치) 변화 업데이트
-        foreach (KeyValuePair<int, Skill_SSEffect> set in m_sDictionary_Skill_SSEffect_Apply) // 플레이어에게 적용중인 모든 스킬 조사
+        // 스킬(버프ㆍ디버프) 적용으로 인한 일시적 스탯(능력치) 업데이트
+        foreach (KeyValuePair<int, Skill_SSEffect> set in m_sDictionary_Skill_SSEffect_Apply) // 플레이어에게 적용중인 모든 스킬(버프ㆍ디버프) 효과 조사
         {
             m_sStatus.P_OperatorSTATUS(set.Value.m_sStatus_Effect_Temporary); // 능력치 합계 += 적용중인 스킬 능력치
         }
 
+        CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로인한 스탯(능력치) 업데이트
+
         m_sStatus.SetSTATUS_HP_Current(m_nHP_Current);   // 현재체력 설정
         m_sStatus.SetSTATUS_MP_Current(m_nMP_Current);   // 현재마나 설정
-
-        CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로인한 능력치 업데이트
 
         CheckLogic(); // 능력치 논리 판단(현재체력, 현재마나)
     }
 
-    // 스킬 적용으로인한 능력치 업데이트
+    // 스킬(버프ㆍ디버프) 적용으로인한 능력치 업데이트
     public void UpdateStatus_ApplySkill()
     {
         m_nEXP_Current = m_sStatus.GetSTATUS_EXP_Current(); // 현재경험치 임시 저장
@@ -405,13 +401,13 @@ public class Player_Status : MonoBehaviour
 
         m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_ItemSetEffect);    // 능력치 합계 += 적용중인 아이템 세트효과 능력치
 
-        // 스킬 적용으로 인한 반영구적 스탯(능력치) 변화 업데이트
-        foreach (KeyValuePair<int, Skill_SSEffect> set in m_sDictionary_Skill_SSEffect_Apply) // 플레이어에게 적용중인 모든 스킬 조사
+        // 스킬(버프ㆍ디버프) 적용으로 인한 일시적 스탯(능력치) 업데이트
+        foreach (KeyValuePair<int, Skill_SSEffect> set in m_sDictionary_Skill_SSEffect_Apply) // 플레이어에게 적용중인 모든 스킬(버프ㆍ디버프) 효과 조사
         {
             m_sStatus.P_OperatorSTATUS(set.Value.m_sStatus_Effect_Temporary); // 능력치 합계 += 적용중인 스킬 능력치
         }
 
-        CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로인한 능력치 업데이트
+        CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로인한 스탯(능력치) 업데이트
 
         m_sStatus.SetSTATUS_EXP_Current(m_nEXP_Current); // 현재경험치 설정
         m_sStatus.SetSTATUS_HP_Current(m_nHP_Current);   // 현재체력 설정
@@ -420,7 +416,7 @@ public class Player_Status : MonoBehaviour
         CheckLogic(); // 능력치 논리 판단(현재체력, 현재마나)
     }
 
-    // 스킬 적용으로인한 평판 업데이트
+    // 스킬(버프ㆍ디버프) 적용으로인한 평판 업데이트
     public void UpdateSoc_ApplySkill()
     {
         m_sSoc.SetSOC_Zero(); // 평판 합계 초기화
@@ -440,7 +436,7 @@ public class Player_Status : MonoBehaviour
 
         m_sSoc.P_OperatorSOC(m_sSoc_Extra_ItemSetEffect);    // 평판 합계 += 적용중인 아이템 세트효과 평판
 
-        // 스킬 적용으로 인한 반영구적 스탯(평판) 변화 업데이트
+        // 스킬 적용으로 인한 일시적 스탯(평판) 변화 업데이트
         foreach (KeyValuePair<int, Skill_SSEffect> set in m_sDictionary_Skill_SSEffect_Apply) // 플레이어에게 적용중인 모든 스킬 조사
         {
             m_sSoc.P_OperatorSOC(set.Value.m_sSoc_Effect_Temporary); // 평판 합계 += 적용중인 스킬 평판
@@ -529,19 +525,19 @@ public class Player_Status : MonoBehaviour
 
         m_sStatus.P_OperatorSTATUS(m_sStatus_Extra_ItemSetEffect);    // 능력치 합계 += 적용중인 아이템 세트효과 능력치
 
-        // 스킬 적용으로 인한 반영구적 스탯(능력치) 변화 업데이트
-        foreach (KeyValuePair<int, Skill_SSEffect> set in m_sDictionary_Skill_SSEffect_Apply) // 플레이어에게 적용중인 모든 스킬 조사
+        // 스킬(버프ㆍ디버프) 적용으로 인한 일시적 스탯(능력치) 업데이트
+        foreach (KeyValuePair<int, Skill_SSEffect> set in m_sDictionary_Skill_SSEffect_Apply) // 플레이어에게 적용중인 모든 스킬(버프ㆍ디버프) 효과 조사
         {
             m_sStatus.P_OperatorSTATUS(set.Value.m_sStatus_Effect_Temporary); // 능력치 합계 += 적용중인 스킬 능력치
         }
+
+        CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로인한 스탯(능력치) 업데이트
 
         m_sStatus.SetSTATUS_EXP_Current(exp); // 현재경험치 설정
         m_sStatus.SetSTATUS_HP_Current(hp);   // 현재체력 설정
         m_sStatus.SetSTATUS_MP_Current(mp);   // 현재마나 설정
 
         CheckLogic(); // 능력치 논리 판단(현재체력, 현재마나)
-
-        CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로인한 능력치 업데이트
 
         Player_Total.Instance.m_pm_Move.SetAttackSpeed(Return_AttackSpeed()); // 플레이어의 행동을 관리하는 Player_Move.cs에 플레이어의 공격속도를 제공
                                                                               // 
@@ -569,7 +565,7 @@ public class Player_Status : MonoBehaviour
 
         m_sSoc.P_OperatorSOC(m_sSoc_Extra_ItemSetEffect);    // 평판 합계 += 적용중인 아이템 세트효과 평판
 
-        // 스킬 적용으로 인한 반영구적 스탯(평판) 변화 업데이트
+        // 스킬 적용으로 인한 일시적 스탯(평판) 변화 업데이트
         foreach (KeyValuePair<int, Skill_SSEffect> set in m_sDictionary_Skill_SSEffect_Apply) // 플레이어에게 적용중인 모든 스킬 조사
         {
             m_sSoc.P_OperatorSOC(set.Value.m_sSoc_Effect_Temporary); // 평판 합계 += 적용중인 스킬 평판
@@ -616,11 +612,11 @@ public class Player_Status : MonoBehaviour
     {
         if (Player_Skill.m_Skill_Condition.ConditionCheck_Bind() == true)
         {
-            m_sStatus.SetSTATUS_Speed(0);
+            m_sStatus.SetSTATUS_Speed(0); // 플레이어 이동속도 0 고정
         }
         if (Player_Skill.m_Skill_Condition.ConditionCheck_Slow() == true)
         {
-            m_sStatus.SetSTATUS_Speed((int)((float)m_sStatus.GetSTATUS_Speed() * ((100 - Player_Skill.m_Skill_Condition.GetSlowRatio()) / 100))); // 둔화 비율에 따라 이동속도 감소
+            m_sStatus.SetSTATUS_Speed((int)((float)m_sStatus.GetSTATUS_Speed() * ((100 - Player_Skill.m_Skill_Condition.GetSlowRatio()) / 100))); // 스킬(상태이상[둔화]) 비율에 따라 플레이어 이동속도 감소
         }
     }
 
@@ -1163,10 +1159,10 @@ public class Player_Status : MonoBehaviour
         m_Dictionary_Item_Use_CoolTime_RemainingTime.Remove(item.m_nItemCode); // 소비아이템의 쿨타임 딕셔너리에 해당 소비아이템 제거. <소비아이템 효과 쿨타임(float) 딕셔너리>
     }
 
-    // 스킬 적용 가능 여부 판단(스탯(능력치, 평판) 상한ㆍ하한, 소모 자원)
+    // 스킬(버프ㆍ디버프, 상태이상) 적용 가능 여부 판단(스탯(능력치, 평판) 상한ㆍ하한, 소모 자원)
     // return 0 : 스킬 적용 가능 / return 1 : 스킬 적용 불가능
     public int CheckCondition_ApplySkill(STATUS stmax, STATUS stmin, SOC somax, SOC somin, STATUS stconsume, SOC soconsume) // stmax : 능력치 상한, stmin : 능력치 하한, somax : 평판 상한, somin : 평판 하한
-                                                                                                                             // stconsume : 소모 능력치, soconsume : 소모 평판
+                                                                                                                            // stconsume : 소모 능력치, soconsume : 소모 평판
     {
         if (m_sStatus.CheckCondition_Max(stmax) == false) // 스킬 적용 조건 : 최대 능력치(플레이어의 능력치 합계가 스킬 적용 조건(최대 능력치)를 초과한 경우 제한)
         {
@@ -1202,8 +1198,8 @@ public class Player_Status : MonoBehaviour
 
         return 0;
     }
-    // 스킬 적용 시 스탯(능력치, 평판), 버프ㆍ디버프 업데이트. SkillEffect : 스탯(능력치, 평판) 변경
-    public void ApplySkill(int ncode, Skill_SSEffect skse) // ncode : 적용할 스킬코드, skse : 스킬 효과
+    // 스킬(버프ㆍ디버프, 상태이상) 적용 시 스탯(능력치, 평판), 상태이상 업데이트
+    public void ApplySkill(int ncode, Skill_SSEffect skse) // ncode : 적용할 스킬 코드, skse : 스킬 효과(스탯(능력치, 평판))
     {
         if (m_sDictionary_Skill_SSEffect_Apply.ContainsKey(ncode) == false)
             m_sDictionary_Skill_SSEffect_Apply.Add(ncode, skse); // 플레이어에게 적용중인 스킬 효과 딕셔너리에 해당 스킬 효과 추가
@@ -1214,7 +1210,7 @@ public class Player_Status : MonoBehaviour
     // 스킬(버프ㆍ디버프) 해제 시 스탯(능력치, 평판) 업데이트
     public void UnApplySkill(int ncode) // ncode : 사용 중단할 스킬코드
     {
-        m_sDictionary_Skill_SSEffect_Apply.Remove(ncode);
+        m_sDictionary_Skill_SSEffect_Apply.Remove(ncode); // 플레이어에게 적용중인 스킬 효과 딕셔너리에서 해당 스킬 제거
 
         UpdateStatus_ApplySkill(); // 스킬 적용으로인한 능력치 업데이트
         UpdateSoc_ApplySkill(); // 스킬 적용으로인한 평판 업데이트
