@@ -682,12 +682,12 @@ public class Player_Total : MonoBehaviour
         {
             Player_Skill.m_Skill_Condition.SetBindTime(Player_Skill.m_Skill_Condition.GetBindTime() - Time.deltaTime); // 스킬(상태이상[속박]) 지속시간 Time.deltaTime 만큼 감소
 
-            if (Player_Skill.m_Skill_Condition.GetBindTime() <= 0)
+            if (Player_Skill.m_Skill_Condition.GetBindTime() <= 0) // 스킬(상태이상[속박]) 지속시간이 0 이하인 경우
             {
-                Player_Skill.m_Skill_Condition.SetBindTime(0);
-                m_pe_Effect.UnApplySkill_Condition_Effect(10000);
-                m_ps_Skill.UnApplySkill_Condition_Effect(10000);
-                m_ps_Status.UnApplySkill_Condition_Effect(10000);
+                Player_Skill.m_Skill_Condition.SetBindTime(0);     // 스킬(상태이상[속박]) 지속시간 0 설정
+	        m_ps_Skill.UnApplySkill_Condition_Effect(10000);   // 스킬(상태이상[속박]) 해제
+                m_ps_Status.UnApplySkill_Condition_Effect(10000);  // 스킬(상태이상[속박]) 해제 시 스탯(능력치, 평판) 업데이트
+                m_pe_Effect.UnApplySkill_Condition_Effect(10000);  // 스킬(상태이상[속박]) 해제 시 이펙트 업데이트
                 GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
             }
         }
@@ -695,12 +695,12 @@ public class Player_Total : MonoBehaviour
         {
             Player_Skill.m_Skill_Condition.SetShockTime(Player_Skill.m_Skill_Condition.GetShockTime() - Time.deltaTime); // 스킬(상태이상[기절]) 지속시간 Time.deltaTime 만큼 감소
 
-            if (Player_Skill.m_Skill_Condition.GetShockTime() <= 0)
+            if (Player_Skill.m_Skill_Condition.GetShockTime() <= 0) // 스킬(상태이상[기절]) 지속시간이 0 이하인 경우
             {
-                Player_Skill.m_Skill_Condition.SetShockTime(0);
-                m_pe_Effect.UnApplySkill_Condition_Effect(11000);
-                m_ps_Skill.UnApplySkill_Condition_Effect(11000);
-                m_ps_Status.UnApplySkill_Condition_Effect(11000);
+                Player_Skill.m_Skill_Condition.SetShockTime(0);     // 스킬(상태이상[기절]) 지속시간 0 설정
+		m_ps_Skill.UnApplySkill_Condition_Effect(11000);    // 스킬(상태이상[기절]) 해제
+                m_ps_Status.UnApplySkill_Condition_Effect(11000);   // 스킬(상태이상[기절]) 해제 시 스탯(능력치, 평판) 업데이트
+                m_pe_Effect.UnApplySkill_Condition_Effect(11000);   // 스킬(상태이상[기절]) 해제 시 이펙트 업데이트
                 GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
             }
         }
@@ -708,13 +708,13 @@ public class Player_Total : MonoBehaviour
         {
             Player_Skill.m_Skill_Condition.SetDarkTime(Player_Skill.m_Skill_Condition.GetDarkTime() - Time.deltaTime); // 스킬(상태이상[암흑]) 지속시간 Time.deltaTime 만큼 감소
 
-	    // 스킬(상태이상[속박]) 제거
+	    // 스킬(상태이상[암흑]) 제거
             if (Player_Skill.m_Skill_Condition.GetDarkTime() <= 0) // 스킬(상태이상[암흑]) 지속시간이 0 이하인 경우
             {
-                Player_Skill.m_Skill_Condition.SetDarkTime(0); // 스킬(상태이상[암흑]) 지속시간 0 설정
-                m_pe_Effect.UnApplySkill_Condition_Effect(12000);
-                m_ps_Skill.UnApplySkill_Condition_Effect(12000);
-                m_ps_Status.UnApplySkill_Condition_Effect(12000);
+                Player_Skill.m_Skill_Condition.SetDarkTime(0);     // 스킬(상태이상[암흑]) 지속시간 0 설정
+		m_ps_Skill.UnApplySkill_Condition_Effect(12000);   // 스킬(상태이상[암흑]) 해제
+                m_ps_Status.UnApplySkill_Condition_Effect(12000);  // 스킬(상태이상[암흑]) 해제 시 스탯(능력치, 평판) 업데이트
+		m_pe_Effect.UnApplySkill_Condition_Effect(12000);  // 스킬(상태이상[암흑]) 해제 시 이펙트 업데이트
                 GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
             }
         }
@@ -722,12 +722,12 @@ public class Player_Total : MonoBehaviour
         {
             Player_Skill.m_Skill_Condition.SetSlowTime(Player_Skill.m_Skill_Condition.GetSlowTime() - Time.deltaTime); // 스킬(상태이상[둔화]) 지속시간 Time.deltaTime 만큼 감소
 
-            if (Player_Skill.m_Skill_Condition.GetSlowTime() <= 0)
+            if (Player_Skill.m_Skill_Condition.GetSlowTime() <= 0) // 스킬(상태이상[둔화]) 지속시간이 0 이하인 경우
             {
-                Player_Skill.m_Skill_Condition.SetSlowTime(0);
-                m_pe_Effect.UnApplySkill_Condition_Effect(13000);
-                m_ps_Skill.UnApplySkill_Condition_Effect(13000);
-                m_ps_Status.UnApplySkill_Condition_Effect(13000);
+                Player_Skill.m_Skill_Condition.SetSlowTime(0);     // 스킬(상태이상[둔화]) 지속시간 0 설정
+		m_ps_Skill.UnApplySkill_Condition_Effect(13000);   // 스킬(상태이상[둔화]) 해제
+                m_ps_Status.UnApplySkill_Condition_Effect(13000);  // 스킬(상태이상[둔화]) 해제 시 스탯(능력치, 평판) 업데이트
+                m_pe_Effect.UnApplySkill_Condition_Effect(13000);  // 스킬(상태이상[둔화]) 해제 시 이펙트 업데이트
                 GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
             }
         }
@@ -735,12 +735,12 @@ public class Player_Total : MonoBehaviour
         {
             Player_Skill.m_Skill_Condition.SetConfuseTime(Player_Skill.m_Skill_Condition.GetConfuseTime() - Time.deltaTime); // 스킬(상태이상[혼란]) 지속시간 Time.deltaTime 만큼 감소
 
-            if (Player_Skill.m_Skill_Condition.GetConfuseTime() <= 0)
+            if (Player_Skill.m_Skill_Condition.GetConfuseTime() <= 0) // 스킬(상태이상[혼란]) 지속시간이 0 이하인 경우
             {
-                Player_Skill.m_Skill_Condition.SetConfuseTime(0);
-                m_pe_Effect.UnApplySkill_Condition_Effect(14000);
-                m_ps_Skill.UnApplySkill_Condition_Effect(14000);
-                m_ps_Status.UnApplySkill_Condition_Effect(14000);
+                Player_Skill.m_Skill_Condition.SetConfuseTime(0);     // 스킬(상태이상[혼란]) 지속시간 0 설정
+		m_ps_Skill.UnApplySkill_Condition_Effect(14000);      // 스킬(상태이상[혼란]) 해제
+                m_ps_Status.UnApplySkill_Condition_Effect(14000);     // 스킬(상태이상[혼란]) 해제 시 스탯(능력치, 평판) 업데이트
+                m_pe_Effect.UnApplySkill_Condition_Effect(14000);     // 스킬(상태이상[혼란]) 해제 시 이펙트 업데이트
                 GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
             }
         }
