@@ -194,7 +194,7 @@ public class Player_Status : MonoBehaviour
     }
 
     // 스탯(능력치, 평판) 업데이트 함수
-    // 레벨업 으로인한 스탯(능력치, 평판) 변경
+    // 레벨업 으로 인한 스탯(능력치, 평판) 변경
     public void UpdateStatus_LVup()
     {
         m_sStatus.SetSTATUS_Zero(); // 능력치 합계 초기화
@@ -221,7 +221,7 @@ public class Player_Status : MonoBehaviour
 	    m_sSoc.P_OperatorSOC(set.Value.m_sSoc_Effect_Temporary);          // 평판 합계 += 적용중인 스킬 평판
         }
 
-        CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로인한 스탯(능력치) 업데이트
+        CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로 인한 스탯(능력치) 업데이트
 
         CheckLogic(); // 능력치 논리 판단(현재체력, 현재마나)
     }
@@ -234,7 +234,7 @@ public class Player_Status : MonoBehaviour
 
         CheckLogic(); // 능력치 논리 판단(현재체력, 현재마나)
     }
-    // 소비아이템(영구적 버프포션) 사용으로인한 스탯(능력치, 평판) 업데이트
+    // 소비아이템(영구적 버프포션) 사용으로 인한 스탯(능력치, 평판) 업데이트
     public void UpdateStatus_Item_Use_EternalBuff(STATUS status, SOC soc) // status : 변경될 능력치 정보, soc : 변경될 평판 정보
     {
         m_sStatus_Origin.P_OperatorSTATUS(status); // 능력치 변경
@@ -243,7 +243,7 @@ public class Player_Status : MonoBehaviour
         UpdateStatus_Equip(); // 능력치 업데이트(착용중인 장비아이템 변경, 소비아이템(영구적 버프포션) 사용)
         UpdateSOC(); // 평판 업데이트
     }
-    // 소비아이템(일시적 버프포션) 사용으로인한 스탯(능력치, 평판) 업데이트
+    // 소비아이템(일시적 버프포션) 사용으로 인한 스탯(능력치, 평판) 업데이트
     public void UpdateStatus_Item_Use_TemporaryBuff()
     {
         m_nEXP_Current = m_sStatus.GetSTATUS_EXP_Current(); // 현재경험치 임시 저장
@@ -282,7 +282,7 @@ public class Player_Status : MonoBehaviour
 	    m_sSoc.P_OperatorSOC(set.Value.m_sSoc_Effect_Temporary);          // 평판 합계 += 적용중인 스킬 평판
         }
 
-        CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로인한 스탯(능력치) 업데이트
+        CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로 인한 스탯(능력치) 업데이트
 
         m_sStatus.SetSTATUS_EXP_Current(m_nEXP_Current); // 현재경험치 설정
         m_sStatus.SetSTATUS_HP_Current(m_nHP_Current);   // 현재체력 설정
@@ -324,7 +324,7 @@ public class Player_Status : MonoBehaviour
 	    m_sSoc.P_OperatorSOC(set.Value.m_sSoc_Effect_Temporary);          // 평판 합계 += 적용중인 스킬 평판
         }
 
-        CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로인한 스탯(능력치) 업데이트
+        CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로 인한 스탯(능력치) 업데이트
 
         m_sStatus.SetSTATUS_EXP_Current(m_nEXP_Current); // 현재경험치 설정
         m_sStatus.SetSTATUS_HP_Current(m_nHP_Current);   // 현재체력 설정
@@ -373,7 +373,7 @@ public class Player_Status : MonoBehaviour
 	    m_sSoc.P_OperatorSOC(set.Value.m_sSoc_Effect_Temporary);          // 평판 합계 += 적용중인 스킬 평판
         }
 
-        CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로인한 스탯(능력치) 업데이트
+        CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로 인한 스탯(능력치) 업데이트
 
         m_sStatus.SetSTATUS_HP_Current(m_nHP_Current);   // 현재체력 설정
         m_sStatus.SetSTATUS_MP_Current(m_nMP_Current);   // 현재마나 설정
@@ -381,7 +381,7 @@ public class Player_Status : MonoBehaviour
         CheckLogic(); // 능력치 논리 판단(현재체력, 현재마나)
     }
 
-    // 스킬(버프ㆍ디버프) 적용으로인한 능력치 업데이트
+    // 스킬(버프ㆍ디버프) 적용으로 인한 능력치 업데이트
     public void UpdateStatus_ApplySkill()
     {
         m_nEXP_Current = m_sStatus.GetSTATUS_EXP_Current(); // 현재경험치 임시 저장
@@ -412,7 +412,7 @@ public class Player_Status : MonoBehaviour
 	    m_sSoc.P_OperatorSOC(set.Value.m_sSoc_Effect_Temporary);          // 평판 합계 += 적용중인 스킬 평판
         }
 
-        CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로인한 스탯(능력치) 업데이트
+        CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로 인한 스탯(능력치) 업데이트
 
         m_sStatus.SetSTATUS_EXP_Current(m_nEXP_Current); // 현재경험치 설정
         m_sStatus.SetSTATUS_HP_Current(m_nHP_Current);   // 현재체력 설정
@@ -421,7 +421,7 @@ public class Player_Status : MonoBehaviour
         CheckLogic(); // 능력치 논리 판단(현재체력, 현재마나)
     }
 
-    // 스킬(버프ㆍ디버프) 적용으로인한 평판 업데이트
+    // 스킬(버프ㆍ디버프) 적용으로 인한 평판 업데이트
     public void UpdateSoc_ApplySkill()
     {
         m_sSoc.SetSOC_Zero(); // 평판 합계 초기화
@@ -543,7 +543,7 @@ public class Player_Status : MonoBehaviour
 	    m_sSoc.P_OperatorSOC(set.Value.m_sSoc_Effect_Temporary);          // 평판 합계 += 적용중인 스킬 평판
         }
 
-        CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로인한 스탯(능력치) 업데이트
+        CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로 인한 스탯(능력치) 업데이트
 
         m_sStatus.SetSTATUS_EXP_Current(exp); // 현재경험치 설정
         m_sStatus.SetSTATUS_HP_Current(hp);   // 현재체력 설정
@@ -590,7 +590,7 @@ public class Player_Status : MonoBehaviour
         
     }
 
-    // 퀘스트 완료 보상 수령으로인한 스탯(능력치, 평판) 업데이트
+    // 퀘스트 완료 보상 수령으로 인한 스탯(능력치, 평판) 업데이트
     public void GetQuestReward(Quest quest) // queset : 퀘스트 정보(퀘스트 완료 보상(스탯(능력치, 평판)))
     {
         // 플레이어 고유 평판 업데이트
@@ -619,7 +619,7 @@ public class Player_Status : MonoBehaviour
         }
     }
 
-    // 스킬(상태이상[속박, 둔화]) 적용으로인한 능력치 업데이트
+    // 스킬(상태이상[속박, 둔화]) 적용으로 인한 능력치 업데이트
     public void CheckSkill_Condition()
     {
         if (Player_Skill.m_Skill_Condition.ConditionCheck_Bind() == true)
@@ -940,7 +940,7 @@ public class Player_Status : MonoBehaviour
                 return 1;
             }
             Debug.Log(m_sStatus.GetSTATUS_HP_Current() + " / " + m_sStatus.GetSTATUS_HP_Max());
-            UpdateStatus_Item_Use_Recover(item.m_sStatus_Effect); // 소비아이템(회복포션) 사용으로인한 능력치 업데이트
+            UpdateStatus_Item_Use_Recover(item.m_sStatus_Effect); // 소비아이템(회복포션) 사용으로 인한 능력치 업데이트
             Debug.Log(m_sStatus.GetSTATUS_HP_Current() + " / " + m_sStatus.GetSTATUS_HP_Max());
             // 사용한 소비아이템의 쿨타임 계산
             if (item.m_fCoolTime > 0) // 해당 소비아이템의 쿨타임이 존재하는 경우
@@ -963,7 +963,7 @@ public class Player_Status : MonoBehaviour
                 return 1;
             }
 
-            UpdateStatus_Item_Use_EternalBuff(item.m_sStatus_Effect, item.m_sSoc_Effect); // 소비아이템(회복포션) 사용으로인한 능력치 업데이트
+            UpdateStatus_Item_Use_EternalBuff(item.m_sStatus_Effect, item.m_sSoc_Effect); // 소비아이템(회복포션) 사용으로 인한 능력치 업데이트
 
             // 사용한 소비아이템의 쿨타임 계산
             if (item.m_fCoolTime > 0) // 해당 소비아이템의 쿨타임이 존재하는 경우
@@ -1085,7 +1085,7 @@ public class Player_Status : MonoBehaviour
     // 소비아이템 사용 시 지속시간을 계산하는 코루틴. <소비아이템 효과 지속시간(코루틴) 딕셔너리> m_Dictionary_Coroutine_Item_Use_Buff 할당
     IEnumerator Process_Item_Use_BuffTime(Item_Use item) // item : 사용한 소비아이템 정보(아이템 코드, 지속시간)
     {
-        UpdateStatus_Item_Use_TemporaryBuff(); // 소비아이템(일시적 버프포션) 사용으로인한 스탯(능력치, 평판) 업데이트
+        UpdateStatus_Item_Use_TemporaryBuff(); // 소비아이템(일시적 버프포션) 사용으로 인한 스탯(능력치, 평판) 업데이트
         GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
 
         float durationtime = item.m_fDurationTime;
@@ -1104,13 +1104,13 @@ public class Player_Status : MonoBehaviour
         m_Dictionary_Coroutine_Item_Use_Buff.Remove(item.m_nItemCode); // 소비아이템의 지속시간을 계산하는 코루틴 제거. <소비아이템 효과 지속시간(코루틴) 딕셔너리>
         m_Dictionary_Item_Use_Buff_RemainingTime.Remove(item.m_nItemCode); // 소비아이템의 지속시간 딕셔너리에 해당 소비아이템 제거. <소비아이템 효과 지속시간(float) 딕셔너리>
 
-        UpdateStatus_Item_Use_TemporaryBuff(); // 소비아이템(일시적 버프포션) 사용으로인한 스탯(능력치, 평판) 업데이트
+        UpdateStatus_Item_Use_TemporaryBuff(); // 소비아이템(일시적 버프포션) 사용으로 인한 스탯(능력치, 평판) 업데이트
         GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
     }
     // 로딩 시(게임 시작 시) 소비아이템(효과, 지속시간) 지속시간을 계산하는 코루틴. <소비아이템 효과 지속시간(코루틴) 딕셔너리> m_Dictionary_Coroutine_Item_Use_Buff 할당
     IEnumerator Process_Item_Use_BuffTime(Item_Use item, float duration) // item : 사용한 소비아이템 정보(아이템 코드), duration : 사용한 소비아이템 잔여 지속시간
     {
-        UpdateStatus_Item_Use_TemporaryBuff(); // 소비아이템(일시적 버프포션) 사용으로인한 스탯(능력치, 평판) 업데이트
+        UpdateStatus_Item_Use_TemporaryBuff(); // 소비아이템(일시적 버프포션) 사용으로 인한 스탯(능력치, 평판) 업데이트
         GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
 
         float durationtime = duration;
@@ -1129,7 +1129,7 @@ public class Player_Status : MonoBehaviour
         m_Dictionary_Coroutine_Item_Use_Buff.Remove(item.m_nItemCode); // 소비아이템의 지속시간을 계산하는 코루틴 제거. <소비아이템 효과 지속시간(코루틴) 딕셔너리>
         m_Dictionary_Item_Use_Buff_RemainingTime.Remove(item.m_nItemCode); // 소비아이템의 지속시간 딕셔너리에 해당 소비아이템 제거. <소비아이템 효과 지속시간(float) 딕셔너리>
 
-        UpdateStatus_Item_Use_TemporaryBuff(); // 소비아이템(일시적 버프포션) 사용으로인한 스탯(능력치, 평판) 업데이트
+        UpdateStatus_Item_Use_TemporaryBuff(); // 소비아이템(일시적 버프포션) 사용으로 인한 스탯(능력치, 평판) 업데이트
         GUIManager_Total.Instance.Update_SS(); // 스탯GUI 업데이트
     }
     // 소비아이템 사용 시 쿨타임 계산하는 코루틴. <소비아이템 효과 쿨타임(코루틴) 딕셔너리> m_Dictionary_Coroutine_Item_Use_CoolTime 할당
@@ -1216,22 +1216,22 @@ public class Player_Status : MonoBehaviour
         if (m_sDictionary_Skill_SSEffect_Apply.ContainsKey(ncode) == false)
             m_sDictionary_Skill_SSEffect_Apply.Add(ncode, skse); // 플레이어에게 적용중인 스킬 효과 딕셔너리에 해당 스킬 효과 추가
 
-        UpdateStatus_ApplySkill(); // 스킬 적용으로인한 능력치 업데이트
-        UpdateSoc_ApplySkill(); // 스킬 적용으로인한 평판 업데이트
+        UpdateStatus_ApplySkill(); // 스킬 적용으로 인한 능력치 업데이트
+        UpdateSoc_ApplySkill(); // 스킬 적용으로 인한 평판 업데이트
     }
     // 스킬(버프ㆍ디버프) 해제 시 스탯(능력치, 평판) 업데이트
     public void UnApplySkill(int ncode) // ncode : 사용 중단할 스킬코드
     {
         m_sDictionary_Skill_SSEffect_Apply.Remove(ncode); // 플레이어에게 적용중인 스킬 효과 딕셔너리에서 해당 스킬 제거
 
-        UpdateStatus_ApplySkill(); // 스킬 적용으로인한 능력치 업데이트
-        UpdateSoc_ApplySkill(); // 스킬 적용으로인한 평판 업데이트
+        UpdateStatus_ApplySkill(); // 스킬 적용으로 인한 능력치 업데이트
+        UpdateSoc_ApplySkill(); // 스킬 적용으로 인한 평판 업데이트
     }
     // 스킬(상태이상) 해제 시 스탯(능력치, 평판) 업데이트
     public void UnApplySkill_Condition_Effect(int ncode) // ncode : 해제할 스킬(상태이상)코드
     {
-        UpdateStatus_ApplySkill(); // 스킬 적용으로인한 능력치 업데이트
-        UpdateSoc_ApplySkill(); // 스킬 적용으로인한 평판 업데이트
+        UpdateStatus_ApplySkill(); // 스킬 적용으로 인한 능력치 업데이트
+        UpdateSoc_ApplySkill(); // 스킬 적용으로 인한 평판 업데이트
     }
 }
 
