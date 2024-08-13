@@ -218,6 +218,7 @@ public class Player_Status : MonoBehaviour
         foreach (KeyValuePair<int, Skill_SSEffect> set in m_sDictionary_Skill_SSEffect_Apply) // 플레이어에게 적용중인 모든 스킬(버프ㆍ디버프) 효과 조사
         {
             m_sStatus.P_OperatorSTATUS(set.Value.m_sStatus_Effect_Temporary); // 능력치 합계 += 적용중인 스킬 능력치
+	    m_sSoc.P_OperatorSOC(set.Value.m_sSoc_Effect_Temporary);          // 평판 합계 += 적용중인 스킬 평판
         }
 
         CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로인한 스탯(능력치) 업데이트
@@ -278,6 +279,7 @@ public class Player_Status : MonoBehaviour
         foreach (KeyValuePair<int, Skill_SSEffect> set in m_sDictionary_Skill_SSEffect_Apply) // 플레이어에게 적용중인 모든 스킬(버프ㆍ디버프) 효과 조사
         {
             m_sStatus.P_OperatorSTATUS(set.Value.m_sStatus_Effect_Temporary); // 능력치 합계 += 적용중인 스킬 능력치
+	    m_sSoc.P_OperatorSOC(set.Value.m_sSoc_Effect_Temporary);          // 평판 합계 += 적용중인 스킬 평판
         }
 
         CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로인한 스탯(능력치) 업데이트
@@ -319,6 +321,7 @@ public class Player_Status : MonoBehaviour
         foreach (KeyValuePair<int, Skill_SSEffect> set in m_sDictionary_Skill_SSEffect_Apply) // 플레이어에게 적용중인 모든 스킬(버프ㆍ디버프) 효과 조사
         {
             m_sStatus.P_OperatorSTATUS(set.Value.m_sStatus_Effect_Temporary); // 능력치 합계 += 적용중인 스킬 능력치
+	    m_sSoc.P_OperatorSOC(set.Value.m_sSoc_Effect_Temporary);          // 평판 합계 += 적용중인 스킬 평판
         }
 
         CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로인한 스탯(능력치) 업데이트
@@ -367,6 +370,7 @@ public class Player_Status : MonoBehaviour
         foreach (KeyValuePair<int, Skill_SSEffect> set in m_sDictionary_Skill_SSEffect_Apply) // 플레이어에게 적용중인 모든 스킬(버프ㆍ디버프) 효과 조사
         {
             m_sStatus.P_OperatorSTATUS(set.Value.m_sStatus_Effect_Temporary); // 능력치 합계 += 적용중인 스킬 능력치
+	    m_sSoc.P_OperatorSOC(set.Value.m_sSoc_Effect_Temporary);          // 평판 합계 += 적용중인 스킬 평판
         }
 
         CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로인한 스탯(능력치) 업데이트
@@ -405,6 +409,7 @@ public class Player_Status : MonoBehaviour
         foreach (KeyValuePair<int, Skill_SSEffect> set in m_sDictionary_Skill_SSEffect_Apply) // 플레이어에게 적용중인 모든 스킬(버프ㆍ디버프) 효과 조사
         {
             m_sStatus.P_OperatorSTATUS(set.Value.m_sStatus_Effect_Temporary); // 능력치 합계 += 적용중인 스킬 능력치
+	    m_sSoc.P_OperatorSOC(set.Value.m_sSoc_Effect_Temporary);          // 평판 합계 += 적용중인 스킬 평판
         }
 
         CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로인한 스탯(능력치) 업데이트
@@ -529,6 +534,7 @@ public class Player_Status : MonoBehaviour
         foreach (KeyValuePair<int, Skill_SSEffect> set in m_sDictionary_Skill_SSEffect_Apply) // 플레이어에게 적용중인 모든 스킬(버프ㆍ디버프) 효과 조사
         {
             m_sStatus.P_OperatorSTATUS(set.Value.m_sStatus_Effect_Temporary); // 능력치 합계 += 적용중인 스킬 능력치
+	    m_sSoc.P_OperatorSOC(set.Value.m_sSoc_Effect_Temporary);          // 평판 합계 += 적용중인 스킬 평판
         }
 
         CheckSkill_Condition(); // 스킬(상태이상[속박, 둔화]) 적용으로인한 스탯(능력치) 업데이트
