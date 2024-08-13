@@ -467,6 +467,12 @@ public class Player_Status : MonoBehaviour
         m_sSoc.P_OperatorSOC(m_sSoc_Extra_Equip_Subweapon);  // 평판 합계 += 착용중인 장비아이템(보조무기) 평판
 
         m_sSoc.P_OperatorSOC(m_sSoc_Extra_ItemSetEffect);    // 평판 합계 += 적용중인 아이템 세트효과 평판
+
+         // 스킬 적용으로 인한 일시적 스탯(평판) 변화 업데이트
+        foreach (KeyValuePair<int, Skill_SSEffect> set in m_sDictionary_Skill_SSEffect_Apply) // 플레이어에게 적용중인 모든 스킬 조사
+        {
+            m_sSoc.P_OperatorSOC(set.Value.m_sSoc_Effect_Temporary); // 평판 합계 += 적용중인 스킬 평판
+        }
     }
 
     // 몬스터 토벌 시 변경되는 스탯(능력치(주로 경험치), 평판) 업데이트
