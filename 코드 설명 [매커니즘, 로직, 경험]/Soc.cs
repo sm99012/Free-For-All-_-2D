@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // 
-// Free For All 에서 중요한 기획 요소 중 하나인 평판 시스템을위한 데이터 타입
+// Free For All 에서 중요한 기획 요소 중 하나인 평판 시스템을 위한 데이터 타입
 //
 
 public struct SOC
