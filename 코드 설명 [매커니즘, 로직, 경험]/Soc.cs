@@ -200,7 +200,7 @@ public struct SOC
     }
 
     // 평판 조건 판단(하한)
-    // return true : 평판 조건 부합 / return false : 평판 조건 미흡
+    // return true : 평판 조건 충족 / return false : 평판 조건 미흡
     public bool CheckCondition_Min(SOC soc)
     {
         if (this.m_nHonor < soc.m_nHonor) return false;
@@ -216,7 +216,7 @@ public struct SOC
         return true;
     }
     // 평판 조건 판단(상한)
-    // return true : 평판 조건 부합 / return false : 평판 조건 미흡
+    // return true : 평판 조건 충족 / return false : 평판 조건 미흡
     public bool CheckCondition_Max(SOC soc)
     {
         if (this.m_nHonor > soc.m_nHonor) return false;
@@ -232,7 +232,7 @@ public struct SOC
         return true;
     }
     // 평판 조건 판단(하한 + 상한)
-    // return true : 평판 조건 부합 / return false : 평판 조건 미흡
+    // return true : 평판 조건 충족 / return false : 평판 조건 미흡
     public bool CheckCondition_MM_Honor(int minvalue, int maxvalue) // minvalue : 하한, maxvalue : 상한
     {
         if (this.m_nHonor < minvalue) return false;
