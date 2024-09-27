@@ -4,40 +4,35 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //
-// Free For All 에서 중요한 기획 요소 중 하나인 능력치 시스템을 위한
+// Free For All 에서 중요한 기획 요소 중 하나인 능력치 시스템을 위한 데이터 타입
 //
 
 public struct STATUS
 {
-    int m_nLV;
+    int m_nLV; // 레벨
+    
+    int m_nEXP_Max;     // 최대경험치(레벨업을 위해 필요한 경험치)
+    int m_nEXP_Current; // 현재경험치
+    int m_nHP_Max;      // 최대체력
+    int m_nHP_Current;  // 현재체력
+    int m_nMP_Max;      // 최대마나
+    int m_nMP_Current;  // 현재마나
 
-    int m_nEXP_Max;
-    int m_nEXP_Current;
+    int m_nDamage_Total;    // 총데미지
+    int m_nDamage_Physical; // 물리데미지 ※ 미사용
+    int m_nDamage_Magical;  // 마법데미지 ※ 미사용
+    
+    int m_nCriticalRate;   // 크리티컬 확률 ※ 미사용
+    int m_nCriticalDamage; // 크리티컬 데미지 ※ 미사용
 
-    int m_nHP_Max;
-    int m_nHP_Current;
+    int m_nDefence_Physical; // 물리방어력
+    int m_nDefence_Magical;  // 마법방어력 ※ 미사용
+    int m_nEvasionRate;      // 회피율 ※ 미사용
+    
+    int m_nSpeed;         // 이동속도
+    float m_fAttackSpeed; // 공격속도
 
-    int m_nMP_Max;
-    int m_nMP_Current;
-
-    int m_nDamage_Total;
-    int m_nDamage_Physical; //
-    int m_nDamage_Magical; //
-
-    int m_nCriticalRate; //
-
-    int m_nCriticalDamage; //
-
-    int m_nSpeed;
-
-    int m_nDefence_Physical;
-    int m_nDefence_Magical; //
-
-    int m_nEvasionRate; //
-
-    float m_fAttackSpeed;
-
-    // 생성자
+    // 생성자 - 기본형
     public STATUS(int lv = 0, int exp_max = 0, int exp_cur = 0, int hp_max = 0, int hp_cur = 0,
                   int mp_max = 0, int mp_cur = 0, int dam_total = 0, int dam_physical = 0, int dam_magical = 0,
                   int criticalrate = 0, int criticaldamage = 0, int speed = 0,
@@ -61,6 +56,7 @@ public struct STATUS
         this.m_nEvasionRate = evasionrate;
         this.m_fAttackSpeed = attackspeed;
     }
+    // 생성자 - 복사형
     public STATUS(STATUS status)
     {
         this.m_nLV = status.GetSTATUS_LV();
@@ -82,7 +78,7 @@ public struct STATUS
         this.m_fAttackSpeed = status.GetSTATUS_AttackSpeed();
     }
 
-    // STATUS +연산
+    // 능력치 +- 연산
     public void P_OperatorSTATUS_LV(int value)
     {
         this.m_nLV += value;
@@ -149,8 +145,7 @@ public struct STATUS
     }
     public void P_OperatorSTATUS_AttackSpeed(float value)
     {
-        //this.m_fAttackSpeed = Mathf.Round(this.m_fAttackSpeed + value);
-        this.m_fAttackSpeed = ((float)Math.Round(this.m_fAttackSpeed + value, 2));
+        this.m_fAttackSpeed = ((float)Math.Round(this.m_fAttackSpeed + value, 2)); // 공격속도의 경우 소수점 2자리까지 연산
     }
     public void P_OperatorSTATUS(STATUS status)
     {
@@ -170,11 +165,10 @@ public struct STATUS
         this.m_nDefence_Physical += status.m_nDefence_Physical;
         this.m_nDefence_Magical += status.m_nDefence_Magical;
         this.m_nEvasionRate += status.m_nEvasionRate;
-        //additionalstatus.SetSTATUS_AttackSpeed((float)Math.Round(UnityEngine.Random.Range(-AdditionalOptionRatio_AttackSpeed, AdditionalOptionRatio_AttackSpeed), 2));
         this.m_fAttackSpeed = (float)Math.Round(this.m_fAttackSpeed + status.m_fAttackSpeed, 2);
     }
 
-    // STATUS *연산
+    // 능력치 */ 연산
     public void M_OperatorSTATUS_LV(float value)
     {
         this.m_nLV = (int)((float)this.m_nLV * value);
@@ -264,7 +258,7 @@ public struct STATUS
         this.m_fAttackSpeed *= status.m_fAttackSpeed;
     }
 
-    // STATUS Set
+    // 능력치 설정
     public void SetSTATUS_LV(int value)
     {
         this.m_nLV = value;
@@ -374,7 +368,7 @@ public struct STATUS
         this.m_fAttackSpeed = 0;
     }
 
-    // STATUS 정보 불러오기
+    // 능력치 반환
     public int GetSTATUS_LV()
     {
         return m_nLV;
@@ -448,7 +442,8 @@ public struct STATUS
         return this;
     }
 
-    // 조건 체크(하한)
+    // 능력치 조건 판단(하한)
+    // return true : 능력치 조건 충족 / return false : 능력치 조건 미흡
     public bool CheckCondition_Min(STATUS status)
     {
         if (this.m_nLV < status.m_nLV) return false;
@@ -471,7 +466,8 @@ public struct STATUS
 
         return true;
     }    
-    // 조건 체크(상한)
+    // 능력치 조건 판단(상한)
+    // return true : 능력치 조건 충족 / return false : 능력치 조건 미흡
     public bool CheckCondition_Max(STATUS status)
     {
         if (this.m_nLV > status.m_nLV) return false;
@@ -494,8 +490,9 @@ public struct STATUS
 
         return true;
     }
-    // 조건 체크(하한 + 상한)
-    public bool CheckCondition_MM_LV(int minvalue, int maxvalue)
+    // 능력치 조건 판단(하한 + 상한)
+    // return true : 능력치 조건 충족 / return false : 능력치 조건 미흡
+    public bool CheckCondition_MM_LV(int minvalue, int maxvalue) // minvalue : 하한, maxvalue : 상한
     {
         if (this.m_nLV < minvalue) return false;
         else
@@ -559,17 +556,19 @@ public struct STATUS
         }
     }
 
-    // HP, MP 비율 반환
+    // 현재체력 비율(%) 반환
     public int GetSTATUS_HP_Ratio()
     {
         return (int)(((float)m_nHP_Current / (float)m_nHP_Max) * 100);
     }
+    // 현재마나 비율(%) 반환
     public int GetSTATUS_MP_Ratio()
     {
         return (int)(((float)m_nMP_Current / (float)m_nMP_Max) * 100);
     }
 
-    // 동일성 체크.
+    // 능력치 동일성 판단
+    // return true : 두 능력치가 동일한 수치를 가진다. / return false : 두 능력치가 다른 수치를 가진다.
     public bool CheckIdentity(STATUS status)
     {
         if (this.m_nLV != status.m_nLV)
@@ -610,8 +609,7 @@ public struct STATUS
         return true;
     }
 
-    // -----------------------------------------------
-    // 데이터 형식으로 내보내기.
+    // 능력치 데이터 저장에 사용되는 함수
     public string GetSTATUS_Data()
     {
         string str = "";
