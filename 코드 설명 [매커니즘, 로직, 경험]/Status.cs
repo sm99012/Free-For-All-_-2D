@@ -258,6 +258,36 @@ public struct STATUS
         this.m_fAttackSpeed *= status.m_fAttackSpeed;
     }
 
+    // STATUS 연산자 오버로딩. 현재 최적화로 인해 사용하지 않는다.
+    public static STATUS operator +(STATUS status_origin, STATUS status_add)
+    {
+        return new STATUS(status_origin.GetSTATUS_LV() + status_add.GetSTATUS_LV(), status_origin.GetSTATUS_EXP_Max() + status_add.GetSTATUS_EXP_Max(), status_origin.GetSTATUS_EXP_Current() + status_add.GetSTATUS_EXP_Current(), status_origin.GetSTATUS_HP_Max() + status_add.GetSTATUS_HP_Max(), status_origin.GetSTATUS_HP_Current() + status_add.GetSTATUS_HP_Current(),
+            status_origin.GetSTATUS_MP_Max() + status_add.GetSTATUS_MP_Max(), status_origin.GetSTATUS_MP_Current() + status_add.GetSTATUS_MP_Current(), status_origin.GetSTATUS_Damage_Total() + status_add.GetSTATUS_Damage_Total(), status_origin.GetSTATUS_Damage_Physical() + status_add.GetSTATUS_Damage_Physical(), status_origin.GetSTATUS_Damage_Magical() + status_add.GetSTATUS_Damage_Magical(),
+            status_origin.GetSTATUS_CriticalRate() + status_add.GetSTATUS_CriticalRate(), status_origin.GetSTATUS_CriticalDamage() + status_add.GetSTATUS_CriticalDamage(), status_origin.GetSTATUS_Speed() + status_add.GetSTATUS_Speed(),
+            status_origin.GetSTATUS_Defence_Physical() + status_add.GetSTATUS_Defence_Physical(), status_origin.GetSTATUS_Defence_Magical() + status_add.GetSTATUS_Defence_Magical(), status_origin.GetSTATUS_EvasionRate() + status_add.GetSTATUS_EvasionRate(), status_origin.GetSTATUS_AttackSpeed() + status_add.GetSTATUS_AttackSpeed());
+    }
+    public static STATUS operator -(STATUS status_origin, STATUS status_add)
+    {
+        return new STATUS(status_origin.GetSTATUS_LV() - status_add.GetSTATUS_LV(), status_origin.GetSTATUS_EXP_Max() - status_add.GetSTATUS_EXP_Max(), status_origin.GetSTATUS_EXP_Current() - status_add.GetSTATUS_EXP_Current(), status_origin.GetSTATUS_HP_Max() - status_add.GetSTATUS_HP_Max(), status_origin.GetSTATUS_HP_Current() - status_add.GetSTATUS_HP_Current(),
+            status_origin.GetSTATUS_MP_Max() - status_add.GetSTATUS_MP_Max(), status_origin.GetSTATUS_MP_Current() - status_add.GetSTATUS_MP_Current(), status_origin.GetSTATUS_Damage_Total() - status_add.GetSTATUS_Damage_Total(), status_origin.GetSTATUS_Damage_Physical() - status_add.GetSTATUS_Damage_Physical(), status_origin.GetSTATUS_Damage_Magical() - status_add.GetSTATUS_Damage_Magical(),
+            status_origin.GetSTATUS_CriticalRate() - status_add.GetSTATUS_CriticalRate(), status_origin.GetSTATUS_CriticalDamage() - status_add.GetSTATUS_CriticalDamage(), status_origin.GetSTATUS_Speed() - status_add.GetSTATUS_Speed(),
+            status_origin.GetSTATUS_Defence_Physical() - status_add.GetSTATUS_Defence_Physical(), status_origin.GetSTATUS_Defence_Magical() - status_add.GetSTATUS_Defence_Magical(), status_origin.GetSTATUS_EvasionRate() - status_add.GetSTATUS_EvasionRate(), status_origin.GetSTATUS_AttackSpeed() - status_add.GetSTATUS_AttackSpeed());
+    }
+    public static STATUS operator *(STATUS status_origin, STATUS status_add)
+    {
+        return new STATUS(status_origin.GetSTATUS_LV() * status_add.GetSTATUS_LV(), status_origin.GetSTATUS_EXP_Max() * status_add.GetSTATUS_EXP_Max(), status_origin.GetSTATUS_EXP_Current() * status_add.GetSTATUS_EXP_Current(), status_origin.GetSTATUS_HP_Max() * status_add.GetSTATUS_HP_Max(), status_origin.GetSTATUS_HP_Current() * status_add.GetSTATUS_HP_Current(),
+            status_origin.GetSTATUS_MP_Max() * status_add.GetSTATUS_MP_Max(), status_origin.GetSTATUS_MP_Current() * status_add.GetSTATUS_MP_Current(), status_origin.GetSTATUS_Damage_Total() * status_add.GetSTATUS_Damage_Total(), status_origin.GetSTATUS_Damage_Physical() * status_add.GetSTATUS_Damage_Physical(), status_origin.GetSTATUS_Damage_Magical() * status_add.GetSTATUS_Damage_Magical(),
+            status_origin.GetSTATUS_CriticalRate() * status_add.GetSTATUS_CriticalRate(), status_origin.GetSTATUS_CriticalDamage() * status_add.GetSTATUS_CriticalDamage(), status_origin.GetSTATUS_Speed() * status_add.GetSTATUS_Speed(),
+            status_origin.GetSTATUS_Defence_Physical() * status_add.GetSTATUS_Defence_Physical(), status_origin.GetSTATUS_Defence_Magical() * status_add.GetSTATUS_Defence_Magical(), status_origin.GetSTATUS_EvasionRate() * status_add.GetSTATUS_EvasionRate(), status_origin.GetSTATUS_AttackSpeed() * status_add.GetSTATUS_AttackSpeed());
+    }
+    public static STATUS operator /(STATUS status_origin, STATUS status_add)
+    {
+        return new STATUS(status_origin.GetSTATUS_LV() / status_add.GetSTATUS_LV(), status_origin.GetSTATUS_EXP_Max() / status_add.GetSTATUS_EXP_Max(), status_origin.GetSTATUS_EXP_Current() / status_add.GetSTATUS_EXP_Current(), status_origin.GetSTATUS_HP_Max() / status_add.GetSTATUS_HP_Max(), status_origin.GetSTATUS_HP_Current() / status_add.GetSTATUS_HP_Current(),
+            status_origin.GetSTATUS_MP_Max() / status_add.GetSTATUS_MP_Max(), status_origin.GetSTATUS_MP_Current() / status_add.GetSTATUS_MP_Current(), status_origin.GetSTATUS_Damage_Total() / status_add.GetSTATUS_Damage_Total(), status_origin.GetSTATUS_Damage_Physical() / status_add.GetSTATUS_Damage_Physical(), status_origin.GetSTATUS_Damage_Magical() / status_add.GetSTATUS_Damage_Magical(),
+            status_origin.GetSTATUS_CriticalRate() / status_add.GetSTATUS_CriticalRate(), status_origin.GetSTATUS_CriticalDamage() / status_add.GetSTATUS_CriticalDamage(), status_origin.GetSTATUS_Speed() / status_add.GetSTATUS_Speed(),
+            status_origin.GetSTATUS_Defence_Physical() / status_add.GetSTATUS_Defence_Physical(), status_origin.GetSTATUS_Defence_Magical() / status_add.GetSTATUS_Defence_Magical(), status_origin.GetSTATUS_EvasionRate() / status_add.GetSTATUS_EvasionRate(), status_origin.GetSTATUS_AttackSpeed() / status_add.GetSTATUS_AttackSpeed());
+    }
+    
     // 능력치 설정
     public void SetSTATUS_LV(int value)
     {
