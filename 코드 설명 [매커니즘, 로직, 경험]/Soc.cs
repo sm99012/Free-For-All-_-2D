@@ -157,7 +157,6 @@ public struct SOC
         this.m_nShadowSoc = 0;
     }
 
-
     // 평판 반환
     public int GetSOC_Honor()
     {
