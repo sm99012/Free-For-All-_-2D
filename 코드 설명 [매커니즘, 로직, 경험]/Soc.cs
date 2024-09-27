@@ -201,66 +201,6 @@ public struct SOC
     }
 
     // 평판 조건 판단(하한)
-    public bool CheckCondition_Min(SOC soc)
-    {
-        if (this.m_nHonor < soc.m_nHonor) return false;
-        if (this.m_nHumanSoc < soc.m_nHumanSoc) return false;
-        if (this.m_nAnimalSoc < soc.m_nAnimalSoc) return false;
-        if (this.m_nSlimeSoc < soc.m_nSlimeSoc) return false;
-        if (this.m_nSkeletonSoc < soc.m_nSkeletonSoc) return false;
-        if (this.m_nEntsSoc < soc.m_nEntsSoc) return false;
-        if (this.m_nDevilSoc < soc.m_nDevilSoc) return false;
-        if (this.m_nDragonSoc < soc.m_nDragonSoc) return false;
-        if (this.m_nShadowSoc < soc.m_nShadowSoc) return false;
-
-        return true;
-    }
-    // 평판 조건 판단    }
-
-
-    // 평판 반환
-    public int GetSOC_Honor()
-    {
-        return m_nHonor;
-    }
-    public int GetSOC_Human()
-    {
-        return m_nHumanSoc;
-    }
-    public int GetSOC_Animal()
-    {
-        return m_nAnimalSoc;
-    }
-    public int GetSOC_Slime()
-    {
-        return m_nSlimeSoc;
-    }
-    public int GetSOC_Skeleton()
-    {
-        return m_nSkeletonSoc;
-    }
-    public int GetSOC_Ents()
-    {
-        return m_nEntsSoc;
-    }
-    public int GetSOC_Devil()
-    {
-        return m_nDevilSoc;
-    }
-    public int GetSOC_Dragon()
-    {
-        return m_nDragonSoc;
-    }
-    public int GetSOC_Shadow()
-    {
-        return m_nShadowSoc;
-    }
-    public SOC GetSOC()
-    {
-        return this;
-    }
-
-    // 평판 조건 판단(하한)
     // return true : 평판 조건 부합 / return false : 평판 조건 미흡
     public bool CheckCondition_Min(SOC soc)
     {
