@@ -95,6 +95,56 @@ public struct SOC
         this.m_nShadowSoc += soc.m_nShadowSoc;
     }
 
+    // SOC 연산자 오버로딩. 현재 최적화로 인해 사용하지 않는다.
+    public static SOC operator+(SOC soc_origin, SOC soc_add)
+    {
+        return new SOC(soc_origin.GetSOC_Honor() + soc_add.GetSOC_Honor(),
+                       soc_origin.GetSOC_Human() + soc_add.GetSOC_Human(),
+                       soc_origin.GetSOC_Animal() + soc_add.GetSOC_Animal(),
+                       soc_origin.GetSOC_Slime() + soc_add.GetSOC_Slime(),
+                       soc_origin.GetSOC_Skeleton() + soc_add.GetSOC_Skeleton(),
+                       soc_origin.GetSOC_Ents() + soc_add.GetSOC_Ents(),
+                       soc_origin.GetSOC_Devil() + soc_add.GetSOC_Devil(),
+                       soc_origin.GetSOC_Dragon() + soc_add.GetSOC_Dragon(),
+                       soc_origin.GetSOC_Shadow() + soc_add.GetSOC_Shadow());
+    }
+    public static SOC operator -(SOC soc_origin, SOC soc_add)
+    {
+        return new SOC(soc_origin.GetSOC_Honor() - soc_add.GetSOC_Honor(),
+                       soc_origin.GetSOC_Human() - soc_add.GetSOC_Human(),
+                       soc_origin.GetSOC_Animal() - soc_add.GetSOC_Animal(),
+                       soc_origin.GetSOC_Slime() - soc_add.GetSOC_Slime(),
+                       soc_origin.GetSOC_Skeleton() - soc_add.GetSOC_Skeleton(),
+                       soc_origin.GetSOC_Ents() - soc_add.GetSOC_Ents(),
+                       soc_origin.GetSOC_Devil() - soc_add.GetSOC_Devil(),
+                       soc_origin.GetSOC_Dragon() - soc_add.GetSOC_Dragon(),
+                       soc_origin.GetSOC_Shadow() - soc_add.GetSOC_Shadow());
+    }
+    public static SOC operator *(SOC soc_origin, SOC soc_add)
+    {
+        return new SOC(soc_origin.GetSOC_Honor() * soc_add.GetSOC_Honor(),
+                       soc_origin.GetSOC_Human() * soc_add.GetSOC_Human(),
+                       soc_origin.GetSOC_Animal() * soc_add.GetSOC_Animal(),
+                       soc_origin.GetSOC_Slime() * soc_add.GetSOC_Slime(),
+                       soc_origin.GetSOC_Skeleton() * soc_add.GetSOC_Skeleton(),
+                       soc_origin.GetSOC_Ents() * soc_add.GetSOC_Ents(),
+                       soc_origin.GetSOC_Devil() * soc_add.GetSOC_Devil(),
+                       soc_origin.GetSOC_Dragon() * soc_add.GetSOC_Dragon(),
+                       soc_origin.GetSOC_Shadow() * soc_add.GetSOC_Shadow());
+    }
+    public static SOC operator /(SOC soc_origin, SOC soc_add)
+    {
+        return new SOC(soc_origin.GetSOC_Honor() / soc_add.GetSOC_Honor(),
+                       soc_origin.GetSOC_Human() / soc_add.GetSOC_Human(),
+                       soc_origin.GetSOC_Animal() / soc_add.GetSOC_Animal(),
+                       soc_origin.GetSOC_Slime() / soc_add.GetSOC_Slime(),
+                       soc_origin.GetSOC_Skeleton() / soc_add.GetSOC_Skeleton(),
+                       soc_origin.GetSOC_Ents() / soc_add.GetSOC_Ents(),
+                       soc_origin.GetSOC_Devil() / soc_add.GetSOC_Devil(),
+                       soc_origin.GetSOC_Dragon() / soc_add.GetSOC_Dragon(),
+                       soc_origin.GetSOC_Shadow() / soc_add.GetSOC_Shadow());
+    }
+    
     // 평판 설정
     public void SetSOC_Honor(int value)
     {
