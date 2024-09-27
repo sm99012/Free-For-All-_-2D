@@ -2,19 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// 
+// Free For All 에서 중요한 기획 요소 중 하나인 평판 시스템을위한 데이터 타입
+//
+
 public struct SOC
 {
-    int m_nHonor;
-    int m_nHumanSoc;
-    int m_nAnimalSoc;
-    int m_nSlimeSoc;
-    int m_nSkeletonSoc;
-    int m_nEntsSoc;
-    int m_nDevilSoc;
-    int m_nDragonSoc;
-    int m_nShadowSoc;
+    int m_nHonor;       // 명예
+    int m_nHumanSoc;    // 인간 종족 평판
+    int m_nAnimalSoc;   // 동물 종족 평판
+    int m_nSlimeSoc;    // 슬라임 종족 평판
+    int m_nSkeletonSoc; // 스켈레톤 종족 평판
+    int m_nEntsSoc;     // 앤트 종족 평판
+    int m_nDevilSoc;    // 마족 평판
+    int m_nDragonSoc;   // 용족 평판
+    int m_nShadowSoc;   // 어둠 평판
 
-    // 생성자
+    // 생성자 - 기본형
     public SOC(int honor = 0, int human = 0, int animal = 0, int slime = 0, int skeleton = 0, int ents = 0, int devil = 0, int dragon = 0, int shadow = 0)
     {
         this.m_nHonor = honor;
@@ -27,7 +31,8 @@ public struct SOC
         this.m_nDragonSoc = dragon;
         this.m_nShadowSoc = shadow;
     }
-    public SOC(SOC soc)
+    // 생성자 - 복사형
+    public SOC(SOC soc) // soc : 복사할 평판 데이터
     {
         this.m_nHonor = soc.GetSOC_Honor();
         this.m_nHumanSoc = soc.GetSOC_Human();
@@ -40,7 +45,7 @@ public struct SOC
         this.m_nShadowSoc = soc.GetSOC_Shadow();
     }
 
-    // SOC +연산
+    // 평판 +- 연산
     public void P_OperatorSOC_Honor(int value)
     {
         this.m_nHonor += value;
@@ -90,7 +95,7 @@ public struct SOC
         this.m_nShadowSoc += soc.m_nShadowSoc;
     }
 
-    // SOC Set
+    // 평판 설정
     public void SetSOC_Honor(int value)
     {
         this.m_nHonor = value;
@@ -153,7 +158,7 @@ public struct SOC
     }
 
 
-    // SOC 정보 불러오기
+    // 평판 반환
     public int GetSOC_Honor()
     {
         return m_nHonor;
@@ -195,7 +200,7 @@ public struct SOC
         return this;
     }
 
-    // 조건 체크(하한)
+    // 평판 조건 판단(하한)
     public bool CheckCondition_Min(SOC soc)
     {
         if (this.m_nHonor < soc.m_nHonor) return false;
@@ -210,7 +215,69 @@ public struct SOC
 
         return true;
     }
-    // 조건 체크(상한)
+    // 평판 조건 판단    }
+
+
+    // 평판 반환
+    public int GetSOC_Honor()
+    {
+        return m_nHonor;
+    }
+    public int GetSOC_Human()
+    {
+        return m_nHumanSoc;
+    }
+    public int GetSOC_Animal()
+    {
+        return m_nAnimalSoc;
+    }
+    public int GetSOC_Slime()
+    {
+        return m_nSlimeSoc;
+    }
+    public int GetSOC_Skeleton()
+    {
+        return m_nSkeletonSoc;
+    }
+    public int GetSOC_Ents()
+    {
+        return m_nEntsSoc;
+    }
+    public int GetSOC_Devil()
+    {
+        return m_nDevilSoc;
+    }
+    public int GetSOC_Dragon()
+    {
+        return m_nDragonSoc;
+    }
+    public int GetSOC_Shadow()
+    {
+        return m_nShadowSoc;
+    }
+    public SOC GetSOC()
+    {
+        return this;
+    }
+
+    // 평판 조건 판단(하한)
+    // return true : 평판 조건 부합 / return false : 평판 조건 미흡
+    public bool CheckCondition_Min(SOC soc)
+    {
+        if (this.m_nHonor < soc.m_nHonor) return false;
+        if (this.m_nHumanSoc < soc.m_nHumanSoc) return false;
+        if (this.m_nAnimalSoc < soc.m_nAnimalSoc) return false;
+        if (this.m_nSlimeSoc < soc.m_nSlimeSoc) return false;
+        if (this.m_nSkeletonSoc < soc.m_nSkeletonSoc) return false;
+        if (this.m_nEntsSoc < soc.m_nEntsSoc) return false;
+        if (this.m_nDevilSoc < soc.m_nDevilSoc) return false;
+        if (this.m_nDragonSoc < soc.m_nDragonSoc) return false;
+        if (this.m_nShadowSoc < soc.m_nShadowSoc) return false;
+
+        return true;
+    }
+    // 평판 조건 판단(상한)
+    // return true : 평판 조건 부합 / return false : 평판 조건 미흡
     public bool CheckCondition_Max(SOC soc)
     {
         if (this.m_nHonor > soc.m_nHonor) return false;
@@ -225,8 +292,9 @@ public struct SOC
 
         return true;
     }
-    // 조건 체크(하한 + 상한)
-    public bool CheckCondition_MM_Honor(int minvalue, int maxvalue)
+    // 평판 조건 판단(하한 + 상한)
+    // return true : 평판 조건 부합 / return false : 평판 조건 미흡
+    public bool CheckCondition_MM_Honor(int minvalue, int maxvalue) // minvalue : 하한, maxvalue : 상한
     {
         if (this.m_nHonor < minvalue) return false;
         else
@@ -308,7 +376,8 @@ public struct SOC
         }
     }
 
-    // 동일성 체크.
+    // 평판 동일성 판단
+    // return true : 두 평판이 동일한 수치를 가진다. / return false : 두 평판이 다른 수치를 가진다.
     public bool CheckIdentity(SOC soc)
     {
         if (this.m_nHonor != soc.m_nHonor)
@@ -333,8 +402,7 @@ public struct SOC
         return true;
     }
 
-    // -----------------------------------------------
-    // 데이터 형식으로 내보내기.
+    // 평판 데이터 저장에 사용되는 함수
     public string GetSOC_Data()
     {
         string str = "";
