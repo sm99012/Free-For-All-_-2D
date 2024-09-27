@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//
+// Free For All 에서 중요한 기획 요소 중 하나인 능력치 시스템을 위한
+//
+
 public struct STATUS
 {
     int m_nLV;
