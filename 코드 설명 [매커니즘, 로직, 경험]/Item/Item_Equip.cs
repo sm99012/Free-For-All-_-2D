@@ -108,7 +108,6 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
         itemscript.m_sSoc_Effect = item.m_sSoc_Effect;
         itemscript.m_sSoc_Effect.P_OperatorSOC(itemscript.m_SOC_AdditionalOption); // 장비아이템 스탯(평판) = 원본 스탯(평판) + 추가 스탯(평판)
 
-
         itemscript.m_nReinforcementCount_Max = item.m_nReinforcementCount_Max;
         itemscript.m_nReinforcementCount_Current = item.m_nReinforcementCount_Current;
         
