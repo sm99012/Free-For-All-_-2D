@@ -21,7 +21,7 @@ public class Item : MonoBehaviour
     public Sprite m_sp_Sprite;                  // 아이템 스프라이트(이미지)
     public SpriteRenderer m_spr_SpriteRenderer; // 아이템 스프라이트 랜더러(이미지 + 색상 정보 등)
 
-    public E_ITEM_TYPE m_eE_ITEM_TYPE;      // 아이템 타입
+    public E_ITEM_TYPE m_eItemType;      // 아이템 타입
     public E_ITEM_GRADE m_eItemGrade; // 아이템 등급
 
     // 제한(착용 제한, 사용 제한)
