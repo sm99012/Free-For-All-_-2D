@@ -134,42 +134,42 @@ public class Player_Move : MonoBehaviour
     {
         if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.IDLE || m_ePlayerMoveState == E_PLAYER_MOVE_STATE.RUN)
         {
-            if (h == 1)
+            if (h == 1) // 오른쪽 이동
             {
-                m_vScale = m_vRightPos;
+                m_vScale = m_vRightPos; // 플레이어가 바라보는 방향 오른쪽 전환
                 m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.RUN);
             }
-            else if (h == -1)
+            else if (h == -1) // 왼쪽 이동
             {
-                m_vScale = m_vLeftPos;
-                m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.RUN);
-            }
-
-            if (v == 1)
-            {
-                m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.RUN);
-            }
-            else if (v == -1)
-            {
+                m_vScale = m_vLeftPos; // 플레이어가 바라보는 방향 왼쪽 전환
                 m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.RUN);
             }
 
-            if (h == 0 && v == 0)
+            if (v == 1) // 위쪽 이동
+            {
+                m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.RUN);
+            }
+            else if (v == -1) // 아래쪽 이동
+            {
+                m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.RUN);
+            }
+
+            if (h == 0 && v == 0) // 정지(이동하지 않은 상태)
                 m_ePlayerMoveState = SetPlayerMoveState(E_PLAYER_MOVE_STATE.IDLE);
         }
         if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.ROLL)
         {
-            if (h == 1)
+            if (h == 1) // 오른쪽 이동
             {
-                m_vScale = m_vRightPos;
+                m_vScale = m_vRightPos;// 플레이어가 바라보는 방향 오른쪽 전환
             }
-            else if (h == -1)
+            else if (h == -1) // 왼쪽 이동
             {
-                m_vScale = m_vLeftPos;
+                m_vScale = m_vLeftPos; // 플레이어가 바라보는 방향 왼쪽 전환
             }
         }
 
-        m_tTransform.localScale = m_vScale; // 플레이어가 바라보는 방향 설정(좌 / 우)
+        m_tTransform.localScale = m_vScale; // 플레이어가 바라보는 방향 설정(왼쪽 / 오른쪽)
     }
 
     // 맵 변경 후 플레이어의 위치 설정(포탈로 이동 시)
