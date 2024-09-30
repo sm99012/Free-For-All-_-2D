@@ -130,7 +130,7 @@ public class Player_Move : MonoBehaviour
         return m_vInputDir;
     }
     // 플레이어 방향 설정, 플레이어 동작 FSM 변경 함수
-    void SetScale(int h, int v)
+    void SetScale(int h, int v) // h : 수평 이동 값, v : 수직 이동 값
     {
         if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.IDLE || m_ePlayerMoveState == E_PLAYER_MOVE_STATE.RUN)
         {
