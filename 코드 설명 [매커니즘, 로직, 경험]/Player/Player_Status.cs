@@ -726,22 +726,22 @@ public class Player_Status : MonoBehaviour
     // 장비아이템 착용 조건 판단, 장비아이템 착용 시 스탯(능력치, 평판) 업데이트
     public bool CheckCondition_Item_Equip(Item_Equip item, STATUS playerstatus, SOC playersoc) // item : 착용할 장비아이템 정보(착용 조건(스탯(능력치, 평판) 최소ㆍ최대)), playerstatus : 플레이어 능력치 합계, playersoc : 플레이어 평판 합계
     {
-        if (playerstatus.CheckCondition_Max(item.m_sStatus_Limit_Max) == false) // 장비아이템 착용 조건 : 최대 능력치(플레이어의 능력치 합계가 장비아이템 착용 조건(최대 능력치)를 초과한 경우 제한)
+        if (playerstatus.CheckCondition_Max(item.m_sStatus_Limit_Max) == false) // 장비아이템 착용 조건 : 능력치 상한(플레이어의 능력치 합계가 장비아이템 착용 조건(최대 능력치)을 초과한 경우 제한)
         {
             //Debug.Log(item.m_sItemName + ": Status 착용 최대 조건 불만족");
             return false;
         }
-        if (playerstatus.CheckCondition_Min(item.m_sStatus_Limit_Min) == false) // 장비아이템 착용 조건 : 최소 능력치(플레이어의 능력치 합계가 장비아이템 착용 조건(최소 능력치)에 미달한 경우 제한)
+        if (playerstatus.CheckCondition_Min(item.m_sStatus_Limit_Min) == false) // 장비아이템 착용 조건 : 능력치 하한(플레이어의 능력치 합계가 장비아이템 착용 조건(최소 능력치)에 미달한 경우 제한)
         {
             //Debug.Log(item.m_sItemName + ": Status 착용 최소 조건 불만족");
             return false;
         }
-        if (playersoc.CheckCondition_Max(item.m_sSoc_Limit_Max) == false) // 장비아이템 착용 조건 : 최대 평판(플레이어의 평판 합계가 장비아이템 착용 조건(최대 평판)를 초과한 경우 제한)
+        if (playersoc.CheckCondition_Max(item.m_sSoc_Limit_Max) == false) // 장비아이템 착용 조건 : 평판 상한(플레이어의 평판 합계가 장비아이템 착용 조건(최대 평판)을 초과한 경우 제한)
         {
             //Debug.Log(item.m_sItemName + ": Soc 착용 최대 조건 불만족");
             return false;
         }
-        if (playersoc.CheckCondition_Min(item.m_sSoc_Limit_Min) == false) // 장비아이템 착용 조건 : 취소 평판(플레이어의 평판 합계가 장비아이템 착용 조건(최소 평판)에 미달한 경우 제한)
+        if (playersoc.CheckCondition_Min(item.m_sSoc_Limit_Min) == false) // 장비아이템 착용 조건 : 평판 하한(플레이어의 평판 합계가 장비아이템 착용 조건(최소 평판)에 미달한 경우 제한)
         {
             //Debug.Log(item.m_sItemName + ": Soc 착용 최소 조건 불만족");
             return false;
@@ -893,22 +893,22 @@ public class Player_Status : MonoBehaviour
     // return 0 : 사용 가능 / return 1 : 사용 불가능
     public int CheckCondition_Item_Use(Item_Use item) // item : 사용할 소비아이템 정보
     {
-        if (m_sStatus.CheckCondition_Max(item.m_sStatus_Limit_Max) == false) // 소비아이템 사용 조건 : 최대 능력치(플레이어의 능력치 합계가 소비아이템 사용 조건(최대 능력치)를 초과한 경우 제한)
+        if (m_sStatus.CheckCondition_Max(item.m_sStatus_Limit_Max) == false) // 소비아이템 사용 조건 : 능력치 상한(플레이어의 능력치 합계가 소비아이템 사용 조건(최대 능력치)을 초과한 경우 제한)
         {
             Debug.Log(item.m_sItemName + ": Status 최대 조건 불만족");
             return 1;
         }
-        if (m_sStatus.CheckCondition_Min(item.m_sStatus_Limit_Min) == false) // 소비아이템 사용 조건 : 최소 능력치(플레이어의 능력치 합계가 소비아이템 사용 조건(최소 능력치)에 미달한 경우 제한)
+        if (m_sStatus.CheckCondition_Min(item.m_sStatus_Limit_Min) == false) // 소비아이템 사용 조건 : 능력치 하한(플레이어의 능력치 합계가 소비아이템 사용 조건(최소 능력치)에 미달한 경우 제한)
         {
             Debug.Log(item.m_sItemName + ": Status 최소 조건 불만족");
             return 1;
         }
-        if (m_sSoc.CheckCondition_Max(item.m_sSoc_Limit_Max) == false) // 소비아이템 사용 조건 : 최소 평판(플레이어의 평판 합계가 소비아이템 사용 조건(최소 평판)에 미달한 경우 제한)
+        if (m_sSoc.CheckCondition_Max(item.m_sSoc_Limit_Max) == false) // 소비아이템 사용 조건 : 평판 상한(플레이어의 평판 합계가 소비아이템 사용 조건(최대 평판)을 초과한 경우 제한)
         {
             Debug.Log(item.m_sItemName + ": Soc 최대 조건 불만족");
             return 1;
         }
-        if (m_sSoc.CheckCondition_Min(item.m_sSoc_Limit_Min) == false) // 소비아이템 사용 조건 : 최대 평판(플레이어의 평판 합계가 소비아이템 사용 조건(최대 평판)를 초과한 경우 제한)
+        if (m_sSoc.CheckCondition_Min(item.m_sSoc_Limit_Min) == false) // 소비아이템 사용 조건 : 평판 하한(플레이어의 평판 합계가 소비아이템 사용 조건(최소 평판)에 미달한 경우 제한)
         {
             Debug.Log(item.m_sItemName + ": Soc 최소 조건 불만족");
             return 1;
@@ -1176,22 +1176,22 @@ public class Player_Status : MonoBehaviour
     public int CheckCondition_ApplySkill(STATUS stmax, STATUS stmin, SOC somax, SOC somin, STATUS stconsume, SOC soconsume) // stmax : 능력치 상한, stmin : 능력치 하한, somax : 평판 상한, somin : 평판 하한
                                                                                                                             // stconsume : 소모 능력치, soconsume : 소모 평판
     {
-        if (m_sStatus.CheckCondition_Max(stmax) == false) // 스킬 적용 조건 : 최대 능력치(플레이어의 능력치 합계가 스킬 적용 조건(최대 능력치)를 초과한 경우 제한)
+        if (m_sStatus.CheckCondition_Max(stmax) == false) // 스킬 적용 조건 : 능력치 상한(플레이어의 능력치 합계가 스킬 적용 조건(최대 능력치)을 초과한 경우 제한)
         {
             Debug.Log("1");
             return 1;
         }
-        if (m_sStatus.CheckCondition_Min(stmin) == false) // 스킬 적용 조건 : 최소 능력치(플레이어의 능력치 합계가 스킬 적용 조건(최소 능력치)에 미달한 경우 제한)
+        if (m_sStatus.CheckCondition_Min(stmin) == false) // 스킬 적용 조건 : 능력치 하한(플레이어의 능력치 합계가 스킬 적용 조건(최소 능력치)에 미달한 경우 제한)
         {
             Debug.Log("2");
             return 1;
         }
-        if (m_sSoc.CheckCondition_Max(somax) == false) // 스킬 적용 조건 : 최대 평판(플레이어의 평판 합계가 스킬 적용 조건(최대 평판)를 초과한 경우 제한)
+        if (m_sSoc.CheckCondition_Max(somax) == false) // 스킬 적용 조건 : 평판 상한(플레이어의 평판 합계가 스킬 적용 조건(최대 평판)을 초과한 경우 제한)
         {
             Debug.Log("3");
             return 1;
         }
-        if (m_sSoc.CheckCondition_Min(somin) == false) // 스킬 적용 조건 : 최소 평판(플레이어의 평판 합계가 스킬 적용 조건(최소 평판)에 미달한 경우 제한)
+        if (m_sSoc.CheckCondition_Min(somin) == false) // 스킬 적용 조건 : 평판 하한(플레이어의 평판 합계가 스킬 적용 조건(최소 평판)에 미달한 경우 제한)
         {
             Debug.Log("4");
             return 1;
