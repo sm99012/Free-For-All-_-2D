@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+//
+// ※ 기반이 되는 Item 클래스를 구현한 후 Item_Equip(장비아이템), Item_Use(소비아이템), Item_Etc(기타아이템) 클래스를 상속으로 구현했다.
+//
+
 // 아이템 타입 : { 장비아이템, 소비아이템, 기타아이템, 골드(재화) }
 public enum E_ITEM_TYPE { EQUIP, USE, ETC, GOLD }
 // 아이템 등급 : { 일반, 흔함, 희귀, 유물, 전설, 신화 }
 public enum E_ITEM_GRADE { NORMAL, COMMON, RARE, RELIC, LEGEND, MYTH }
-
-//
-// ※ 기반이 되는 Item 클래스를 구현한 후 Item_Equip(장비아이템), Item_Use(소비아이템), Item_Etc(기타아이템) 클래스를 상속으로 구현했다.
-//
 
 public class Item : MonoBehaviour
 {
