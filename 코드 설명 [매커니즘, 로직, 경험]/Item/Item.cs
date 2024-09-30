@@ -25,11 +25,11 @@ public class Item : MonoBehaviour
     public E_ITEM_GRADE m_eItemGrade; // 아이템 등급
 
     // 아이템 착용 및 사용 조건(상한ㆍ하한) 스탯(능력치)
-    public STATUS m_sStatus_Limit_Max; // 아이템 착용 및 사용 조건 : 능력치 상한(플레이어의 능력치 합계가 아이템 착용 및 사용 조건(최대 능력치)을 초과한 경우 제한)
-    public STATUS m_sStatus_Limit_Min; // 아이템 착용 및 사용 조건 : 능력치 하한(플레이어의 능력치 합계가 아이템 착용 및 사용 조건(최대 능력치)에 미달한 경우 제한)
-    // 아이템 착용 및 사용 조건(상한ㆍ하한) 스탯(능력치)
-    public SOC m_sSoc_Limit_Max;
-    public SOC m_sSoc_Limit_Min;
+    public STATUS m_sStatus_Limit_Max; // 아이템 착용 및 사용 조건 : 능력치 상한(플레이어의 능력치 합계가 아이템 착용 및 사용 조건(능력치 상한)을 초과한 경우 제한)
+    public STATUS m_sStatus_Limit_Min; // 아이템 착용 및 사용 조건 : 능력치 하한(플레이어의 능력치 합계가 아이템 착용 및 사용 조건(능력치 하한)에 미달한 경우 제한)
+    // 아이템 착용 및 사용 조건(상한ㆍ하한) 스탯(평판)
+    public SOC m_sSoc_Limit_Max; // 아이템 착용 및 사용 조건 : 평판 싱한(플레이어의 평판 합계가 아이템 착용 및 사용 조건(평판 상한)을 초과한 경우 제한)
+    public SOC m_sSoc_Limit_Min; // 아이템 착용 및 사용 조건 : 평판 하한(플레이어의 평판 합계가 아이템 착용 및 사용 조건(평판 하한)에 미달한 경우 제한)
     // 효과(착용 효과, 사용 효과)
     public STATUS m_sStatus_Effect;
     public SOC m_sSoc_Effect;
