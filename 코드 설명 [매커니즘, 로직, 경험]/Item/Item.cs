@@ -4,21 +4,25 @@ using UnityEngine;
 using UnityEditor;
 
 // 아이템 타입 : { 장비아이템, 소비아이템, 기타아이템, 골드(재화) }
-public enum ItemType { EQUIP, USE, ETC, GOLD }
+public enum E_ITEM_TYPE { EQUIP, USE, ETC, GOLD }
 // 아이템 등급 : { 일반, 흔함, 희귀, 유물, 전설, 신화 }
 public enum E_ITEM_GRADE { NORMAL, COMMON, RARE, RELIC, LEGEND, MYTH }
 
+//
+// ※ 기반이 되는 Item 클래스를 구현한 후 Item_Equip(장비아이템), Item_Use(소비아이템), Item_Etc(기타아이템) 클래스를 상속으로 구현했다.
+//
+
 public class Item : MonoBehaviour
 {
-    public string m_sItemName;
-    public string m_sItemDescription;
-    public int m_nItemCode;
-    public int m_nItemNumber;
-    public Sprite m_sp_Sprite;
-    public SpriteRenderer m_spr_SpriteRenderer;
+    public string m_sItemName;                  // 아이템 이름
+    public string m_sItemDescription;           // 아이템 정보(설명)
+    public int m_nItemCode;                     // 아이템 고유코드
+    public int m_nItemNumber;                   // 아이템 생성코드(아이템 생성 순서)
+    public Sprite m_sp_Sprite;                  // 아이템 스프라이트(이미지)
+    public SpriteRenderer m_spr_SpriteRenderer; // 아이템 스프라이트 랜더러(이미지 + 색상 정보 등)
 
-    public ItemType m_eItemtype;
-    public E_ITEM_GRADE m_eItemGrade;
+    public E_ITEM_TYPE m_eE_ITEM_TYPE;      // 아이템 타입
+    public E_ITEM_GRADE m_eItemGrade; // 아이템 등급
 
     // 제한(착용 제한, 사용 제한)
     public STATUS m_sStatus_Limit_Max;
