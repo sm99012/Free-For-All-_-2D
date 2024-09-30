@@ -28,50 +28,44 @@ public class Item : MonoBehaviour
     public STATUS m_sStatus_Limit_Max; // 아이템 착용 및 사용 조건 : 능력치 상한(플레이어의 능력치 합계가 아이템 착용 및 사용 조건(능력치 상한)을 초과한 경우 제한)
     public STATUS m_sStatus_Limit_Min; // 아이템 착용 및 사용 조건 : 능력치 하한(플레이어의 능력치 합계가 아이템 착용 및 사용 조건(능력치 하한)에 미달한 경우 제한)
     // 아이템 착용 및 사용 조건(상한ㆍ하한) 스탯(평판)
-    public SOC m_sSoc_Limit_Max; // 아이템 착용 및 사용 조건 : 평판 싱한(플레이어의 평판 합계가 아이템 착용 및 사용 조건(평판 상한)을 초과한 경우 제한)
+    public SOC m_sSoc_Limit_Max; // 아이템 착용 및 사용 조건 : 평판 상한(플레이어의 평판 합계가 아이템 착용 및 사용 조건(평판 상한)을 초과한 경우 제한)
     public SOC m_sSoc_Limit_Min; // 아이템 착용 및 사용 조건 : 평판 하한(플레이어의 평판 합계가 아이템 착용 및 사용 조건(평판 하한)에 미달한 경우 제한)
-    // 효과(착용 효과, 사용 효과)
+    // 아이템 착용 및 사용 효과 스탯(능력치)
     public STATUS m_sStatus_Effect;
+    // 아이템 착용 및 사용 효과 스탯(평판)
     public SOC m_sSoc_Effect;
-    // 판매 금액.
+    
+    // 아이템 가격(가치)
     public int m_nPrice;
 
-    // 아이템 페이드인.
-    public bool m_bPossible_Get;
-    protected float m_FadeinAlpa;
+    // 아이템 획득 관련 변수
+    public bool m_bPossible_Get;  // (m_bPossible_Get == true : 아이템 획득 가능 / m_bPossible_Get == false : 아이템 획득 불가능)
+    protected float m_FadeinAlpa; // 아이템 스프라이트 랜더러(이미지) 투명도
 
+    // 소멸자를 이용해 아이템 객체가 정상적으로 제거되는지 확인하는 함수. 테스트용
     //~Item()
     //{
     //    Debug.Log("아이템 원본 삭제: " + m_sItemName);
     //}
 
+    // 아이템 정보(설명) 반환 함수
     public string GetItemDescription()
     {
         return m_sItemDescription;
     }    
 
+    // 아이템 정보(아이템 이름, 아이템 생성코드) 출력 함수(가상 함수). 테스트용
     virtual public void ItemInformation()
     {
         Debug.Log(m_sItemName + ", " + m_nItemNumber);
     }
 
-    // 필드에 아이템 드랍 후 일정 시간이 지나도록 Player 가 드랍하지 않을시 해당 아이템 삭제. 
-    protected bool Delete_Item()
-    {
-        return true;
-    }
-
-    IEnumerator ProcessDeleteItem()
-    {
-        yield return new WaitForSeconds(5f);
-        Destroy(this.gameObject);
-    }
-
+    // 아이템 생성 시 페이드인 효과 실행 함수
     protected void Fadein()
     {
         StartCoroutine(ProcessFadein());
     }
-
+    // 페이드인 효과 코루틴
     protected IEnumerator ProcessFadein()
     {
         m_bPossible_Get = false;
