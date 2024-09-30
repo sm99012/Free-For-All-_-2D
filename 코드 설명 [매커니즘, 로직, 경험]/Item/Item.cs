@@ -21,12 +21,13 @@ public class Item : MonoBehaviour
     public Sprite m_sp_Sprite;                  // 아이템 스프라이트(이미지)
     public SpriteRenderer m_spr_SpriteRenderer; // 아이템 스프라이트 랜더러(이미지 + 색상 정보 등)
 
-    public E_ITEM_TYPE m_eItemType;      // 아이템 타입
+    public E_ITEM_TYPE m_eItemType;   // 아이템 타입
     public E_ITEM_GRADE m_eItemGrade; // 아이템 등급
 
-    // 제한(착용 제한, 사용 제한)
-    public STATUS m_sStatus_Limit_Max;
-    public STATUS m_sStatus_Limit_Min;
+    // 아이템 착용 및 사용 조건(상한ㆍ하한) 스탯(능력치)
+    public STATUS m_sStatus_Limit_Max; // 아이템 착용 및 사용 조건 : 능력치 상한(플레이어의 능력치 합계가 아이템 착용 및 사용 조건(최대 능력치)을 초과한 경우 제한)
+    public STATUS m_sStatus_Limit_Min; // 아이템 착용 및 사용 조건 : 능력치 하한(플레이어의 능력치 합계가 아이템 착용 및 사용 조건(최대 능력치)에 미달한 경우 제한)
+    // 아이템 착용 및 사용 조건(상한ㆍ하한) 스탯(능력치)
     public SOC m_sSoc_Limit_Max;
     public SOC m_sSoc_Limit_Min;
     // 효과(착용 효과, 사용 효과)
