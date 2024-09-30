@@ -28,7 +28,7 @@ public class Item_Gold : Item
         itemobject.GetComponent<SpriteRenderer>().sprite = itemscript.m_sp_Sprite;
         itemscript.m_spr_SpriteRenderer = itemobject.GetComponent<SpriteRenderer>();
 
-        itemscript.m_eItemtype = ItemType.GOLD;
+        itemscript.m_eItemType = E_ITEM_TYPE.GOLD;
         itemscript.m_eItemGrade = E_ITEM_GRADE.NORMAL;
 
         itemscript.m_nPrice = gold;
