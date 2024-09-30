@@ -281,11 +281,11 @@ public class Player_Itemslot : MonoBehaviour
     public GameObject GetCloneItem(GameObject item)
     {
         GameObject ReturnITem;
-        if (item.GetComponent<Item>().m_eItemtype == ItemType.ETC)
+        if (item.GetComponent<Item>().m_eItemType == E_ITEM_TYPE.ETC)
         {
             ReturnITem = Resources.Load("Prefab/Item/Item_Etc/" + item.name) as GameObject;
         }
-        else if (item.GetComponent<Item>().m_eItemtype == ItemType.USE)
+        else if (item.GetComponent<Item>().m_eItemType == E_ITEM_TYPE.USE)
         {
             ReturnITem = Resources.Load("Prefab/Item/Item_Use/" + item.name) as GameObject;
         }
