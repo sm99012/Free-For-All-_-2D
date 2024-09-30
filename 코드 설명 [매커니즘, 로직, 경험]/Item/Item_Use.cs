@@ -48,7 +48,7 @@ public class Item_Use : Item
         this.m_nItemCode = code;
         this.m_sp_Sprite = Resources.Load<Sprite>(path_sprite);
         
-        this.m_eItemtype = ItemType.USE;
+        this.m_eItemType = E_ITEM_TYPE.USE;
         this.m_eItemGrade = ig;
         this.m_eItemUseType = iut;
 
@@ -194,7 +194,7 @@ public class Item_Use : Item
         itemscript.m_sp_Sprite = item.m_sp_Sprite;
         itemscript.m_spr_SpriteRenderer = itemobject.GetComponent<SpriteRenderer>();
 
-        itemscript.m_eItemtype = ItemType.USE;
+        itemscript.m_eItemType = E_ITEM_TYPE.USE;
         itemscript.m_eItemGrade = item.m_eItemGrade;
         itemscript.m_eItemUseType = item.m_eItemUseType;
 
@@ -252,7 +252,7 @@ public class Item_Use : Item
         itemscript.m_nItemNumber = 0;
         itemscript.m_sp_Sprite = item.m_sp_Sprite;
 
-        itemscript.m_eItemtype = ItemType.USE;
+        itemscript.m_eItemType = E_ITEM_TYPE.USE;
         itemscript.m_eItemGrade = item.m_eItemGrade;
         itemscript.m_eItemUseType = item.m_eItemUseType;
 
@@ -300,7 +300,7 @@ public class Item_Use : Item
         itemscript.m_nItemNumber = 0;
         itemscript.m_sp_Sprite = item.m_sp_Sprite;
 
-        itemscript.m_eItemtype = ItemType.USE;
+        itemscript.m_eItemType = E_ITEM_TYPE.USE;
         itemscript.m_eItemGrade = item.m_eItemGrade;
         itemscript.m_eItemUseType = item.m_eItemUseType;
 
@@ -347,7 +347,7 @@ public class Item_Use : Item
         itemscript.m_nItemNumber = 0;
         itemscript.m_sp_Sprite = item.m_sp_Sprite;
 
-        itemscript.m_eItemtype = ItemType.USE;
+        itemscript.m_eItemType = E_ITEM_TYPE.USE;
         itemscript.m_eItemGrade = item.m_eItemGrade;
         itemscript.m_eItemUseType = item.m_eItemUseType;
 
