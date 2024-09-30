@@ -7,6 +7,10 @@ using System;
 public enum E_ITEM_EQUIP_TYPE { HAT, TOP, BOTTOMS, SHOSE, GLOVES, MAINWEAPON, SUBWEAPON }
 // 무기가 아닌 장비 아이템은 NULL 값을 가짐.
 public enum E_ITEM_EQUIP_MAINWEAPON_TYPE { NULL, SWORD, AXE, KNIFE, SPEAR }
+// 아이템(장비아이템) 추가 스탯(능력치) 등급
+public enum E_ITEM_ADDITIONALOPTION_STATUS { S1, S2, S3, S4, S5, S6, S7, S8, S9, S10 }
+// 아이템(장비아이템) 추가 스탯(평판) 등급
+public enum E_ITEM_ADDITIONALOPTION_SOC { S1, S2, S3, S4, S5, S6, S7, S8, S9, S10 }
 
 public class Item_Equip : Item
 {
