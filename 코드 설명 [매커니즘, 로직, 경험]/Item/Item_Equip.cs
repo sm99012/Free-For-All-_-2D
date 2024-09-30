@@ -45,7 +45,7 @@ public class Item_Equip : Item
         //this.m_sp_Sprite = AssetDatabase.LoadAssetAtPath(path_sprite, typeof(Sprite)) as Sprite;
         this.m_sp_Sprite = Resources.Load<Sprite>(path_sprite);
 
-        this.m_eItemtype = ItemType.EQUIP;
+        this.m_eItemType = E_ITEM_TYPE.EQUIP;
         this.m_eItemGrade = eig;
         this.m_eItemEquipType = iet;
         this.m_eItemEquipMainWeaponType = iemt;
@@ -82,7 +82,7 @@ public class Item_Equip : Item
         itemscript.m_sp_Sprite = item.m_sp_Sprite;
         itemscript.m_spr_SpriteRenderer = itemobject.GetComponent<SpriteRenderer>();
 
-        itemscript.m_eItemtype = ItemType.EQUIP;
+        itemscript.m_eItemType = E_ITEM_TYPE.EQUIP;
         itemscript.m_eItemGrade = item.m_eItemGrade;
         itemscript.m_eItemEquipType = item.m_eItemEquipType;
         itemscript.m_eItemEquipMainWeaponType = item.m_eItemEquipMainWeaponType;
@@ -129,7 +129,7 @@ public class Item_Equip : Item
         itemscript.m_nItemNumber = item.m_nItemNumber;
         itemscript.m_sp_Sprite = item.m_sp_Sprite;
 
-        itemscript.m_eItemtype = ItemType.EQUIP;
+        itemscript.m_eItemType = E_ITEM_TYPE.EQUIP;
         itemscript.m_eItemGrade = item.m_eItemGrade;
         itemscript.m_eItemEquipType = item.m_eItemEquipType;
         itemscript.m_eItemEquipMainWeaponType = item.m_eItemEquipMainWeaponType;
@@ -171,7 +171,7 @@ public class Item_Equip : Item
         itemscript.m_nItemNumber = ++ItemManager.sm_nItemNumber;
         itemscript.m_sp_Sprite = item.m_sp_Sprite;
 
-        itemscript.m_eItemtype = ItemType.EQUIP;
+        itemscript.m_eItemType = E_ITEM_TYPE.EQUIP;
         itemscript.m_eItemGrade = item.m_eItemGrade;
         itemscript.m_eItemEquipType = item.m_eItemEquipType;
         itemscript.m_eItemEquipMainWeaponType = item.m_eItemEquipMainWeaponType;
@@ -216,7 +216,7 @@ public class Item_Equip : Item
         itemscript.m_nItemNumber = itemnumber;
         itemscript.m_sp_Sprite = item.m_sp_Sprite;
 
-        itemscript.m_eItemtype = ItemType.EQUIP;
+        itemscript.m_eItemType = E_ITEM_TYPE.EQUIP;
         itemscript.m_eItemGrade = item.m_eItemGrade;
         itemscript.m_eItemEquipType = item.m_eItemEquipType;
         itemscript.m_eItemEquipMainWeaponType = item.m_eItemEquipMainWeaponType;
