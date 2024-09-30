@@ -18,7 +18,7 @@ public class Item_Etc : Item
         this.m_nItemCode = code;
         this.m_sp_Sprite = Resources.Load<Sprite>(path_sprite);
         
-        this.m_eItemtype = ItemType.ETC;
+        this.m_eItemType = E_ITEM_TYPE.ETC;
         this.m_eItemGrade = eig;
         this.m_eItemEtcType = iet;
 
@@ -41,7 +41,7 @@ public class Item_Etc : Item
         itemscript.m_sp_Sprite = item.m_sp_Sprite;
         itemscript.m_spr_SpriteRenderer = itemobject.GetComponent<SpriteRenderer>();
 
-        itemscript.m_eItemtype = ItemType.ETC;
+        itemscript.m_eItemType = E_ITEM_TYPE.ETC;
         itemscript.m_eItemEtcType = item.m_eItemEtcType;
         itemscript.m_eItemGrade = item.m_eItemGrade;
 
@@ -76,7 +76,7 @@ public class Item_Etc : Item
         itemscript.m_nItemNumber = 0;
         itemscript.m_sp_Sprite = item.m_sp_Sprite;
 
-        itemscript.m_eItemtype = ItemType.ETC;
+        itemscript.m_eItemType = E_ITEM_TYPE.ETC;
         itemscript.m_eItemEtcType = item.m_eItemEtcType;
         itemscript.m_eItemGrade = item.m_eItemGrade;
 
@@ -106,7 +106,7 @@ public class Item_Etc : Item
         itemscript.m_nItemNumber = 0;
         itemscript.m_sp_Sprite = item.m_sp_Sprite;
 
-        itemscript.m_eItemtype = ItemType.ETC;
+        itemscript.m_eItemType = E_ITEM_TYPE.ETC;
         itemscript.m_eItemEtcType = item.m_eItemEtcType;
         itemscript.m_eItemGrade = item.m_eItemGrade;
 
@@ -135,7 +135,7 @@ public class Item_Etc : Item
         itemscript.m_nItemNumber = 0;
         itemscript.m_sp_Sprite = item.m_sp_Sprite;
 
-        itemscript.m_eItemtype = ItemType.ETC;
+        itemscript.m_eItemType = E_ITEM_TYPE.ETC;
         itemscript.m_eItemEtcType = item.m_eItemEtcType;
         itemscript.m_eItemGrade = item.m_eItemGrade;
 
