@@ -70,7 +70,6 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
         m_STATUS_ReinforcementValue = new STATUS();
         m_SOC_ReinforcementValue = new SOC();
     }
-
     // 장비아이템 사본을 생성하는 생성자. 필드에 장비아이템 드랍 시 실행되는 함수
     public Item_Equip(Item_Equip item, Vector3 itemposition) // item : 장비아이템 원본 객체, itemposition : 장비아이템 드랍 위치
     {
@@ -84,7 +83,7 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
         itemscript.m_sItemName = item.m_sItemName;
         itemscript.m_sItemDescription = item.m_sItemDescription;
         itemscript.m_nItemCode = item.m_nItemCode;
-        itemscript.m_nItemNumber = ++ItemManager.sm_nItemNumber;
+        itemscript.m_nItemNumber = ++ItemManager.sm_nItemNumber; // 아이템 생성코드 할당
         itemscript.m_sp_Sprite = item.m_sp_Sprite;
         itemscript.m_spr_SpriteRenderer = itemobject.GetComponent<SpriteRenderer>();
 
@@ -122,7 +121,6 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
         itemscript.m_FadeinAlpa = 0;
         itemscript.Fadein(); // 아이템 생성시 페이드인 효과 실행 함수
     }
-
     // 장비아이템 사본을 생성하는 생성자. 플레이어가 장비아이템 사본을 획득할 시 실행되는 함수
     // 장비아이템 사본(유니티 오브젝트)을 획득할 시 해당 장비아이템 사본(유니티 오브젝트)은 삭제되고 해당 장비아이템 사본(메모리 객체) 데이터를 저장소에 저장
     public Item_Equip DeleteItem(Item_Equip item) // item : 장비아이템 사본 객체
@@ -139,34 +137,34 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
         itemscript.m_eItemGrade = item.m_eItemGrade;
         itemscript.m_eItemEquipType = item.m_eItemEquipType;
         itemscript.m_eItemEquipMainWeaponType = item.m_eItemEquipMainWeaponType;
+        
         itemscript.m_eItemEquip_SpecialRatio_STATUS = item.m_eItemEquip_SpecialRatio_STATUS;
         itemscript.m_STATUS_AdditionalOption = item.m_STATUS_AdditionalOption;
-        itemscript.m_STATUS_ReinforcementValue = item.m_STATUS_ReinforcementValue;
         itemscript.m_eItemEquip_SpecialRatio_SOC = item.m_eItemEquip_SpecialRatio_SOC;
         itemscript.m_SOC_AdditionalOption = item.m_SOC_AdditionalOption;
-        itemscript.m_SOC_ReinforcementValue = item.m_SOC_ReinforcementValue;
 
-        itemscript.m_sStatus_Effect = item.m_sStatus_Effect;
-        itemscript.m_eItemEquip_SpecialRatio_STATUS = item.m_eItemEquip_SpecialRatio_STATUS;
-        itemscript.m_sStatus_Limit_Min = item.m_sStatus_Limit_Min;
         itemscript.m_sStatus_Limit_Max = item.m_sStatus_Limit_Max;
-
-        itemscript.m_sSoc_Effect = item.m_sSoc_Effect;
-        itemscript.m_eItemEquip_SpecialRatio_SOC = item.m_eItemEquip_SpecialRatio_SOC;
-        itemscript.m_sSoc_Limit_Min = item.m_sSoc_Limit_Min;
+        itemscript.m_sStatus_Limit_Min = item.m_sStatus_Limit_Min;
+        itemscript.m_sStatus_Effect = item.m_sStatus_Effect;
         itemscript.m_sSoc_Limit_Max = item.m_sSoc_Limit_Max;
-        itemscript.m_nPrice = item.m_nPrice;
-        itemscript.m_nItemSetCode = item.m_nItemSetCode;
+        itemscript.m_sSoc_Limit_Min = item.m_sSoc_Limit_Min;
+        itemscript.m_sSoc_Effect = item.m_sSoc_Effect;
 
         itemscript.m_nReinforcementCount_Max = item.m_nReinforcementCount_Max;
         itemscript.m_nReinforcementCount_Current = item.m_nReinforcementCount_Current;
+        
+        itemscript.m_STATUS_ReinforcementValue = item.m_STATUS_ReinforcementValue;
+        itemscript.m_SOC_ReinforcementValue = item.m_SOC_ReinforcementValue;
+        
+        itemscript.m_nPrice = item.m_nPrice;
+        itemscript.m_nItemSetCode = item.m_nItemSetCode;
 
-        Destroy(this.gameObject);
+        Destroy(this.gameObject); // 장비아이템 사본(유니티 오브젝트) 삭제
 
-        return itemscript;
+        return itemscript; // 장비아이템 사본(메모리 객체) 데이터 반환
     }
-
-    // Player 퀘스트 보상 획득 시 사용.
+    // 장비아이템 사본을 생성하는 생성자. 플레이어가 장비아이템 사본을 획득할 시 실행되는 함수
+    // 퀘스트 완료 보상으로 획득하는 장비아이템의 경우 장비아이템 사본(유니티 오브젝트)이 필요하지 않아 바로 장비아이템 사본(메모리 객체) 데이터를 저장소에 저장
     public Item_Equip CreateItem(Item_Equip item)
     {
         Item_Equip itemscript = new Item_Equip();
@@ -174,23 +172,27 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
         itemscript.m_sItemName = item.m_sItemName;
         itemscript.m_sItemDescription = item.m_sItemDescription;
         itemscript.m_nItemCode = item.m_nItemCode;
-        itemscript.m_nItemNumber = ++ItemManager.sm_nItemNumber;
+        itemscript.m_nItemNumber = ++ItemManager.sm_nItemNumber; // 아이템 생성코드 할당
         itemscript.m_sp_Sprite = item.m_sp_Sprite;
 
         itemscript.m_eItemType = E_ITEM_TYPE.EQUIP;
         itemscript.m_eItemGrade = item.m_eItemGrade;
         itemscript.m_eItemEquipType = item.m_eItemEquipType;
         itemscript.m_eItemEquipMainWeaponType = item.m_eItemEquipMainWeaponType;
+        
         itemscript.m_eItemEquip_SpecialRatio_STATUS = item.m_eItemEquip_SpecialRatio_STATUS;
+        
         itemscript.m_eItemEquip_SpecialRatio_SOC = item.m_eItemEquip_SpecialRatio_SOC;
 
+        itemscript.m_sStatus_Limit_Max = item.m_sStatus_Limit_Max;
+        itemscript.m_sStatus_Limit_Min = item.m_sStatus_Limit_Min;
         itemscript.m_sStatus_Effect = item.m_sStatus_Effect;
         itemscript.m_STATUS_AdditionalOption = Set_Item_Equip_AdditionalOption_STATUS(item, item.m_eItemEquip_SpecialRatio_STATUS);
         itemscript.m_STATUS_ReinforcementValue = item.m_STATUS_ReinforcementValue;
         itemscript.m_sStatus_Effect.P_OperatorSTATUS(itemscript.m_STATUS_AdditionalOption);
         itemscript.m_sStatus_Effect.SetSTATUS_AttackSpeed((float)Math.Round(itemscript.m_sStatus_Effect.GetSTATUS_AttackSpeed(), 2));
-        itemscript.m_sStatus_Limit_Min = item.m_sStatus_Limit_Min;
-        itemscript.m_sStatus_Limit_Max = item.m_sStatus_Limit_Max;
+
+
 
         itemscript.m_sSoc_Effect = item.m_sSoc_Effect;
         itemscript.m_SOC_AdditionalOption = Set_Item_Equip_AdditionalOption_SOC(item, item.m_eItemEquip_SpecialRatio_SOC);
