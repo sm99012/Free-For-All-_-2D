@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+// 아이템 타입 : { 장비아이템, 소비아이템, 기타아이템, 골드(재화) }
 public enum ItemType { EQUIP, USE, ETC, GOLD }
+// 아이템 등급 : { 일반, 흔함, 희귀, 유물, 전설, 신화 }
 public enum E_ITEM_GRADE { NORMAL, COMMON, RARE, RELIC, LEGEND, MYTH }
-public enum E_ITEM_ADDITIONALOPTION_STATUS { S1, S2, S3, S4, S5, S6, S7, S8, S9, S10 }
-public enum E_ITEM_ADDITIONALOPTION_SOC { S1, S2, S3, S4, S5, S6, S7, S8, S9, S10 }
 
 public class Item : MonoBehaviour
 {
