@@ -1,25 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using UnityEditor;
 using System;
 
+// 장비아이템 타입 : { 모자, 상의, 하의, 신발, 장갑, 주무기, 보조무기 }
 public enum E_ITEM_EQUIP_TYPE { HAT, TOP, BOTTOMS, SHOSE, GLOVES, MAINWEAPON, SUBWEAPON }
-// 무기가 아닌 장비 아이템은 NULL 값을 가짐.
+// 장비아이템(주무기) 타입 : { NULL, 검, 도끼, 단검, 창 }. 주무기가 아닌 장비아이템은 NULL값 할당. 창 타입의 주무기는 미구현
 public enum E_ITEM_EQUIP_MAINWEAPON_TYPE { NULL, SWORD, AXE, KNIFE, SPEAR }
-// 아이템(장비아이템) 추가 스탯(능력치) 등급
+// 장비아이템 추가 스탯(능력치) 등급. 해당 등급에 따라 장비아이템에 추가 또는 감소 스탯(능력치) 적용
 public enum E_ITEM_ADDITIONALOPTION_STATUS { S1, S2, S3, S4, S5, S6, S7, S8, S9, S10 }
-// 아이템(장비아이템) 추가 스탯(평판) 등급
+// 장비아이템 추가 스탯(평판) 등급. 해당 등급에 따라 장비아이템에 추가 또는 감소 스탯(평판) 적용
 public enum E_ITEM_ADDITIONALOPTION_SOC { S1, S2, S3, S4, S5, S6, S7, S8, S9, S10 }
 
-public class Item_Equip : Item
+//
+// ※ 장비아이템 추가 스탯(능력치, 평판) 등급 관련 정보는 아이템 추가옵션
+//
+
+public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
 {
-    public E_ITEM_EQUIP_TYPE m_eItemEquipType;
-    public E_ITEM_EQUIP_MAINWEAPON_TYPE m_eItemEquipMainWeaponType;
-    public E_ITEM_ADDITIONALOPTION_STATUS m_eItemEquip_SpecialRatio_STATUS;
-    public STATUS m_STATUS_AdditionalOption;
-    public E_ITEM_ADDITIONALOPTION_SOC m_eItemEquip_SpecialRatio_SOC;
-    public SOC m_SOC_AdditionalOption;
+    public E_ITEM_EQUIP_TYPE m_eItemEquipType;                              // 장비아이템 타입
+    public E_ITEM_EQUIP_MAINWEAPON_TYPE m_eItemEquipMainWeaponType;         // 장비아이템(주무기) 타입
+    public E_ITEM_ADDITIONALOPTION_STATUS m_eItemEquip_SpecialRatio_STATUS; // 장비아이템 추가 스탯(능력치) 등급
+    public STATUS m_STATUS_AdditionalOption;                                // 장비아이템 추가 스탯(능력치)
+    public E_ITEM_ADDITIONALOPTION_SOC m_eItemEquip_SpecialRatio_SOC;       // 장비아이템 추가 스탯(평판) 등급
+    public SOC m_SOC_AdditionalOption;                                      // 장비아이템 추가 스탯(평판)
 
     public STATUS m_STATUS_ReinforcementValue;
     public SOC m_SOC_ReinforcementValue;
