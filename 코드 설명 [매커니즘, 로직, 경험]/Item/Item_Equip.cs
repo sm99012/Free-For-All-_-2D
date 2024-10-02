@@ -192,9 +192,9 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
         itemscript.m_eItemEquipMainWeaponType = item.m_eItemEquipMainWeaponType;
         
         itemscript.m_eItemEquip_SpecialRatio_STATUS = item.m_eItemEquip_SpecialRatio_STATUS;
-        itemscript.m_STATUS_AdditionalOption = Set_Item_Equip_AdditionalOption_STATUS(item, item.m_eItemEquip_SpecialRatio_STATUS);
+        itemscript.m_STATUS_AdditionalOption = Set_Item_Equip_AdditionalOption_STATUS(item, item.m_eItemEquip_SpecialRatio_STATUS); // 장비아이템 추가 스탯(능력치)을 결정하는 함수
         itemscript.m_eItemEquip_SpecialRatio_SOC = item.m_eItemEquip_SpecialRatio_SOC;
-        itemscript.m_SOC_AdditionalOption = Set_Item_Equip_AdditionalOption_SOC(item, item.m_eItemEquip_SpecialRatio_SOC);
+        itemscript.m_SOC_AdditionalOption = Set_Item_Equip_AdditionalOption_SOC(item, item.m_eItemEquip_SpecialRatio_SOC); // 장비아이템 추가 스탯(평판)을 결정하는 함수
 
         itemscript.m_STATUS_ReinforcementValue = item.m_STATUS_ReinforcementValue;
         itemscript.m_SOC_ReinforcementValue = item.m_SOC_ReinforcementValue;
@@ -220,7 +220,8 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
         return itemscript;
     }
 
-    // 불러오기
+    // 로딩 관련 함수
+    // 게임 시작 시 플레이어가 장착중이거나 보유한 장비아이템 스탯(능력치, 평판) 로딩
     public Item_Equip LoadItem(int itemcode, int itemnumber, STATUS additionalstatus, SOC additionalsoc, int reinforcementcount_current, STATUS reinforcementstatus, SOC reinforcementsoc)
     {
         Item_Equip item = ItemManager.instance.m_Dictionary_MonsterDrop_Equip[itemcode];
@@ -273,89 +274,16 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
         
     }
 
-    // 장비 아이템의 추가 능력치.
-    // Drop, 퀘스트 보상 으로 인해 획득할 수 있는 장비에 부여된 추가 능력치.
-    // STATUS
-    STATUS Set_Item_Equip_AdditionalOption_STATUS(Item_Equip item, E_ITEM_ADDITIONALOPTION_STATUS eiastatus)
+    // 장비아이템 추가 스탯(능력치)을 결정하는 함수
+    STATUS Set_Item_Equip_AdditionalOption_STATUS(Item_Equip item, E_ITEM_ADDITIONALOPTION_STATUS eiastatus) // item : 장비아이템, eiastatus : 장비아이템 추가 스탯(능력치) 등급
     {
         STATUS additionalstatus = new STATUS(item.m_sStatus_Effect);
-        int AdditionalOptionRatio = ((int)eiastatus + 1);
+        int AdditionalOptionRatio = ((int)eiastatus + 1); // enum(열거형) 변수를 이용한 추가 스탯(능력치) 계수. 공격속도 스탯(능력치)을 제외한 스탯(능력치)의 추가 스탯(능력치) 계산에 사용된다.
         float AdditionalOptionRatio_Min, AdditionalOptionRatio_Max, AdditionalOptionRatio_AttackSpeed;
 
-        //Debug.Log("추가 능력치 계수: " + AdditionalOptionRatio);
-
-        //AdditionalOptionRatio_Max = (float)AdditionalOptionRatio * 0.05f;
+        
         AdditionalOptionRatio_Max = (float)AdditionalOptionRatio * 0.1f;
 
-        //switch (AdditionalOptionRatio)
-        //{
-        //    case 1:
-        //        {
-        //            AdditionalOptionRatio_Min = 0;
-        //            AdditionalOptionRatio_AttackSpeed = 0.05f;
-        //        }
-        //        break;
-        //    case 2:
-        //        {
-        //            AdditionalOptionRatio_Min = 0;
-        //            AdditionalOptionRatio_AttackSpeed = 0.05f;
-        //        }
-        //        break;
-        //    case 3:
-        //        {
-        //            AdditionalOptionRatio_Min = 0;
-        //            AdditionalOptionRatio_AttackSpeed = 0.1f;
-        //        }
-        //        break;
-        //    case 4:
-        //        {
-        //            AdditionalOptionRatio_Min = 0;
-        //            AdditionalOptionRatio_AttackSpeed = 0.1f;
-        //        }
-        //        break;
-        //    case 5:
-        //        {
-        //            AdditionalOptionRatio_Min = -0.05f;
-        //            AdditionalOptionRatio_AttackSpeed = 0.15f;
-        //        }
-        //        break;
-        //    case 6:
-        //        {
-        //            AdditionalOptionRatio_Min = -0.05f;
-        //            AdditionalOptionRatio_AttackSpeed = 0.15f;
-        //        }
-        //        break;
-        //    case 7:
-        //        {
-        //            AdditionalOptionRatio_Min = -0.1f;
-        //            AdditionalOptionRatio_AttackSpeed = 0.2f;
-        //        }
-        //        break;
-        //    case 8:
-        //        {
-        //            AdditionalOptionRatio_Min = -0.1f;
-        //            AdditionalOptionRatio_AttackSpeed = 0.2f;
-        //        }
-        //        break;
-        //    case 9:
-        //        {
-        //            AdditionalOptionRatio_Min = -0.15f;
-        //            AdditionalOptionRatio_AttackSpeed = 0.25f;
-        //        }
-        //        break;
-        //    case 10:
-        //        {
-        //            AdditionalOptionRatio_Min = -0.15f;
-        //            AdditionalOptionRatio_AttackSpeed = 0.25f;
-        //        }
-        //        break;
-        //    default:
-        //        {
-        //            AdditionalOptionRatio_Min = 0;
-        //            AdditionalOptionRatio_AttackSpeed = 0;
-        //        }
-        //        break;
-        //}
         switch (AdditionalOptionRatio)
         {
             case 1:
@@ -471,7 +399,7 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
 
         return additionalstatus;
     }
-    // SOC
+    // 장비아이템 추가 스탯(평판)을 결정하는 함수
     SOC Set_Item_Equip_AdditionalOption_SOC(Item_Equip item, E_ITEM_ADDITIONALOPTION_SOC eiasoc)
     {
         SOC additionalsoc = new SOC(item.m_sSoc_Effect);
