@@ -62,13 +62,14 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
         this.m_sSoc_Limit_Min = new SOC(-10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000);
         this.m_sSoc_Limit_Max = new SOC(10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000);
 
-        m_nReinforcementCount_Max = rfcmax;
-        m_nReinforcementCount_Current = rfccur;
-        m_nPrice = price;
-        m_nItemSetCode = setitemcode;
-
         m_STATUS_ReinforcementValue = new STATUS();
         m_SOC_ReinforcementValue = new SOC();
+        
+        m_nReinforcementCount_Max = rfcmax;
+        m_nReinforcementCount_Current = rfccur;
+        
+        m_nPrice = price;
+        m_nItemSetCode = setitemcode;
     }
     // 장비아이템 사본을 생성하는 생성자. 필드에 장비아이템 드랍 시 실행되는 함수
     public Item_Equip(Item_Equip item, Vector3 itemposition) // item : 장비아이템 원본 객체, itemposition : 장비아이템 드랍 위치
@@ -97,15 +98,20 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
         itemscript.m_eItemEquip_SpecialRatio_SOC = item.m_eItemEquip_SpecialRatio_SOC;
         itemscript.m_SOC_AdditionalOption = Set_Item_Equip_AdditionalOption_SOC(item, item.m_eItemEquip_SpecialRatio_SOC); // 장비아이템 추가 스탯(평판)을 결정하는 함수
 
+        itemscript.m_STATUS_ReinforcementValue = item.m_STATUS_ReinforcementValue;
+        itemscript.m_SOC_ReinforcementValue = item.m_SOC_ReinforcementValue;
+        
         itemscript.m_sStatus_Limit_Max = item.m_sStatus_Limit_Max;
         itemscript.m_sStatus_Limit_Min = item.m_sStatus_Limit_Min;
         itemscript.m_sStatus_Effect = item.m_sStatus_Effect;
         itemscript.m_sStatus_Effect.P_OperatorSTATUS(itemscript.m_STATUS_AdditionalOption); // 장비아이템 스탯(능력치) = 원본 스탯(능력치) + 추가 스탯(능력치)
+        itemscript.m_sStatus_Effect.P_OperatorSTATUS(itemscript.m_STATUS_ReinforcementValue); // 장비아이템 스탯(능력치) : 원본 스탯(능력치) += 강화 스탯(능력치)
         itemscript.m_sStatus_Effect.SetSTATUS_AttackSpeed((float)Math.Round(itemscript.m_sStatus_Effect.GetSTATUS_AttackSpeed(), 2)); // 장비아이템 스탯(능력치(공격속도))는 소수점 2자리까지만 계산
         itemscript.m_sSoc_Limit_Max = item.m_sSoc_Limit_Max;
         itemscript.m_sSoc_Limit_Min = item.m_sSoc_Limit_Min;
         itemscript.m_sSoc_Effect = item.m_sSoc_Effect;
         itemscript.m_sSoc_Effect.P_OperatorSOC(itemscript.m_SOC_AdditionalOption); // 장비아이템 스탯(평판) = 원본 스탯(평판) + 추가 스탯(평판)
+        itemscript.m_sSoc_Effect.P_OperatorSOC(itemscript.m_SOC_ReinforcementValue); // 장비아이템 스탯(평판) : 원본 스탯(평판) += 강화 스탯(평판)
 
         itemscript.m_nReinforcementCount_Max = item.m_nReinforcementCount_Max;
         itemscript.m_nReinforcementCount_Current = item.m_nReinforcementCount_Current;
@@ -143,18 +149,23 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
         itemscript.m_eItemEquip_SpecialRatio_SOC = item.m_eItemEquip_SpecialRatio_SOC;
         itemscript.m_SOC_AdditionalOption = item.m_SOC_AdditionalOption;
 
+        itemscript.m_STATUS_ReinforcementValue = item.m_STATUS_ReinforcementValue;
+        itemscript.m_SOC_ReinforcementValue = item.m_SOC_ReinforcementValue;
+
         itemscript.m_sStatus_Limit_Max = item.m_sStatus_Limit_Max;
         itemscript.m_sStatus_Limit_Min = item.m_sStatus_Limit_Min;
         itemscript.m_sStatus_Effect = item.m_sStatus_Effect;
+        itemscript.m_sStatus_Effect.P_OperatorSTATUS(itemscript.m_STATUS_AdditionalOption); // 장비아이템 스탯(능력치) : 원본 스탯(능력치) += 추가 스탯(능력치)
+        itemscript.m_sStatus_Effect.P_OperatorSTATUS(itemscript.m_STATUS_ReinforcementValue); // 장비아이템 스탯(능력치) : 원본 스탯(능력치) += 강화 스탯(능력치)
+        itemscript.m_sStatus_Effect.SetSTATUS_AttackSpeed((float)Math.Round(itemscript.m_sStatus_Effect.GetSTATUS_AttackSpeed(), 2));
         itemscript.m_sSoc_Limit_Max = item.m_sSoc_Limit_Max;
         itemscript.m_sSoc_Limit_Min = item.m_sSoc_Limit_Min;
         itemscript.m_sSoc_Effect = item.m_sSoc_Effect;
+        itemscript.m_sSoc_Effect.P_OperatorSOC(itemscript.m_SOC_AdditionalOption); // 장비아이템 스탯(평판) : 원본 스탯(평판) += 추가 스탯(평판)
+        itemscript.m_sSoc_Effect.P_OperatorSOC(itemscript.m_SOC_ReinforcementValue); // 장비아이템 스탯(평판) : 원본 스탯(평판) += 강화 스탯(평판)
 
         itemscript.m_nReinforcementCount_Max = item.m_nReinforcementCount_Max;
         itemscript.m_nReinforcementCount_Current = item.m_nReinforcementCount_Current;
-        
-        itemscript.m_STATUS_ReinforcementValue = item.m_STATUS_ReinforcementValue;
-        itemscript.m_SOC_ReinforcementValue = item.m_SOC_ReinforcementValue;
         
         itemscript.m_nPrice = item.m_nPrice;
         itemscript.m_nItemSetCode = item.m_nItemSetCode;
@@ -181,41 +192,39 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
         itemscript.m_eItemEquipMainWeaponType = item.m_eItemEquipMainWeaponType;
         
         itemscript.m_eItemEquip_SpecialRatio_STATUS = item.m_eItemEquip_SpecialRatio_STATUS;
-        
+        itemscript.m_STATUS_AdditionalOption = Set_Item_Equip_AdditionalOption_STATUS(item, item.m_eItemEquip_SpecialRatio_STATUS);
         itemscript.m_eItemEquip_SpecialRatio_SOC = item.m_eItemEquip_SpecialRatio_SOC;
+        itemscript.m_SOC_AdditionalOption = Set_Item_Equip_AdditionalOption_SOC(item, item.m_eItemEquip_SpecialRatio_SOC);
 
+        itemscript.m_STATUS_ReinforcementValue = item.m_STATUS_ReinforcementValue;
+        itemscript.m_SOC_ReinforcementValue = item.m_SOC_ReinforcementValue;
+        
         itemscript.m_sStatus_Limit_Max = item.m_sStatus_Limit_Max;
         itemscript.m_sStatus_Limit_Min = item.m_sStatus_Limit_Min;
         itemscript.m_sStatus_Effect = item.m_sStatus_Effect;
-        itemscript.m_STATUS_AdditionalOption = Set_Item_Equip_AdditionalOption_STATUS(item, item.m_eItemEquip_SpecialRatio_STATUS);
-        itemscript.m_STATUS_ReinforcementValue = item.m_STATUS_ReinforcementValue;
-        itemscript.m_sStatus_Effect.P_OperatorSTATUS(itemscript.m_STATUS_AdditionalOption);
+        itemscript.m_sStatus_Effect.P_OperatorSTATUS(itemscript.m_STATUS_AdditionalOption); // 장비아이템 스탯(능력치) : 원본 스탯(능력치) += 추가 스탯(능력치)
+        itemscript.m_sStatus_Effect.P_OperatorSTATUS(itemscript.m_STATUS_ReinforcementValue); // 장비아이템 스탯(능력치) : 원본 스탯(능력치) += 강화 스탯(능력치)
         itemscript.m_sStatus_Effect.SetSTATUS_AttackSpeed((float)Math.Round(itemscript.m_sStatus_Effect.GetSTATUS_AttackSpeed(), 2));
-
-
-
+        itemscript.m_sSoc_Limit_Max = item.m_sSoc_Limit_Max;
+        itemscript.m_sSoc_Limit_Min = item.m_sSoc_Limit_Min;
         itemscript.m_sSoc_Effect = item.m_sSoc_Effect;
-        itemscript.m_SOC_AdditionalOption = Set_Item_Equip_AdditionalOption_SOC(item, item.m_eItemEquip_SpecialRatio_SOC);
-        itemscript.m_SOC_ReinforcementValue = item.m_SOC_ReinforcementValue;
-        itemscript.m_sSoc_Effect.P_OperatorSOC(itemscript.m_SOC_AdditionalOption);
-        itemscript.m_sSoc_Limit_Min = item.m_sSoc_Limit_Min;
-        itemscript.m_sSoc_Limit_Max = item.m_sSoc_Limit_Max;
-
-        itemscript.m_sSoc_Limit_Min = item.m_sSoc_Limit_Min;
-        itemscript.m_sSoc_Limit_Max = item.m_sSoc_Limit_Max;
-        itemscript.m_nPrice = item.m_nPrice;
-        itemscript.m_nItemSetCode = item.m_nItemSetCode;
+        itemscript.m_sSoc_Effect.P_OperatorSOC(itemscript.m_SOC_AdditionalOption); // 장비아이템 스탯(평판) : 원본 스탯(평판) += 추가 스탯(평판)
+        itemscript.m_sSoc_Effect.P_OperatorSOC(itemscript.m_SOC_ReinforcementValue); // 장비아이템 스탯(평판) : 원본 스탯(평판) += 강화 스탯(평판)
 
         itemscript.m_nReinforcementCount_Max = item.m_nReinforcementCount_Max;
         itemscript.m_nReinforcementCount_Current = item.m_nReinforcementCount_Current;
 
+        itemscript.m_nPrice = item.m_nPrice;
+        itemscript.m_nItemSetCode = item.m_nItemSetCode;
+
         return itemscript;
     }
 
-    // 불러오기.
+    // 불러오기
     public Item_Equip LoadItem(int itemcode, int itemnumber, STATUS additionalstatus, SOC additionalsoc, int reinforcementcount_current, STATUS reinforcementstatus, SOC reinforcementsoc)
     {
         Item_Equip item = ItemManager.instance.m_Dictionary_MonsterDrop_Equip[itemcode];
+        
         Item_Equip itemscript = new Item_Equip();
 
         itemscript.m_sItemName = item.m_sItemName;
@@ -228,40 +237,37 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
         itemscript.m_eItemGrade = item.m_eItemGrade;
         itemscript.m_eItemEquipType = item.m_eItemEquipType;
         itemscript.m_eItemEquipMainWeaponType = item.m_eItemEquipMainWeaponType;
+        
         itemscript.m_eItemEquip_SpecialRatio_STATUS = item.m_eItemEquip_SpecialRatio_STATUS;
         itemscript.m_STATUS_AdditionalOption = additionalstatus;
-        itemscript.m_STATUS_ReinforcementValue = reinforcementstatus;
         itemscript.m_eItemEquip_SpecialRatio_SOC = item.m_eItemEquip_SpecialRatio_SOC;
         itemscript.m_SOC_AdditionalOption = additionalsoc;
+        
+        itemscript.m_STATUS_ReinforcementValue = reinforcementstatus;
         itemscript.m_SOC_ReinforcementValue = reinforcementsoc;
 
+        itemscript.m_sStatus_Limit_Max = item.m_sStatus_Limit_Max;
+        itemscript.m_sStatus_Limit_Min = item.m_sStatus_Limit_Min;
         itemscript.m_sStatus_Effect = item.m_sStatus_Effect;
         itemscript.m_sStatus_Effect.P_OperatorSTATUS(itemscript.m_STATUS_AdditionalOption);
         itemscript.m_sStatus_Effect.P_OperatorSTATUS(itemscript.m_STATUS_ReinforcementValue);
         itemscript.m_sStatus_Effect.SetSTATUS_AttackSpeed((float)Math.Round(itemscript.m_sStatus_Effect.GetSTATUS_AttackSpeed(), 2));
-        itemscript.m_sStatus_Limit_Min = item.m_sStatus_Limit_Min;
-        itemscript.m_sStatus_Limit_Max = item.m_sStatus_Limit_Max;
+        itemscript.m_sSoc_Limit_Max = item.m_sSoc_Limit_Max;
+        itemscript.m_sSoc_Limit_Min = item.m_sSoc_Limit_Min;
         itemscript.m_sSoc_Effect = item.m_sSoc_Effect;
         itemscript.m_sSoc_Effect.P_OperatorSOC(itemscript.m_SOC_AdditionalOption);
         itemscript.m_sSoc_Effect.P_OperatorSOC(itemscript.m_SOC_ReinforcementValue);
-        itemscript.m_sSoc_Limit_Min = item.m_sSoc_Limit_Min;
-        itemscript.m_sSoc_Limit_Max = item.m_sSoc_Limit_Max;
-
-        itemscript.m_sSoc_Limit_Min = item.m_sSoc_Limit_Min;
-        itemscript.m_sSoc_Limit_Max = item.m_sSoc_Limit_Max;
-        itemscript.m_nPrice = item.m_nPrice;
-        itemscript.m_nItemSetCode = item.m_nItemSetCode;
 
         itemscript.m_nReinforcementCount_Max = item.m_nReinforcementCount_Max;
         itemscript.m_nReinforcementCount_Current = reinforcementcount_current;
 
-        //if (itemscript.m_nReinforcementCount_Current != 0)
-        //    itemscript.m_sItemName += " + " + itemscript.m_nReinforcementCount_Current.ToString();
+        itemscript.m_nPrice = item.m_nPrice;
+        itemscript.m_nItemSetCode = item.m_nItemSetCode;
 
         return itemscript;
     }
 
-    // Item 능력치 초기화 및 계산.
+    // 장비아이템 스탯(능력치, 평판) 초기화 함수
     void CarculateSTATUS()
     {
         
