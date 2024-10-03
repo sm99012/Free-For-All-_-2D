@@ -157,7 +157,7 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
         itemscript.m_sStatus_Effect = item.m_sStatus_Effect;
         itemscript.m_sStatus_Effect.P_OperatorSTATUS(itemscript.m_STATUS_AdditionalOption); // 장비아이템 스탯(능력치) : 원본 스탯(능력치) += 추가 스탯(능력치)
         itemscript.m_sStatus_Effect.P_OperatorSTATUS(itemscript.m_STATUS_ReinforcementValue); // 장비아이템 스탯(능력치) : 원본 스탯(능력치) += 강화 스탯(능력치)
-        itemscript.m_sStatus_Effect.SetSTATUS_AttackSpeed((float)Math.Round(itemscript.m_sStatus_Effect.GetSTATUS_AttackSpeed(), 2));
+        itemscript.m_sStatus_Effect.SetSTATUS_AttackSpeed((float)Math.Round(itemscript.m_sStatus_Effect.GetSTATUS_AttackSpeed(), 2)); // 장비아이템 스탯(능력치(공격속도))는 소수점 2자리까지만 계산
         itemscript.m_sSoc_Limit_Max = item.m_sSoc_Limit_Max;
         itemscript.m_sSoc_Limit_Min = item.m_sSoc_Limit_Min;
         itemscript.m_sSoc_Effect = item.m_sSoc_Effect;
@@ -204,7 +204,7 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
         itemscript.m_sStatus_Effect = item.m_sStatus_Effect;
         itemscript.m_sStatus_Effect.P_OperatorSTATUS(itemscript.m_STATUS_AdditionalOption); // 장비아이템 스탯(능력치) : 원본 스탯(능력치) += 추가 스탯(능력치)
         itemscript.m_sStatus_Effect.P_OperatorSTATUS(itemscript.m_STATUS_ReinforcementValue); // 장비아이템 스탯(능력치) : 원본 스탯(능력치) += 강화 스탯(능력치)
-        itemscript.m_sStatus_Effect.SetSTATUS_AttackSpeed((float)Math.Round(itemscript.m_sStatus_Effect.GetSTATUS_AttackSpeed(), 2));
+        itemscript.m_sStatus_Effect.SetSTATUS_AttackSpeed((float)Math.Round(itemscript.m_sStatus_Effect.GetSTATUS_AttackSpeed(), 2)); // 장비아이템 스탯(능력치(공격속도))는 소수점 2자리까지만 계산
         itemscript.m_sSoc_Limit_Max = item.m_sSoc_Limit_Max;
         itemscript.m_sSoc_Limit_Min = item.m_sSoc_Limit_Min;
         itemscript.m_sSoc_Effect = item.m_sSoc_Effect;
@@ -250,14 +250,14 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
         itemscript.m_sStatus_Limit_Max = item.m_sStatus_Limit_Max;
         itemscript.m_sStatus_Limit_Min = item.m_sStatus_Limit_Min;
         itemscript.m_sStatus_Effect = item.m_sStatus_Effect;
-        itemscript.m_sStatus_Effect.P_OperatorSTATUS(itemscript.m_STATUS_AdditionalOption);
-        itemscript.m_sStatus_Effect.P_OperatorSTATUS(itemscript.m_STATUS_ReinforcementValue);
-        itemscript.m_sStatus_Effect.SetSTATUS_AttackSpeed((float)Math.Round(itemscript.m_sStatus_Effect.GetSTATUS_AttackSpeed(), 2));
+        itemscript.m_sStatus_Effect.P_OperatorSTATUS(itemscript.m_STATUS_AdditionalOption); // 장비아이템 스탯(능력치) : 원본 스탯(능력치) += 추가 스탯(능력치)
+        itemscript.m_sStatus_Effect.P_OperatorSTATUS(itemscript.m_STATUS_ReinforcementValue); // 장비아이템 스탯(능력치) : 원본 스탯(능력치) += 강화 스탯(능력치)
+        itemscript.m_sStatus_Effect.SetSTATUS_AttackSpeed((float)Math.Round(itemscript.m_sStatus_Effect.GetSTATUS_AttackSpeed(), 2)); // 장비아이템 스탯(능력치(공격속도))는 소수점 2자리까지만 계산
         itemscript.m_sSoc_Limit_Max = item.m_sSoc_Limit_Max;
         itemscript.m_sSoc_Limit_Min = item.m_sSoc_Limit_Min;
         itemscript.m_sSoc_Effect = item.m_sSoc_Effect;
-        itemscript.m_sSoc_Effect.P_OperatorSOC(itemscript.m_SOC_AdditionalOption);
-        itemscript.m_sSoc_Effect.P_OperatorSOC(itemscript.m_SOC_ReinforcementValue);
+        itemscript.m_sSoc_Effect.P_OperatorSOC(itemscript.m_SOC_AdditionalOption); // 장비아이템 스탯(평판) : 원본 스탯(평판) += 추가 스탯(평판)
+        itemscript.m_sSoc_Effect.P_OperatorSOC(itemscript.m_SOC_ReinforcementValue); // 장비아이템 스탯(평판) : 원본 스탯(평판) += 강화 스탯(평판)
 
         itemscript.m_nReinforcementCount_Max = item.m_nReinforcementCount_Max;
         itemscript.m_nReinforcementCount_Current = reinforcementcount_current;
@@ -274,138 +274,52 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
         
     }
 
-    // 장비아이템 추가 스탯(능력치)을 결정하는 함수
+    // 장비아이템에 적용될 추가 스탯(능력치)을 결정하고 반환하는 함수
     STATUS Set_Item_Equip_AdditionalOption_STATUS(Item_Equip item, E_ITEM_ADDITIONALOPTION_STATUS eiastatus) // item : 장비아이템, eiastatus : 장비아이템 추가 스탯(능력치) 등급
     {
         STATUS additionalstatus = new STATUS(item.m_sStatus_Effect);
         int AdditionalOptionRatio = ((int)eiastatus + 1); // enum(열거형) 변수를 이용한 추가 스탯(능력치) 계수. 공격속도 스탯(능력치)을 제외한 스탯(능력치)의 추가 스탯(능력치) 계산에 사용된다.
         float AdditionalOptionRatio_Min, AdditionalOptionRatio_Max, AdditionalOptionRatio_AttackSpeed;
 
-        
+        // 추가 스탯(능력치) 상한ㆍ하한 설정
         AdditionalOptionRatio_Max = (float)AdditionalOptionRatio * 0.1f;
+        AdditionalOptionRatio_Min = (float)AdditionalOptionRatio * -0.05f;
+        AdditionalOptionRatio_AttackSpeed = (float)(((AdditionalOptionRatio - 1) / 2) + 1) * 0.05f;
 
-        switch (AdditionalOptionRatio)
-        {
-            case 1:
-                {
-                    AdditionalOptionRatio_Min = 0.05f;
-                    AdditionalOptionRatio_AttackSpeed = 0.05f;
-                }
-                break;
-            case 2:
-                {
-                    AdditionalOptionRatio_Min = 0.1f;
-                    AdditionalOptionRatio_AttackSpeed = 0.05f;
-                }
-                break;
-            case 3:
-                {
-                    AdditionalOptionRatio_Min = 0.15f;
-                    AdditionalOptionRatio_AttackSpeed = 0.1f;
-                }
-                break;
-            case 4:
-                {
-                    AdditionalOptionRatio_Min = 0.2f;
-                    AdditionalOptionRatio_AttackSpeed = 0.1f;
-                }
-                break;
-            case 5:
-                {
-                    AdditionalOptionRatio_Min = 0.25f;
-                    AdditionalOptionRatio_AttackSpeed = 0.15f;
-                }
-                break;
-            case 6:
-                {
-                    AdditionalOptionRatio_Min = 0.3f;
-                    AdditionalOptionRatio_AttackSpeed = 0.15f;
-                }
-                break;
-            case 7:
-                {
-                    AdditionalOptionRatio_Min = 0.35f;
-                    AdditionalOptionRatio_AttackSpeed = 0.2f;
-                }
-                break;
-            case 8:
-                {
-                    AdditionalOptionRatio_Min = 0.4f;
-                    AdditionalOptionRatio_AttackSpeed = 0.2f;
-                }
-                break;
-            case 9:
-                {
-                    AdditionalOptionRatio_Min = 0.45f;
-                    AdditionalOptionRatio_AttackSpeed = 0.25f;
-                }
-                break;
-            case 10:
-                {
-                    AdditionalOptionRatio_Min = 0.5f;
-                    AdditionalOptionRatio_AttackSpeed = 0.25f;
-                }
-                break;
-            default:
-                {
-                    AdditionalOptionRatio_Min = 0;
-                    AdditionalOptionRatio_AttackSpeed = 0;
-                }
-                break;
-        }
-
-        //if (additionalstatus.GetSTATUS_HP_Max() != 0)
-        //    additionalstatus.SetSTATUS_HP_Max((int)UnityEngine.Random.Range((float)(-additionalstatus.GetSTATUS_HP_Max() * AdditionalOptionRatio_Min), (float)(additionalstatus.GetSTATUS_HP_Max() * AdditionalOptionRatio_Max) + 0.1f));
-        //if (additionalstatus.GetSTATUS_MP_Max() != 0)
-        //    additionalstatus.SetSTATUS_MP_Max((int)UnityEngine.Random.Range((float)(-additionalstatus.GetSTATUS_MP_Max() * AdditionalOptionRatio_Min), (float)(additionalstatus.GetSTATUS_MP_Max() * AdditionalOptionRatio_Max) + 0.1f));
-        //if (additionalstatus.GetSTATUS_Damage_Total() != 0)
-        //    additionalstatus.SetSTATUS_Damage_Total((int)UnityEngine.Random.Range((float)(-additionalstatus.GetSTATUS_Damage_Total() * AdditionalOptionRatio_Min), (float)(additionalstatus.GetSTATUS_Damage_Total() * AdditionalOptionRatio_Max) + 0.1f));
-        //if (additionalstatus.GetSTATUS_CriticalRate() != 0)
-        //    additionalstatus.SetSTATUS_CriticalRate((int)UnityEngine.Random.Range((float)(-additionalstatus.GetSTATUS_CriticalRate() * AdditionalOptionRatio_Min), (float)(additionalstatus.GetSTATUS_CriticalRate() * AdditionalOptionRatio_Max) + 0.1f));
-        //if (additionalstatus.GetSTATUS_CriticalDamage() != 0)
-        //    additionalstatus.SetSTATUS_CriticalDamage((int)UnityEngine.Random.Range((float)(-additionalstatus.GetSTATUS_CriticalDamage() * AdditionalOptionRatio_Min), (float)(additionalstatus.GetSTATUS_CriticalDamage() * AdditionalOptionRatio_Max) + 0.1f));
-        //if (additionalstatus.GetSTATUS_Defence_Physical() != 0)
-        //    additionalstatus.SetSTATUS_Defence_Physical((int)UnityEngine.Random.Range((float)(-additionalstatus.GetSTATUS_Defence_Physical() * AdditionalOptionRatio_Min), (float)(additionalstatus.GetSTATUS_Defence_Physical() * AdditionalOptionRatio_Max) + 0.1f));
-        //if (additionalstatus.GetSTATUS_Defence_Magical() != 0)
-        //    additionalstatus.SetSTATUS_Defence_Magical((int)UnityEngine.Random.Range((float)(-additionalstatus.GetSTATUS_Defence_Magical() * AdditionalOptionRatio_Min), (float)(additionalstatus.GetSTATUS_Defence_Magical() * AdditionalOptionRatio_Max) + 0.1f));
-        //if (additionalstatus.GetSTATUS_Speed() != 0)
-        //    additionalstatus.SetSTATUS_Speed((int)UnityEngine.Random.Range((float)(-additionalstatus.GetSTATUS_Speed() * AdditionalOptionRatio_Min), (float)(additionalstatus.GetSTATUS_Speed() * AdditionalOptionRatio_Max) + 0.1f));
-        //if (additionalstatus.GetSTATUS_EvasionRate() != 0)
-        //    additionalstatus.SetSTATUS_EvasionRate((int)UnityEngine.Random.Range((float)(-additionalstatus.GetSTATUS_EvasionRate() * AdditionalOptionRatio_Min), (float)(additionalstatus.GetSTATUS_EvasionRate() * AdditionalOptionRatio_Max) + 0.1f));
+        // 추가 스탯(능력치)이 적용 될 장비아이템의 스탯(능력치)이 0이 아닌 경우에만 추가 스탯(능력치) 적용
+        // [추가 스탯(능력치) 하한 ~ 추가 스탯(능력치) 상한] 범위에 해당하는 추가 스탯(능력치) 부여
         if (additionalstatus.GetSTATUS_HP_Max() != 0)
-            additionalstatus.SetSTATUS_HP_Max((int)UnityEngine.Random.Range(Mathf.Round((float)(-additionalstatus.GetSTATUS_HP_Max() * AdditionalOptionRatio_Min)), Mathf.Round((float)(additionalstatus.GetSTATUS_HP_Max() * AdditionalOptionRatio_Max) + 0.1f)));
+            additionalstatus.SetSTATUS_HP_Max((int)UnityEngine.Random.Range(Mathf.Round((float)(additionalstatus.GetSTATUS_HP_Max() * AdditionalOptionRatio_Min)), Mathf.Round((float)(additionalstatus.GetSTATUS_HP_Max() * AdditionalOptionRatio_Max) + 0.1f)));
         if (additionalstatus.GetSTATUS_MP_Max() != 0)
-            additionalstatus.SetSTATUS_MP_Max((int)UnityEngine.Random.Range(Mathf.Round((float)(-additionalstatus.GetSTATUS_MP_Max() * AdditionalOptionRatio_Min)), Mathf.Round((float)(additionalstatus.GetSTATUS_MP_Max() * AdditionalOptionRatio_Max) + 0.1f)));
+            additionalstatus.SetSTATUS_MP_Max((int)UnityEngine.Random.Range(Mathf.Round((float)(additionalstatus.GetSTATUS_MP_Max() * AdditionalOptionRatio_Min)), Mathf.Round((float)(additionalstatus.GetSTATUS_MP_Max() * AdditionalOptionRatio_Max) + 0.1f)));
         if (additionalstatus.GetSTATUS_Damage_Total() != 0)
-            additionalstatus.SetSTATUS_Damage_Total((int)UnityEngine.Random.Range(Mathf.Round((float)(-additionalstatus.GetSTATUS_Damage_Total() * AdditionalOptionRatio_Min)), Mathf.Round((float)(additionalstatus.GetSTATUS_Damage_Total() * AdditionalOptionRatio_Max) + 0.1f)));
+            additionalstatus.SetSTATUS_Damage_Total((int)UnityEngine.Random.Range(Mathf.Round((float)(additionalstatus.GetSTATUS_Damage_Total() * AdditionalOptionRatio_Min)), Mathf.Round((float)(additionalstatus.GetSTATUS_Damage_Total() * AdditionalOptionRatio_Max) + 0.1f)));
         if (additionalstatus.GetSTATUS_CriticalRate() != 0)
-            additionalstatus.SetSTATUS_CriticalRate((int)UnityEngine.Random.Range(Mathf.Round((float)(-additionalstatus.GetSTATUS_CriticalRate() * AdditionalOptionRatio_Min)), Mathf.Round((float)(additionalstatus.GetSTATUS_CriticalRate() * AdditionalOptionRatio_Max) + 0.1f)));
+            additionalstatus.SetSTATUS_CriticalRate((int)UnityEngine.Random.Range(Mathf.Round((float)(additionalstatus.GetSTATUS_CriticalRate() * AdditionalOptionRatio_Min)), Mathf.Round((float)(additionalstatus.GetSTATUS_CriticalRate() * AdditionalOptionRatio_Max) + 0.1f)));
         if (additionalstatus.GetSTATUS_CriticalDamage() != 0)
-            additionalstatus.SetSTATUS_CriticalDamage((int)UnityEngine.Random.Range(Mathf.Round((float)(-additionalstatus.GetSTATUS_CriticalDamage() * AdditionalOptionRatio_Min)), Mathf.Round((float)(additionalstatus.GetSTATUS_CriticalDamage() * AdditionalOptionRatio_Max) + 0.1f)));
+            additionalstatus.SetSTATUS_CriticalDamage((int)UnityEngine.Random.Range(Mathf.Round((float)(additionalstatus.GetSTATUS_CriticalDamage() * AdditionalOptionRatio_Min)), Mathf.Round((float)(additionalstatus.GetSTATUS_CriticalDamage() * AdditionalOptionRatio_Max) + 0.1f)));
         if (additionalstatus.GetSTATUS_Defence_Physical() != 0)
-            additionalstatus.SetSTATUS_Defence_Physical((int)UnityEngine.Random.Range(Mathf.Round((float)(-additionalstatus.GetSTATUS_Defence_Physical() * AdditionalOptionRatio_Min)), Mathf.Round((float)(additionalstatus.GetSTATUS_Defence_Physical() * AdditionalOptionRatio_Max) + 0.1f)));
+            additionalstatus.SetSTATUS_Defence_Physical((int)UnityEngine.Random.Range(Mathf.Round((float)(additionalstatus.GetSTATUS_Defence_Physical() * AdditionalOptionRatio_Min)), Mathf.Round((float)(additionalstatus.GetSTATUS_Defence_Physical() * AdditionalOptionRatio_Max) + 0.1f)));
         if (additionalstatus.GetSTATUS_Defence_Magical() != 0)
-            additionalstatus.SetSTATUS_Defence_Magical((int)UnityEngine.Random.Range(Mathf.Round((float)(-additionalstatus.GetSTATUS_Defence_Magical() * AdditionalOptionRatio_Min)), Mathf.Round((float)(additionalstatus.GetSTATUS_Defence_Magical() * AdditionalOptionRatio_Max) + 0.1f)));
+            additionalstatus.SetSTATUS_Defence_Magical((int)UnityEngine.Random.Range(Mathf.Round((float)(additionalstatus.GetSTATUS_Defence_Magical() * AdditionalOptionRatio_Min)), Mathf.Round((float)(additionalstatus.GetSTATUS_Defence_Magical() * AdditionalOptionRatio_Max) + 0.1f)));
         if (additionalstatus.GetSTATUS_Speed() != 0)
-            additionalstatus.SetSTATUS_Speed((int)UnityEngine.Random.Range(Mathf.Round((float)(-additionalstatus.GetSTATUS_Speed() * AdditionalOptionRatio_Min)), Mathf.Round((float)(additionalstatus.GetSTATUS_Speed() * AdditionalOptionRatio_Max) + 0.1f)));
+            additionalstatus.SetSTATUS_Speed((int)UnityEngine.Random.Range(Mathf.Round((float)(additionalstatus.GetSTATUS_Speed() * AdditionalOptionRatio_Min)), Mathf.Round((float)(additionalstatus.GetSTATUS_Speed() * AdditionalOptionRatio_Max) + 0.1f)));
         if (additionalstatus.GetSTATUS_EvasionRate() != 0)
-            additionalstatus.SetSTATUS_EvasionRate((int)UnityEngine.Random.Range(Mathf.Round((float)(-additionalstatus.GetSTATUS_EvasionRate() * AdditionalOptionRatio_Min)), Mathf.Round((float)(additionalstatus.GetSTATUS_EvasionRate() * AdditionalOptionRatio_Max) + 0.1f)));
-
+            additionalstatus.SetSTATUS_EvasionRate((int)UnityEngine.Random.Range(Mathf.Round((float)(additionalstatus.GetSTATUS_EvasionRate() * AdditionalOptionRatio_Min)), Mathf.Round((float)(additionalstatus.GetSTATUS_EvasionRate() * AdditionalOptionRatio_Max) + 0.1f)));
 
         if (additionalstatus.GetSTATUS_AttackSpeed() != 0)
             additionalstatus.SetSTATUS_AttackSpeed((float)Math.Round(UnityEngine.Random.Range(-AdditionalOptionRatio_AttackSpeed, AdditionalOptionRatio_AttackSpeed), 2));
 
-        //Debug.Log(additionalstatus.GetSTATUS_Data());
-
-        return additionalstatus;
+        return additionalstatus; // 장비아이템에 적용될 추가 스탯(능력치) 반환
     }
-    // 장비아이템 추가 스탯(평판)을 결정하는 함수
+    // 장비아이템에 적용될 추가 스탯(평판)을 결정하고 반환하는 함수
     SOC Set_Item_Equip_AdditionalOption_SOC(Item_Equip item, E_ITEM_ADDITIONALOPTION_SOC eiasoc)
     {
         SOC additionalsoc = new SOC(item.m_sSoc_Effect);
-        //int AdditionalOptionRatio = item.m_sStatus_Limit_Min.GetSTATUS_LV() * ((int)eiasoc + 1);
-        int AdditionalOptionRatio = (int)eiasoc + 1;
+        int AdditionalOptionRatio = (int)eiasoc + 1; // enum(열거형) 변수를 이용한 추가 스탯(평판) 계수. 추가 스탯(평판) 계산에 사용된다.
 
+        // 추가 스탯(평판)이 적용 될 장비아이템의 스탯(평판)이 0이 아닌 경우에만 추가 스탯(평판) 적용
+        // [추가 스탯(평판) 하한 ~ 추가 스탯(평판) 상한] 범위에 해당하는 추가 스탯(평판) 부여
         if (additionalsoc.GetSOC_Honor() != 0)
             additionalsoc.SetSOC_Honor(UnityEngine.Random.Range(-AdditionalOptionRatio, AdditionalOptionRatio + 1));
         if (additionalsoc.GetSOC_Human() != 0)
@@ -425,33 +339,31 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
         if (additionalsoc.GetSOC_Shadow() != 0)
             additionalsoc.SetSOC_Shadow(UnityEngine.Random.Range(-AdditionalOptionRatio, AdditionalOptionRatio + 1));
 
-        return additionalsoc;
+        return additionalsoc; // 장비아이템에 적용될 추가 스탯(평판) 반환
     }
 
-    // 장비 아이템 강화.
-    public bool ReinforceItem(Reinforcement rf)
+    // 장비아이템 강화 관련 함수
+    // return true : 장비아이템 강화 성공 / return false : 장비아이템 강화 실패
+    public bool ReinforceItem(Reinforcement rf) // rf : 장비아이템 강화 데이터
     {
-        Debug.Log("REINFORCEMENT: " + m_nReinforcementCount_Current + " / " + m_nReinforcementCount_Max);
-        if (m_nReinforcementCount_Max > m_nReinforcementCount_Current)
+        if (m_nReinforcementCount_Max > m_nReinforcementCount_Current) // 장비아이템 최대 강화 횟수 > 장비아이템 현재 강화 횟수(강화 횟수가 남아 있는 경우)
         {
-            Debug.Log("업그레이드 가능.");
-            if (rf.Reinforce_Item_Equip() == true)
+            // 장비아이템 강화 확률 계산
+            if (rf.Reinforce_Item_Equip() == true) // 장비아이템 강화 성공
             {
-                Debug.Log("강화 성공");
                 m_STATUS_ReinforcementValue.P_OperatorSTATUS(rf.GetReinforcementSTATUS());
-                m_SOC_ReinforcementValue.P_OperatorSOC(rf.GetReinforcementSOC());
                 m_sStatus_Effect.P_OperatorSTATUS(rf.GetReinforcementSTATUS());
+                m_SOC_ReinforcementValue.P_OperatorSOC(rf.GetReinforcementSOC());
                 m_sSoc_Effect.P_OperatorSOC(rf.GetReinforcementSOC());
-                //CarculateSTATUS();
-                GUIManager_Total.Instance.Display_GUI_Reinforcement_Check(true);
+                
+                GUIManager_Total.Instance.Display_GUI_Reinforcement_Check(true); // 장비아이템 강화 성공 GUI 활성화
             }
-            else
+            else // 장비아이템 강화 실패
             {
-                Debug.Log("강화 실패");
-                GUIManager_Total.Instance.Display_GUI_Reinforcement_Check(false);
+                GUIManager_Total.Instance.Display_GUI_Reinforcement_Check(false); // 장비아이템 강화 실패 GUI 활성화
             }
 
-            m_nReinforcementCount_Current += 1;
+            m_nReinforcementCount_Current += 1; // 장비아이템 현재 강화 횟수 += 1
 
             return true;
         }
