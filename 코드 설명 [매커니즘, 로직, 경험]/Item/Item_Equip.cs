@@ -355,6 +355,8 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
                 m_sStatus_Effect.P_OperatorSTATUS(rf.GetReinforcementSTATUS());
                 m_SOC_ReinforcementValue.P_OperatorSOC(rf.GetReinforcementSOC());
                 m_sSoc_Effect.P_OperatorSOC(rf.GetReinforcementSOC());
+
+                m_nReinforcementCount_Current += 1; // 장비아이템 현재 강화 횟수 += 1
                 
                 GUIManager_Total.Instance.Display_GUI_Reinforcement_Check(true); // 장비아이템 강화 성공 GUI 활성화
             }
@@ -362,8 +364,6 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
             {
                 GUIManager_Total.Instance.Display_GUI_Reinforcement_Check(false); // 장비아이템 강화 실패 GUI 활성화
             }
-
-            m_nReinforcementCount_Current += 1; // 장비아이템 현재 강화 횟수 += 1
 
             return true;
         }
