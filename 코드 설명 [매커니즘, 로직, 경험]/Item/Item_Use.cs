@@ -1,43 +1,46 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
+// 소비아이템 타입 : { 회복포션, 일시적 버프포션, 영구적 버프포션, 강화서, 기프트 }
 public enum E_ITEM_USE_TYPE { RECOVERPOTION, TEMPORARYBUFFPOTION, ETERNALBUFFPOTION, REINFORCEMENT, GIFT }
+// 소비아이템(기프트) 타입 : { NULL, 기프트(아이템 확정 지급형), 기프트(랜덤 지급형 _ A 타입)(독립시행), 기프트(랜덤 지급형 _ B 타입)(종속시행), 기프트(혼합형) }
 public enum E_ITEM_USE_GIFT_TYPE { NULL, FIXEDBOX, RANDOMBOX_INDEPENDENTTRIAL, RANDOMBOX_DEPENDENTTRIAL, FUSION }
 
-public class Item_Use : Item
+public class Item_Use : Item // 기반이 되는 Item 클래스 상속
 {
-    public E_ITEM_USE_TYPE m_eItemUseType;
+    public E_ITEM_USE_TYPE m_eItemUseType; // 소비아이템 타입
 
-    // 소비 아이템 쿨타임
-    public float m_fCoolTime;
+    public float m_fCoolTime; // 소비아이템 사용 쿨타임
 
-    // 버프포션 지속시간.
-    public float m_fDurationTime;
+    public float m_fDurationTime; // 버프포션 지속시간
 
-    // 강화서.
+    // 소비아이템(강화서) 관련 변수
     public Reinforcement m_Reinforcement_Effect;
 
-    // 기프트 타입
-    public E_ITEM_USE_GIFT_TYPE m_eItemUseGiftType;
-    // 기프트 타입의 아이템에 포함된 아이템 품목 정보를 출력하는지 안하는지.
-    public bool m_bDisplay_Gift_Item;
-    // 기프트 타입이 랜덤박스일 경우 뽑을수 있는 최대 수량.
-    public int m_nRandomBox_PickCount_Max;
-    public int m_nRandomBox_PickCount_Min;
-    // 보상 소비아이템(선물)
-    public Dictionary<int, int> m_nDictionary_Gift_Item_Equip_Code;
-    public Dictionary<int, int> m_nDictionary_Gift_Item_Equip_Count;
-    public Dictionary<int, int> m_nDictionary_Gift_Item_Equip_Probability;
-    // 보상 소비아이템(선물)
-    public Dictionary<int, int> m_nDictionary_Gift_Item_Use_Code;
-    public Dictionary<int, int> m_nDictionary_Gift_Item_Use_Count;
-    public Dictionary<int, int> m_nDictionary_Gift_Item_Use_Probability;
-    // 보상 소비아이템(선물)
-    public Dictionary<int, int> m_nDictionary_Gift_Item_Etc_Code;
-    public Dictionary<int, int> m_nDictionary_Gift_Item_Etc_Count;
-    public Dictionary<int, int> m_nDictionary_Gift_Item_Etc_Probability;
+    // 소비아이템(기프트) 관련 변수
+    public E_ITEM_USE_GIFT_TYPE m_eItemUseGiftType; // 소비아이템(기프트) 타입
+    public bool m_bDisplay_Gift_Item; // 소비아이템(기프트) 목록에 포함된 아이템 정보 출력 여부를 결정하는 변수
+    // 소비아이템(기프트(랜덥 지급형 _ A, B 타입)) 관련 변수
+    public int m_nRandomBox_PickCount_Max; // 획득 가능한 최대 아이템 개수
+    public int m_nRandomBox_PickCount_Min; // 획득 가능한 최소 아이템 개수
+    // 소비아이템(기프트) 사용 시 획득 가능한 장비아이템 목록
+    public Dictionary<int, int> m_nDictionary_Gift_Item_Equip_Code;        // 장비아이템 고유코드 딕셔너리
+    public Dictionary<int, int> m_nDictionary_Gift_Item_Equip_Count;       // 장비아이템 획득 개수 딕셔너리
+    public Dictionary<int, int> m_nDictionary_Gift_Item_Equip_Probability; // 장비아이템 획득 확률 딕셔너리
+    // 소비아이템(기프트) 사용 시 획득 가능한 소비아이템 목록
+    public Dictionary<int, int> m_nDictionary_Gift_Item_Use_Code;        // 소비아이템 고유코드 딕셔너리
+    public Dictionary<int, int> m_nDictionary_Gift_Item_Use_Count;       // 소비아이템 획득 개수 딕셔너리
+    public Dictionary<int, int> m_nDictionary_Gift_Item_Use_Probability; // 소비아이템 획득 확률 딕셔너리
+    // 소비아이템(기프트) 사용 시 획득 가능한 기타아이템 목록
+    public Dictionary<int, int> m_nDictionary_Gift_Item_Etc_Code;        // 기타아이템 고유코드 딕셔너리
+    public Dictionary<int, int> m_nDictionary_Gift_Item_Etc_Count;       // 기타아이템 획득 개수 딕셔너리
+    public Dictionary<int, int> m_nDictionary_Gift_Item_Etc_Probability; // 기타아이템 획득 확률 딕셔너리
+
+    //
+    // ※ 각 아이템 분류별 딕셔너리는 Key 값에 따라 짝을 이룬다.
+    //    Key 값이 동일한 고유코드 딕셔너리, 획득 개수 딕셔너리, 획득 확률 딕셔너리는 소비아이템(기프트) 사용 시 획득 가능한 아이템 관련 정보를 저장한다.
+    //
 
     public Item_Use() { }
     // Item 원본.
