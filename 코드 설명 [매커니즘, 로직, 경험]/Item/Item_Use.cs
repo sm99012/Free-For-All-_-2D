@@ -38,8 +38,10 @@ public class Item_Use : Item // 기반이 되는 Item 클래스 상속
     public Dictionary<int, int> m_nDictionary_Gift_Item_Etc_Probability; // 기타아이템 획득 확률 딕셔너리
 
     //
-    // ※ 각 아이템 분류별 딕셔너리는 Key 값에 따라 짝을 이룬다.
-    //    Key 값이 동일한 고유코드 딕셔너리, 획득 개수 딕셔너리, 획득 확률 딕셔너리는 소비아이템(기프트) 사용 시 획득 가능한 아이템 관련 정보를 저장한다.
+    // ※ 아이템 고유코드, 획득 개수, 획득 확률 딕셔너리는 소비아이템(기프트) 사용 시 획득 가능한 아이템 관련 정보를 저장한다. 또 각각의 딕셔너리는 서로 연관되어 있다.
+    //    1. m_nDictionary_Gift_Item_Equip_Code[n] 고유코드에 해당하는 장비아이템을
+    //    2. 1 ~ m_nDictionary_Gift_Item_Equip_Count[n] 개 만큼
+    //    3. m_nDictionary_Gift_Item_Equip_Probability[n] 의 확률로 획득 할 수 있다.
     //
 
     public Item_Use() { }
