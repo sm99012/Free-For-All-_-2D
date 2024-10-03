@@ -13,7 +13,8 @@ public enum E_ITEM_ADDITIONALOPTION_STATUS { S1, S2, S3, S4, S5, S6, S7, S8, S9,
 public enum E_ITEM_ADDITIONALOPTION_SOC { S1, S2, S3, S4, S5, S6, S7, S8, S9, S10 }
 
 //
-// ※ 장비아이템 추가 스탯(능력치, 평판) 등급 관련 정보는 아이템 추가옵션
+// ※ 장비아이템 추가 스탯(능력치, 평판) 등급 관련 정보는 아래 링크를 참조해 주세요.
+//    https://qowhddnjs.tistory.com/41
 //
 
 public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
