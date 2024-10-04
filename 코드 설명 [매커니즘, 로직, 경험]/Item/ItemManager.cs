@@ -1,50 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using UnityEditor;
 
 public class ItemManager : MonoBehaviour
 {
+    //
+    // ※ 싱글톤패턴을 적용한 ItemManager 클래스를 이용해 모든 아이템을 관리한다. 원본 아이템 데이터의 저장 공간이다.(게임 시작 시 모든 아이템 데이터를 저장한다.)
+    //    추후 최적화를 위해 플레이어가 현재 착용 및 적용중이거나, 보유한 아이템 데이터만을 로드해 메모리 성능을 높일 예정이다.
+    //    최적화 관련 정보는 아래 링크를 참조해 주세요.
+    //    
+    //    
+    
     public static ItemManager m_ItemManager = null;
-    public static ItemManager instance
-    {
-        get
-        {
-            if (m_ItemManager == null)
-            {
-                return null;
-            }
-            return m_ItemManager;
-        }
-    }
-
-    public static int sm_nItemNumber = 0;
-
-
-    // 장비 아이템이 만들어질 빈 개체.
-    public GameObject m_gItem_Equip_Null;
-    public GameObject m_gItem_Use_Null;
-    public GameObject m_gItem_Etc_Null;
-    public GameObject m_gItem_Gold_Null;
-
-    // Monster 로 부터 얻을 수 있는 모든 Item 목록.
-    public Dictionary <int, Item_Equip> m_Dictionary_MonsterDrop_Equip;
-    public Dictionary <int, Item_Use> m_Dictionary_MonsterDrop_Use;
-    public Dictionary <int, Item_Etc> m_Dictionary_MonsterDrop_Etc;
-
-    // 채집물 로 부터 얻을 수 있는 모든 Item 목록.
-    public Dictionary<int, Item_Equip> m_Dictionary_Collection_Equip;
-    public Dictionary<int, Item_Use> m_Dictionary_Collection_Use;
-    public Dictionary<int, Item_Etc> m_Dictionary_Collection_Etc;
-
-    // 퀘스트 클리어 를 통해 얻을 수 있는 모든 Item 목록.
-    public Dictionary<int, Item_Equip> m_Dictionary_QuestReward_Equip;
-    public Dictionary<int, Item_Use> m_Dictionary_QuestReward_Use;
-    public Dictionary<int, Item_Etc> m_Dictionary_QuestReward_Etc;
-
-    // 생성 순서.
-    public List <Item> m_List_CreateItemList;
-
     private void Awake()
     {
         if (m_ItemManager == null)
@@ -57,7 +24,38 @@ public class ItemManager : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
+    public static ItemManager instance
+    {
+        get
+        {
+            if (m_ItemManager == null)
+            {
+                return null;
+            }
+            return m_ItemManager;
+        }
+    }
 
+    public static int sm_nItemNumber = 0; // 아이템 생성코드(아이템 생성 순서) 계산을 위한 스태틱 변수이다. 아이템 생성코드는 장비아이템에만 할당된다.
+
+    public GameObject m_gItem_Equip_Null; // 장비아이템 사본(유니티 오브젝트) 생성을 위한 기반(유니티 오브젝트)
+    public GameObject m_gItem_Use_Null;   // 소비아이템 사본(유니티 오브젝트) 생성을 위한 기반(유니티 오브젝트)
+    public GameObject m_gItem_Etc_Null;   // 기타아이템 사본(유니티 오브젝트) 생성을 위한 기반(유니티 오브젝트)
+    public GameObject m_gItem_Gold_Null;  // 골드(재화) 사본(유니티 오브젝트) 생성을 위한 기반(유니티 오브젝트)
+
+    public Dictionary <int, Item_Equip> m_Dictionary_MonsterDrop_Equip; // 몬스터 제거(토벌 + 놓아주기) 를 통해 획득 가능한 장비아이템 딕셔너리. Dictionary <Key : 장비아이템 고유코드, Value : 장비아이템 데이터>
+    public Dictionary <int, Item_Use> m_Dictionary_MonsterDrop_Use;     // 몬스터 제거(토벌 + 놓아주기) 를 통해 획득 가능한 소비아이템 딕셔너리. Dictionary <Key : 소비아이템 고유코드, Value : 소비아이템 데이터>
+    public Dictionary <int, Item_Etc> m_Dictionary_MonsterDrop_Etc;     // 몬스터 제거(토벌 + 놓아주기) 를 통해 획득 가능한 기타아이템 딕셔너리. Dictionary <Key : 기타아이템 고유코드, Value : 기타아이템 데이터>
+
+    public Dictionary<int, Item_Equip> m_Dictionary_Collection_Equip; // 채집물 채집을 통해 획득 가능한 장비아이템 딕셔너리. Dictionary <Key : 장비아이템 고유코드, Value : 장비아이템 데이터>
+    public Dictionary<int, Item_Use> m_Dictionary_Collection_Use;     // 채집물 채집을 통해 획득 가능한 소비아이템 딕셔너리. Dictionary <Key : 소비아이템 고유코드, Value : 소비아이템 데이터>
+    public Dictionary<int, Item_Etc> m_Dictionary_Collection_Etc;     // 채집물 채집을 통해 획득 가능한 기타아이템 딕셔너리. Dictionary <Key : 기타아이템 고유코드, Value : 기타아이템 데이터>
+
+    public Dictionary<int, Item_Equip> m_Dictionary_QuestReward_Equip; // 퀘스트 완료 보상으로 획득 가능한 장비아이템 딕셔너리. Dictionary <Key : 장비아이템 고유코드, Value : 장비아이템 데이터>
+    public Dictionary<int, Item_Use> m_Dictionary_QuestReward_Use;     // 퀘스트 완료 보상으로 획득 가능한 소비아이템 딕셔너리. Dictionary <Key : 소비아이템 고유코드, Value : 소비아이템 데이터>
+    public Dictionary<int, Item_Etc> m_Dictionary_QuestReward_Etc;     // 퀘스트 완료 보상으로 획득 가능한 기타아이템 딕셔너리. Dictionary <Key : 기타아이템 고유코드, Value : 기타아이템 데이터>
+
+    // 변수 초기화
     public void InitialSet()
     {
         m_Dictionary_MonsterDrop_Equip = new Dictionary<int, Item_Equip>();
@@ -72,8 +70,6 @@ public class ItemManager : MonoBehaviour
         m_Dictionary_QuestReward_Use = new Dictionary<int, Item_Use>();
         m_Dictionary_QuestReward_Etc = new Dictionary<int, Item_Etc>();
 
-        m_List_CreateItemList = new List<Item>();
-
         m_gItem_Equip_Null = Resources.Load("Prefab/GameObject/Item_Equip_Null") as GameObject;
         m_gItem_Use_Null = Resources.Load("Prefab/GameObject/Item_Use_Null") as GameObject;
         m_gItem_Etc_Null = Resources.Load("Prefab/GameObject/Item_Etc_Null") as GameObject;
@@ -82,258 +78,8 @@ public class ItemManager : MonoBehaviour
         Load_Item();
     }
 
-    //---------------------------------------------------------------------------------------------
-
-    // Test Area.
-    void Update()
-    {
-        //if (Input.GetKeyUp(KeyCode.F1))
-        //{
-        //    Item item;
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8011], Player_Total.Instance.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8013], Player_Total.Instance.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8018], Player_Total.Instance.transform.position);
-        //}
-        //{ 
-        //    Item_Use item = new Item_Use(m_Dictionary_MonsterDrop_Use[12000], Player_Total.Instance.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[12301], Player_Total.Instance.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[12300], Player_Total.Instance.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[12600], Player_Total.Instance.transform.position);
-        //}
-        //if (Input.GetKeyUp(KeyCode.F2))
-        //{
-        //    Item item = new Item_Equip(m_Dictionary_MonsterDrop_Equip[1606], Player_Total.Instance.transform.position);
-        //    item = new Item_Equip(m_Dictionary_MonsterDrop_Equip[3002], Player_Total.Instance.transform.position);
-        //    item = new Item_Equip(m_Dictionary_MonsterDrop_Equip[4002], Player_Total.Instance.transform.position);
-        //}
-        //if (Input.GetKeyUp(KeyCode.F3))
-        //{
-        //    Item item = new Item_Use(m_Dictionary_MonsterDrop_Use[8010], Player_Total.Instance.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8010], Player_Total.Instance.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8010], Player_Total.Instance.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8010], Player_Total.Instance.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8010], Player_Total.Instance.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8010], Player_Total.Instance.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8010], Player_Total.Instance.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8010], Player_Total.Instance.transform.position);
-        //}
-        //if (Input.GetKeyUp(KeyCode.Alpha3))
-        //{
-        //    Item item = new Item_Use(m_Dictionary_MonsterDrop_Use[8000], Player_Total.Instance.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8000], Player_Total.Instance.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8000], Player_Total.Instance.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8001], Player_Total.Instance.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8001], Player_Total.Instance.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8001], Player_Total.Instance.transform.position);
-        //}
-        //if (Input.GetKeyUp(KeyCode.F4))
-        //{
-        //    Item item = new Item_Etc(m_Dictionary_MonsterDrop_Etc[0001], Player_Total.Instance.transform.position);
-        //    item = new Item_Etc(m_Dictionary_MonsterDrop_Etc[0001], Player_Total.Instance.transform.position);
-        //    item = new Item_Etc(m_Dictionary_MonsterDrop_Etc[0001], Player_Total.Instance.transform.position);
-        //    item = new Item_Etc(m_Dictionary_MonsterDrop_Etc[0001], Player_Total.Instance.transform.position);
-        //    item = new Item_Etc(m_Dictionary_MonsterDrop_Etc[0001], Player_Total.Instance.transform.position);
-        //    item = new Item_Etc(m_Dictionary_MonsterDrop_Etc[0001], Player_Total.Instance.transform.position);
-        //    item = new Item_Etc(m_Dictionary_MonsterDrop_Etc[0001], Player_Total.Instance.transform.position);
-        //}
-        //if (Input.GetKeyUp(KeyCode.Alpha4))
-        //{
-        //    Item item = new Item_Etc(m_Dictionary_MonsterDrop_Etc[0015], Player_Total.Instance.transform.position);
-        //    item = new Item_Etc(m_Dictionary_MonsterDrop_Etc[0015], Player_Total.Instance.transform.position);
-        //    item = new Item_Etc(m_Dictionary_MonsterDrop_Etc[0015], Player_Total.Instance.transform.position);
-        //}
-        //if (Input.GetKeyUp(KeyCode.Alpha2))
-        //{
-        //    Debug.Log(Player_Total.Instance.m_ps_Status.ApplyPotion(m_Dictionary_MonsterDrop_Use[7001]));
-        //}
-        //if (Input.GetKeyUp(KeyCode.Alpha3))
-        //{
-        //    Debug.Log(Player_Total.Instance.m_ps_Status.ApplyPotion(m_Dictionary_MonsterDrop_Use[7002]));
-        //}
-        // 모든 장비 아이템 생성.
-        //if (Input.GetKeyUp(KeyCode.F1) && Input.GetKey(KeyCode.Space))
-        //{
-        //    foreach (KeyValuePair<int, Item_Equip> items in m_Dictionary_MonsterDrop_Equip)
-        //    {
-        //        ////if (items.Value.m_nItemCode / 1000 == 3 ||
-        //        ////    items.Value.m_nItemCode / 1000 == 4 ||
-        //        ////    items.Value.m_nItemCode / 1000 == 5 ||
-        //        ////    items.Value.m_nItemCode / 1000 == 6)
-        //        ////{
-        //        ////    Item item = new Item_Equip(items.Value, Player_Total.Instance.gameObject.transform.position);
-        //        ////}
-        //        //if (items.Value.m_nItemCode / 1000 == 1)
-        //        //{
-        //        //    if (items.Value.m_nItemCode / 1600 == 1)
-        //        //    {
-        //        //        Item item = new Item_Equip(items.Value, Player_Total.Instance.gameObject.transform.position);
-        //        //    }
-        //        //}
-        //        //if (items.Value.m_nItemCode / 1000 == 2)
-        //        //{
-        //        //    Item item = new Item_Equip(items.Value, Player_Total.Instance.gameObject.transform.position);
-        //        //}
-
-        //        Item item = new Item_Equip(items.Value, Player_Total.Instance.gameObject.transform.position);
-        //    }
-        //}
-        //// 마을 수호대 셋
-        //if (Input.GetKeyUp(KeyCode.F5) && Input.GetKey(KeyCode.Space))
-        //{
-        //    Item item;
-        //    //item = new Item_Equip(m_Dictionary_MonsterDrop_Equip[3003], Player_Total.Instance.gameObject.transform.position);
-        //    //item = new Item_Equip(m_Dictionary_MonsterDrop_Equip[4006], Player_Total.Instance.gameObject.transform.position);
-        //    //item = new Item_Equip(m_Dictionary_MonsterDrop_Equip[5001], Player_Total.Instance.gameObject.transform.position);
-        //    //item = new Item_Equip(m_Dictionary_MonsterDrop_Equip[6003], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Equip(m_Dictionary_MonsterDrop_Equip[3001], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Equip(m_Dictionary_MonsterDrop_Equip[4001], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Equip(m_Dictionary_MonsterDrop_Equip[5001], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Equip(m_Dictionary_MonsterDrop_Equip[6001], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Equip(m_Dictionary_MonsterDrop_Equip[1000], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Equip(m_Dictionary_MonsterDrop_Equip[1300], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Equip(m_Dictionary_MonsterDrop_Equip[1600], Player_Total.Instance.gameObject.transform.position);
-        //}
-        //// 모든 소비 아이템 생성.
-        //if (Input.GetKeyUp(KeyCode.F2) && Input.GetKey(KeyCode.Space))
-        //{
-        //    foreach (KeyValuePair<int, Item_Use> items in m_Dictionary_MonsterDrop_Use)
-        //    {
-        //        Item item = new Item_Use(items.Value, Player_Total.Instance.gameObject.transform.position);
-        //    }
-        //}
-        //// 모든 기타 아이템 생성.
-        //if (Input.GetKeyUp(KeyCode.F3) && Input.GetKey(KeyCode.Space))
-        //{
-        //    foreach (KeyValuePair<int, Item_Etc> items in m_Dictionary_MonsterDrop_Etc)
-        //    {
-        //        Item item = new Item_Etc(items.Value, Player_Total.Instance.gameObject.transform.position);
-        //    }
-        //    foreach (KeyValuePair<int, Item_Etc> items in m_Dictionary_Collection_Etc)
-        //    {
-        //        Item item = new Item_Etc(items.Value, Player_Total.Instance.gameObject.transform.position);
-        //    }
-        //}
-        //// 버프포션 테스트.
-        //if (Input.GetKeyUp(KeyCode.F4) && Input.GetKey(KeyCode.Space))
-        //{
-        //    Item item = new Item_Use(m_Dictionary_MonsterDrop_Use[9000], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[9000], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[9000], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[9000], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[9000], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[9001], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[9001], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[9001], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[9001], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[9002], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[9002], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[9002], Player_Total.Instance.gameObject.transform.position);
-        //}
-        //if (Input.GetKeyUp(KeyCode.F6))
-        //{
-        //    //Item item = new Item_Equip(m_Dictionary_MonsterDrop_Equip[1610], Player_Total.Instance.gameObject.transform.position);
-        //    //item = new Item_Equip(m_Dictionary_MonsterDrop_Equip[1610], Player_Total.Instance.gameObject.transform.position);
-        //    //item = new Item_Equip(m_Dictionary_MonsterDrop_Equip[1610], Player_Total.Instance.gameObject.transform.position);
-        //    //item = new Item_Equip(m_Dictionary_MonsterDrop_Equip[1610], Player_Total.Instance.gameObject.transform.position);
-        //    //item = new Item_Equip(m_Dictionary_MonsterDrop_Equip[1610], Player_Total.Instance.gameObject.transform.position);
-        //    Item item = new Item_Use(m_Dictionary_MonsterDrop_Use[8002], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8002], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8002], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8002], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8002], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8002], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8002], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8002], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8002], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8002], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8002], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Use(m_Dictionary_MonsterDrop_Use[8002], Player_Total.Instance.gameObject.transform.position);
-        //}
-        //if (Input.GetKeyUp(KeyCode.F7))
-        //{
-        //    //Player_Total.Instance.Check_Quickslot_Item_Use(E_QUICKSLOT_CATEGORY.USE, 8002);
-        //    //Player_Total.Instance.Use_Quickslot_Item_Use(E_QUICKSLOT_CATEGORY.USE, 8002);
-
-        //    Item item = new Item_Etc(m_Dictionary_MonsterDrop_Etc[0003], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Etc(m_Dictionary_MonsterDrop_Etc[0003], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Etc(m_Dictionary_MonsterDrop_Etc[0003], Player_Total.Instance.gameObject.transform.position);
-        //    item = new Item_Etc(m_Dictionary_MonsterDrop_Etc[0003], Player_Total.Instance.gameObject.transform.position);
-        //}
-
-        // 장비 아이템 강화 Test
-        //if (Input.GetKeyUp(KeyCode.Keypad9))
-        //{
-        //    STATUS status = new STATUS(0, 0, 0, 0, 0, 0, 0, 500);
-        //    Reinforcement reinforcement1 = new Reinforcement(9000, status);
-        //    if (Player_Total.Instance.m_pi_Itemslot.m_nary_Itemslot_Equip_Count[0] > 0)
-        //    {
-        //        Debug.Log(Player_Total.Instance.m_pi_Itemslot.m_gary_Itemslot_Equip[0].m_sItemName);
-        //        Player_Total.Instance.m_pi_Itemslot.m_gary_Itemslot_Equip[0].ReinforceItem(reinforcement1);
-        //        GUIManager_Total.Instance.Update_Itemslot_Equip_Information(Player_Total.Instance.m_pi_Itemslot.m_gary_Itemslot_Equip[0], 0);
-        //    }
-        //}
-
-        //if (Input.GetKeyUp(KeyCode.Alpha2))
-        //{
-        //    foreach (KeyValuePair<int, Item_Use> items in m_Dictionary_MonsterDrop_Use)
-        //    {
-        //        Debug.Log(items.Value.m_sItemName);
-        //    }
-        //}
-        //if (Input.GetKeyUp(KeyCode.Alpha3))
-        //{
-        //    foreach (KeyValuePair<int, Item_Etc> items in m_Dictionary_MonsterDrop_Etc)
-        //    {
-        //        //Debug.Log(items.Value.m_sItemName);
-        //        Item item = new Item_Etc(items.Value, Player_Total.Instance.gameObject.transform.position);
-        //        //Destroy(item);
-        //    }
-        //}
-        //if (Input.GetKeyUp(KeyCode.F1))
-        //{
-        //    int testitemcode = 1004;
-
-        //    if (m_Dictionary_MonsterDrop_Equip.ContainsKey(testitemcode) == true)
-        //    {
-        //        Item item = new Item_Equip(m_Dictionary_MonsterDrop_Equip[testitemcode], Player_Total.Instance.gameObject.transform.position);
-        //        Destroy(item);
-        //    }
-        //}
-        //if (Input.GetKeyUp(KeyCode.F2))
-        //{
-        //    int testitemcode = 1002;
-
-        //    if (m_Dictionary_MonsterDrop_Equip.ContainsKey(testitemcode) == true)
-        //    {
-        //        Item item = new Item_Equip(m_Dictionary_MonsterDrop_Equip[testitemcode], Player_Total.Instance.gameObject.transform.position);
-        //        Destroy(item);
-        //    }
-        //}
-        //if (Input.GetKeyUp(KeyCode.F3))
-        //{
-        //    int testitemcode = 4001;
-
-        //    if (m_Dictionary_MonsterDrop_Equip.ContainsKey(testitemcode) == true)
-        //    {
-        //        Item item = new Item_Equip(m_Dictionary_MonsterDrop_Equip[testitemcode], Player_Total.Instance.gameObject.transform.position);
-        //        Destroy(item);
-        //    }
-        //}
-
-        //if (Input.GetKeyUp(KeyCode.Delete))
-        //{
-        //    InitializeItemManager();
-        //}
-        //if (Input.GetKeyUp(KeyCode.F4))
-        //{
-        //    Debug.Log("Monster Drop Item_Equip: " + m_Dictionary_MonsterDrop_Equip.Count);
-        //    Debug.Log("Monster Drop Item_Use: " + m_Dictionary_MonsterDrop_Use.Count);
-        //    Debug.Log("Monster Drop Item_Etc: " + m_Dictionary_MonsterDrop_Etc.Count);
-        //}
-    }
-
-        // Loading 시 원본 아이템 저장소 초기화 및 원본 아이템 삭제.
-        void InitializeItemManager()
+    // Loading 시 원본 아이템 저장소 초기화 및 원본 아이템 삭제.
+    void InitializeItemManager()
     {
         m_Dictionary_MonsterDrop_Equip.Clear();
         m_Dictionary_MonsterDrop_Use.Clear();
