@@ -78,51 +78,34 @@ public class ItemManager : MonoBehaviour
         Load_Item();
     }
 
-    // Loading 시 원본 아이템 저장소 초기화 및 원본 아이템 삭제.
-    void InitializeItemManager()
-    {
-        m_Dictionary_MonsterDrop_Equip.Clear();
-        m_Dictionary_MonsterDrop_Use.Clear();
-        m_Dictionary_MonsterDrop_Etc.Clear();
-
-        m_Dictionary_Collection_Equip.Clear();
-        m_Dictionary_Collection_Use.Clear();
-        m_Dictionary_Collection_Etc.Clear();
-
-        m_Dictionary_QuestReward_Equip.Clear();
-        m_Dictionary_QuestReward_Use.Clear();
-        m_Dictionary_QuestReward_Etc.Clear();
-    }
-
+    // 로딩 관련 함수
+    // 게임 시작 시 모든 아이템 데이터 로딩
     void Load_Item()
     {
-        Load_Item_Equip();
-        Load_Item_Use();
-        Load_Item_Etc();
-
-        Load_Item_Use_Gift();
+        Load_Item_Equip();    // 모든 장비아이템 데이터 로딩
+        Load_Item_Use();      // 소비아이템(기프트)을 제외한 모든 소비아이템 데이터 로딩
+        Load_Item_Etc();      // 모든 기타아이템 데이터 로딩
+        
+        Load_Item_Use_Gift(); // 모든 소비아이템(기프트) 데이터 로딩
     }
-
+    // 모든 장비아이템 데이터 로딩
     void Load_Item_Equip()
     {
-        Load_Item_Equip_MainWeapon();
-        Load_Item_Equip_SubWeapon();
-        Load_Item_Equip_Hat();
-        Load_Item_Equip_Top();
-        Load_Item_Equip_Bottoms();
-        Load_Item_Equip_Shose();
+        Load_Item_Equip_MainWeapon(); // 모든 장비아이템(주무기) 데이터 로딩
+        Load_Item_Equip_SubWeapon();  // 모든 장비아이템(보조무기) 데이터 로딩
+        Load_Item_Equip_Hat();        // 모든 장비아이템(모자) 데이터 로딩
+        Load_Item_Equip_Top();        // 모든 장비아이템(상의) 데이터 로딩
+        Load_Item_Equip_Bottoms();    // 모든 장비아이템(하의) 데이터 로딩
+        Load_Item_Equip_Shose();      // 모든 장비아이템(신발) 데이터 로딩
     }
-
-    // Sword: 1000 ~ 1300
-    // Knife: 1300 ~ 1600
-    // Axe: 1600 ~ 1900
-    // Etc: 1900 ~ 1999
+    // 모든 장비아이템(주무기) 데이터 로딩
     void Load_Item_Equip_MainWeapon()
     {
-        Load_Item_Equip_MainWaepon_Sword();
-        Load_Item_Equip_MainWeapon_Knife();
-        Load_Item_Equip_MainWeapon_Axe();
+        Load_Item_Equip_MainWaepon_Sword(); // 모든 장비아이템(주무기(검)) 데이터 로딩
+        Load_Item_Equip_MainWeapon_Knife(); // 모든 장비아이템(주무기(단검)) 데이터 로딩
+        Load_Item_Equip_MainWeapon_Axe();   // 모든 장비아이템(주무기(도끼)) 데이터 로딩
     }
+    // 모든 장비아이템(주무기(검)) 데이터 로딩
     void Load_Item_Equip_MainWaepon_Sword()
     {
         Item_Equip item;
@@ -374,6 +357,7 @@ public class ItemManager : MonoBehaviour
         item.m_sItemDescription = "구양 사막 지대에 위치하고 있는 알트 왕국의 공신들에게 제공되는 사막의 모래폭풍이라 불리는 알트제 반달검이다.\n'알트제 반달검' 은 알트 왕국 그 자체를 의미할 정도로 깊은 역사를 자랑한다.";
         m_Dictionary_MonsterDrop_Equip.Add(item.m_nItemCode, item);
     }
+    // 모든 장비아이템(주무기(단검)) 데이터 로딩
     void Load_Item_Equip_MainWeapon_Knife()
     {
         Item_Equip item;
@@ -456,6 +440,7 @@ public class ItemManager : MonoBehaviour
         item.m_sItemDescription = "별빛에 은은하게 빛나는 커틀러스이다.\n해적들의 무기라 알려져있지만 준수한 성능덕에 많이들 사용한다.";
         m_Dictionary_MonsterDrop_Equip.Add(item.m_nItemCode, item);
     }
+    // 모든 장비아이템(주무기(도끼)) 데이터 로딩
     void Load_Item_Equip_MainWeapon_Axe()
     {
         Item_Equip item;
@@ -694,7 +679,7 @@ public class ItemManager : MonoBehaviour
         item.m_sItemDescription = "갓 캐낸 감자 뭉텅이를 닮아있어 포테이토 해머라고 불린다.";
         m_Dictionary_MonsterDrop_Equip.Add(item.m_nItemCode, item);
     }
-
+    // 모든 장비아이템(보조무기) 데이터 로딩
     void Load_Item_Equip_SubWeapon()
     {
         Item_Equip item;
@@ -729,7 +714,6 @@ public class ItemManager : MonoBehaviour
             E_ITEM_GRADE.RELIC, E_ITEM_EQUIP_TYPE.SUBWEAPON, E_ITEM_EQUIP_MAINWEAPON_TYPE.NULL,
             E_ITEM_ADDITIONALOPTION_STATUS.S4, E_ITEM_ADDITIONALOPTION_SOC.S4,
             5, 0, 9000);
-        //item.m_sStatus_Effect = new STATUS(0, 0, 0, 5, 0, -5, 0, 5, 5, 5, 0, 0, -5, 1, 1, 0, 0.2f);
         item.m_sStatus_Effect = new STATUS(0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 0, 0, -5, 1, 1, 0, 0.2f);
         item.m_sStatus_Limit_Min = new STATUS(12, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000);
         item.m_sStatus_Limit_Max = new STATUS(10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000);
@@ -792,6 +776,7 @@ public class ItemManager : MonoBehaviour
         item.m_sItemDescription = "대장장이 '블랙' 이 만든 최소한의 몸을 지키기 위한 용도의 단검이다.\n그래서 그런지 주무기로는 사용하기 힘들다.\n'드넓은 초원' 의 핍박받는 약자들을 위해 만들어졌으나 단검의 능력치가 출중하여 구하려 해도 못 구하는 귀한 단검이다.";
         m_Dictionary_MonsterDrop_Equip.Add(item.m_nItemCode, item);
     }
+    // 모든 장비아이템(모자) 데이터 로딩
     void Load_Item_Equip_Hat()
     {
         Item_Equip item;
@@ -949,6 +934,7 @@ public class ItemManager : MonoBehaviour
 
 
     }
+    // 모든 장비아이템(상의) 데이터 로딩
     void Load_Item_Equip_Top()
     {
         Item_Equip item;
@@ -1144,6 +1130,7 @@ public class ItemManager : MonoBehaviour
         item.m_sItemDescription = "화려한 금빛 갑옷이다.\n금과 여러 사치스러운 재료로 만들어 매우 화려하다.\n좋은 재료는 다 들어있기에 성능은 확실하다.";
         m_Dictionary_MonsterDrop_Equip.Add(item.m_nItemCode, item);
     }
+    // 모든 장비아이템(하의) 데이터 로딩
     void Load_Item_Equip_Bottoms()
     {
         Item_Equip item;
@@ -1236,6 +1223,7 @@ public class ItemManager : MonoBehaviour
         item.m_sItemDescription = "이 세계를 떠돌던 한 이름 없는 방랑자의 하의.\n그의 이름은 기억되지 않았지만 그의 물건은 세계 곳곳에서 발견되고 있다. 그는 왜 세계 곳곳을 누비고 다닌 걸까?";
         m_Dictionary_MonsterDrop_Equip.Add(item.m_nItemCode, item);
     }
+    // 모든 장비아이템(신발) 데이터 로딩
     void Load_Item_Equip_Shose()
     {
         Item_Equip item;
@@ -1344,18 +1332,15 @@ public class ItemManager : MonoBehaviour
         item.m_sItemDescription = "상위 1% 의 능력을 인정받은 상급 기사에게 보급되는 갑옷[장화]이다.\n능력치는 말할 것도 없다. 평판 또한.\n이 장비 덕에 상급 기사는 임무에는 실패해도 절대 죽지는 않는다고 한다.";
         m_Dictionary_MonsterDrop_Equip.Add(item.m_nItemCode, item);
     }
-
+    // 소비아이템(기프트)을 제외한 모든 소비아이템 데이터 로딩
     void Load_Item_Use()
     {
-        // 회복포션.
-        Load_Item_Use_RecoverPotion();
-        // 일시적 버프 포션.
-        Load_Item_Use_TemporaryBuffPotion();
-        // 영구적 버프 포션.
-        Load_Item_Use_EternalBuffPotion();
-        // 강화서.
-        Load_Item_Use_Reinforcement();
+        Load_Item_Use_RecoverPotion();       // 모든 소비아이템(회복포션) 데이터 로딩
+        Load_Item_Use_TemporaryBuffPotion(); // 모든 소비아이템(일시적 버프포션) 데이터 로딩
+        Load_Item_Use_EternalBuffPotion();   // 모든 소비아이템(영구적 버프포션) 데이터 로딩
+        Load_Item_Use_Reinforcement();       // 모든 소비아이템(강화서) 데이터 로딩
     }
+    // 모든 소비아이템(회복포션) 데이터 로딩
     void Load_Item_Use_RecoverPotion()
     {
         Item_Use item;
@@ -1690,6 +1675,7 @@ public class ItemManager : MonoBehaviour
         item.m_sItemDescription = "소스가 뿌려진 핫도그. 말 그대로 소스가 뿌려진 핫도그. 핫도그를 모르는 사람은 없을 것이다. 그냥 소스가 뿌려져 더 맛있는 핫도그이다.\n체력을 35, 마나를 5 회복시켜준다.";
         m_Dictionary_MonsterDrop_Use.Add(item.m_nItemCode, item);
     }
+    // 모든 소비아이템(일시적 버프포션) 데이터 로딩
     void Load_Item_Use_TemporaryBuffPotion()
     {
         Item_Use item;
@@ -1796,6 +1782,7 @@ public class ItemManager : MonoBehaviour
         item.m_sItemDescription = "이상한 초콜릿이다.\n무엇으로 만들어졌는지, 누가 만들었는지, 어디서 왔는지 아무것도 모른다.\n섭취 시 주변 꼬맹이들로부터 '엄마 쟤 똥 먹어!' 라는 말을 들을지도 모른다.\n섭취 시 30초 동안 평판이 크게 감소한다.";
         m_Dictionary_MonsterDrop_Use.Add(item.m_nItemCode, item);
     }
+    // 모든 소비아이템(영구적 버프포션) 데이터 로딩
     void Load_Item_Use_EternalBuffPotion()
     {
         Item_Use item;
@@ -1824,12 +1811,13 @@ public class ItemManager : MonoBehaviour
         m_Dictionary_MonsterDrop_Use.Add(item.m_nItemCode, item);
         m_Dictionary_QuestReward_Use.Add(item.m_nItemCode, item);
     }
+    // 모든 소비아이템(강화서) 데이터 로딩
     void Load_Item_Use_Reinforcement()
     {
         Item_Use item;
         STATUS status; SOC soc;
         Reinforcement reinforcement1;
-        // 데미지 강화서.
+        // 소비아이템(강화서(데미지)). 공격의 강화서
         {
             item = new Item_Use("데미지 강화서[S1]", 11000, "Prefab/Item/Item_Use/Scroll", E_ITEM_USE_TYPE.REINFORCEMENT, E_ITEM_GRADE.COMMON,
                 0, 0, 500);
@@ -1971,7 +1959,7 @@ public class ItemManager : MonoBehaviour
             item.m_sItemDescription = "1% 확률로 영구적으로 장비의 데미지을 50, 명예를 16 증가시킬 수 있는 강화서이다.\n장비의 강화 가능 횟수가 남아있을때 사용 가능하다.";
             m_Dictionary_MonsterDrop_Use.Add(item.m_nItemCode, item);
         }
-        // 방어력 강화서
+        // 소비아이템(강화서(방어력)). 방어의 강화서
         {
             item = new Item_Use("방어력 강화서[S1]", 11010, "Prefab/Item/Item_Use/Scroll", E_ITEM_USE_TYPE.REINFORCEMENT, E_ITEM_GRADE.COMMON,
                 0, 0, 500);
@@ -2113,7 +2101,7 @@ public class ItemManager : MonoBehaviour
             item.m_sItemDescription = "1% 확률로 영구적으로 장비의 방어력을 50, 명예를 16 증가시킬 수 있는 강화서이다.\n장비의 강화 가능 횟수가 남아있을때 사용 가능하다.";
             m_Dictionary_MonsterDrop_Use.Add(item.m_nItemCode, item);
         }
-        // 민첩의 강화서.(공격속도, 이동속도)
+        // 소비아이템(강화서(공격속도, 이동속도)). 민첩의 강화서
         {
             item = new Item_Use("민첩의 강화서[S1]", 11020, "Prefab/Item/Item_Use/Scroll", E_ITEM_USE_TYPE.REINFORCEMENT, E_ITEM_GRADE.RARE,
                 0, 0, 5000);
@@ -2130,325 +2118,7 @@ public class ItemManager : MonoBehaviour
             m_Dictionary_MonsterDrop_Use.Add(item.m_nItemCode, item);
         }
     }
-
-    void Load_Item_Use_Gift()
-    {
-        Load_Item_Use_Gift_FixedBox();
-        Load_Item_Use_Gift_RandomBox_IndependentTrial();
-        Load_Item_Use_Gift_RandomBox_dependentTrial();
-    }
-    void Load_Item_Use_Gift_FixedBox()
-    {
-        Item_Use item;
-        // 초보 모험가를 위한 선물 상자.
-        {
-            item = new Item_Use("초보 모험가를 위한 선물 상자", 12000, "Prefab/Item/Item_Use/Gift/Box_Wood_1", E_ITEM_USE_TYPE.GIFT, E_ITEM_GRADE.NORMAL,
-                0, 0, 1000);
-            item.Set_Item_Use_Gift(E_ITEM_USE_GIFT_TYPE.FIXEDBOX);
-            item.m_sStatus_Limit_Max.SetSTATUS_LV(10);
-            item.m_sItemDescription = "초보 모험가의 편의를 위해 제공되는 선물상자이다.\n무기와 회복포션이 들어있다.";
-            item.Add_Gift_Item_Equip(1000, 1);
-            item.Add_Gift_Item_Equip(1300, 1);
-            item.Add_Gift_Item_Equip(1600, 1);
-            item.Add_Gift_Item_Equip(3001, 1);
-            item.Add_Gift_Item_Equip(4001, 1);
-            item.Add_Gift_Item_Equip(6001, 1);
-            item.Add_Gift_Item_Use(8000, 20);
-            item.Add_Gift_Item_Use(8001, 20);
-            m_Dictionary_MonsterDrop_Use.Add(item.m_nItemCode, item);
-        }
-        // 용병단의 비보 Lv1.
-        {
-            item = new Item_Use("용병단의 비보 Lv1", 12001, "Prefab/Item/Item_Use/Gift/Box_Gold_Silver_1", E_ITEM_USE_TYPE.GIFT, E_ITEM_GRADE.RARE,
-                0, 0, 13000);
-            item.Set_Item_Use_Gift(E_ITEM_USE_GIFT_TYPE.FIXEDBOX);
-            item.m_sStatus_Limit_Min.SetSTATUS_LV(7);
-            item.m_sItemDescription = "역사상 최강의 용병 조직인 용병단의 비보이다.\n오직 신속하고 정확한 임무수행만을 위해 조직에 헌신하는 초급 용병에게 주어진다.\n앞으로 수행할 고난도의 임무 수행에 대비해 여러 아이템이 들어있다. 용병단의 재력은 상당한 수준이고 이 세계의 금기따위에 얽매이지 않기 때문에 획득하기 힘든 아이템을 여럿 획득할 수 있다.";
-            item.Add_Gift_Item_Equip(3004, 1);
-            item.Add_Gift_Item_Equip(4009, 1);
-            item.Add_Gift_Item_Equip(5002, 1);
-            item.Add_Gift_Item_Equip(6004, 1);
-            item.Add_Gift_Item_Use(8003, 20);
-            item.Add_Gift_Item_Use(8004, 20);
-            item.Add_Gift_Item_Use(11001, 5);
-            item.Add_Gift_Item_Use(11011, 3);
-            m_Dictionary_MonsterDrop_Use.Add(item.m_nItemCode, item);
-        }
-        // 기사단의 비보 Lv1.
-        {
-            item = new Item_Use("기사단의 비보 Lv1", 12002, "Prefab/Item/Item_Use/Gift/Box_Gold_Ruby_1", E_ITEM_USE_TYPE.GIFT, E_ITEM_GRADE.RARE,
-                0, 0, 13000);
-            item.Set_Item_Use_Gift(E_ITEM_USE_GIFT_TYPE.FIXEDBOX);
-            item.m_sSoc_Limit_Min = new SOC(30, 0, 0, 0, 0, 0, 0, 0, -10000);
-            item.m_sSoc_Limit_Max = new SOC(10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10);
-            item.m_sStatus_Limit_Min.SetSTATUS_LV(7);
-            item.m_sItemDescription = "오랜 전통과 역사를 자랑하는 기사단의 비보이다.\n끝없는 역경과 고난을 헤쳐내고 인내하며 남을 위해 헌신하는 정의로운 초급 기사에게 주어진다.\n앞으로 수행할 고난도의 임무 수행에 대비해 여러 아이템이 들어있다.";
-            item.Add_Gift_Item_Equip(3007, 1);
-            item.Add_Gift_Item_Equip(4013, 1);
-            item.Add_Gift_Item_Equip(5005, 1);
-            item.Add_Gift_Item_Equip(6007, 1);
-            item.Add_Gift_Item_Use(8003, 10);
-            item.Add_Gift_Item_Use(8004, 10);
-            m_Dictionary_MonsterDrop_Use.Add(item.m_nItemCode, item);
-        }
-    }
-    // 모든 아이템 확률의 합은 10000(100%) 로 정한다.
-    void Load_Item_Use_Gift_RandomBox_IndependentTrial()
-    {
-        Item_Use item;
-        // 대장장이 '블랙' 의 무기 상자
-        {
-            item = new Item_Use("대장장이 '블랙' 의 무기 상자", 12300, "Prefab/Item/Item_Use/Gift/Box_Iron_1", E_ITEM_USE_TYPE.GIFT, E_ITEM_GRADE.COMMON,
-                0, 0, 2500);
-            item.Set_Item_Use_Gift(E_ITEM_USE_GIFT_TYPE.RANDOMBOX_INDEPENDENTTRIAL, 1, 1);
-            item.m_sItemDescription = "'드넓은 초원' 의 대장장이 '블랙' 이 만든 무기가 들어있다.\n어떤 무기가 들어있는지는 알 수 없으나 대장장이 '블랙' 이 직접 만든 무기가 단 한개만 들어있다.\n운이 좋다면 좋은 무기를 얻을 수 있다.";
-            item.m_sStatus_Limit_Min.SetSTATUS_LV(5);
-            item.Add_Gift_Item_Equip(1001, 1, 1000);
-            item.Add_Gift_Item_Equip(1003, 1, 1000);
-            item.Add_Gift_Item_Equip(1004, 1, 1000);
-            item.Add_Gift_Item_Equip(1301, 1, 1000);
-            item.Add_Gift_Item_Equip(1303, 1, 1000);
-            item.Add_Gift_Item_Equip(1304, 1, 1000);
-            item.Add_Gift_Item_Equip(1601, 1, 1000);
-            item.Add_Gift_Item_Equip(1602, 1, 1000);
-            item.Add_Gift_Item_Equip(1603, 1, 1000);
-            item.Add_Gift_Item_Equip(2007, 1, 1000);
-            m_Dictionary_MonsterDrop_Use.Add(item.m_nItemCode, item);
-        }
-        // 대장장이 '블랙 스미슬라임' 의 방어구 상자.
-        {
-            item = new Item_Use("대장장이 '블랙스미슬라임' 의 방어구 상자", 12301, "Prefab/Item/Item_Use/Gift/Box_Iron_1", E_ITEM_USE_TYPE.GIFT, E_ITEM_GRADE.COMMON,
-                0, 0, 2500);
-            item.Set_Item_Use_Gift(E_ITEM_USE_GIFT_TYPE.RANDOMBOX_INDEPENDENTTRIAL, 1, 1);
-            item.m_sItemDescription = "'드넓은 초원' 의 대장장이 '블랙스미슬라임' 이 만든 방어구가 들어있다.\n어떤 방어구가 들어있는지는 알 수 없으나 대장장이 '블랙스미슬라임' 이 직접 만든 방어구가 단 한개만 들어있다.\n운이 좋다면 좋은 방어구를 얻을 수 있다.";
-            item.m_sStatus_Limit_Min.SetSTATUS_LV(5);
-            item.Add_Gift_Item_Equip(3003, 1, 1250);
-            item.Add_Gift_Item_Equip(3010, 1, 1250);
-            item.Add_Gift_Item_Equip(4003, 1, 1250);
-            item.Add_Gift_Item_Equip(4005, 1, 1250);
-            item.Add_Gift_Item_Equip(4006, 1, 1250);
-            item.Add_Gift_Item_Equip(4008, 1, 1250);
-            item.Add_Gift_Item_Equip(5001, 1, 1250);
-            item.Add_Gift_Item_Equip(6003, 1, 1250);
-            m_Dictionary_MonsterDrop_Use.Add(item.m_nItemCode, item);
-        }
-        // 은빛 보물 상자 Lv1.
-        {
-            item = new Item_Use("은빛 보물 상자 Lv1", 12302, "Prefab/Item/Item_Use/Gift/Box_SilverPlating_1", E_ITEM_USE_TYPE.GIFT, E_ITEM_GRADE.RARE,
-                0, 0, 80000);
-            item.Set_Item_Use_Gift(E_ITEM_USE_GIFT_TYPE.RANDOMBOX_INDEPENDENTTRIAL, 1, 1);
-            item.m_sItemDescription = "귀하디 귀한 보물 상자이다.\n등급은 낮지만 그래도 꼴에 보물 상자라고 레어보다 낮은 등급의 아이템은 상자에 들어있지 않다.";
-            item.Add_Gift_Item_Equip(1005, 1, 250);
-            item.Add_Gift_Item_Equip(1006, 1, 250);
-            item.Add_Gift_Item_Equip(1009, 1, 250);
-            item.Add_Gift_Item_Equip(1017, 1, 250);
-            item.Add_Gift_Item_Equip(1018, 1, 250);
-            item.Add_Gift_Item_Equip(1607, 1, 250);
-            item.Add_Gift_Item_Equip(1608, 1, 250);
-            item.Add_Gift_Item_Equip(1609, 1, 250);
-            item.Add_Gift_Item_Equip(2006, 1, 250);
-            item.Add_Gift_Item_Equip(2007, 1, 250);
-            item.Add_Gift_Item_Equip(4004, 1, 250);
-            item.Add_Gift_Item_Equip(4016, 1, 250);
-            item.Add_Gift_Item_Equip(4017, 1, 250);
-            item.Add_Gift_Item_Equip(4018, 1, 250);
-            item.Add_Gift_Item_Equip(5008, 1, 250);
-            item.Add_Gift_Item_Equip(1016, 1, 60);
-            item.Add_Gift_Item_Equip(1610, 1, 60);
-            item.Add_Gift_Item_Equip(1615, 1, 60);
-            item.Add_Gift_Item_Equip(2003, 1, 60);
-
-            item.Add_Gift_Item_Use(8011, 1, 250);
-            item.Add_Gift_Item_Use(8017, 1, 250);
-            item.Add_Gift_Item_Use(8023, 1, 250);
-            item.Add_Gift_Item_Use(8025, 1, 250);
-            item.Add_Gift_Item_Use(9002, 1, 250);
-            item.Add_Gift_Item_Use(9007, 1, 250);
-            item.Add_Gift_Item_Use(9003, 1, 60);
-            item.Add_Gift_Item_Use(10000, 1, 250);
-            item.Add_Gift_Item_Use(10001, 1, 20);
-
-            item.Add_Gift_Item_Use(11004, 1, 250);
-            item.Add_Gift_Item_Use(11005, 1, 250);
-            item.Add_Gift_Item_Use(11006, 1, 250);
-            item.Add_Gift_Item_Use(11007, 1, 250);
-            item.Add_Gift_Item_Use(11008, 1, 250);
-            item.Add_Gift_Item_Use(11014, 1, 250);
-            item.Add_Gift_Item_Use(11015, 1, 250);
-            item.Add_Gift_Item_Use(11016, 1, 250);
-            item.Add_Gift_Item_Use(11017, 1, 250);
-            item.Add_Gift_Item_Use(11018, 1, 250);
-            item.Add_Gift_Item_Use(11020, 1, 250);
-            item.Add_Gift_Item_Use(11009, 1, 60);
-            item.Add_Gift_Item_Use(11019, 1, 60);
-
-            item.Add_Gift_Item_Etc(0002, 1, 250);
-            item.Add_Gift_Item_Etc(0003, 1, 250);
-            item.Add_Gift_Item_Etc(0006, 1, 250);
-            item.Add_Gift_Item_Etc(0015, 1, 250);
-            item.Add_Gift_Item_Etc(0016, 1, 250);
-            item.Add_Gift_Item_Etc(0007, 1, 60);
-            m_Dictionary_MonsterDrop_Use.Add(item.m_nItemCode, item);
-        }
-        // 은빛 보물 상자 Lv2.
-        {
-            item = new Item_Use("은빛 보물 상자 Lv2", 12303, "Prefab/Item/Item_Use/Gift/Box_SilverPlating_2", E_ITEM_USE_TYPE.GIFT, E_ITEM_GRADE.RARE,
-                0, 0, 120000);
-            item.Set_Item_Use_Gift(E_ITEM_USE_GIFT_TYPE.RANDOMBOX_INDEPENDENTTRIAL, 1, 3);
-            item.m_sItemDescription = "귀하디 귀한 보물 상자이다.\n등급은 낮지만 그래도 꼴에 보물 상자라고 레어보다 낮은 등급의 아이템은 상자에 들어있지 않다.\n'은빛 보물 상자 Lv1' 보다 더 많은 아이템을 획득할 수 있다.";
-            item.Add_Gift_Item_Equip(1005, 1, 250);
-            item.Add_Gift_Item_Equip(1006, 1, 250);
-            item.Add_Gift_Item_Equip(1009, 1, 250);
-            item.Add_Gift_Item_Equip(1017, 1, 250);
-            item.Add_Gift_Item_Equip(1018, 1, 250);
-            item.Add_Gift_Item_Equip(1607, 1, 250);
-            item.Add_Gift_Item_Equip(1608, 1, 250);
-            item.Add_Gift_Item_Equip(1609, 1, 250);
-            item.Add_Gift_Item_Equip(2006, 1, 250);
-            item.Add_Gift_Item_Equip(2007, 1, 250);
-            item.Add_Gift_Item_Equip(4004, 1, 250);
-            item.Add_Gift_Item_Equip(4016, 1, 250);
-            item.Add_Gift_Item_Equip(4017, 1, 250);
-            item.Add_Gift_Item_Equip(4018, 1, 250);
-            item.Add_Gift_Item_Equip(5008, 1, 250);
-            item.Add_Gift_Item_Equip(1016, 1, 60);
-            item.Add_Gift_Item_Equip(1610, 1, 60);
-            item.Add_Gift_Item_Equip(1615, 1, 60);
-            item.Add_Gift_Item_Equip(2003, 1, 60);
-
-            item.Add_Gift_Item_Use(8011, 1, 250);
-            item.Add_Gift_Item_Use(8017, 1, 250);
-            item.Add_Gift_Item_Use(8023, 1, 250);
-            item.Add_Gift_Item_Use(8025, 1, 250);
-            item.Add_Gift_Item_Use(9002, 1, 250);
-            item.Add_Gift_Item_Use(9007, 1, 250);
-            item.Add_Gift_Item_Use(9003, 1, 60);
-            item.Add_Gift_Item_Use(10000, 1, 250);
-            item.Add_Gift_Item_Use(10001, 1, 20);
-
-            item.Add_Gift_Item_Use(11004, 1, 250);
-            item.Add_Gift_Item_Use(11005, 1, 250);
-            item.Add_Gift_Item_Use(11006, 1, 250);
-            item.Add_Gift_Item_Use(11007, 1, 250);
-            item.Add_Gift_Item_Use(11008, 1, 250);
-            item.Add_Gift_Item_Use(11014, 1, 250);
-            item.Add_Gift_Item_Use(11015, 1, 250);
-            item.Add_Gift_Item_Use(11016, 1, 250);
-            item.Add_Gift_Item_Use(11017, 1, 250);
-            item.Add_Gift_Item_Use(11018, 1, 250);
-            item.Add_Gift_Item_Use(11020, 1, 250);
-            item.Add_Gift_Item_Use(11009, 1, 60);
-            item.Add_Gift_Item_Use(11019, 1, 60);
-
-            item.Add_Gift_Item_Etc(0002, 1, 250);
-            item.Add_Gift_Item_Etc(0003, 1, 250);
-            item.Add_Gift_Item_Etc(0006, 1, 250);
-            item.Add_Gift_Item_Etc(0015, 1, 250);
-            item.Add_Gift_Item_Etc(0016, 1, 250);
-            item.Add_Gift_Item_Etc(0007, 1, 60);
-            m_Dictionary_MonsterDrop_Use.Add(item.m_nItemCode, item);
-        }
-    }
-    // 모든 아이템 확률의 합은 10000(100%) 로 정한다.
-    void Load_Item_Use_Gift_RandomBox_dependentTrial()
-    {
-        Item_Use item;
-        // 초급 의문의 상자.
-        {
-            item = new Item_Use("초급 의문의 상자", 12600, "Prefab/Item/Item_Use/Gift/Box_Wood_2", E_ITEM_USE_TYPE.GIFT, E_ITEM_GRADE.NORMAL,
-                0, 0, 2000);
-            item.Set_Item_Use_Gift(E_ITEM_USE_GIFT_TYPE.RANDOMBOX_DEPENDENTTRIAL, 1, 5);
-            item.m_sItemDescription = "무엇이 들어있는지 알 수 없는 상자이다.";
-            item.m_bDisplay_Gift_Item = true;
-            item.m_sStatus_Limit_Min.SetSTATUS_LV(1);
-            item.Add_Gift_Item_Equip(1002, 1, 200);
-            item.Add_Gift_Item_Equip(1005, 1, 200);
-            item.Add_Gift_Item_Equip(1302, 1, 200);
-            item.Add_Gift_Item_Equip(1305, 1, 200);
-            item.Add_Gift_Item_Equip(1602, 1, 200);
-            item.Add_Gift_Item_Equip(1604, 1, 200);
-            item.Add_Gift_Item_Equip(2001, 1, 150);
-            item.Add_Gift_Item_Equip(2002, 1, 150);
-            item.Add_Gift_Item_Equip(2004, 1, 150);
-            item.Add_Gift_Item_Equip(3002, 1, 150);
-            item.Add_Gift_Item_Equip(4002, 1, 150);
-            item.Add_Gift_Item_Equip(4003, 1, 150);
-            item.Add_Gift_Item_Equip(4005, 1, 200);
-            item.Add_Gift_Item_Equip(6002, 1, 200);
-
-            item.Add_Gift_Item_Use(8000, 5, 500);
-            item.Add_Gift_Item_Use(8001, 5, 500);
-            item.Add_Gift_Item_Use(8002, 5, 300);
-            item.Add_Gift_Item_Use(9000, 1, 300);
-            item.Add_Gift_Item_Use(9001, 1, 300);
-            item.Add_Gift_Item_Use(10000, 1, 100);
-            item.Add_Gift_Item_Use(11000, 1, 300);
-            item.Add_Gift_Item_Use(11010, 1, 300);
-
-            item.Add_Gift_Item_Etc(0001, 1, 800);
-            item.Add_Gift_Item_Etc(0002, 1, 300);
-            item.Add_Gift_Item_Etc(0003, 1, 300);
-            item.Add_Gift_Item_Etc(0008, 1, 800);
-            item.Add_Gift_Item_Etc(0009, 1, 800);
-            item.Add_Gift_Item_Etc(0011, 1, 800);
-            item.Add_Gift_Item_Etc(0014, 1, 800);
-            item.Add_Gift_Item_Etc(0015, 1, 300);
-            m_Dictionary_MonsterDrop_Use.Add(item.m_nItemCode, item);
-        }
-        // 중급 의문의 상자.
-        {
-            item = new Item_Use("중급 의문의 상자", 12601, "Prefab/Item/Item_Use/Gift/Box_Iron_2", E_ITEM_USE_TYPE.GIFT, E_ITEM_GRADE.NORMAL,
-                0, 0, 5000);
-            item.Set_Item_Use_Gift(E_ITEM_USE_GIFT_TYPE.RANDOMBOX_DEPENDENTTRIAL, 1, 5);
-            item.m_sItemDescription = "무엇이 들어있는지 알 수 없는 상자이다.";
-            item.m_bDisplay_Gift_Item = true;
-            item.m_sStatus_Limit_Min.SetSTATUS_LV(10);
-            item.Add_Gift_Item_Equip(1013, 1, 300);
-            item.Add_Gift_Item_Equip(1012, 1, 100); 
-            item.Add_Gift_Item_Equip(1304, 1, 300);
-            item.Add_Gift_Item_Equip(1305, 1, 100);
-            item.Add_Gift_Item_Equip(1611, 1, 300);
-            item.Add_Gift_Item_Equip(1613, 1, 100);
-            item.Add_Gift_Item_Equip(2005, 1, 300);
-            item.Add_Gift_Item_Equip(2006, 1, 100);
-            item.Add_Gift_Item_Equip(3012, 1, 300);
-            item.Add_Gift_Item_Equip(3013, 1, 100);
-            item.Add_Gift_Item_Equip(4016, 1, 200);
-            item.Add_Gift_Item_Equip(4017, 1, 125);
-            item.Add_Gift_Item_Equip(4018, 1, 75);
-
-            item.Add_Gift_Item_Use(8003, 5, 200);
-            item.Add_Gift_Item_Use(8004, 5, 200);
-            item.Add_Gift_Item_Use(8005, 5, 200);
-            item.Add_Gift_Item_Use(8009, 5, 300);
-            item.Add_Gift_Item_Use(8011, 5, 300);
-            item.Add_Gift_Item_Use(8017, 5, 300);
-            item.Add_Gift_Item_Use(8020, 5, 300);
-            item.Add_Gift_Item_Use(8029, 5, 300);
-            item.Add_Gift_Item_Use(8030, 5, 200);
-            item.Add_Gift_Item_Use(9008, 1, 240);
-            item.Add_Gift_Item_Use(9002, 1, 240);
-            item.Add_Gift_Item_Use(9004, 1, 240);
-            item.Add_Gift_Item_Use(9005, 1, 240);
-            item.Add_Gift_Item_Use(9003, 1, 240);
-            item.Add_Gift_Item_Use(11000, 1, 300);
-            item.Add_Gift_Item_Use(11001, 1, 200);
-            item.Add_Gift_Item_Use(11002, 1, 100);
-            item.Add_Gift_Item_Use(11000, 1, 300);
-            item.Add_Gift_Item_Use(11001, 1, 200);
-            item.Add_Gift_Item_Use(11012, 1, 100);
-
-            item.Add_Gift_Item_Etc(0002, 1, 300);
-            item.Add_Gift_Item_Etc(0003, 1, 300);
-            item.Add_Gift_Item_Etc(0005, 1, 800);
-            item.Add_Gift_Item_Etc(0006, 1, 100);
-            item.Add_Gift_Item_Etc(0013, 1, 800);
-            item.Add_Gift_Item_Etc(0015, 1, 300);
-            item.Add_Gift_Item_Etc(0016, 1, 300);
-            m_Dictionary_MonsterDrop_Use.Add(item.m_nItemCode, item);
-        }
-    }
-
+    // 모든 기타아이템 데이터 로딩
     void Load_Item_Etc()
     {
         Item_Etc item;
@@ -2482,8 +2152,6 @@ public class ItemManager : MonoBehaviour
         item.m_sSoc_Limit_Max = new SOC();
         item.m_sItemDescription = "'짙은 앤트' 에게서 얻은 나무가죽이다.\n질기지만 가벼워 '드넓은 초원' 에서 널리 사용되고있다.\n'짙은 앤트의 나무가죽' 으로 만든 방어구는 성능이 뛰어나다고 한다.";
         m_Dictionary_MonsterDrop_Etc.Add(item.m_nItemCode, item);
-
-
 
         item = new Item_Etc("주식회사 더 슬라 사원증", 0005, "Prefab/Item/Item_Etc/Leather", E_ITEM_GRADE.NORMAL, E_ITEM_ETC_TYPE.JUNK, 20);
         item.m_sStatus_Effect = new STATUS(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -2619,9 +2287,330 @@ public class ItemManager : MonoBehaviour
         m_Dictionary_MonsterDrop_Etc.Add(item.m_nItemCode, item);
         m_Dictionary_Collection_Etc.Add(item.m_nItemCode, item);
     }
+    // 모든 소비아이템(기프트) 데이터 로딩
+    void Load_Item_Use_Gift()
+    {
+        Load_Item_Use_Gift_FixedBox();                   // 모든 소비아이템(기프트(아이템 확정 지급형)) 데이터 로딩
+        Load_Item_Use_Gift_RandomBox_IndependentTrial(); // 모든 소비아이템(기프트(랜덤 지급형 _ A 타입)) 데이터 로딩
+        Load_Item_Use_Gift_RandomBox_dependentTrial();   // 모든 소비아이템(기프트(랜덤 지급형 _ B 타입)) 데이터 로딩
+    }
+    // 모든 소비아이템(기프트(아이템 확정 지급형)) 데이터 로딩
+    void Load_Item_Use_Gift_FixedBox()
+    {
+        Item_Use item;
+        // 초보 모험가를 위한 선물 상자
+        {
+            item = new Item_Use("초보 모험가를 위한 선물 상자", 12000, "Prefab/Item/Item_Use/Gift/Box_Wood_1", E_ITEM_USE_TYPE.GIFT, E_ITEM_GRADE.NORMAL,
+                0, 0, 1000);
+            item.Set_Item_Use_Gift(E_ITEM_USE_GIFT_TYPE.FIXEDBOX);
+            item.m_sStatus_Limit_Max.SetSTATUS_LV(10);
+            item.m_sItemDescription = "초보 모험가의 편의를 위해 제공되는 선물상자이다.\n무기와 회복포션이 들어있다.";
+            item.Add_Gift_Item_Equip(1000, 1);
+            item.Add_Gift_Item_Equip(1300, 1);
+            item.Add_Gift_Item_Equip(1600, 1);
+            item.Add_Gift_Item_Equip(3001, 1);
+            item.Add_Gift_Item_Equip(4001, 1);
+            item.Add_Gift_Item_Equip(6001, 1);
+            item.Add_Gift_Item_Use(8000, 20);
+            item.Add_Gift_Item_Use(8001, 20);
+            m_Dictionary_MonsterDrop_Use.Add(item.m_nItemCode, item);
+        }
+        // 용병단의 비보 Lv1
+        {
+            item = new Item_Use("용병단의 비보 Lv1", 12001, "Prefab/Item/Item_Use/Gift/Box_Gold_Silver_1", E_ITEM_USE_TYPE.GIFT, E_ITEM_GRADE.RARE,
+                0, 0, 13000);
+            item.Set_Item_Use_Gift(E_ITEM_USE_GIFT_TYPE.FIXEDBOX);
+            item.m_sStatus_Limit_Min.SetSTATUS_LV(7);
+            item.m_sItemDescription = "역사상 최강의 용병 조직인 용병단의 비보이다.\n오직 신속하고 정확한 임무수행만을 위해 조직에 헌신하는 초급 용병에게 주어진다.\n앞으로 수행할 고난도의 임무 수행에 대비해 여러 아이템이 들어있다. 용병단의 재력은 상당한 수준이고 이 세계의 금기따위에 얽매이지 않기 때문에 획득하기 힘든 아이템을 여럿 획득할 수 있다.";
+            item.Add_Gift_Item_Equip(3004, 1);
+            item.Add_Gift_Item_Equip(4009, 1);
+            item.Add_Gift_Item_Equip(5002, 1);
+            item.Add_Gift_Item_Equip(6004, 1);
+            item.Add_Gift_Item_Use(8003, 20);
+            item.Add_Gift_Item_Use(8004, 20);
+            item.Add_Gift_Item_Use(11001, 5);
+            item.Add_Gift_Item_Use(11011, 3);
+            m_Dictionary_MonsterDrop_Use.Add(item.m_nItemCode, item);
+        }
+        // 기사단의 비보 Lv1
+        {
+            item = new Item_Use("기사단의 비보 Lv1", 12002, "Prefab/Item/Item_Use/Gift/Box_Gold_Ruby_1", E_ITEM_USE_TYPE.GIFT, E_ITEM_GRADE.RARE,
+                0, 0, 13000);
+            item.Set_Item_Use_Gift(E_ITEM_USE_GIFT_TYPE.FIXEDBOX);
+            item.m_sSoc_Limit_Min = new SOC(30, 0, 0, 0, 0, 0, 0, 0, -10000);
+            item.m_sSoc_Limit_Max = new SOC(10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10);
+            item.m_sStatus_Limit_Min.SetSTATUS_LV(7);
+            item.m_sItemDescription = "오랜 전통과 역사를 자랑하는 기사단의 비보이다.\n끝없는 역경과 고난을 헤쳐내고 인내하며 남을 위해 헌신하는 정의로운 초급 기사에게 주어진다.\n앞으로 수행할 고난도의 임무 수행에 대비해 여러 아이템이 들어있다.";
+            item.Add_Gift_Item_Equip(3007, 1);
+            item.Add_Gift_Item_Equip(4013, 1);
+            item.Add_Gift_Item_Equip(5005, 1);
+            item.Add_Gift_Item_Equip(6007, 1);
+            item.Add_Gift_Item_Use(8003, 10);
+            item.Add_Gift_Item_Use(8004, 10);
+            m_Dictionary_MonsterDrop_Use.Add(item.m_nItemCode, item);
+        }
+    }
+    // 모든 소비아이템(기프트(랜덤 지급형 _ A 타입)) 데이터 로딩
+    // 소비아이템(기프트(랜덤 지급형 _ A 타입)) 목록의 아이템 획득 확률의 합은 10000(100%)
+    void Load_Item_Use_Gift_RandomBox_IndependentTrial()
+    {
+        Item_Use item;
+        // 대장장이 '블랙' 의 무기 상자
+        {
+            item = new Item_Use("대장장이 '블랙' 의 무기 상자", 12300, "Prefab/Item/Item_Use/Gift/Box_Iron_1", E_ITEM_USE_TYPE.GIFT, E_ITEM_GRADE.COMMON,
+                0, 0, 2500);
+            item.Set_Item_Use_Gift(E_ITEM_USE_GIFT_TYPE.RANDOMBOX_INDEPENDENTTRIAL, 1, 1);
+            item.m_sItemDescription = "'드넓은 초원' 의 대장장이 '블랙' 이 만든 무기가 들어있다.\n어떤 무기가 들어있는지는 알 수 없으나 대장장이 '블랙' 이 직접 만든 무기가 단 한개만 들어있다.\n운이 좋다면 좋은 무기를 얻을 수 있다.";
+            item.m_sStatus_Limit_Min.SetSTATUS_LV(5);
+            item.Add_Gift_Item_Equip(1001, 1, 1000);
+            item.Add_Gift_Item_Equip(1003, 1, 1000);
+            item.Add_Gift_Item_Equip(1004, 1, 1000);
+            item.Add_Gift_Item_Equip(1301, 1, 1000);
+            item.Add_Gift_Item_Equip(1303, 1, 1000);
+            item.Add_Gift_Item_Equip(1304, 1, 1000);
+            item.Add_Gift_Item_Equip(1601, 1, 1000);
+            item.Add_Gift_Item_Equip(1602, 1, 1000);
+            item.Add_Gift_Item_Equip(1603, 1, 1000);
+            item.Add_Gift_Item_Equip(2007, 1, 1000);
+            m_Dictionary_MonsterDrop_Use.Add(item.m_nItemCode, item);
+        }
+        // 대장장이 '블랙 스미슬라임' 의 방어구 상자
+        {
+            item = new Item_Use("대장장이 '블랙스미슬라임' 의 방어구 상자", 12301, "Prefab/Item/Item_Use/Gift/Box_Iron_1", E_ITEM_USE_TYPE.GIFT, E_ITEM_GRADE.COMMON,
+                0, 0, 2500);
+            item.Set_Item_Use_Gift(E_ITEM_USE_GIFT_TYPE.RANDOMBOX_INDEPENDENTTRIAL, 1, 1);
+            item.m_sItemDescription = "'드넓은 초원' 의 대장장이 '블랙스미슬라임' 이 만든 방어구가 들어있다.\n어떤 방어구가 들어있는지는 알 수 없으나 대장장이 '블랙스미슬라임' 이 직접 만든 방어구가 단 한개만 들어있다.\n운이 좋다면 좋은 방어구를 얻을 수 있다.";
+            item.m_sStatus_Limit_Min.SetSTATUS_LV(5);
+            item.Add_Gift_Item_Equip(3003, 1, 1250);
+            item.Add_Gift_Item_Equip(3010, 1, 1250);
+            item.Add_Gift_Item_Equip(4003, 1, 1250);
+            item.Add_Gift_Item_Equip(4005, 1, 1250);
+            item.Add_Gift_Item_Equip(4006, 1, 1250);
+            item.Add_Gift_Item_Equip(4008, 1, 1250);
+            item.Add_Gift_Item_Equip(5001, 1, 1250);
+            item.Add_Gift_Item_Equip(6003, 1, 1250);
+            m_Dictionary_MonsterDrop_Use.Add(item.m_nItemCode, item);
+        }
+        // 은빛 보물 상자 Lv1
+        {
+            item = new Item_Use("은빛 보물 상자 Lv1", 12302, "Prefab/Item/Item_Use/Gift/Box_SilverPlating_1", E_ITEM_USE_TYPE.GIFT, E_ITEM_GRADE.RARE,
+                0, 0, 80000);
+            item.Set_Item_Use_Gift(E_ITEM_USE_GIFT_TYPE.RANDOMBOX_INDEPENDENTTRIAL, 1, 1);
+            item.m_sItemDescription = "귀하디 귀한 보물 상자이다.\n등급은 낮지만 그래도 꼴에 보물 상자라고 레어보다 낮은 등급의 아이템은 상자에 들어있지 않다.";
+            item.Add_Gift_Item_Equip(1005, 1, 250);
+            item.Add_Gift_Item_Equip(1006, 1, 250);
+            item.Add_Gift_Item_Equip(1009, 1, 250);
+            item.Add_Gift_Item_Equip(1017, 1, 250);
+            item.Add_Gift_Item_Equip(1018, 1, 250);
+            item.Add_Gift_Item_Equip(1607, 1, 250);
+            item.Add_Gift_Item_Equip(1608, 1, 250);
+            item.Add_Gift_Item_Equip(1609, 1, 250);
+            item.Add_Gift_Item_Equip(2006, 1, 250);
+            item.Add_Gift_Item_Equip(2007, 1, 250);
+            item.Add_Gift_Item_Equip(4004, 1, 250);
+            item.Add_Gift_Item_Equip(4016, 1, 250);
+            item.Add_Gift_Item_Equip(4017, 1, 250);
+            item.Add_Gift_Item_Equip(4018, 1, 250);
+            item.Add_Gift_Item_Equip(5008, 1, 250);
+            item.Add_Gift_Item_Equip(1016, 1, 60);
+            item.Add_Gift_Item_Equip(1610, 1, 60);
+            item.Add_Gift_Item_Equip(1615, 1, 60);
+            item.Add_Gift_Item_Equip(2003, 1, 60);
 
-    // Item 반환.
-    public Item Get_Item_Information(int itemcode)
+            item.Add_Gift_Item_Use(8011, 1, 250);
+            item.Add_Gift_Item_Use(8017, 1, 250);
+            item.Add_Gift_Item_Use(8023, 1, 250);
+            item.Add_Gift_Item_Use(8025, 1, 250);
+            item.Add_Gift_Item_Use(9002, 1, 250);
+            item.Add_Gift_Item_Use(9007, 1, 250);
+            item.Add_Gift_Item_Use(9003, 1, 60);
+            item.Add_Gift_Item_Use(10000, 1, 250);
+            item.Add_Gift_Item_Use(10001, 1, 20);
+
+            item.Add_Gift_Item_Use(11004, 1, 250);
+            item.Add_Gift_Item_Use(11005, 1, 250);
+            item.Add_Gift_Item_Use(11006, 1, 250);
+            item.Add_Gift_Item_Use(11007, 1, 250);
+            item.Add_Gift_Item_Use(11008, 1, 250);
+            item.Add_Gift_Item_Use(11014, 1, 250);
+            item.Add_Gift_Item_Use(11015, 1, 250);
+            item.Add_Gift_Item_Use(11016, 1, 250);
+            item.Add_Gift_Item_Use(11017, 1, 250);
+            item.Add_Gift_Item_Use(11018, 1, 250);
+            item.Add_Gift_Item_Use(11020, 1, 250);
+            item.Add_Gift_Item_Use(11009, 1, 60);
+            item.Add_Gift_Item_Use(11019, 1, 60);
+
+            item.Add_Gift_Item_Etc(0002, 1, 250);
+            item.Add_Gift_Item_Etc(0003, 1, 250);
+            item.Add_Gift_Item_Etc(0006, 1, 250);
+            item.Add_Gift_Item_Etc(0015, 1, 250);
+            item.Add_Gift_Item_Etc(0016, 1, 250);
+            item.Add_Gift_Item_Etc(0007, 1, 60);
+            m_Dictionary_MonsterDrop_Use.Add(item.m_nItemCode, item);
+        }
+        // 은빛 보물 상자 Lv2
+        {
+            item = new Item_Use("은빛 보물 상자 Lv2", 12303, "Prefab/Item/Item_Use/Gift/Box_SilverPlating_2", E_ITEM_USE_TYPE.GIFT, E_ITEM_GRADE.RARE,
+                0, 0, 120000);
+            item.Set_Item_Use_Gift(E_ITEM_USE_GIFT_TYPE.RANDOMBOX_INDEPENDENTTRIAL, 1, 3);
+            item.m_sItemDescription = "귀하디 귀한 보물 상자이다.\n등급은 낮지만 그래도 꼴에 보물 상자라고 레어보다 낮은 등급의 아이템은 상자에 들어있지 않다.\n'은빛 보물 상자 Lv1' 보다 더 많은 아이템을 획득할 수 있다.";
+            item.Add_Gift_Item_Equip(1005, 1, 250);
+            item.Add_Gift_Item_Equip(1006, 1, 250);
+            item.Add_Gift_Item_Equip(1009, 1, 250);
+            item.Add_Gift_Item_Equip(1017, 1, 250);
+            item.Add_Gift_Item_Equip(1018, 1, 250);
+            item.Add_Gift_Item_Equip(1607, 1, 250);
+            item.Add_Gift_Item_Equip(1608, 1, 250);
+            item.Add_Gift_Item_Equip(1609, 1, 250);
+            item.Add_Gift_Item_Equip(2006, 1, 250);
+            item.Add_Gift_Item_Equip(2007, 1, 250);
+            item.Add_Gift_Item_Equip(4004, 1, 250);
+            item.Add_Gift_Item_Equip(4016, 1, 250);
+            item.Add_Gift_Item_Equip(4017, 1, 250);
+            item.Add_Gift_Item_Equip(4018, 1, 250);
+            item.Add_Gift_Item_Equip(5008, 1, 250);
+            item.Add_Gift_Item_Equip(1016, 1, 60);
+            item.Add_Gift_Item_Equip(1610, 1, 60);
+            item.Add_Gift_Item_Equip(1615, 1, 60);
+            item.Add_Gift_Item_Equip(2003, 1, 60);
+
+            item.Add_Gift_Item_Use(8011, 1, 250);
+            item.Add_Gift_Item_Use(8017, 1, 250);
+            item.Add_Gift_Item_Use(8023, 1, 250);
+            item.Add_Gift_Item_Use(8025, 1, 250);
+            item.Add_Gift_Item_Use(9002, 1, 250);
+            item.Add_Gift_Item_Use(9007, 1, 250);
+            item.Add_Gift_Item_Use(9003, 1, 60);
+            item.Add_Gift_Item_Use(10000, 1, 250);
+            item.Add_Gift_Item_Use(10001, 1, 20);
+
+            item.Add_Gift_Item_Use(11004, 1, 250);
+            item.Add_Gift_Item_Use(11005, 1, 250);
+            item.Add_Gift_Item_Use(11006, 1, 250);
+            item.Add_Gift_Item_Use(11007, 1, 250);
+            item.Add_Gift_Item_Use(11008, 1, 250);
+            item.Add_Gift_Item_Use(11014, 1, 250);
+            item.Add_Gift_Item_Use(11015, 1, 250);
+            item.Add_Gift_Item_Use(11016, 1, 250);
+            item.Add_Gift_Item_Use(11017, 1, 250);
+            item.Add_Gift_Item_Use(11018, 1, 250);
+            item.Add_Gift_Item_Use(11020, 1, 250);
+            item.Add_Gift_Item_Use(11009, 1, 60);
+            item.Add_Gift_Item_Use(11019, 1, 60);
+
+            item.Add_Gift_Item_Etc(0002, 1, 250);
+            item.Add_Gift_Item_Etc(0003, 1, 250);
+            item.Add_Gift_Item_Etc(0006, 1, 250);
+            item.Add_Gift_Item_Etc(0015, 1, 250);
+            item.Add_Gift_Item_Etc(0016, 1, 250);
+            item.Add_Gift_Item_Etc(0007, 1, 60);
+            m_Dictionary_MonsterDrop_Use.Add(item.m_nItemCode, item);
+        }
+    }
+    // 모든 소비아이템(기프트(랜덤 지급형 _ B 타입)) 데이터 로딩
+    // 소비아이템(기프트(랜덤 지급형 _ B 타입)) 목록의 아이템 획득 확률의 합은 10000(100%)
+    void Load_Item_Use_Gift_RandomBox_dependentTrial()
+    {
+        Item_Use item;
+        // 초급 의문의 상자
+        {
+            item = new Item_Use("초급 의문의 상자", 12600, "Prefab/Item/Item_Use/Gift/Box_Wood_2", E_ITEM_USE_TYPE.GIFT, E_ITEM_GRADE.NORMAL,
+                0, 0, 2000);
+            item.Set_Item_Use_Gift(E_ITEM_USE_GIFT_TYPE.RANDOMBOX_DEPENDENTTRIAL, 1, 5);
+            item.m_sItemDescription = "무엇이 들어있는지 알 수 없는 상자이다.";
+            item.m_bDisplay_Gift_Item = true;
+            item.m_sStatus_Limit_Min.SetSTATUS_LV(1);
+            item.Add_Gift_Item_Equip(1002, 1, 200);
+            item.Add_Gift_Item_Equip(1005, 1, 200);
+            item.Add_Gift_Item_Equip(1302, 1, 200);
+            item.Add_Gift_Item_Equip(1305, 1, 200);
+            item.Add_Gift_Item_Equip(1602, 1, 200);
+            item.Add_Gift_Item_Equip(1604, 1, 200);
+            item.Add_Gift_Item_Equip(2001, 1, 150);
+            item.Add_Gift_Item_Equip(2002, 1, 150);
+            item.Add_Gift_Item_Equip(2004, 1, 150);
+            item.Add_Gift_Item_Equip(3002, 1, 150);
+            item.Add_Gift_Item_Equip(4002, 1, 150);
+            item.Add_Gift_Item_Equip(4003, 1, 150);
+            item.Add_Gift_Item_Equip(4005, 1, 200);
+            item.Add_Gift_Item_Equip(6002, 1, 200);
+
+            item.Add_Gift_Item_Use(8000, 5, 500);
+            item.Add_Gift_Item_Use(8001, 5, 500);
+            item.Add_Gift_Item_Use(8002, 5, 300);
+            item.Add_Gift_Item_Use(9000, 1, 300);
+            item.Add_Gift_Item_Use(9001, 1, 300);
+            item.Add_Gift_Item_Use(10000, 1, 100);
+            item.Add_Gift_Item_Use(11000, 1, 300);
+            item.Add_Gift_Item_Use(11010, 1, 300);
+
+            item.Add_Gift_Item_Etc(0001, 1, 800);
+            item.Add_Gift_Item_Etc(0002, 1, 300);
+            item.Add_Gift_Item_Etc(0003, 1, 300);
+            item.Add_Gift_Item_Etc(0008, 1, 800);
+            item.Add_Gift_Item_Etc(0009, 1, 800);
+            item.Add_Gift_Item_Etc(0011, 1, 800);
+            item.Add_Gift_Item_Etc(0014, 1, 800);
+            item.Add_Gift_Item_Etc(0015, 1, 300);
+            m_Dictionary_MonsterDrop_Use.Add(item.m_nItemCode, item);
+        }
+        // 중급 의문의 상자
+        {
+            item = new Item_Use("중급 의문의 상자", 12601, "Prefab/Item/Item_Use/Gift/Box_Iron_2", E_ITEM_USE_TYPE.GIFT, E_ITEM_GRADE.NORMAL,
+                0, 0, 5000);
+            item.Set_Item_Use_Gift(E_ITEM_USE_GIFT_TYPE.RANDOMBOX_DEPENDENTTRIAL, 1, 5);
+            item.m_sItemDescription = "무엇이 들어있는지 알 수 없는 상자이다.";
+            item.m_bDisplay_Gift_Item = true;
+            item.m_sStatus_Limit_Min.SetSTATUS_LV(10);
+            item.Add_Gift_Item_Equip(1013, 1, 300);
+            item.Add_Gift_Item_Equip(1012, 1, 100); 
+            item.Add_Gift_Item_Equip(1304, 1, 300);
+            item.Add_Gift_Item_Equip(1305, 1, 100);
+            item.Add_Gift_Item_Equip(1611, 1, 300);
+            item.Add_Gift_Item_Equip(1613, 1, 100);
+            item.Add_Gift_Item_Equip(2005, 1, 300);
+            item.Add_Gift_Item_Equip(2006, 1, 100);
+            item.Add_Gift_Item_Equip(3012, 1, 300);
+            item.Add_Gift_Item_Equip(3013, 1, 100);
+            item.Add_Gift_Item_Equip(4016, 1, 200);
+            item.Add_Gift_Item_Equip(4017, 1, 125);
+            item.Add_Gift_Item_Equip(4018, 1, 75);
+
+            item.Add_Gift_Item_Use(8003, 5, 200);
+            item.Add_Gift_Item_Use(8004, 5, 200);
+            item.Add_Gift_Item_Use(8005, 5, 200);
+            item.Add_Gift_Item_Use(8009, 5, 300);
+            item.Add_Gift_Item_Use(8011, 5, 300);
+            item.Add_Gift_Item_Use(8017, 5, 300);
+            item.Add_Gift_Item_Use(8020, 5, 300);
+            item.Add_Gift_Item_Use(8029, 5, 300);
+            item.Add_Gift_Item_Use(8030, 5, 200);
+            item.Add_Gift_Item_Use(9008, 1, 240);
+            item.Add_Gift_Item_Use(9002, 1, 240);
+            item.Add_Gift_Item_Use(9004, 1, 240);
+            item.Add_Gift_Item_Use(9005, 1, 240);
+            item.Add_Gift_Item_Use(9003, 1, 240);
+            item.Add_Gift_Item_Use(11000, 1, 300);
+            item.Add_Gift_Item_Use(11001, 1, 200);
+            item.Add_Gift_Item_Use(11002, 1, 100);
+            item.Add_Gift_Item_Use(11000, 1, 300);
+            item.Add_Gift_Item_Use(11001, 1, 200);
+            item.Add_Gift_Item_Use(11012, 1, 100);
+
+            item.Add_Gift_Item_Etc(0002, 1, 300);
+            item.Add_Gift_Item_Etc(0003, 1, 300);
+            item.Add_Gift_Item_Etc(0005, 1, 800);
+            item.Add_Gift_Item_Etc(0006, 1, 100);
+            item.Add_Gift_Item_Etc(0013, 1, 800);
+            item.Add_Gift_Item_Etc(0015, 1, 300);
+            item.Add_Gift_Item_Etc(0016, 1, 300);
+            m_Dictionary_MonsterDrop_Use.Add(item.m_nItemCode, item);
+        }
+    }
+    
+    // 아이템 데이터 반환 함수
+    public Item Get_Item_Information(int itemcode) // itemcode : 반환할 아이템 고유코드
     {
         if (m_Dictionary_MonsterDrop_Equip.ContainsKey(itemcode) == true)
         {
