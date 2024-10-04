@@ -126,7 +126,7 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
         itemobject.name = item.m_sItemName;
 
         itemscript.m_FadeinAlpa = 0;
-        itemscript.Fadein(); // 아이템 생성시 페이드인 효과 실행 함수
+        itemscript.Fadein(); // 아이템 생성 시 페이드인 효과 실행 함수
     }
     
     // 장비아이템 사본을 생성하는 함수. 플레이어가 장비아이템 사본을 획득할 시 사용되는 함수
