@@ -13,8 +13,8 @@ public class Item_Etc : Item // 기반이 되는 Item 클래스 상속
     // 빈 생성자
     public Item_Etc() { }
     // 기타아이템 원본을 생성하는 생성자. 게임 시작 시 최초 1회만 사용되는 생성자
-    public Item_Etc(string name, int code, string path_sprite, 
-        E_ITEM_GRADE eig, E_ITEM_ETC_TYPE iet, int price)
+    public Item_Etc(string name, int code, string path_sprite, E_ITEM_GRADE eig, E_ITEM_ETC_TYPE iet,
+        int price)
     {
         this.m_sItemName = name;
         this.m_nItemCode = code;
