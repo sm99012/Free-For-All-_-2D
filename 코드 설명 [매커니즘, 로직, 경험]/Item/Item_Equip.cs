@@ -224,7 +224,7 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
     }
 
     // 로딩 관련 함수
-    // 게임 시작 시 플레이어가 장착중이거나 보유한 장비아이템 스탯(능력치, 평판) 로딩
+    // 게임 시작 시 플레이어가 장착중이거나 보유한 장비아이템 데이터 로딩
     public Item_Equip LoadItem(int itemcode, int itemnumber, STATUS additionalstatus, SOC additionalsoc, int reinforcementcount_current, STATUS reinforcementstatus, SOC reinforcementsoc)
     {
         Item_Equip item = ItemManager.instance.m_Dictionary_MonsterDrop_Equip[itemcode];
