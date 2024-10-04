@@ -1649,7 +1649,7 @@ public class Player_Total : MonoBehaviour
                     Dictionary<int, int> Dictionary_GetItem_Etc_Count = new Dictionary<int, int>();   // 종류별 획득할 기타아이템 개수
                     int tempnumber;
 
-                    // 3_1. 소비아이템(기프트_고정형(전체 확정 지급형)) 사용 시 아이템 획득(기프트 구성물품 전부를 획득한다.)
+                    // 3_1. 소비아이템(기프트(아이템 확정 지급형)) 사용 시 아이템 획득(기프트 구성물품 전부를 획득한다.)
                     if (item.m_eItemUseGiftType == E_ITEM_USE_GIFT_TYPE.FIXEDBOX)
                     {
                         if (CheckCondition_Item_Use_Gift(item, arynumber) == true) // 소비아이템(기프트) 사용 조건(획득할 아이템 만큼 인벤토리에 여유가 있는지 판단)을 충족한 경우
@@ -1734,7 +1734,7 @@ public class Player_Total : MonoBehaviour
                             return 2;
                         }
                     }
-                    // 3_2. 소비아이템(기프트_랜덤 독립형(랜덤 지급 A타입 : 아이템 중복 획득 가능)) 사용 시 아이템 획득(기프트 구성물품중 정해진 품목 개수만큼 랜덤으로 획득한다. 이때 아이템 중복 획득이 가능하다.)
+                    // 3_2. 소비아이템(기프트(랜덤 지급형 _ A 타입 : 아이템 중복 획득 가능)) 사용 시 아이템 획득(기프트 구성물품중 정해진 품목 개수만큼 랜덤으로 획득한다. 이때 아이템 중복 획득이 가능하다.)
                     else if (item.m_eItemUseGiftType == E_ITEM_USE_GIFT_TYPE.RANDOMBOX_INDEPENDENTTRIAL)
                     {
                         if (CheckCondition_Item_Use_Gift(item, arynumber) == true) // 소비아이템(기프트) 사용 조건(획득할 아이템 만큼 인벤토리에 여우가 있는지 판단)을 충족한 경우
@@ -1900,7 +1900,7 @@ public class Player_Total : MonoBehaviour
                             return 2;
                         }
                     }
-                    // 3_3. 소비아이템(기프트_랜덤 종속형(랜덤 지급 B타입 : 아이템 중복 획득 불가능)) 사용 시 아이템 획득(기프트 구성물품중 정해진 품목 개수만큼 랜덤으로 획득한다. 이때 아이템 중복 획득이 불가능하다.)
+                    // 3_3. 소비아이템(기프트(랜덤 지급형 _ B 타입 : 아이템 중복 획득 불가능)) 사용 시 아이템 획득(기프트 구성물품중 정해진 품목 개수만큼 랜덤으로 획득한다. 이때 아이템 중복 획득이 불가능하다.)
                     else if (item.m_eItemUseGiftType == E_ITEM_USE_GIFT_TYPE.RANDOMBOX_DEPENDENTTRIAL)
                     {
                         if (CheckCondition_Item_Use_Gift(item, arynumber) == true) // 소비아이템(기프트) 사용 조건(획득할 아이템 만큼 인벤토리에 여유가 있는지 판단)을 충족한 경우
@@ -2096,7 +2096,7 @@ public class Player_Total : MonoBehaviour
             {
                 bool item_equip_get_possible = true, item_use_get_possible = true, item_etc_get_possible = true; // 인벤토리에 여유가 있는지 판단할때 사용되는 변수
 
-                // 1. 소비아이템(기프트_고정형(전체 확정 지급형)) 사용 조건(획득할 아이템 만큼 인벤토리에 여유가 있는지) 판단
+                // 1. 소비아이템(기프트(아이템 확정 지급형)) 사용 조건(획득할 아이템 만큼 인벤토리에 여유가 있는지) 판단
                 if (item.m_eItemUseGiftType == E_ITEM_USE_GIFT_TYPE.FIXEDBOX)
                 {
                     // 장비아이템을 획득할 인벤토리(장비아이템)에 여유가 있는지 판단
@@ -2135,7 +2135,7 @@ public class Player_Total : MonoBehaviour
                         item_etc_get_possible = false;
                     }
 
-                    // 인벤토리(장비아이템, 소비아이템, 기타아이템)에 모두 여유가 있을 경우에만 소비아이템(기프트_고정형(전체 확정 지급형)) 사용 가능
+                    // 인벤토리(장비아이템, 소비아이템, 기타아이템)에 모두 여유가 있을 경우에만 소비아이템(기프트(아이템 확정 지급형)) 사용 가능
                     if (item_equip_get_possible == false || item_use_get_possible == false || item_etc_get_possible == false)
                     {
                         return false;
@@ -2145,7 +2145,7 @@ public class Player_Total : MonoBehaviour
                         return true;
                     }
                 }
-                // 2. 소비아이템(기프트_랜덤 독립형(랜덤 지급 A타입 : 아이템 중복 획득 가능)) 사용 조건(획득할 아이템 만큼 인벤토리에 여유가 있는지) 판단
+                // 2. 소비아이템(기프트(랜덤 지급형 _ A 타입 : 아이템 중복 획득 가능)) 사용 조건(획득할 아이템 만큼 인벤토리에 여유가 있는지) 판단
                 else if (item.m_eItemUseGiftType == E_ITEM_USE_GIFT_TYPE.RANDOMBOX_INDEPENDENTTRIAL)
                 {
                     // 장비아이템을 획득할 인벤토리(장비아이템)에 여유가 있는지 판단. 장비아이템 1개당 인벤토리(장비아이템) 1개의 공간을 필요로 한다.
@@ -2233,7 +2233,7 @@ public class Player_Total : MonoBehaviour
                         item_etc_get_possible = false;
                     }
 
-                    // 인벤토리(장비아이템, 소비아이템, 기타아이템)에 모두 여유가 있을 경우에만 소비아이템(기프트_랜덤 독립형(랜덤 지급 A타입 : 아이템 중복 획득 가능)) 사용 가능
+                    // 인벤토리(장비아이템, 소비아이템, 기타아이템)에 모두 여유가 있을 경우에만 소비아이템(기프트(랜덤 지급형 _ A 타입 : 아이템 중복 획득 가능)) 사용 가능
                     if (item_equip_get_possible == false || item_use_get_possible == false || item_etc_get_possible == false)
                     {
                         return false;
@@ -2243,7 +2243,7 @@ public class Player_Total : MonoBehaviour
                         return true;
                     }
                 }
-                // 3. 소비아이템(기프트_랜덤 종속형(랜덤 지급 B타입 : 아이템 중복 획득 불가능)) 사용 조건(획득할 아이템 만큼 인벤토리에 여유가 있는지) 판단
+                // 3. 소비아이템(기프트(랜덤 지급형 _ B 타입 : 아이템 중복 획득 불가능)) 사용 조건(획득할 아이템 만큼 인벤토리에 여유가 있는지) 판단
                 else if (item.m_eItemUseGiftType == E_ITEM_USE_GIFT_TYPE.RANDOMBOX_DEPENDENTTRIAL)
                 {
                     // 장비아이템을 획득할 인벤토리(장비아이템)에 여유가 있는지 판단. 장비아이템 1개당 인벤토리(장비아이템) 1개의 공간을 필요로 한다.
@@ -2334,7 +2334,7 @@ public class Player_Total : MonoBehaviour
                         item_etc_get_possible = false;
                     }
 
-                    // 인벤토리(장비아이템, 소비아이템, 기타아이템)에 모두 여유가 있을 경우에만 소비아이템(기프트_랜덤 종속형(랜덤 지급 B타입 : 아이템 중복 획득 불가능)) 사용 가능
+                    // 인벤토리(장비아이템, 소비아이템, 기타아이템)에 모두 여유가 있을 경우에만 소비아이템(기프트(랜덤 지급형 _ B 타입 : 아이템 중복 획득 불가능)) 사용 가능
                     if (item_equip_get_possible == false || item_use_get_possible == false || item_etc_get_possible == false)
                     {
                         return false;
