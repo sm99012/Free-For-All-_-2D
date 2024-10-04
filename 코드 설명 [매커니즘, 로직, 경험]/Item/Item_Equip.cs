@@ -77,7 +77,7 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
     {
         GameObject itemobject = Instantiate(ItemManager.instance.m_gItem_Equip_Null); // 장비아이템 사본(유니티 오브젝트) 생성
 
-        // 장비아이템 사본 객체 정보 할당
+        // 장비아이템 사본 객체 데이터 할당
         Item_Equip itemscript = itemobject.GetComponent<Item_Equip>();
 
         itemscript.m_bPossible_Get = false;
