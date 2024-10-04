@@ -48,8 +48,8 @@ public class Item_Use : Item // 기반이 되는 Item 클래스 상속
     // 빈 생성자
     public Item_Use() { }
     // 소비아이템 원본을 생성하는 생성자. 게임 시작 시 최초 1회만 사용되는 생성자
-    public Item_Use(string name, int code, string path_sprite, E_ITEM_USE_TYPE iut, E_ITEM_GRADE ig,
-        float durationtime, float cooltime, int price)
+    public Item_Use(string name, int code, string path_sprite, 
+        E_ITEM_USE_TYPE iut, E_ITEM_GRADE ig, float durationtime, float cooltime, int price)
     {
         this.m_sItemName = name;
         this.m_nItemCode = code;
