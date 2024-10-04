@@ -55,7 +55,7 @@ public class ItemManager : MonoBehaviour
     public Dictionary<int, Item_Use> m_Dictionary_QuestReward_Use;     // 퀘스트 완료 보상으로 획득 가능한 소비아이템 딕셔너리. Dictionary <Key : 소비아이템 고유코드, Value : 소비아이템 데이터>
     public Dictionary<int, Item_Etc> m_Dictionary_QuestReward_Etc;     // 퀘스트 완료 보상으로 획득 가능한 기타아이템 딕셔너리. Dictionary <Key : 기타아이템 고유코드, Value : 기타아이템 데이터>
 
-    // 변수 초기화
+    // 변수 초기화 및 데이터 로딩
     public void InitialSet()
     {
         m_Dictionary_MonsterDrop_Equip = new Dictionary<int, Item_Equip>();
@@ -75,7 +75,7 @@ public class ItemManager : MonoBehaviour
         m_gItem_Etc_Null = Resources.Load("Prefab/GameObject/Item_Etc_Null") as GameObject;
         m_gItem_Gold_Null = Resources.Load("Prefab/GameObject/Item_Gold_Null") as GameObject;
 
-        Load_Item();
+        Load_Item(); // 게임 시작 시 모든 아이템 데이터 로딩
     }
 
     // 로딩 관련 함수
