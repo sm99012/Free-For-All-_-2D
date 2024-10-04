@@ -44,8 +44,10 @@ public class Item_Use : Item // 기반이 되는 Item 클래스 상속
     //    3. m_nDictionary_Gift_Item_Equip_Probability[n] 의 확률로 획득 할 수 있다.
     //
 
+    // 생성자 오버로딩을 이용한 소비아이템 생성 함수(경우에 따라 사용하는 생성자가 다르다.)
+    // 빈 생성자
     public Item_Use() { }
-    // Item 원본.
+    // 소비아이템 원본을 생성하는 생성자. 게임 시작 시 최초 1회만 사용되는 생성자
     public Item_Use(string name, int code, string path_sprite, E_ITEM_USE_TYPE iut, E_ITEM_GRADE ig,
         float durationtime, float cooltime, int price)
     {
