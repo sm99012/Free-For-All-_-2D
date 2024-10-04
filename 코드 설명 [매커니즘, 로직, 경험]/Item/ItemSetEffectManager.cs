@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//
+// ※ 싱글톤패턴을 적용한 ItemSetEffectManager 클래스를 이용해 모든 아이템 세트효과를 관리한다.
+//    추후 최적화를 위해 플레이어에게 적용중인 아이템 세트효과 데이터만을 로드해 메모리 성능을 높일 예정이다.
+//    최적화 관련 정보는 아래 링크를 참조해 주세요.
+//    
+//
 public class ItemSetEffectManager : MonoBehaviour
 {
     public static ItemSetEffectManager m_ItemSetEffectManager = null;
@@ -16,9 +22,6 @@ public class ItemSetEffectManager : MonoBehaviour
             return m_ItemSetEffectManager;
         }
     }
-
-    public static Dictionary<int, ItemSetEffect> m_Dictionary_ItemSetEffect;
-
     private void Awake()
     {
         if (m_ItemSetEffectManager == null)
@@ -31,15 +34,10 @@ public class ItemSetEffectManager : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
+    
+    public static Dictionary<int, ItemSetEffect> m_Dictionary_ItemSetEffect; // 아이템 세트효과 딕셔너리. Dictionary <Key : 아이템 세트효과 고유코드, Value : 아이템 세트효과 데이터>
 
-    private void Update()
-    {
-        if (Input.GetKeyUp(KeyCode.Insert))
-        {
-            Information_SetItemEffect(1);
-        }
-    }
-
+    // 변수 초기화 및 데이터 로딩
     public void InitialSet()
     {
         m_Dictionary_ItemSetEffect = new Dictionary<int, ItemSetEffect>();
@@ -173,6 +171,10 @@ public class ItemSetEffectManager : MonoBehaviour
         return m_Dictionary_ItemSetEffect[setitemnumber].m_sItemSetEffect_Name + " " + count.ToString();
     }
 }
+
+//
+// ※ 아이템 세트효과 클래스
+//
 
 public class ItemSetEffect
 {
