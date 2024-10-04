@@ -59,6 +59,7 @@ public class Item_Use : Item // 기반이 되는 Item 클래스 상속
         this.m_eItemGrade = ig;
         this.m_eItemUseType = iut;
 
+        // 소비아이템 사용 효과 및 조건(상한ㆍ하한) 스탯(능력치, 평판) 초기화
         this.m_sStatus_Effect = new STATUS(0);
         this.m_sStatus_Limit_Min = new STATUS(-10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000);
         this.m_sStatus_Limit_Max = new STATUS(10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000);
@@ -66,7 +67,7 @@ public class Item_Use : Item // 기반이 되는 Item 클래스 상속
         this.m_sSoc_Limit_Min = new SOC(-10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000);
         this.m_sSoc_Limit_Max = new SOC(10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000);
 
-        if (iut == E_ITEM_USE_TYPE.GIFT)
+        if (iut == E_ITEM_USE_TYPE.GIFT) // 소비아이템(기프트)의 경우 관련 딕셔너리 초기화
         {
             m_bDisplay_Gift_Item = true;
             m_nDictionary_Gift_Item_Equip_Code = new Dictionary<int, int>();
@@ -84,37 +85,38 @@ public class Item_Use : Item // 기반이 되는 Item 클래스 상속
 
         this.m_fDurationTime = durationtime;
         this.m_fCoolTime = cooltime;
+        
         this.m_nPrice = price;
     }
 
-    // 기프트 타입 지정.
-    public void Set_Item_Use_Gift(E_ITEM_USE_GIFT_TYPE eiugt, int pickcount_min = 0, int pickcount_max = 0)
+    // 소비아이템(기프트) 관련 설정 함수
+    public void Set_Item_Use_Gift(E_ITEM_USE_GIFT_TYPE eiugt, int pickcount_min = 0, int pickcount_max = 0) // eiugt : 소비아이템(기프트) 타입
     {
         m_eItemUseGiftType = eiugt;
         m_nRandomBox_PickCount_Min = pickcount_min;
         m_nRandomBox_PickCount_Max = pickcount_max;
     }
-    // 기프트 품목 추가.
-    public void Add_Gift_Item_Equip(int code, int count, int probability = 10000)
+    // 소비아이템(기프트) 목록 추가 함수
+    public void Add_Gift_Item_Equip(int code, int count, int probability = 10000) // code : 추가할 장비아이템 고유코드, count : 아이템 획득 개수, probability : 아이템 획득 확률
     {
         m_nDictionary_Gift_Item_Equip_Code.Add(m_nDictionary_Gift_Item_Equip_Probability.Count, code);
         m_nDictionary_Gift_Item_Equip_Count.Add(m_nDictionary_Gift_Item_Equip_Probability.Count, count);
         m_nDictionary_Gift_Item_Equip_Probability.Add(m_nDictionary_Gift_Item_Equip_Probability.Count, probability);
     }
-    public void Add_Gift_Item_Use(int code, int count, int probability = 10000)
+    public void Add_Gift_Item_Use(int code, int count, int probability = 10000) // code : 추가할 소비아이템 고유코드, count : 아이템 획득 개수, probability : 아이템 획득 확률
     {
         m_nDictionary_Gift_Item_Use_Code.Add(m_nDictionary_Gift_Item_Use_Probability.Count, code);
         m_nDictionary_Gift_Item_Use_Count.Add(m_nDictionary_Gift_Item_Use_Probability.Count, count);
         m_nDictionary_Gift_Item_Use_Probability.Add(m_nDictionary_Gift_Item_Use_Probability.Count, probability);
     }
-    public void Add_Gift_Item_Etc(int code, int count, int probability = 10000)
+    public void Add_Gift_Item_Etc(int code, int count, int probability = 10000) // code : 추가할 기타아이템 고유코드, count : 아이템 획득 개수, probability : 아이템 획득 확률
     {
         m_nDictionary_Gift_Item_Etc_Code.Add(m_nDictionary_Gift_Item_Etc_Probability.Count, code);
         m_nDictionary_Gift_Item_Etc_Count.Add(m_nDictionary_Gift_Item_Etc_Probability.Count, count);
         m_nDictionary_Gift_Item_Etc_Probability.Add(m_nDictionary_Gift_Item_Etc_Probability.Count, probability);
     }
 
-    // 아이템 정보 UI 용 기프트 품목명, 수량, 확률 반환.
+    // 소비아이템(기프트) 사용 정보(아이템 목록, 아이템 획득 개수, 아이템 획득 확률) 반환 함수
     public string Return_Gift_List()
     {
         string strtoken = "";
