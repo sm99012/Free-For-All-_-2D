@@ -116,11 +116,12 @@ public class ItemSetEffectManager : MonoBehaviour
         m_Dictionary_ItemSetEffect.Add(ise.m_nItemSetEffect_Code, ise);
     }
 
-    public void Information_SetItemEffect(int setitemcode)
+    // 아이템 세트효과 정보 출력(테스트 전용)
+    public void Information_SetItemEffect(int setitemcode) // setitemcode : 아이템 세트효과 고유코드
     {
         if (m_Dictionary_ItemSetEffect.ContainsKey(setitemcode) == true)
         {
-            m_Dictionary_ItemSetEffect[setitemcode].Information_SetItemEffect();
+            m_Dictionary_ItemSetEffect[setitemcode].Information_SetItemEffect(); // 아이템 세트효과 정보 출력(테스트 전용)
         }
         else
         {
@@ -128,25 +129,26 @@ public class ItemSetEffectManager : MonoBehaviour
         }
     }
 
-    // 해당 아이템이 세트효과를 가지고 있는지 판단.
-    // return null: 세트효과 X.
-    public int Return_SetItemEffect(int itemcode)
+    // 장비아이템의 아이템 세트효과 보유 여부를 판단하는 함수. 아이템 세트효과 고유코드를 반환한다.
+    // return 0 : 아이템 세트효과 미보유 / return n (n > 0) : 아이템 세트효과 보유(아이템 세트효과 고유코드 반환)
+    public int Return_SetItemEffect(int itemcode) // itemcode : 장비아이템 고유코드
     {
-        foreach (KeyValuePair<int, ItemSetEffect> dictionary in m_Dictionary_ItemSetEffect)
+        foreach (KeyValuePair<int, ItemSetEffect> dictionary in m_Dictionary_ItemSetEffect) // 모든 아이템 세트효과 검색
         {
-            if (dictionary.Value.m_Dictionary_Item_Equip_Code.ContainsKey(itemcode) == true)
+            if (dictionary.Value.m_Dictionary_Item_Equip_Code.ContainsKey(itemcode) == true) // 아이템 세트효과 데이터에 itemcode에 해당하는 장비아이템 고유코드가 존재할 경우
             {
-                return dictionary.Key;
+                return dictionary.Key; // 아이템 세트효과 고유코드 반환
             }
         }
 
         return 0;
     }
-    // 아이템 세트 효과 여부 판단.
-    public bool Check_SetItemEffect(int setitemnumber, int count)
+    
+    // 아이템 세트효과의 추가 스탯(능력치, 평판)이 존재하는지 판단하는 함수. 해당 아이템 세트효과에 추가 스탯(능력치, 평판)이 존재하지 않는 경우 해당 아이템 세트효과 정보는 표시되지 않는다.
+    public bool Check_SetItemEffect(int setitemnumber, int count) // setitemnumber : 아이템 세트효과 고유코드, count : 아이템 세트효과 고유코드를 보유한 착용중인 장비아이템 개수
     {
         if (m_Dictionary_ItemSetEffect[setitemnumber].m_Dictionary_STATUS_Effect[count].CheckIdentity(new STATUS(0)) == true && 
-            m_Dictionary_ItemSetEffect[setitemnumber].m_Dictionary_SOC_Effect[count].CheckIdentity(new SOC(0)) == true)
+            m_Dictionary_ItemSetEffect[setitemnumber].m_Dictionary_SOC_Effect[count].CheckIdentity(new SOC(0)) == true) // 스탯(능력치, 평판) 동일성 판단. 추가 스탯(능력치, 평판)이 존재하는지 판단
         {
             return false;
         }
@@ -156,43 +158,38 @@ public class ItemSetEffectManager : MonoBehaviour
         }
     }
 
-
-    // 아이템 세트 효과 반환.
-    public STATUS Return_SetItemEffect_STATUS(int setitemnumber, int count)
+    // 아이템 세트효과 추가 스탯(능력치) 반환 함수
+    public STATUS Return_SetItemEffect_STATUS(int setitemnumber, int count) // setitemnumber : 아이템 세트효과 고유코드, count : 아이템 세트효과 고유코드를 보유한 착용중인 장비아이템 개수
     {
         return new STATUS(m_Dictionary_ItemSetEffect[setitemnumber].m_Dictionary_STATUS_Effect[count]);
     }
-    public SOC Return_SetItemEffect_SOC(int setitemnumber, int count)
+    // 아이템 세트효과 추가 스탯(평판) 반환 함수
+    public SOC Return_SetItemEffect_SOC(int setitemnumber, int count) // setitemnumber : 아이템 세트효과 고유코드, count : 아이템 세트효과 고유코드를 보유한 착용중인 장비아이템 개수
     {
         return new SOC(m_Dictionary_ItemSetEffect[setitemnumber].m_Dictionary_SOC_Effect[count]);
     }
-    public string Return_SetItemEffect_Name(int setitemnumber, int count)
+    // 아이템 세트효과 정보(아이템 세트효과 이름, 아이템 세트효과 고유코드를 보유한 착용중인 장비아이템 개수) 반환 함수
+    public string Return_SetItemEffect_Name(int setitemnumber, int count) // setitemnumber : 아이템 세트효과 고유코드, count : 아이템 세트효과 고유코드를 보유한 착용중인 장비아이템 개수
     {
         return m_Dictionary_ItemSetEffect[setitemnumber].m_sItemSetEffect_Name + " " + count.ToString();
     }
 }
 
-//
-// ※ 아이템 세트효과 클래스
-//
-
-public class ItemSetEffect
+public class ItemSetEffect // 아이템 세트효과 클래스
 {
-    public string m_sItemSetEffect_Name;
-    public int m_nItemSetEffect_Code;
+    public string m_sItemSetEffect_Name; // 아이템 세트효과 이름
+    public int m_nItemSetEffect_Code;    // 아이템 세트효과 고유코드(n > 0)
 
-    // m_Dictionary_STATUS_Effect[0]: 세트효과 없음.
-    // m_Dictionary_STATUS_Effect[1]: 세트 아이템 1개 장착 효과.
-    // m_Dictionary_STATUS_Effect[2]: 세트 아이템 2개 장착 효과.
-    // m_Dictionary_STATUS_Effect[3]: 세트 아이템 3개 장착 효과.
-    // . . .
-    public Dictionary<int, STATUS> m_Dictionary_STATUS_Effect;
-    public Dictionary<int, SOC> m_Dictionary_SOC_Effect;
-    public Dictionary<int, string> m_Dictionary_Description;
+    public Dictionary<int, STATUS> m_Dictionary_STATUS_Effect; // 아이템 세트효과 추가 스탯(능력치) 딕셔너리. Dictionary <Key : 장비아이템 개수, Value : 추가 스탯(능력치)>
+    public Dictionary<int, SOC> m_Dictionary_SOC_Effect;       // 아이템 세트효과 추가 스탯(평판) 딕셔너리. Dictionary <Key : 장비아이템 개수, Value : 추가 스탯(평판)>
+    public Dictionary<int, string> m_Dictionary_Description;   // 아이템 세트효과 설명 딕셔너리. Dictionary <Key : 장비아이템 개수, Value : 설명>
 
-    // 세트 아이템 리스트. - 아이템 코드로 확인.
-    public Dictionary<int, int> m_Dictionary_Item_Equip_Code;
+    public Dictionary<int, int> m_Dictionary_Item_Equip_Code; // 아이템 세트효과 고유코드를 보유한 장비아이템 딕셔너리. Dictionary <Key : 장비아이템 고유코드, Value : 장비아이템 고유코드>
+                                                              //
+                                                              // ※ 이렇게 딕셔너리를 이용해 구현할 필요가 없다. 추후 변경 예정
+                                                              //
 
+    // 아이템 세트효과 데이터를 생성하는 생성자
     public ItemSetEffect(string name, int code)
     {
         this.m_sItemSetEffect_Name = name;
@@ -205,23 +202,34 @@ public class ItemSetEffect
         m_Dictionary_Item_Equip_Code = new Dictionary<int, int>();
     }
 
-    public bool AddItemSetEffect(int itemcount, STATUS statuseffect, SOC soceffect, string description = "")
+    // 아이템 세트효과 데이터 설정 관련 함수. 아이템 세트효과 고유코드를 보유한 장비아이템 개수별 아이템 세트효과 설정
+    //
+    // Ex) '굉장히 엄청난 세트 _ 1' : 해당 아이템 세트효과 고유코드를 보유한 장비아이템 1개 착용
+    //     '굉장히 엄청난 세트 _ 2' : 해당 아이템 세트효과 고유코드를 보유한 장비아이템 2개 착용(해당 아이템 세트효과에 추가 스탯(능력치, 평판)이 존재하지 않는 경우 해당 아이템 세트효과는 표시되지 않는다.)
+    //     '굉장히 엄청난 세트 _ 3' : 해당 아이템 세트효과 고유코드를 보유한 장비아이템 3개 착용
+    //     '굉장히 엄청난 세트 _ n' : 해당 아이템 세트효과 고유코드를 보유한 장비아이템 n개 착용
+    //
+    public bool AddItemSetEffect(int itemcount, STATUS statuseffect, SOC soceffect, string description = "") // itemcount : 아이템 세트효과 고유코드를 보유한 장비아이템 개수, statuseffect : 추가 스탯(능력치), soceffect : 추가 스탯(평판), description : 설명
     {
+        // 아이템 세트효과 데이터(스탯(능력치)) 설정
         if (AddItemSetEffect_STATUS(itemcount, statuseffect) == false)
         {
             return false;
         }
+        // 아이템 세트효과 데이터(스탯(평판)) 설정
         if (AddItemSetEffect_SOC(itemcount, soceffect) == false)
         {
             return false;
         }
+        // 아이템 세트효과 데이터(설명) 설정
         if (AddItemSetEffect_Description(itemcount, description) == false)
         {
             return false;
         }
         return true;
     }
-    bool AddItemSetEffect_STATUS(int itemcount, STATUS statuseffect)
+    // 아이템 세트효과 데이터(스탯(능력치)) 설정
+    bool AddItemSetEffect_STATUS(int itemcount, STATUS statuseffect) // itemcount : 아이템 세트효과 고유코드를 보유한 장비아이템 개수, statuseffect : 추가 스탯(능력치)
     {
         if (m_Dictionary_STATUS_Effect.ContainsKey(itemcount) == false)
         {
@@ -231,7 +239,8 @@ public class ItemSetEffect
         }
         return false;
     }
-    bool AddItemSetEffect_SOC(int itemcount, SOC soceffect)
+    // 아이템 세트효과 데이터(스탯(평판)) 설정
+    bool AddItemSetEffect_SOC(int itemcount, SOC soceffect) // itemcount : 아이템 세트효과 고유코드를 보유한 장비아이템 개수, soceffect : 추가 스탯(평판)
     {
         if (m_Dictionary_SOC_Effect.ContainsKey(itemcount) == false)
         {
@@ -241,7 +250,8 @@ public class ItemSetEffect
         }
         return false;
     }
-    bool AddItemSetEffect_Description(int itemcount, string description)
+    // 아이템 세트효과 데이터(설명) 설정
+    bool AddItemSetEffect_Description(int itemcount, string description) // itemcount : 아이템 세트효과 고유코드를 보유한 장비아이템 개수, description : 설명
     {
         if (m_Dictionary_Description.ContainsKey(itemcount) == false)
         {
@@ -252,7 +262,9 @@ public class ItemSetEffect
         return false;
     }
 
-    public bool AddItem(int itemcode, string itemname = "")
+    // 아이템 세트효과 고유코드를 보유한 장비아이템 추가
+    // return true : 추가 성공 / return false : 추가 실패(이미 추가된 상태)
+    public bool AddItem(int itemcode, string itemname = "") // itemcode : 장비아이템 고유코드, itemname : 장비아이템 이름(확인용)
     {
         if (m_Dictionary_Item_Equip_Code.ContainsKey(itemcode) == false)
         {
@@ -263,12 +275,12 @@ public class ItemSetEffect
         return false;
     }
 
-    // 세트 아이템 효과 정보 출력.
+    // 아이템 세트효과 정보 출력(테스트 전용)
     public void Information_SetItemEffect()
     {
-        //Debug.Log(m_sItemSetEffect_Name + " / " + m_nItemSetEffect_Code);
-        //Debug.Log(m_Dictionary_STATUS_Effect[1].GetSTATUS_Data());
-        //Debug.Log(m_Dictionary_SOC_Effect[1].GetSOC_Data());
+        Debug.Log(m_sItemSetEffect_Name + " / " + m_nItemSetEffect_Code);
+        Debug.Log(m_Dictionary_STATUS_Effect[1].GetSTATUS_Data());
+        Debug.Log(m_Dictionary_SOC_Effect[1].GetSOC_Data());
     }
 }
 
