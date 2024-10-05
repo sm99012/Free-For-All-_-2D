@@ -33,7 +33,7 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
     public int m_nReinforcementCount_Max;     // 장비아이템 최대 강화 횟수
     public int m_nReinforcementCount_Current; // 장비아이템 현재 강화 횟수
 
-    public int m_nItemSetCode; // 장비아이템 세트효과 코드번호. 세트효과가 존재하지 않을 경우 0 할당
+    public int m_nItemSetCode; // 아이템 세트효과 코드번호. 아이템 세트효과가 존재하지 않을 경우 0 할당
 
     // 생성자 오버로딩을 이용한 장비아이템 생성 함수(경우에 따라 사용하는 생성자가 다르다.)
     // 빈 생성자
