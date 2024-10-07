@@ -38,7 +38,7 @@ public class ItemSetEffectManager : MonoBehaviour
     
     public static Dictionary<int, ItemSetEffect> m_Dictionary_ItemSetEffect; // 아이템 세트효과 딕셔너리. Dictionary <Key : 아이템 세트효과 고유코드, Value : 아이템 세트효과 데이터>
 
-    // 변수 초기화 및 데이터 로딩
+    // 변수 초기화 및 아이템 세트효과 데이터 로딩
     public void InitialSet()
     {
         m_Dictionary_ItemSetEffect = new Dictionary<int, ItemSetEffect>();
