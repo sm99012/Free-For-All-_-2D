@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Reinforcement // 장비아이템 강화 관련 클래스
-                           // 장비아이템에는 장비아이템 최대 강화 횟수가 존재하는데 해당 횟수 만큼 강화를 할 수 있다.
-                           // 강화는 성공할때 까지 가능하다. 강화 실패의 단점이 없다.
+//
+// ※ 장비아이템 강화 관련 클래스
+//    장비아이템에는 장비아이템 최대 강화 횟수가 존재하는데 해당 횟수 만큼 강화를 할 수 있다.
+//    강화는 성공할때 까지 가능하다. 강화 실패의 단점이 없다.
+//
+
+public class Reinforcement
 {
     int m_nProbabilityMax; // 장비아이템 강화 확률 범위(10000 고정)
     int m_nProbability;    // 장비아이템 강화 성공 확률(0.01% ~ 100%)
