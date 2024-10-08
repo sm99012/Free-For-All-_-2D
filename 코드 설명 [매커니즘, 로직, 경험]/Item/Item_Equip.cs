@@ -33,7 +33,7 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
     public int m_nReinforcementCount_Max;     // 장비아이템 최대 강화 횟수
     public int m_nReinforcementCount_Current; // 장비아이템 현재 강화 횟수
 
-    public int m_nItemSetCode; // 아이템 세트효과 코드. 아이템 세트효과가 존재하지 않을 경우 0 할당
+    public int m_nItemSetEffectCode; // 아이템 세트효과 코드. 아이템 세트효과가 존재하지 않을 경우 0 할당
 
     // 생성자 오버로딩을 이용한 장비아이템 생성 함수(경우에 따라 사용하는 생성자가 다르다.)
     // 빈 생성자
@@ -70,7 +70,7 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
         m_nReinforcementCount_Current = rfccur;
         
         m_nPrice = price;
-        m_nItemSetCode = setitemcode;
+        m_nItemSetEffectCode = setitemcode;
     }
     // 장비아이템 사본을 생성하는 생성자. 필드에 장비아이템 드랍 시 사용되는 생성자
     public Item_Equip(Item_Equip item, Vector3 itemposition) // item : 장비아이템 원본 객체, itemposition : 장비아이템 드랍 위치
@@ -118,7 +118,7 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
         itemscript.m_nReinforcementCount_Current = item.m_nReinforcementCount_Current;
         
         itemscript.m_nPrice = item.m_nPrice;
-        itemscript.m_nItemSetCode = item.m_nItemSetCode;
+        itemscript.m_nItemSetEffectCode = item.m_nItemSetEffectCode;
 
         itemobject.transform.position = itemposition;
 
@@ -170,7 +170,7 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
         itemscript.m_nReinforcementCount_Current = item.m_nReinforcementCount_Current;
         
         itemscript.m_nPrice = item.m_nPrice;
-        itemscript.m_nItemSetCode = item.m_nItemSetCode;
+        itemscript.m_nItemSetEffectCode = item.m_nItemSetEffectCode;
 
         Destroy(this.gameObject); // 장비아이템 사본(유니티 오브젝트) 삭제
 
@@ -218,7 +218,7 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
         itemscript.m_nReinforcementCount_Current = item.m_nReinforcementCount_Current;
 
         itemscript.m_nPrice = item.m_nPrice;
-        itemscript.m_nItemSetCode = item.m_nItemSetCode;
+        itemscript.m_nItemSetEffectCode = item.m_nItemSetEffectCode;
 
         return itemscript;
     }
@@ -266,7 +266,7 @@ public class Item_Equip : Item // 기반이 되는 Item 클래스 상속
         itemscript.m_nReinforcementCount_Current = reinforcementcount_current;
 
         itemscript.m_nPrice = item.m_nPrice;
-        itemscript.m_nItemSetCode = item.m_nItemSetCode;
+        itemscript.m_nItemSetEffectCode = item.m_nItemSetEffectCode;
 
         return itemscript;
     }
