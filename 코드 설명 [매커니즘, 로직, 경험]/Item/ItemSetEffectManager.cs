@@ -145,7 +145,7 @@ public class ItemSetEffectManager : MonoBehaviour
         return 0;
     }
     
-    // 아이템 세트효과의 추가 스탯(능력치, 평판)이 존재하는지 판단하는 함수. 해당 아이템 세트효과에 추가 스탯(능력치, 평판)이 존재하지 않는 경우 해당 아이템 세트효과 정보는 표시되지 않는다.
+    // 아이템 세트효과의 단계 별 추가 스탯(능력치, 평판) 존재 유무를 판단하는 함수. 해당 아이템 세트효과에 추가 스탯(능력치, 평판)이 존재하지 않는 경우 해당 아이템 세트효과 정보는 표시되지 않는다.
     public bool Check_SetItemEffect(int setitemnumber, int count) // setitemnumber : 아이템 세트효과 고유코드, count : 아이템 세트효과 고유코드를 보유한 착용중인 장비아이템 개수
     {
         if (m_Dictionary_ItemSetEffect[setitemnumber].m_Dictionary_STATUS_Effect[count].CheckIdentity(new STATUS(0)) == true && 
