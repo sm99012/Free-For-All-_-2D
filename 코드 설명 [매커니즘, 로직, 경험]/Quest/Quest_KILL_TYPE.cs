@@ -7,7 +7,7 @@ using UnityEngine;
 //    해당 퀘스트는 특정 몬스터 타입 토벌(사냥) 행위와 연관되어 있다. 몬스터 타입이란 평판 데이터(인간, 동물, 슬라임, 스켈레톤, 앤트, 마족, 용족, 어둠)와 관련이 있다.
 //
 
-public class Quest_KILL_TYPE : Quest
+public class Quest_KILL_TYPE : Quest // 기반이 되는 Quest 클래스 상속
 {
     // 특정 몬스터 타입 관련 변수
     public E_MONSTER_KIND m_eMonsterType; // 특정 몬스터 타입
