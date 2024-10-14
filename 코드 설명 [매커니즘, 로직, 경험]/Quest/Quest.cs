@@ -239,7 +239,7 @@ public class Quest : MonoBehaviour
     virtual public bool Check_Condition_STATUS()
     {
         if (Player_Total.Instance.m_ps_Status.m_sStatus.CheckCondition_Min(m_sStatus_Necessity_Down) == true &&
-            Player_Total.Instance.m_ps_Status.m_sStatus.CheckCondition_Max(m_sStatus_Necessity_Up) == true) // 능력치 조건 판단(하한), 능력치 조건 판단(상한)
+            Player_Total.Instance.m_ps_Status.m_sStatus.CheckCondition_Max(m_sStatus_Necessity_Up) == true) // 스탯(능력치) 조건 판단(상한ㆍ하한)
             return true;
         else
             return false;
@@ -248,7 +248,7 @@ public class Quest : MonoBehaviour
     virtual public bool Check_Condition_SOC()
     {
         if (Player_Total.Instance.m_ps_Status.m_sSoc.CheckCondition_Min(m_sSoc_Necessity_Down) == true &&
-            Player_Total.Instance.m_ps_Status.m_sSoc.CheckCondition_Max(m_sSoc_Necessity_Up) == true) // 평판 조건 판단(하한), 평판 조건 판단(상한)
+            Player_Total.Instance.m_ps_Status.m_sSoc.CheckCondition_Max(m_sSoc_Necessity_Up) == true) // 스탯(평판) 조건 판단(상한ㆍ하한)
             return true;
         else
             return false;
