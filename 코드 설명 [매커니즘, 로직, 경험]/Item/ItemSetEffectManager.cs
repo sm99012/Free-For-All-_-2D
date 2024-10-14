@@ -6,7 +6,7 @@ using UnityEngine;
 // ※ 싱글톤패턴을 적용한 ItemSetEffectManager 클래스를 이용해 모든 아이템 세트효과를 관리한다.
 //    추후 최적화를 위해 플레이어에게 적용중인 아이템 세트효과 데이터만을 로드해 메모리 성능을 높일 예정이다.
 //    최적화 관련 정보는 아래 링크를 참조해 주세요.
-//    
+//    https://qowhddnjs.tistory.com/42
 //
 
 public class ItemSetEffectManager : MonoBehaviour
