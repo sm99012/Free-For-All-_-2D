@@ -17,8 +17,8 @@ public enum E_QUEST_LEVEL { S1, S2, S3, S4, S5, S6, S7, S8, S9, S10 }
 public enum E_QUEST_REPEAT { ONCE, FINITE, INFINITE }
 
 //
-// ※ Quest 클래스는 가장 공들여 설계한 클래스 중 하나이다. 상속과 가상함수(오버라이딩)을 이용해 다양한 퀘스트를 구현했다.
-//    인터페이스를 이용한 효율적인 메모리 관리법을 생각하고 있다.
+// ※ Quest 클래스는 가장 공들여 설계한 클래스 중 하나이다. 퀘스트 데이터의 저장, 로드 과정에서는 꽤나 애먹었던 기억이 난다.
+//    상속과 가상함수(오버라이딩)을 이용해 다양한 퀘스트를 구현했다. 추후 인터페이스를 이용한 효율적인 메모리 관리법을 생각하고 있다.
 //
 
 public class Quest : MonoBehaviour
@@ -41,7 +41,9 @@ public class Quest : MonoBehaviour
 
     public E_QUEST_TYPE m_eQuestType;   // 퀘스트 타입
     public E_QUEST_LEVEL m_eQuestLevel; // 퀘스트 등급(난이도)
-
+    
+    public bool m_bQuest_Information_Process_Hide; // 히든 퀘스트의 정보 출력 여부
+    
     public int m_nNPC;       // 퀘스트 발행 NPC
     public int m_nNPC_Clear; // 퀘스트 완료 NPC
 
@@ -66,46 +68,34 @@ public class Quest : MonoBehaviour
     public SOC m_sSoc_Necessity_Up;         // 스탯(평판) 상한(플레이어의 스탯(평판) 합계가 퀘스트 진행 사전 조건(해당 조건)을 초과한 경우 제한)
     public SOC m_sSoc_Necessity_Down;       // 스탯(평판) 하한(플레이어의 스탯(평판) 합계가 퀘스트 진행 사전 조건(해당 조건)에 미달한 경우 제한)
     // 퀘스트 진행 사전 조건 - 연계 퀘스트
-    public List<Quest> m_ql_Quest_Necessity_Clear;      // 사전 조건 - 완료 퀘스트(해당 리스트에 포함된 퀘스트의 완료 여부 판단)
-    public List<Quest> m_ql_Quest_Necessity_NonClear;   // 사전 조건 - 미완료 퀘스트(해당 리스트에 포함된 퀘스트의 미완료 여부 판단)
-    public List<Quest> m_ql_Quest_Necessity_Process;    // 사전 조건 - 진행 퀘스트(해당 리스트에 포함된 퀘스트의 진행 여부 판단)
-    public List<Quest> m_ql_Quest_Necessity_NonProcess; // 사전 조건 - 미진행 퀘스트(해당 리스트에 포함된 퀘스트의 미진행 여부 판단)
+    public List<Quest> m_ql_Quest_Necessity_Clear;      // 필수 완료 퀘스트(해당 리스트에 포함된 퀘스트가 완료되지 않은 경우 제한)
+    public List<Quest> m_ql_Quest_Necessity_NonClear;   // 필수 미완료 퀘스트(해당 리스트에 포함된 퀘스트가 완료된 경우 제한)
+    public List<Quest> m_ql_Quest_Necessity_Process;    // 필수 진행 퀘스트(해당 리스트에 포함된 퀘스트가 진행 중이지 않은 경우 제한)
+    public List<Quest> m_ql_Quest_Necessity_NonProcess; // 필수 미진행 퀘스트(해당 리스트에 포함된 퀘스트가 진행 중인 경우 제한)
 
-    // 퀘스트 클리어 보상
-    public List<Item_Equip> m_lRewardList_Item_Equip;
-    public List<Item_Use> m_lRewardList_Item_Use;
-    public List<Item_Etc> m_lRewardList_Item_Etc;
-    public STATUS m_sRewardSTATUS;
-    public SOC m_sRewardSOC;
-    public int m_nRewardGold;
+    // 퀘스트 완료 보상 관련 변수
+    public List<Item_Equip> m_lRewardList_Item_Equip; // 장비아이템 보상 리스트
+    public List<Item_Use> m_lRewardList_Item_Use;     // 소비아이템 보상 리스트
+    public List<Item_Etc> m_lRewardList_Item_Etc;     // 기타아이템 보상 리스트
+    public int m_nRewardGold;                         // 골드(재화) 보상
+    public STATUS m_sRewardSTATUS;                    // 스탯(능력치(경험치 + 고정형 능력치(최대체력, 최대마나, 데미지, 방어력, 이동속도, 공격속도))) 보상
+    public SOC m_sRewardSOC;                          // 스탯(평판) 보상
 
-    // 퀘스트 클리어 시점
-    public int m_nClearDay;
+    public int m_nClearDay; // 퀘스트 완료 시점
 
-    // 히든 퀘스트의 정보 출력 여부.
-    public bool m_bQuest_Information_Process_Hide;
+    // 퀘스트 GUI 정보 출력 관련 변수
+    public string m_sQuest_Information_Recommend; // 시작 가능한(추천) 퀘스트 정보
+    public string m_sQuest_Information_Process;   // 진행중인 퀘스트 정보
+    public string m_sQuest_Information_Condition; // 완료 가능한 퀘스트 정보
+    public string m_sQuest_Information_Clear;     // 완료한 퀘스트 정보
 
-    // 추천 퀘스트 정보.
-    public string m_sQuest_Information_Recommend;
-    // 퀘스트 진행도중 퀘스트 정보.
-    public string m_sQuest_Information_Process;
-    // 퀘스트 완료 가능시 퀘스트 정보.
-    public string m_sQuest_Information_Condition;
-    // 퀘스트 완료 후 퀘스트 정보.
-    public string m_sQuest_Information_Clear;
-
+    // 생성자. 사용하지 않음
     public Quest()
     {
         InitialSet();
-        //m_nl_MonsterCode = new List<int>();
-        //m_nl_Count_Max = new List<int>();
-        //m_nl_Count_Current = new List<int>();
-        //m_nl_ItemCode = new List<int>();
-        //m_nl_ItemCount_Max = new List<int>();
-        //m_nl_ItemCount_Current = new List<int>();
     }
 
-    // Quest 초기 설정.
+    // 퀘스트 초기 설정
     protected void InitialSet()
     {
         m_bProcess = false;
