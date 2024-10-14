@@ -37,7 +37,7 @@ public class Quest_KILL_MONSTER : Quest // 기반이 되는 Quest 클래스 상�
         m_nl_Count_Current = new List<int>();
     }
 
-    // 특정 몬스터 토벌 퀘스트 설정 함수
+    // 특정 몬스터 토벌 퀘스트 설정(추가) 함수
     public void AddCondition(int monstercode, int max, int c = 0) // monstercode : 특정 몬스터 고유코드, max : 특정 몬스터 토벌 필요 수량, c : 특정 몬스터 토벌 현재 수량
     {
         m_nl_MonsterCode.Add(monstercode);
