@@ -54,7 +54,7 @@ public class Quest_GOAWAY_MONSTER : Quest // 기반이 되는 Quest 클래스 �
         {
             if (m_nl_MonsterCode[i] == monstercode) // 특정 몬스터 고유코드 == 플레이어가 놓아주기한 몬스터 고유코드
             {
-                if (m_nl_Count_Max[i] > m_nl_Count_Current[i]) 특정 몬스터 놓아주기 필요 수량 > 특정 몬스터 놓아주기 현재 수량
+                if (m_nl_Count_Max[i] > m_nl_Count_Current[i]) // 특정 몬스터 놓아주기 필요 수량 > 특정 몬스터 놓아주기 현재 수량
                     m_nl_Count_Current[i]++;
 
                 m_bReturn = true;
