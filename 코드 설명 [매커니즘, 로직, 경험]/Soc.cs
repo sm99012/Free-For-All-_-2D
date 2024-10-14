@@ -44,6 +44,34 @@ public struct SOC
         this.m_nDragonSoc = soc.GetSOC_Dragon();
         this.m_nShadowSoc = soc.GetSOC_Shadow();
     }
+    // 생성자 - 조건형(최대ㆍ최소 평판 설정)
+    public SOC(bool bmax)
+    {
+        if (bmax == true)
+        {
+            this.m_nHonor = 10000;
+            this.m_nHumanSoc = 10000;
+            this.m_nAnimalSoc = 10000;
+            this.m_nSlimeSoc = 10000;
+            this.m_nSkeletonSoc = 10000;
+            this.m_nEntsSoc = 10000;
+            this.m_nDevilSoc = 10000;
+            this.m_nDragonSoc = 10000;
+            this.m_nShadowSoc = 10000;
+        }
+        else
+        {
+            this.m_nHonor = -10000;
+            this.m_nHumanSoc = -10000;
+            this.m_nAnimalSoc = -10000;
+            this.m_nSlimeSoc = -10000;
+            this.m_nSkeletonSoc = -10000;
+            this.m_nEntsSoc = -10000;
+            this.m_nDevilSoc = -10000;
+            this.m_nDragonSoc = -10000;
+            this.m_nShadowSoc = -10000;
+        }
+    }
 
     // 평판 +- 연산
     public void P_OperatorSOC_Honor(int value)
