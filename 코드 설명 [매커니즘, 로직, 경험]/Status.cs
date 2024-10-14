@@ -77,6 +77,50 @@ public struct STATUS
         this.m_nEvasionRate = status.GetSTATUS_EvasionRate();
         this.m_fAttackSpeed = status.GetSTATUS_AttackSpeed();
     }
+    // 생성자 - 조건형(최대ㆍ최소 능력치 설정)
+    public STATUS(bool bmax)
+    {
+        if (bmax == true)
+        {
+            this.m_nLV = 10000;
+            this.m_nEXP_Max = 10000;
+            this.m_nEXP_Current = 10000;
+            this.m_nHP_Max = 10000;
+            this.m_nHP_Current = 10000;
+            this.m_nMP_Max = 10000;
+            this.m_nMP_Current = 10000;
+            this.m_nDamage_Total = 10000;
+            this.m_nDamage_Physical = 10000;
+            this.m_nDamage_Magical = 10000;
+            this.m_nCriticalRate = 10000;
+            this.m_nCriticalDamage = 10000;
+            this.m_nSpeed = 10000;
+            this.m_nDefence_Physical = 10000;
+            this.m_nDefence_Magical = 10000;
+            this.m_nEvasionRate = 10000;
+            this.m_fAttackSpeed = 10000;
+        }
+        else
+        {
+            this.m_nLV = -10000;
+            this.m_nEXP_Max = -10000;
+            this.m_nEXP_Current = -10000;
+            this.m_nHP_Max = -10000;
+            this.m_nHP_Current = -10000;
+            this.m_nMP_Max = -10000;
+            this.m_nMP_Current = -10000;
+            this.m_nDamage_Total = -10000;
+            this.m_nDamage_Physical = -10000;
+            this.m_nDamage_Magical = -10000;
+            this.m_nCriticalRate = -10000;
+            this.m_nCriticalDamage = -10000;
+            this.m_nSpeed = -10000;
+            this.m_nDefence_Physical = -10000;
+            this.m_nDefence_Magical = -10000;
+            this.m_nEvasionRate = -10000;
+            this.m_fAttackSpeed = -10000;
+        }
+    }
 
     // 능력치 +- 연산
     public void P_OperatorSTATUS_LV(int value)
