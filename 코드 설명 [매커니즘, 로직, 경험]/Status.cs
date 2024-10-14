@@ -18,14 +18,14 @@ public struct STATUS
     int m_nMP_Max;      // 최대마나
     int m_nMP_Current;  // 현재마나
 
-    int m_nDamage_Total;    // 데미지
+    int m_nDamage_Total;    // 데미지(총데미지)
     int m_nDamage_Physical; // 물리데미지 ※ 미사용
     int m_nDamage_Magical;  // 마법데미지 ※ 미사용
     
     int m_nCriticalRate;   // 크리티컬 확률 ※ 미사용
     int m_nCriticalDamage; // 크리티컬 데미지 ※ 미사용
 
-    int m_nDefence_Physical; // 물리방어력
+    int m_nDefence_Physical; // 방어력(물리방어력)
     int m_nDefence_Magical;  // 마법방어력 ※ 미사용
     int m_nEvasionRate;      // 회피율 ※ 미사용
     
