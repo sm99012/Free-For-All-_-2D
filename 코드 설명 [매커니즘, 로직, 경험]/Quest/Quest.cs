@@ -198,6 +198,7 @@ public class Quest : MonoBehaviour
         return true;
     }
     // 퀘스트 진행 사전 조건 판단 - 연계 퀘스트
+    // return true : 조건 충족 / return false : 조건 미흡
     virtual public bool Check_Condition_Connection()
     {
         // 퀘스트 진행 사전 조건 판단 - 필수 완료 퀘스트(해당 리스트에 포함된 퀘스트가 완료되지 않은 경우 제한)
@@ -236,6 +237,7 @@ public class Quest : MonoBehaviour
         return true;
     }
     // 퀘스트 진행 사전 조건 판단 - 스탯(능력치) 상한ㆍ하한
+    // return true : 조건 충족 / return false : 조건 미흡
     virtual public bool Check_Condition_STATUS()
     {
         if (Player_Total.Instance.m_ps_Status.m_sStatus.CheckCondition_Min(m_sStatus_Necessity_Down) == true &&
@@ -245,6 +247,7 @@ public class Quest : MonoBehaviour
             return false;
     }
     // 퀘스트 진행 사전 조건 판단 - 스탯(평판) 상한ㆍ하한
+    // return true : 조건 충족 / return false : 조건 미흡
     virtual public bool Check_Condition_SOC()
     {
         if (Player_Total.Instance.m_ps_Status.m_sSoc.CheckCondition_Min(m_sSoc_Necessity_Down) == true &&
