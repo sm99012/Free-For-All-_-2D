@@ -89,7 +89,7 @@ public class Quest : MonoBehaviour
     public string m_sQuest_Information_Condition; // 완료 가능한 퀘스트 정보
     public string m_sQuest_Information_Clear;     // 완료한 퀘스트 정보
 
-    // 생성자. 사용하지 않음
+    // 생성자(사용하지 않음)
     public Quest()
     {
         InitialSet();
@@ -116,54 +116,57 @@ public class Quest : MonoBehaviour
         m_lRewardList_Item_Use = new List<Item_Use>();
         m_lRewardList_Item_Etc = new List<Item_Etc>();
 
-        m_sStatus_Necessity_Up = new STATUS(true);
-        m_sStatus_Necessity_Down = new STATUS(false);
-        m_sSoc_Necessity_Up = new SOC(true);
-        m_sSoc_Necessity_Down = new SOC(false);
+        m_sStatus_Necessity_Up = new STATUS(true);    // 퀘스트 진행 사전 조건 설정 - 스탯(능력치) 상한 최대
+        m_sStatus_Necessity_Down = new STATUS(false); // 퀘스트 진행 사전 조건 설정 - 스탯(능력치) 하한 최소
+        m_sSoc_Necessity_Up = new SOC(true);          // 퀘스트 진행 사전 조건 설정 - 스탯(퍙판) 상한 최대
+        m_sSoc_Necessity_Down = new SOC(false);       // 퀘스트 진행 사전 조건 설정 - 스탯(평판) 하한 최소
     }
 
-    // Quest 대화 스크립트 설정.
-    // Quest 대화.
-    public void AddQuestDescription_Context(string str)
+    // 퀘스트 대화 스크립트 설정 관련 함수
+    // 퀘스트 발행 시 대화 스크립트 추가 함수
+    public void AddQuestDescription_Context(string str) // str : 추가할 대화 스크립트
     {
         m_sl_QuestDescription_Context.Add(str);
     }
-    // Quest 수락.
-    public void AddQuestOk_Context(string str)
+    // 퀘스트 수락 시 대화 스크립트 추가 함수
+    public void AddQuestOk_Context(string str) // str : 추가할 대화 스크립트
     {
         m_sl_QuestOk_Context.Add(str);
     }
-    // Quest 거절.
-    public void AddQuestNo_Context(string str)
+    // 퀘스트 거절 시 대화 스크립트 추가 함수
+    public void AddQuestNo_Context(string str) // str : 추가할 대화 스크립트
     {
         m_sl_QuestNo_Context.Add(str);
     }
-    // Quest 진행중.
-    public void AddQuestProgress_Context(string str)
+    // 퀘스트 진행중일 시 대화 스크립트 추가 함수
+    public void AddQuestProgress_Context(string str) // str : 추가할 대화 스크립트
     {
         m_sl_QuestProgress_Context.Add(str);
     }
-    // Quest 완료.
-    public void AddQuestClear_Context(string str)
+    // 퀘스트 완료 시 대화 스크립트 추가 함수
+    public void AddQuestClear_Context(string str) // str : 추가할 대화 스크립트
     {
         m_sl_QuestClear_Context.Add(str);
     }
 
-    // Quest 보상 Item 추가.
-    public void AddQuestClearReward_Item(Item_Equip item)
+    // 퀘스트 완료 보상 설정 관련 함수
+    // 장비아이템 보상 추가 함수
+    public void AddQuestClearReward_Item(Item_Equip item) // item : 추가할 장비아이템
     {
         m_lRewardList_Item_Equip.Add(item);
     }
-    public void AddQuestClearReward_Item(Item_Use item)
+    // 소비아이템 보상 추가 함수
+    public void AddQuestClearReward_Item(Item_Use item) // item : 추가할 소비아이템
     {
         m_lRewardList_Item_Use.Add(item);
     }
-    public void AddQuestClearReward_Item(Item_Etc item)
+    // 기타아이템 보상 추가 함수
+    public void AddQuestClearReward_Item(Item_Etc item) // item : 추가할 기타아이템
     {
         m_lRewardList_Item_Etc.Add(item);
     }
 
-    // Quest 리셋
+    // 퀘스트 진행 상태 관련 변수 초기화 함수
     public void ResetQuest()
     {
         m_bClear = false;
@@ -177,35 +180,27 @@ public class Quest : MonoBehaviour
 
     }
 
-    // 퀘스트 사전 요구조건
+    // 퀘스트 진행 사전 조건 판단 함수
+    // return true : 퀘스트 진행 가능 / return false : 퀘스트 진행 불가능
     virtual public bool Check_Condition_Total()
     {
-        if (Check_Condition_Connection() == true)
-        {
-
-        }
+        if (Check_Condition_Connection() == true) {} // 퀘스트 진행 사전 조건 판단 - 연계 퀘스트
         else
             return false;
-        if (Check_Condition_SOC() == true)
-        {
-
-        }
+        if (Check_Condition_STATUS() == true) {}     // 퀘스트 진행 사전 조건 판단 - 스탯(능력치) 상한ㆍ하한
         else
             return false;
-        if (Check_Condition_STATUS() == true)
-        {
+        if (Check_Condition_SOC() == true) {}        // 퀘스트 진행 사전 조건 판단 - 스탯(평판) 상한ㆍ하한
 
-        }
         else
             return false;
 
         return true;
     }
-
-    // 퀘스트 사전 요구조건_연계
+    // 퀘스트 진행 사전 조건 판단 - 연계 퀘스트
     virtual public bool Check_Condition_Connection()
     {
-        // 이 퀘스트를 수행하기위해 사전 퀘스트가 클리어되야 할때 조건 체크
+        // 퀘스트 진행 사전 조건 판단 - 필수 완료 퀘스트(해당 리스트에 포함된 퀘스트가 완료되지 않은 경우 제한)
         for (int i = 0; i < m_ql_Quest_Necessity_Clear.Count; i++)
         {
             if (m_ql_Quest_Necessity_Clear[i].m_bClear == false)
@@ -213,8 +208,7 @@ public class Quest : MonoBehaviour
             else
                 continue;
         }
-
-        // 이 퀘스트를 수행하기위해 사전 퀘스트가 클리어되지 말아야 할때 조건 체크
+        // 퀘스트 진행 사전 조건 판단 - 필수 미완료 퀘스트(해당 리스트에 포함된 퀘스트가 완료된 경우 제한)
         for (int i = 0; i < m_ql_Quest_Necessity_NonClear.Count; i++)
         {
             if (m_ql_Quest_Necessity_NonClear[i].m_bClear == true)
@@ -222,8 +216,7 @@ public class Quest : MonoBehaviour
             else
                 continue;
         }
-
-        // 이 퀘스트를 수행하기위해 특정 퀘스트가 진행중이어야할때
+        // 퀘스트 진행 사전 조건 판단 - 필수 진행 퀘스트(해당 리스트에 포함된 퀘스트가 진행 중이지 않은 경우 제한)
         for (int i = 0; i < m_ql_Quest_Necessity_Process.Count; i++)
         {
             if (m_ql_Quest_Necessity_Process[i].m_bProcess == false)
@@ -231,7 +224,7 @@ public class Quest : MonoBehaviour
             else
                 continue;
         }
-
+        // 퀘스트 진행 사전 조건 판단 - 필수 미진행 퀘스트(해당 리스트에 포함된 퀘스트가 진행 중인 경우 제한)
         for (int i = 0; i < m_ql_Quest_Necessity_NonProcess.Count; i++)
         {
             if (m_ql_Quest_Necessity_NonProcess[i].m_bProcess == true)
@@ -242,18 +235,20 @@ public class Quest : MonoBehaviour
 
         return true;
     }
-    virtual public bool Check_Condition_SOC()
+    // 퀘스트 진행 사전 조건 판단 - 스탯(능력치) 상한ㆍ하한
+    virtual public bool Check_Condition_STATUS()
     {
-        if (Player_Total.Instance.m_ps_Status.m_sSoc.CheckCondition_Min(m_sSoc_Necessity_Down) == true &&
-            Player_Total.Instance.m_ps_Status.m_sSoc.CheckCondition_Max(m_sSoc_Necessity_Up) == true)
+        if (Player_Total.Instance.m_ps_Status.m_sStatus.CheckCondition_Min(m_sStatus_Necessity_Down) == true &&
+            Player_Total.Instance.m_ps_Status.m_sStatus.CheckCondition_Max(m_sStatus_Necessity_Up) == true) // 능력치 조건 판단(하한), 능력치 조건 판단(상한)
             return true;
         else
             return false;
     }
-    virtual public bool Check_Condition_STATUS()
+    // 퀘스트 진행 사전 조건 판단 - 스탯(평판) 상한ㆍ하한
+    virtual public bool Check_Condition_SOC()
     {
-        if (Player_Total.Instance.m_ps_Status.m_sStatus.CheckCondition_Min(m_sStatus_Necessity_Down) == true &&
-            Player_Total.Instance.m_ps_Status.m_sStatus.CheckCondition_Max(m_sStatus_Necessity_Up) == true)
+        if (Player_Total.Instance.m_ps_Status.m_sSoc.CheckCondition_Min(m_sSoc_Necessity_Down) == true &&
+            Player_Total.Instance.m_ps_Status.m_sSoc.CheckCondition_Max(m_sSoc_Necessity_Up) == true) // 평판 조건 판단(하한), 평판 조건 판단(상한)
             return true;
         else
             return false;
