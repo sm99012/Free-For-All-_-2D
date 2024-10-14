@@ -40,7 +40,7 @@ public class Item : MonoBehaviour
                                                 //    소비아이템(기프트(혼합형)) 고유코드 : 12900 ~ 12999
                                                 //
                                                 // ※ 기타아이템 고유코드 : 0 ~ 999 (기타아이템 고유코드의 경우 20000번대로 수정 예정)
-                                                //
+                                                
     public int m_nItemNumber;                   // 아이템 생성코드(아이템 생성 순서)
     
     public Sprite m_sp_Sprite;                  // 아이템 스프라이트(이미지)
