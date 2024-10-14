@@ -16,6 +16,7 @@ public class Item : MonoBehaviour
 {
     public string m_sItemName;                  // 아이템 이름
     public string m_sItemDescription;           // 아이템 정보(설명)
+    
     public int m_nItemCode;                     // 아이템 고유코드
                                                 // 
                                                 // ※ 장비아이템(주무기(검)) 고유코드 : 1000 ~ 1299
@@ -41,6 +42,7 @@ public class Item : MonoBehaviour
                                                 // ※ 기타아이템 고유코드 : 0 ~ 999 (기타아이템 고유코드의 경우 20000번대로 수정 예정)
                                                 //
     public int m_nItemNumber;                   // 아이템 생성코드(아이템 생성 순서)
+    
     public Sprite m_sp_Sprite;                  // 아이템 스프라이트(이미지)
     public SpriteRenderer m_spr_SpriteRenderer; // 아이템 스프라이트 랜더러(이미지 + 색상 정보 등)
 
