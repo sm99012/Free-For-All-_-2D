@@ -2,12 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Quest_KILL_MONSTER : Quest
-{
-    public List<int> m_nl_MonsterCode;
-    public List<int> m_nl_Count_Max;
-    public List<int> m_nl_Count_Current;
+//
+// ※ 특정 몬스터 토벌 퀘스트 클래스
+//    해당 퀘스트는 특정 몬스터 토벌(사냥) 행위와 연관되어 있다.
+//
 
+public class Quest_KILL_MONSTER : Quest // 기반이 되는 Quest 클래스 상속
+{
+    public List<int> m_nl_MonsterCode;   // 특정 몬스터 고유코드 리스트
+    public List<int> m_nl_Count_Max;     // 몬스터 토벌 필요 수량 리스트
+    public List<int> m_nl_Count_Current; // 몬스터 토벌 현재 수량 리스트
+
+    //
+    // ※ m_nl_MonsterCode(특정 몬스터 고유코드 리스트), m_nl_Count_Max(몬스터 토벌 필요 수량 리스트), m_nl_Count_Current(몬스터 토벌 현재 수량 리스트) 는 리스트 순번에 따라 짝을 이룬다.
+    //    m_nl_MonsterCode[n]에 해당하는 고유코드를 가진 몬스터를 m_nl_Count_Max[n]만큼 토벌해야 한다. 이때 m_nl_Count_Current[n]을 통해 토벌 현황을 확인할 수 있다.
+    //
+
+    // 특정 몬스터 토벌 퀘스트를 생성하는 생성자
     public Quest_KILL_MONSTER(string questtitle, int questcode, E_QUEST_LEVEL ql, int givenpccode, int clearnpccode, int questloadmapcode)
     {
         m_sQuest_Title = questtitle;
@@ -25,8 +36,8 @@ public class Quest_KILL_MONSTER : Quest
         m_nl_Count_Current = new List<int>();
     }
 
-    // Quest 조건에 Monster, MaxCount, CurrentCount 추가.
-    public void AddCondition(int monstercode, int max, int c = 0)
+    // 특정 몬스터 토벌 퀘스트 설정 함수. 특정 몬스터 고유코드
+    public void AddCondition(int monstercode, int max, int c = 0) // monstercode : 특정 몬스터 고유코드, max : 몬스터 토벌 필요 수량, c : 몬스터 토벌 현재 수량
     {
         m_nl_MonsterCode.Add(monstercode);
         m_nl_Count_Max.Add(max);
@@ -57,6 +68,7 @@ public class Quest_KILL_MONSTER : Quest
             return false;
     }
 
+    // 퀘스트 완료 조건 달성 여부(플레이어가 현재 해당 퀘스트를 완료할 조건을 충족시켰는지?) 판단 함수
     void Check_Condition()
     {
         for (int i = 0; i < m_nl_MonsterCode.Count; i++)
