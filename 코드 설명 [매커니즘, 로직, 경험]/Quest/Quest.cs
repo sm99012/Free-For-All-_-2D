@@ -116,10 +116,10 @@ public class Quest : MonoBehaviour
         m_lRewardList_Item_Use = new List<Item_Use>();
         m_lRewardList_Item_Etc = new List<Item_Etc>();
 
-        m_sStatus_Necessity_Up = new STATUS(10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000);
-        m_sStatus_Necessity_Down = new STATUS(-10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000);
-        m_sSoc_Necessity_Up = new SOC(10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000);
-        m_sSoc_Necessity_Down = new SOC(-10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000);
+        m_sStatus_Necessity_Up = new STATUS(true);
+        m_sStatus_Necessity_Down = new STATUS(false);
+        m_sSoc_Necessity_Up = new SOC(true);
+        m_sSoc_Necessity_Down = new SOC(false);
     }
 
     // Quest 대화 스크립트 설정.
