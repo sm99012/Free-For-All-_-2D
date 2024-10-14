@@ -43,7 +43,7 @@ public class Quest_KILL_TYPE : Quest // 기반이 되는 Quest 클래스 상속
         bool m_bReturn = false;
         if (m_eMonsterType == mk) // 특정 몬스터 타입 == 플레이어가 토벌한 몬스터 타입
         {
-            if (m_nCount_Max > m_nCount_Current) 특정 몬스터 타입 토벌 필요 수량 > 특정 몬스터 타입 토벌 현재 수량
+            if (m_nCount_Max > m_nCount_Current) // 특정 몬스터 타입 토벌 필요 수량 > 특정 몬스터 타입 토벌 현재 수량
                 m_nCount_Current++;
 
             m_bReturn = true;
