@@ -54,7 +54,7 @@ public class Quest_KILL_MONSTER : Quest // 기반이 되는 Quest 클래스 상�
         {
             if (m_nl_MonsterCode[i] == monstercode) // 특정 몬스터 고유코드 == 플레이어가 토벌한 몬스터 고유코드
             {
-                if (m_nl_Count_Max[i] > m_nl_Count_Current[i]) 특정 몬스터 토벌 필요 수량 > 특정 몬스터 토벌 현재 수량
+                if (m_nl_Count_Max[i] > m_nl_Count_Current[i]) // 특정 몬스터 토벌 필요 수량 > 특정 몬스터 토벌 현재 수량
                     m_nl_Count_Current[i]++;
 
                 m_bReturn = true;
