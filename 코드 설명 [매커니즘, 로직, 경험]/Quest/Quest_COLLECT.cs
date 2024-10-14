@@ -2,12 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Quest_COLLECT : Quest
-{
-    public List<int> m_nl_ItemCode;
-    public List<int> m_nl_ItemCount_Max;
-    public List<int> m_nl_ItemCount_Current;
+//
+// ※ 수집 퀘스트 클래스
+//    해당 퀘스트는 특정 아이템 수집 행위와 연관되어 있다.
+//
 
+public class Quest_COLLECT : Quest // 기반이 되는 Quest 클래스 상속
+{
+    // 특정 아이템 관련 변수
+    public List<int> m_nl_ItemCode;          // 특정 아이템 고유코드 리스트
+    public List<int> m_nl_ItemCount_Max;     // 특정 아이템 수집 필요 수량 리스트
+    public List<int> m_nl_ItemCount_Current; // 특정 아이템 수집 현재 수량 리스트
+
+    //
+    // ※ m_nl_ItemCode(특정 아이템 고유코드 리스트), m_nl_ItemCount_Max(특정 아이템 수집 필요 수량 리스트), m_nl_ItemCount_Current(특정 아이템 수집 현재 수량 리스트)는 리스트 순번에 따라 짝을 이룬다.
+    //    m_nl_ItemCode[n]에 해당하는 고유코드를 가진 아이템을 m_nl_ItemCount_Max[n]만큼 수집해야 한다. 이때 m_nl_ItemCount_Current[n]을 통해 아이템 수집 현황을 확인할 수 있다.
+    //
+    
     public Quest_COLLECT(string questtitle, int questcode, E_QUEST_LEVEL ql, int givenpccode,int clearnpccode, int questloadmapcode)
     {
         m_sQuest_Title = questtitle;
