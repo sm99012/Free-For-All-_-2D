@@ -256,4 +256,7 @@ public class Quest : MonoBehaviour
         else
             return false;
     }
+
+    // 퀘스트 완료 조건 달성 여부(플레이어가 현재 해당 퀘스트를 완료할 조건을 충족시켰는지?) 판단 함수(가상 함수)
+    virtual public void Check_Condition() { }
 }
