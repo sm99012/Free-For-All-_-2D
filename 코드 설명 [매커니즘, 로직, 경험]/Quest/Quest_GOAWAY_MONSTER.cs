@@ -50,7 +50,7 @@ public class Quest_GOAWAY_MONSTER : Quest // 기반이 되는 Quest 클래스 �
     public bool Check_GOAWAY_MONSTER(int monstercode) // monstercode : 플레이어가 놓아주기한 몬스터 고유코드
     {
         bool m_bReturn = false;
-        for (int i = 0; i < m_nl_MonsterCode.Count; i++) // 특정 몬스터 수량 만큼 반복
+        for (int i = 0; i < m_nl_MonsterCode.Count; i++) // 특정 몬스터 수량만큼 반복
         {
             if (m_nl_MonsterCode[i] == monstercode) // 특정 몬스터 고유코드 == 플레이어가 놓아주기한 몬스터 고유코드
             {
@@ -73,7 +73,7 @@ public class Quest_GOAWAY_MONSTER : Quest // 기반이 되는 Quest 클래스 �
     // 퀘스트 완료 조건 달성 여부(플레이어가 현재 해당 퀘스트를 완료할 조건을 충족시켰는지?) 판단 함수
     override public void Check_Condition()
     {
-        for (int i = 0; i < m_nl_MonsterCode.Count; i++) // 특정 몬스터 수량 만큼 반복
+        for (int i = 0; i < m_nl_MonsterCode.Count; i++) // 특정 몬스터 수량만큼 반복
         {
             if (m_nl_Count_Max[i] == m_nl_Count_Current[i]) // 특정 몬스터 놓아주기 필요 수량 == 특정 몬스터 놓아주기 현재 수량 : 퀘스트 완료 조건 충족
             {
