@@ -1,14 +1,14 @@
-﻿    using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class QuestManager : MonoBehaviour
 {
+    //
+    // ※ 싱글톤패턴을 적용한 QuestManager 클래스를 이용해 모든 퀘스트를 관리한다. 퀘스트 데이터의 저장 공간이다.(게임 시작 시 모든 퀘스트 데이터를 저장한다.)
+    //    
+    
     private static QuestManager instance = null;
-
-    public static int m_snQuest_ProcessOrder;
-    public static int m_snQuest_CompleteOrder;
-
     private void Awake()
     {
         if (instance == null)
@@ -32,17 +32,21 @@ public class QuestManager : MonoBehaviour
             return instance;
         }
     }
+    
+    public static int m_snQuest_ProcessOrder;  // 퀘스트 진행 순서(정적 변수)
+    public static int m_snQuest_CompleteOrder; // 퀘스트 완료 순서(정적 변수)
 
-    public Dictionary <int, Quest_KILL_MONSTER> m_Dictionary_QuestList_KILL_MONSTER;
-    public Dictionary <int, Quest_KILL_TYPE> m_Dictionary_QuestList_KILL_TYPE;
-    public Dictionary <int, Quest_GOAWAY_MONSTER> m_Dictionary_QuestList_GOAWAY_MONSTER;
-    public Dictionary <int, Quest_GOAWAY_TYPE> m_Dictionary_QuestList_GOAWAY_TYPE;
-    public Dictionary <int, Quest_COLLECT> m_Dictionary_QuestList_COLLECT;
-    public Dictionary <int, Quest_CONVERSATION> m_Dictionary_QuestList_CONVERSATION;
-    public Dictionary <int, Quest_ROLL> m_Dictionary_QuestList_ROLL;
-    public Dictionary <int, Quest_ELIMINATE_MONSTER> m_Dictionary_QuestList_ELIMINATE_MONSTER;
-    public Dictionary <int, Quest_ELIMINATE_TYPE> m_Dictionary_QuestList_ELIMINATE_TYPE;
+    public Dictionary <int, Quest_KILL_MONSTER> m_Dictionary_QuestList_KILL_MONSTER;           // 특정 몬스터 토벌 퀘스트 딕셔너리
+    public Dictionary <int, Quest_KILL_TYPE> m_Dictionary_QuestList_KILL_TYPE;                 // 특정 몬스터 타입 토벌 퀘스트 딕셔너리
+    public Dictionary <int, Quest_GOAWAY_MONSTER> m_Dictionary_QuestList_GOAWAY_MONSTER;       // 특정 몬스터 놓아주기 퀘스트 딕셔너리
+    public Dictionary <int, Quest_GOAWAY_TYPE> m_Dictionary_QuestList_GOAWAY_TYPE;             // 특정 몬스터 타입 놓아주기 딕셔너리
+    public Dictionary <int, Quest_COLLECT> m_Dictionary_QuestList_COLLECT;                     // 수집 퀘스트 딕셔너리
+    public Dictionary <int, Quest_CONVERSATION> m_Dictionary_QuestList_CONVERSATION;           // 대화 퀘스트 딕셔너리
+    public Dictionary <int, Quest_ROLL> m_Dictionary_QuestList_ROLL;                           // 구르기 퀘스트 딕셔너리
+    public Dictionary <int, Quest_ELIMINATE_MONSTER> m_Dictionary_QuestList_ELIMINATE_MONSTER; // 특정 몬스터 제거(토벌 + 놓아주기) 퀘스트 딕셔너리
+    public Dictionary <int, Quest_ELIMINATE_TYPE> m_Dictionary_QuestList_ELIMINATE_TYPE;       // 특정 몬스터 타입 제거(토벌 + 놓아주기) 퀘스트 딕셔너리
 
+    // 변수 초기화 및 퀘스트 데이터 로딩
     public bool InitialSet()
     {
         m_Dictionary_QuestList_KILL_MONSTER = new Dictionary<int, Quest_KILL_MONSTER>();
@@ -1485,7 +1489,7 @@ public class QuestManager : MonoBehaviour
         return true;
     }
 
-    // Find Quest
+    // 퀘스트를 반환하는 함수
     public Quest_KILL_MONSTER GetQuest_KILL_MONSTER(int questcode)
     {
         if (m_Dictionary_QuestList_KILL_MONSTER.ContainsKey(questcode) == true)
@@ -1568,7 +1572,7 @@ public class QuestManager : MonoBehaviour
         return null;
     }
 
-    // Return QuestType
+    // 퀘스트 타입을 반환하는 함수
     public E_QUEST_TYPE GetQuestType(int questcode)
     {
         if (m_Dictionary_QuestList_KILL_MONSTER.ContainsKey(questcode) == true)
@@ -1611,8 +1615,7 @@ public class QuestManager : MonoBehaviour
         return E_QUEST_TYPE.NULL;
     }
 
-    // 해당 퀘스트 정보 분석
-    // 퀘스트 수행 사전 조건
+    // 퀘스트 진행 사전 조건 판단 함수
     public bool GetQuest_Info_PreCondition(int questcode)
     {
         if (m_Dictionary_QuestList_KILL_MONSTER.ContainsKey(questcode) == true)
@@ -1654,7 +1657,7 @@ public class QuestManager : MonoBehaviour
         else
             return false;
     }
-    // 퀘스트 진행 여부
+    // 퀘스트 진행 상태 반환 함수
     public bool GetQuest_Info_ProgressCondition(int questcode)
     {
         if (m_Dictionary_QuestList_KILL_MONSTER.ContainsKey(questcode) == true)
@@ -1696,7 +1699,7 @@ public class QuestManager : MonoBehaviour
         else
             return false;
     }
-    // 퀘스트 클리어 여부
+    // 퀘스트 완료 상태 반환 함수
     public bool GetQuest_Info_CurrentCondition (int questcode)
     {
         if (m_Dictionary_QuestList_KILL_MONSTER.ContainsKey(questcode) == true)
@@ -1739,7 +1742,7 @@ public class QuestManager : MonoBehaviour
             return false;
     }
 
-    // Find Quest Order(수락순서, 클리어순서)
+    // 퀘스트 진행 및 퀘스트 완료 순서 반환 함수
     public int GetQuest_Order(int questcode)
     {
         if (m_Dictionary_QuestList_KILL_MONSTER.ContainsKey(questcode) == true)
@@ -1784,7 +1787,7 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-    // Find Quest Order(추천순서)
+    // 퀘스트 로드맵 순서 반환 함수
     public int GetQuest_Order_Recommend(int questcode)
     {
         if (m_Dictionary_QuestList_KILL_MONSTER.ContainsKey(questcode) == true)
