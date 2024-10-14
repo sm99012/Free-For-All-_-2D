@@ -18,7 +18,7 @@ public struct STATUS
     int m_nMP_Max;      // 최대마나
     int m_nMP_Current;  // 현재마나
 
-    int m_nDamage_Total;    // 총데미지
+    int m_nDamage_Total;    // 데미지
     int m_nDamage_Physical; // 물리데미지 ※ 미사용
     int m_nDamage_Magical;  // 마법데미지 ※ 미사용
     
