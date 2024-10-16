@@ -47,6 +47,8 @@ public class Quest : MonoBehaviour
     
     public bool m_bQuest_Information_Process_Hide; // 퀘스트 정보 출력 여부
 
+    public int m_nClearDay; // 퀘스트 완료 시점
+
     // 퀘스트 대화 스크립트 관련 변수
     public List<string> m_sl_QuestDescription_Context; // 퀘스트 의뢰 시 대화 스크립트
     public List<string> m_sl_QuestDescription_Simple;  // 퀘스트 간단 설명
@@ -80,8 +82,6 @@ public class Quest : MonoBehaviour
     public int m_nRewardGold;                         // 골드(재화) 보상
     public STATUS m_sRewardSTATUS;                    // 스탯(능력치(경험치 + 고정형 능력치(최대체력, 최대마나, 데미지, 방어력, 이동속도, 공격속도))) 보상
     public SOC m_sRewardSOC;                          // 스탯(평판) 보상
-
-    public int m_nClearDay; // 퀘스트 완료 시점
 
     // 퀘스트 GUI 정보 출력 관련 변수
     public string m_sQuest_Information_Recommend; // 시작 가능한(추천) 퀘스트 정보
