@@ -48,7 +48,7 @@ public class Quest : MonoBehaviour
     public bool m_bQuest_Information_Process_Hide; // 퀘스트 정보 출력 여부
 
     // 퀘스트 대화 스크립트 관련 변수
-    public List<string> m_sl_QuestDescription_Context; // 퀘스트 발행 시 대화 스크립트
+    public List<string> m_sl_QuestDescription_Context; // 퀘스트 의뢰 시 대화 스크립트
     public List<string> m_sl_QuestDescription_Simple;  // 퀘스트 간단 설명
     public List<string> m_sl_QuestOk_Context;          // 퀘스트 수락 시 대화 스크립트
     public List<string> m_sl_QuestNo_Context;          // 퀘스트 거절 시 대화 스크립트
