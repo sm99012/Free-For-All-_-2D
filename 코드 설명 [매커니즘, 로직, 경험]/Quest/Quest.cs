@@ -52,7 +52,7 @@ public class Quest : MonoBehaviour
     public List<string> m_sl_QuestDescription_Simple;  // 퀘스트 간단 설명
     public List<string> m_sl_QuestOk_Context;          // 퀘스트 수락 시 대화 스크립트
     public List<string> m_sl_QuestNo_Context;          // 퀘스트 거절 시 대화 스크립트
-    public List<string> m_sl_QuestProgress_Context;    // 퀘스트 진행중일 시 대화 스크립트(퀘스트 완료 조건을 충족시키지 않은 경우 출력되는 대화 스크립트)
+    public List<string> m_sl_QuestProgress_Context;    // 퀘스트 진행 중일 시 대화 스크립트(퀘스트 완료 조건을 충족시키지 않은 경우 출력되는 대화 스크립트)
     public List<string> m_sl_QuestClear_Context;       // 퀘스트 완료 시 대화 스크립트
 
     // 퀘스트 진행 상태 관련 변수
