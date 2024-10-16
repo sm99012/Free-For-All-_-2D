@@ -58,7 +58,7 @@ public class Quest_ELIMINATE_TYPE : Quest // 기반이 되는 Quest 클래스 �
     }
 
     // 퀘스트 완료 조건(플레이어가 현재 해당 퀘스트를 완료할 조건을 충족시켰는지?) 판단 함수
-    void Check_Condition()
+    override public void Check_Condition()
     {
         if (m_nCount_Max == m_nCount_Current) // 특정 몬스터 타입 제거(토벌 + 놓아주기) 필요 수량 == 특정 몬스터 타입 제거(토벌 + 놓아주기) 현재 수량 : 퀘스트 완료 조건 충족
         {
