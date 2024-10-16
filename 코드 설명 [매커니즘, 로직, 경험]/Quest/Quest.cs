@@ -33,8 +33,8 @@ public class Quest : MonoBehaviour
                                         //    COLLECT(수집) 고유코드 : 4000 ~ 4999
                                         //    CONVERSATION(대화) 고유코드 : 5000 ~ 5999
                                         //    ROLL(구르기) 고유코드 : 6000 ~ 6999
-                                        //    ELIMINATE_MONSTER(특정 몬스터 제거) 고유코드 : 7000 ~ 7999
-                                        //    ELIMINATE_TYPE(특정 몬스터 타입 제거) 고유코드 : 8000 ~ 8999
+                                        //    ELIMINATE_MONSTER(특정 몬스터 제거(토벌 + 놓아주기)) 고유코드 : 7000 ~ 7999
+                                        //    ELIMINATE_TYPE(특정 몬스터 타입 제거(토벌 + 놓아주기)) 고유코드 : 8000 ~ 8999
                                       
     public int m_nQuestOrder;           // 퀘스트 진행 및 퀘스트 완료 순서(해당 순서에 따라 퀘스트GUI가 업데이트 된다.)
     public int m_nQuest_Loadmap_Code;   // 퀘스트 로드맵 순서(추천 퀘스트 출력 순서)
