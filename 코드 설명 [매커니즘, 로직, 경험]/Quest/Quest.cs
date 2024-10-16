@@ -257,7 +257,7 @@ public class Quest : MonoBehaviour
             return false;
     }
 
-    // 퀘스트 완료 조건 달성 여부(플레이어가 현재 해당 퀘스트를 완료할 조건을 충족시켰는지?) 판단 함수(가상 함수)
+    // 퀘스트 완료 조건(플레이어가 현재 해당 퀘스트를 완료할 조건을 충족시켰는지?) 판단 함수(가상 함수)
     // 퀘스트 타입에 따라 해당 함수를 사용하지 않는 퀘스트도 존재한다.
     virtual public void Check_Condition() { }
 }
