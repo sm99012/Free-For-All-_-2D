@@ -90,7 +90,7 @@ public class Quest_COLLECT : Quest // 기반이 되는 Quest 클래스 상속
             return true;
     }
     
-     // 퀘스트 완료 조건 달성 여부(플레이어가 현재 해당 퀘스트를 완료할 조건을 충족시켰는지?) 판단 함수
+    // 퀘스트 완료 조건(플레이어가 현재 해당 퀘스트를 완료할 조건을 충족시켰는지?) 판단 함수
     public bool Check_Condition()
     {
         for (int i = 0; i < m_nl_ItemCode.Count; i++) // 특정 아이템 수량만큼 반복
