@@ -39,13 +39,13 @@ public class Quest : MonoBehaviour
     public int m_nQuestOrder;           // 퀘스트 진행 및 퀘스트 완료 순서(해당 순서에 따라 퀘스트GUI가 업데이트 된다.)
     public int m_nQuest_Loadmap_Code;   // 퀘스트 로드맵 순서(추천 퀘스트 출력 순서)
 
+    public int m_nNPC;       // 퀘스트 발행 NPC
+    public int m_nNPC_Clear; // 퀘스트 완료 NPC
+
     public E_QUEST_TYPE m_eQuestType;   // 퀘스트 타입
     public E_QUEST_LEVEL m_eQuestLevel; // 퀘스트 등급(난이도)
     
     public bool m_bQuest_Information_Process_Hide; // 히든 퀘스트의 정보 출력 여부
-    
-    public int m_nNPC;       // 퀘스트 발행 NPC
-    public int m_nNPC_Clear; // 퀘스트 완료 NPC
 
     // 퀘스트 대화 스크립트 관련 변수
     public List<string> m_sl_QuestDescription_Context; // 퀘스트 발행 시 대화 스크립트
