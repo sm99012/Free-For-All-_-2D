@@ -45,7 +45,7 @@ public class Quest : MonoBehaviour
     public E_QUEST_TYPE m_eQuestType;   // 퀘스트 타입
     public E_QUEST_LEVEL m_eQuestLevel; // 퀘스트 등급(난이도)
     
-    public bool m_bQuest_Information_Process_Hide; // 히든 퀘스트의 정보 출력 여부
+    public bool m_bQuest_Information_Process_Hide; // 퀘스트 정보 출력 여부
 
     // 퀘스트 대화 스크립트 관련 변수
     public List<string> m_sl_QuestDescription_Context; // 퀘스트 발행 시 대화 스크립트
