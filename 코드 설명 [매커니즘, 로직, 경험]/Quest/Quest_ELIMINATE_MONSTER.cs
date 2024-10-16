@@ -71,7 +71,7 @@ public class Quest_ELIMINATE_MONSTER : Quest // 기반이 되는 Quest 클래스
     }
 
     // 퀘스트 완료 조건(플레이어가 현재 해당 퀘스트를 완료할 조건을 충족시켰는지?) 판단 함수
-    void Check_Condition()
+    override public void Check_Condition()
     {
         for (int i = 0; i < m_nl_MonsterCode.Count; i++) // 특정 몬스터 수량만큼 반복
         {
