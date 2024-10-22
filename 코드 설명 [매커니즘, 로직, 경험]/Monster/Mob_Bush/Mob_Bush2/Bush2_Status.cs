@@ -34,6 +34,6 @@ public class Bush2_Status : Bush1_Status
 
     override public void Goaway()
     {
-
+        m_bPower = true;
     }
 }
