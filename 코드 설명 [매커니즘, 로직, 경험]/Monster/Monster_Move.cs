@@ -189,18 +189,23 @@ public class Monster_Move : MonoBehaviour
     // 몬스터 리스폰 함수
     virtual public void Respone()
     {
-        m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.IDLE); // 몬스터 동작 FSM : 평화(IDLE)
+    	// 몬스터 설정 변경(초기화)
+     	m_bFix = false; // 몬스터 이동 가능
         m_rRigdbody.bodyType = RigidbodyType2D.Dynamic; // Rigidbody(강체).bodyType : Dynamic(다른 오브젝트에 의한 물리 적용 가능)
                                                         // 몬스터에게 다른 오브젝트(몬스터)에 의한 물리법칙을 적용 가능하도록 변경(다른 오브젝트에 의해 밀리는 현상 가능)
         this.gameObject.layer = LayerMask.NameToLayer("Monster"); // 몬스터의 레이어 변경 : "Monster" -> "Default"
                                                                   // 몬스터가 대상(플레이어)과 충돌 불가능 하도록 레이어 변경
+        m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.IDLE); // 몬스터 동작 FSM : 평화(IDLE)
+
+ 	// 몬스터 스프라이트 랜더러(색상) 변경(초기화)
         m_sSpriteRenderer.color = m_Color_OriginalSprite;
+
+ 	// Fadein 효과 연출
         m_FadeinAlpa = 0;
-        m_bFix = false;
         Fadein();   
     }
 
-    // Fadein 효과 관련 함수(가상 함수)
+    // Fadein 효과 연출 함수(가상 함수)
     // 플레이어의 몬스터 제거(토벌 + 놓아주기)로 인해 제거된 몬스터의 리스폰 시 연출되는 Fadein 효과
     virtual public void Fadein()
     {
@@ -209,21 +214,21 @@ public class Monster_Move : MonoBehaviour
     // Fadein 효과 계산 코루틴
     IEnumerator ProcessFadein()
     {
-        m_bPower = true;
+        m_bPower = true; // 몬스터 피격 불가능
         while (m_FadeinAlpa != 1)
         {
             m_sSpriteRenderer.color = new Color(m_sSpriteRenderer.color.r, m_sSpriteRenderer.color.g, m_sSpriteRenderer.color.b, m_FadeinAlpa);
             m_FadeinAlpa += 0.006f;
             if (m_FadeinAlpa < 0.6f)
-                if (m_sSpriteRenderer_Shadow != null)
+                if (m_sSpriteRenderer_Shadow != null) // 몬스터 그림자 스프라이트 랜더러가 존재하는 경우
                     m_sSpriteRenderer_Shadow.color = new Color(m_sSpriteRenderer_Shadow.color.r, m_sSpriteRenderer_Shadow.color.g, m_sSpriteRenderer_Shadow.color.b, m_FadeinAlpa);
 
             if (m_FadeinAlpa > 1)
                 m_FadeinAlpa = 1;
             yield return new WaitForSeconds(0.01f);
         }
-        m_bAttack = true;
-        m_bPower = false;
+        m_bAttack = true; // 몬스터 공격 가능
+        m_bPower = false; // 몬스터 피격 가능
 
         m_Color_OriginalSprite = m_sSpriteRenderer.color;
         if (m_sSpriteRenderer_Shadow != null)
