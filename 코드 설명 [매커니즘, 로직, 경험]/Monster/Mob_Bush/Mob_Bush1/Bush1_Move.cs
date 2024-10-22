@@ -83,7 +83,7 @@ public class Bush1_Move : Monster_Move
         return false;
     }
 
-    override public E_MONSTER_MOVE_STATE SetMonsterMoveState(E_MONSTER_MOVE_STATE ms)
+    override public E_MONSTER_MOVE_STATE SetMonsterMoveState(E_MONSTER_MOVE_STATE ms, float attackspeed = 0)
     {
         return ms;
     }
