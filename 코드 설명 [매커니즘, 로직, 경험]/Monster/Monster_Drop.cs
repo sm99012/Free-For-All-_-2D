@@ -19,56 +19,64 @@ public class Monster_Drop : MonoBehaviour
     // 몬스터 토벌로 인한 아이템 드롭(아이템 필드 생성)
     public void DropItem_Death(int monstercode, Vector3 pos) // monstercode : 토벌한 몬스터 고유코드, pos : 아이템 생성 위치
     {
-        if (MonsterManager.m_Dictionary_Monster.ContainsKey(monstercode) == true) // Monster
+        if (MonsterManager.m_Dictionary_Monster.ContainsKey(monstercode) == true) // MonsterManager 에 해당 고유코드를 보유한 몬스터가 존재하는지
         {
-            for (int i = 0; i < MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Death_Reward_Item_Equip.Count; i++)
+            for (int i = 0; i < MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Death_Reward_Item_Equip.Count; i++) // 해당 몬스터가 드랍 가능한 모든 장비아이템
             {
-                for (int j = 0; j < MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Death_Reward_Item_Equip_Count[i]; j++)
+                for (int j = 0; j < MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Death_Reward_Item_Equip_Count[i]; j++) // 수량
                 {
+                    // 아이템 드랍 확률 계산
                     m_nRandomNum = Random.Range(1, 10001);
                     if (m_nRandomNum <= MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Death_Reward_Item_Equip_DropRate[i])
                     {
+                        // 아이템 필드 드랍. 아이템 사본 생성
                         Item item = new Item_Equip(ItemManager.instance.m_Dictionary_MonsterDrop_Equip[MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Death_Reward_Item_Equip[i]], this.transform.position + m_vItempos);
                         Destroy(item);
-                        m_vItempos += m_vItemoffset;
+                        m_vItempos += m_vItemoffset; // 아이템 생성 위치 변동
                     }
                 }
             }
-            for (int i = 0; i < MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Death_Reward_Item_Use.Count; i++)
+            for (int i = 0; i < MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Death_Reward_Item_Use.Count; i++) // 해당 몬스터가 드랍 가능한 모든 소비아이템
             {
-                for (int j = 0; j < MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Death_Reward_Item_Use_Count[i]; j++)
+                for (int j = 0; j < MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Death_Reward_Item_Use_Count[i]; j++) // 수량
                 {
+                    // 아이템 드랍 확률 계산
                     m_nRandomNum = Random.Range(1, 10001);
                     if (m_nRandomNum <= MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Death_Reward_Item_Use_DropRate[i])
                     {
+                        // 아이템 필드 드랍. 아이템 사본 생성
                         Item item = new Item_Use(ItemManager.instance.m_Dictionary_MonsterDrop_Use[MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Death_Reward_Item_Use[i]], this.transform.position + m_vItempos);
                         Destroy(item);
-                        m_vItempos += m_vItemoffset;
+                        m_vItempos += m_vItemoffset; // 아이템 생성 위치 변동
                     }
                 }
             }
-            for (int i = 0; i < MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Death_Reward_Item_Etc.Count; i++)
+            for (int i = 0; i < MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Death_Reward_Item_Etc.Count; i++) // 해당 몬스터가 드랍 가능한 모든 기타아이템
             {
-                for (int j = 0; j < MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Death_Reward_Item_Etc_Count[i]; j++)
+                for (int j = 0; j < MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Death_Reward_Item_Etc_Count[i]; j++) // 수량
                 {
+                    // 아이템 드랍 확률 계산
                     m_nRandomNum = Random.Range(1, 10001);
                     if (m_nRandomNum <= MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Death_Reward_Item_Etc_DropRate[i])
                     {
+                        // 아이템 필드 드랍. 아이템 사본 생성
                         Item item = new Item_Etc(ItemManager.instance.m_Dictionary_MonsterDrop_Etc[MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Death_Reward_Item_Etc[i]], this.transform.position + m_vItempos);
                         Destroy(item);
-                        m_vItempos += m_vItemoffset;
+                        m_vItempos += m_vItemoffset; // 아이템 생성 위치 변동
                     }
                 }
             }
-            for (int i = 0; i < MonsterManager.m_Dictionary_Monster[monstercode].m_nMonster_Death_Reward_Gold_Count; i++)
+            for (int i = 0; i < MonsterManager.m_Dictionary_Monster[monstercode].m_nMonster_Death_Reward_Gold_Count; i++) // 해당 몬스터가 드랍 가능한 모든 재화(골드)
             {
+                // 골드(재화) 드랍 확률 계산
                 m_nRandomNum = Random.Range(1, 10001);
                 if (m_nRandomNum <= MonsterManager.m_Dictionary_Monster[monstercode].m_nMonster_Death_Reward_Gold_DropRate)
                 {
+                    // 골드(재화) 필드 드랍. 골드(재화) 사본 생성
                     m_nRandomGold = Random.Range(MonsterManager.m_Dictionary_Monster[monstercode].m_nMonster_Death_Reward_Gold_Min, MonsterManager.m_Dictionary_Monster[monstercode].m_nMonster_Death_Reward_Gold_Max + 1);
                     Item item = new Item_Gold(m_nRandomGold, this.transform.position + m_vItempos);
                     Destroy(item);
-                    m_vItempos += m_vItemoffset;
+                    m_vItempos += m_vItemoffset; // 골드(재화) 생성 위치 변동
                 }
             }
         }
@@ -79,36 +87,39 @@ public class Monster_Drop : MonoBehaviour
     {
         if (MonsterManager.m_Dictionary_Monster.ContainsKey(monstercode) == true)
         {
-            for (int i = 0; i < MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Goaway_Reward_Item_Equip.Count; i++)
+            for (int i = 0; i < MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Goaway_Reward_Item_Equip.Count; i++) // 해당 몬스터가 드랍 가능한 모든 장비아이템
             {
-                for (int j = 0; j < MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Goaway_Reward_Item_Equip_Count[i]; j++)
+                for (int j = 0; j < MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Goaway_Reward_Item_Equip_Count[i]; j++) // 수량
                 {
+                    // 아이템 필드 드랍. 아이템 사본 생성
                     m_nRandomNum = Random.Range(1, 10001);
                     if (m_nRandomNum <= MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Goaway_Reward_Item_Equip_DropRate[i])
                     {
                         Item item = new Item_Equip(ItemManager.instance.m_Dictionary_MonsterDrop_Equip[MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Goaway_Reward_Item_Equip[i]], this.transform.position + m_vItempos);
                         Destroy(item);
-                        m_vItempos += m_vItemoffset;
+                        m_vItempos += m_vItemoffset; // 아이템 생성 위치 변동
                     }
                 }
             }
-            for (int i = 0; i < MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Goaway_Reward_Item_Use.Count; i++)
+            for (int i = 0; i < MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Goaway_Reward_Item_Use.Count; i++) // 해당 몬스터가 드랍 가능한 모든 소비아이템
             {
-                for (int j = 0; j < MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Goaway_Reward_Item_Use_Count[i]; j++)
+                for (int j = 0; j < MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Goaway_Reward_Item_Use_Count[i]; j++) // 수량
                 {
+                    // 아이템 필드 드랍. 아이템 사본 생성
                     m_nRandomNum = Random.Range(1, 10001);
                     if (m_nRandomNum <= MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Goaway_Reward_Item_Use_DropRate[i])
                     {
                         Item item = new Item_Use(ItemManager.instance.m_Dictionary_MonsterDrop_Use[MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Goaway_Reward_Item_Use[i]], this.transform.position + m_vItempos);
                         Destroy(item);
-                        m_vItempos += m_vItemoffset;
+                        m_vItempos += m_vItemoffset; // 아이템 생성 위치 변동
                     }
                 }
             }
-            for (int i = 0; i < MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Goaway_Reward_Item_Etc.Count; i++)
+            for (int i = 0; i < MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Goaway_Reward_Item_Etc.Count; i++) // 해당 몬스터가 드랍 가능한 모든 기타아이템
             {
-                for (int j = 0; j < MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Goaway_Reward_Item_Etc_Count[i]; j++)
+                for (int j = 0; j < MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Goaway_Reward_Item_Etc_Count[i]; j++) // 수량
                 {
+                    // 골드(재화) 드랍 확률 계산
                     m_nRandomNum = Random.Range(1, 10001);
                     if (m_nRandomNum <= MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Goaway_Reward_Item_Etc_DropRate[i])
                     {
@@ -118,15 +129,16 @@ public class Monster_Drop : MonoBehaviour
                     }
                 }
             }
-            for (int i = 0; i < MonsterManager.m_Dictionary_Monster[monstercode].m_nMonster_Goaway_Reward_Gold_Count; i++)
+            for (int i = 0; i < MonsterManager.m_Dictionary_Monster[monstercode].m_nMonster_Goaway_Reward_Gold_Count; i++) // 해당 몬스터가 드랍 가능한 모든 재화(골드)
             {
+                // 골드(재화) 드랍 확률 계산
                 m_nRandomNum = Random.Range(1, 10001);
                 if (m_nRandomNum <= MonsterManager.m_Dictionary_Monster[monstercode].m_nMonster_Goaway_Reward_Gold_DropRate)
                 {
                     m_nRandomGold = Random.Range(MonsterManager.m_Dictionary_Monster[monstercode].m_nMonster_Goaway_Reward_Gold_Min, MonsterManager.m_Dictionary_Monster[monstercode].m_nMonster_Goaway_Reward_Gold_Max + 1);
                     Item item = new Item_Gold(m_nRandomGold, this.transform.position + m_vItempos);
                     Destroy(item);
-                    m_vItempos += m_vItemoffset;
+                    m_vItempos += m_vItemoffset; // 골드(재화) 생성 위치 변동
                 }
             }
         }
