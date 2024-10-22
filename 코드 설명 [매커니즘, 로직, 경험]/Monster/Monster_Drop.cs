@@ -19,7 +19,7 @@ public class Monster_Drop : MonoBehaviour
     // 몬스터 토벌로 인한 아이템 드롭(아이템 필드 생성)
     public void DropItem_Death(int monstercode, Vector3 pos) // monstercode : 토벌한 몬스터 고유코드, pos : 아이템 생성 위치
     {
-        if (MonsterManager.m_Dictionary_Monster.ContainsKey(monstercode) == true)
+        if (MonsterManager.m_Dictionary_Monster.ContainsKey(monstercode) == true) // Monster
         {
             for (int i = 0; i < MonsterManager.m_Dictionary_Monster[monstercode].m_nlMonster_Dictionary_Death_Reward_Item_Equip.Count; i++)
             {
