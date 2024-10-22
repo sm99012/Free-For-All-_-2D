@@ -4,47 +4,34 @@ using UnityEngine;
 
 public class Monster_Move : MonoBehaviour
 {
-    public SpriteRenderer m_sSpriteRenderer;
-    public SpriteRenderer m_sSpriteRenderer_Shadow;
-    protected Color m_Color_OriginalSprite;
-    protected Color m_Color_OriginalSprite_Shadow;
+    public SpriteRenderer m_sSpriteRenderer;        // 몬스터 스프라이트 랜더러(이미지 + 색상 정보 등)
+    public SpriteRenderer m_sSpriteRenderer_Shadow; // 몬스터 그림자 스프라이트 랜더러(이미지 + 색상 정보 등)
+    protected Color m_Color_OriginalSprite;         // 몬스터 스프라이트 원본 색상(변동X)
+    protected Color m_Color_OriginalSprite_Shadow;  // 몬스터 그림자 스프라이트 원본 색상(변동X)
     public Transform m_tTransform;
-    public Vector3 m_vRightPos;
-    public Vector3 m_vLeftPos;
-
     public Animator m_aAnimator;
-
     public Rigidbody2D m_rRigdbody;
 
-    public bool m_bFix;
-    public bool m_bAttack;
-
-    public bool m_bPower;
-
-    // 투명도
-    public float m_fAlpa;
-    public float m_fAlpa_Shadow;
-    // CHASE 상태에서 IDLE 상태로 전환되는 시간
-    public float m_fPeacefulTime;
-
-    public float m_FadeinAlpa;
-
-    protected float m_fAttackSpeed;
-
-    public enum E_MONSTER_MOVE_STATE { IDLE, RUN, ATTACK, ATTACKED, CHASE, DEATH, GOAWAY,
-                                        ATTACK1, ATTACK2 }
+    public enum E_MONSTER_MOVE_STATE { IDLE, RUN, ATTACK, ATTACKED, CHASE, DEATH, GOAWAY, ATTACK1, ATTACK2 }
     public E_MONSTER_MOVE_STATE m_eMonsterState;
 
-    void Start()
-    {
+    // 이동
+    public Vector3 m_vRightPos;    // m_vRightPos = new Vector3(1, 1, 1);
+    public Vector3 m_vLeftPos;     // m_vLeftPos = new Vector3(-1, 1, 1);
+    public bool m_bFix;            // 몬스터 고정 여부 (m_bFix == true : 고정형 몬스터(이동 불가) / m_bFix == false : 이동형 몬스터(이동 가능))
 
-    }
-
+    // 공격
+    public bool m_bAttack;          // 몬스터 공격 가능 여부 (m_bAttack == true : 몬스터 공격 가능 / m_bAttack == false : 몬스터 공격 불가능)
+    public float m_fPeacefulTime;   // CHASE 상태에서 IDLE 상태로 전환되는 시간
     
-    void Update()
-    {
-        
-    }
+    // 피격
+    public bool m_bPower;  // 몬스터 피격 가능 여부 (m_bPower == true : 몬스터 피격 블가능 / m_bPower == false : 몬스터 피격 가능)
+
+    // Fadeout 효과 관련 변수
+    public float m_fAlpa;        // 몬스터 스프라이트 랜더러(이미지) 투명도
+    public float m_fAlpa_Shadow; // 몬스터 그림자 스프라이트 랜더러(이미지) 투명도
+    // Fadein 효과 관련 변수
+    public float m_FadeinAlpa;   // 몬스터 스프라이트 랜더러(이미지) 투명도
 
     virtual public void Move(int speed, Vector3 dir)
     {
@@ -108,7 +95,7 @@ public class Monster_Move : MonoBehaviour
             m_Color_OriginalSprite_Shadow = m_sSpriteRenderer_Shadow.color;
     }
 
-    virtual public E_MONSTER_MOVE_STATE SetMonsterMoveState(E_MONSTER_MOVE_STATE ms)
+    virtual public E_MONSTER_MOVE_STATE SetMonsterMoveState(E_MONSTER_MOVE_STATE ms, float attackspeed = 0)
     {
         return ms;
     }
@@ -204,9 +191,9 @@ public class Monster_Move : MonoBehaviour
     }
 
     // ATTACK
-    virtual protected IEnumerator ProcessAttack()
+    virtual protected IEnumerator ProcessAttack(float attackspeed)
     {
-        yield return new WaitForSeconds(m_fAttackSpeed);
+        yield return new WaitForSeconds(attackspeed);
         m_bAttack = true;
     }
 
