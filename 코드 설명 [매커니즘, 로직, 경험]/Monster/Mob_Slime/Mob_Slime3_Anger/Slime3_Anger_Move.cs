@@ -6,20 +6,19 @@ public class Slime3_Anger_Move : Slime1_Move
 {
     override public bool Attack(float attackspeed)
     {
-        m_fAttackSpeed = attackspeed;
         if (m_bAttack == true)
             if (m_eMonsterState == E_MONSTER_MOVE_STATE.CHASE ||
                 m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACKED || 
                 m_eMonsterState == E_MONSTER_MOVE_STATE.IDLE || 
                 m_eMonsterState == E_MONSTER_MOVE_STATE.RUN)
             {
-                m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.ATTACK);
+                m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.ATTACK, attackspeed);
                 return true;
             }
         return false;
     }
 
-    override public E_MONSTER_MOVE_STATE SetMonsterMoveState(E_MONSTER_MOVE_STATE ms)
+    override public E_MONSTER_MOVE_STATE SetMonsterMoveState(E_MONSTER_MOVE_STATE ms, float attackspeed = 0)
     {
         switch (ms)
         {
@@ -79,7 +78,7 @@ public class Slime3_Anger_Move : Slime1_Move
                             if (m_bAttack == true)
                             {
                                 SetAnimationParameters("ATTACK");
-                                StartCoroutine(ProcessAttack());
+                                StartCoroutine(ProcessAttack(attackspeed));
                             }
                         }
                     }
