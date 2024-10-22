@@ -21,19 +21,19 @@ public class Monster_Move : MonoBehaviour
     public enum E_MONSTER_MOVE_STATE { IDLE, RUN, ATTACK, ATTACKED, CHASE, DEATH, GOAWAY, ATTACK1, ATTACK2 }
     public E_MONSTER_MOVE_STATE m_eMonsterState; // 몬스터 동작 FSM 변수
 
-    // 이동
+    // 몬스터 이동 관련 변수
     public Vector3 m_vRightPos;    // m_vRightPos = new Vector3(1, 1, 1);
     public Vector3 m_vLeftPos;     // m_vLeftPos = new Vector3(-1, 1, 1);
     public bool m_bFix;            // 몬스터 고정 여부 (m_bFix == true : 몬스터 이동 불가 / m_bFix == false : 몬스터 이동 가능)
 
-    // 추격
+    // 몬스터 추격 관련 변수
     protected Coroutine m_cProcessPeaceful; // 몬스터 추격(CHASE) -> 평화(IDEL) 상태 변화 계산 코루틴
     
-    // 공격
+    // 몬스터 공격 관련 변수
     public bool m_bAttack;          // 몬스터 공격 가능 여부 (m_bAttack == true : 몬스터 공격 가능 / m_bAttack == false : 몬스터 공격 불가능)
     public float m_fPeacefulTime;   // CHASE 상태에서 IDLE 상태로 전환되는 시간
     
-    // 피격
+    // 몬스터 피격 관련 변수
     protected Coroutine m_cProcessAttacked; // 몬스터 피격 계산 코루틴
     public bool m_bPower;                   // 몬스터 피격 가능 여부 (m_bPower == true : 몬스터 피격 블가능 / m_bPower == false : 몬스터 피격 가능)
 
