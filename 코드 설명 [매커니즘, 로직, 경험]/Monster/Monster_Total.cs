@@ -184,7 +184,7 @@ public class Monster_Total : MonoBehaviour
         yield return new WaitForSeconds(time);
         Respone(); // 몬스터 리스폰 함수
     }
-        // 몬스터 리스폰 함수
+    // 몬스터 리스폰 함수
     virtual public void Respone()
     {
         m_bWait = false; // 몬스터 상호작용 가능
