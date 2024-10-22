@@ -15,7 +15,7 @@ public class Monster_Drop : MonoBehaviour
     protected Vector3 m_vItempos = new Vector3(0, 0, 0);
     protected Vector3 m_vItemoffset = new Vector3(0.001f, 0, 0);
 
-    virtual public void DropItem_Death(int monstercode, Vector3 pos)
+    public void DropItem_Death(int monstercode, Vector3 pos)
     {
         if (MonsterManager.m_Dictionary_Monster.ContainsKey(monstercode) == true)
         {
@@ -71,7 +71,7 @@ public class Monster_Drop : MonoBehaviour
             }
         }
     }
-    virtual public void DropItem_Goaway(int monstercode, Vector3 pos)
+    public void DropItem_Goaway(int monstercode, Vector3 pos)
     {
         if (MonsterManager.m_Dictionary_Monster.ContainsKey(monstercode) == true)
         {
