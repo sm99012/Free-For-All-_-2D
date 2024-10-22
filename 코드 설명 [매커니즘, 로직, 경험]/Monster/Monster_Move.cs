@@ -19,15 +19,18 @@ public class Monster_Move : MonoBehaviour
     // 이동
     public Vector3 m_vRightPos;    // m_vRightPos = new Vector3(1, 1, 1);
     public Vector3 m_vLeftPos;     // m_vLeftPos = new Vector3(-1, 1, 1);
-    public bool m_bFix;            // 몬스터 고정 여부 (m_bFix == true : 고정형 몬스터(이동 불가) / m_bFix == false : 이동형 몬스터(이동 가능))
+    public bool m_bFix;            // 몬스터 고정 여부 (m_bFix == true : 몬스터 이동 불가 / m_bFix == false : 몬스터 이동 가능)
 
+    // 추격
+    protected Coroutine m_cProcessPeaceful; // 몬스터 추격(CHASE) -> 평화(IDEL) 상태 변화 계산 코루틴
+    
     // 공격
     public bool m_bAttack;          // 몬스터 공격 가능 여부 (m_bAttack == true : 몬스터 공격 가능 / m_bAttack == false : 몬스터 공격 불가능)
     public float m_fPeacefulTime;   // CHASE 상태에서 IDLE 상태로 전환되는 시간
     
     // 피격
     protected Coroutine m_cProcessAttacked; // 몬스터 피격 계산 코루틴
-    public bool m_bPower;                          // 몬스터 피격 가능 여부 (m_bPower == true : 몬스터 피격 블가능 / m_bPower == false : 몬스터 피격 가능)
+    public bool m_bPower;                   // 몬스터 피격 가능 여부 (m_bPower == true : 몬스터 피격 블가능 / m_bPower == false : 몬스터 피격 가능)
 
     // Fadein 효과 관련 변수
     public float m_FadeinAlpa;   // 몬스터 스프라이트 랜더러(이미지) 투명도
@@ -42,7 +45,7 @@ public class Monster_Move : MonoBehaviour
     }
     
     // 몬스터 방향 설정(가상 함수)
-    virtual public void SetDir(Vector3 dir)
+    virtual public void SetDir(Vector3 dir) // dir : 방향
     {
 
     }
@@ -52,21 +55,11 @@ public class Monster_Move : MonoBehaviour
     {
 
     }
-    // Animator AddEvent
-    protected Coroutine m_cProcessPeaceful;
-    virtual protected void EndAttack()
-    {
-        m_bAttack = false;
-        if (m_cProcessPeaceful != null)
-            m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.CHASE);
-        else 
-            m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.IDLE);
-    }
-    // CHASE 일정시간이 지난 이후 평화로움 상태로 변경
+    // 몬스터 추격 시간 계산 코루틴. 몬스터 동작 FSM : 추격(CHASE) -> 평화(IDLE)
     virtual protected IEnumerator ProcessPeaceful()
     {
-        yield return new WaitForSeconds(m_fPeacefulTime);
-        m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.IDLE);
+        yield return new WaitForSeconds(m_fPeacefulTime); // m_fPeacefulTime 만큼 몬스터는 대상(플레이어)을 추격한다.
+        m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.IDLE); // 몬스터 동작 FSM : 추격(CHASE) -> 평화(IDLE)
         m_cProcessPeaceful = null;
     }
 
@@ -75,10 +68,20 @@ public class Monster_Move : MonoBehaviour
     {
         return false;
     }
+    // 몬스터 공격속도 계산 코루틴. 몬스터의 공격속도에 따라 다음 공격까지 기다려야하는 시간을 계산한다.
     virtual protected IEnumerator ProcessAttack(float attackspeed)
     {
         yield return new WaitForSeconds(attackspeed);
         m_bAttack = true;
+    }
+    // 몬스터 공격 종료 함수(가상 함수). 몬스터 공격 애니메이션의 특정 프레임에서 호출된다. 몬스터 동작 FSM : 공격(ATTACK) -> 추격(CHASE) / 평화(IDLE)
+    virtual protected void EndAttack()
+    {
+        m_bAttack = false;
+        if (m_cProcessPeaceful != null) // 몬스터 공격이 종료된 후에도 여전히 몬스터가 대상(플레이어)을 추격해야하는 상태일 경우
+            m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.CHASE); // 몬스터 동작 FSM : 공격(ATTACK) -> 추격(CHASE)
+        else // 몬스터 공격이 종료된 후 몬스터가 평화로운 상태(추격X)일 경우
+            m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.IDLE);  // 몬스터 동작 FSM : 공격(ATTACK) -> 평화(IDLE)
     }
     
     // 몬스터 피격 함수(가상 함수)
@@ -86,47 +89,54 @@ public class Monster_Move : MonoBehaviour
     {
 
     }
-    // ATTACKED 모션 실행
+    // 몬스터 피격 시간 계산 코루틴1. 몬스터 피격 시 0.6f초의 경직 적용
     virtual protected IEnumerator ProcessAttacked1()
     {
-        SetAnimationParameters("ATTACKED");
-        m_bFix = true;
-        yield return new WaitForSeconds(0.6f); // 경직시간
-        m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.CHASE);
-        m_bFix = false;
+        SetAnimationParameters("ATTACKED"); // 몬스터 피격 애니메이션 설정
+        m_bFix = true; // 몬스터 이동 불가
+        yield return new WaitForSeconds(0.6f);
+        m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.CHASE); // 몬스터 피격 후 몬스터 추격 실행. 몬스터 동작 FSM : 피격(ATTACKED) -> 추격(CHASE)
+        m_bFix = false; // 몬스터 이동 가능
         m_cProcessAttacked = null;
     }
-    // ATTACKED 모션 중에 또맞으면 ATTACKED모션 재실행
+    // 몬스터 피격 시간 계산 코루틴2. 몬스터 피격 중 또다시 피격 시 피격 판정 재실행(몬스터 동작 FSM의 상태를 변화해주는 추가 작업 필요)
     virtual protected IEnumerator ProcessAttacked2()
     {
+        // 몬스터 동작 FSM의 상태를 변화해주는 추가 작업
         SetAnimationParameters("CHASE");
         yield return new WaitForSeconds(0.03f);
-        SetAnimationParameters("ATTACKED");
-        m_bFix = true;
-        yield return new WaitForSeconds(0.6f); // 경직시간
-        m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.CHASE);
-        m_bFix = false;
+        
+        SetAnimationParameters("ATTACKED"); // 몬스터 피격 애니메이션 설정
+        m_bFix = true; // 몬스터 이동 불가
+        yield return new WaitForSeconds(0.6f);
+        m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.CHASE); // 몬스터 피격 후 몬스터 추격 실행. 몬스터 동작 FSM : 피격(ATTACKED) -> 추격(CHASE)
+        m_bFix = false; // 몬스터 이동 가능
         m_cProcessAttacked = null;
     }
 
     // 몬스터 사망 함수
     virtual public void Death()
     {
-        StartCoroutine(ProcessDeath());
+        StartCoroutine(ProcessDeath()); // 몬스터 사망 시간 계산 코루틴
     }
-    // Death
+    // 몬스터 사망 시간 계산 코루틴. Fadeout 효과 관련 계산
     virtual public IEnumerator ProcessDeath()
     {
+        // 몬스터 설정 변경
+        m_bFix = true; // 몬스터 이동 불가
+        m_rRigdbody.bodyType = RigidbodyType2D.Static; // Rigidbody(강체).bodyType : Dynamic(다른 오브젝트에 의한 물리 적용 가능) -> Static(다른 오브젝트에 의한 물리 적용 불가능)
+                                                       // 몬스터에게 다른 오브젝트(몬스터)에 의한 물리법칙을 적용 불가능하게 변경(다른 오브젝트에 의해 밀리는 현상 불가능)
+        this.gameObject.layer = LayerMask.NameToLayer("Default"); // 몬스터의 레이어 변경 : "Monster" -> "Default"
+                                                                  // 몬스터가 대상(플레이어)과 충돌 불가능 하도록 레이어 변경
+                                                                  
+        // 몬스터 스프라이트 랜더러(이미지) 투명도 감소(Fadeout 효과)
         m_fAlpa = 1;
         m_fAlpa_Shadow = 0.6f;
-        m_bFix = true;
-        m_rRigdbody.bodyType = RigidbodyType2D.Static;
-        this.gameObject.layer = LayerMask.NameToLayer("Default");
         while (m_fAlpa > 0)
         {
             m_sSpriteRenderer.color = new Color(m_Color_OriginalSprite.r, m_Color_OriginalSprite.g, m_Color_OriginalSprite.b, m_fAlpa);
             if (m_fAlpa_Shadow >= 0)
-                if (m_sSpriteRenderer_Shadow != null)
+                if (m_sSpriteRenderer_Shadow != null) // 몬스터 그림자 스프라이트 랜더러가 존재하는 경우
                     m_sSpriteRenderer_Shadow.color = new Color(m_Color_OriginalSprite_Shadow.r, m_Color_OriginalSprite_Shadow.g, m_Color_OriginalSprite_Shadow.b, m_fAlpa_Shadow);
 
             m_fAlpa -= 0.006f;
@@ -134,9 +144,10 @@ public class Monster_Move : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
         m_sSpriteRenderer.color = new Color(m_Color_OriginalSprite.r, m_Color_OriginalSprite.g, m_Color_OriginalSprite.b, 0);
-        if (m_sSpriteRenderer_Shadow != null)
+        if (m_sSpriteRenderer_Shadow != null) // 몬스터 그림자 스프라이트 랜더러가 존재하는 경우
             m_sSpriteRenderer_Shadow.color = new Color(m_Color_OriginalSprite_Shadow.r, m_Color_OriginalSprite_Shadow.g, m_Color_OriginalSprite_Shadow.b, 0);
-        m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.IDLE);
+        
+        m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.IDLE); // 몬스터 동작 FSM : 사망(DEATH) -> 평화(IDLE)
     }
 
     // 몬스터 놓아주기 함수(가상 함수)
@@ -144,18 +155,24 @@ public class Monster_Move : MonoBehaviour
     {
 
     }
+    // 몬스터 놓아주기 시간 계산 코루틴. Fadeout 효과 관련 계산
     virtual public IEnumerator ProcessGoaway()
     {
+        // 몬스터 설정 변경
+        m_bFix = true; // 몬스터 이동 불가
+        m_rRigdbody.bodyType = RigidbodyType2D.Static; // Rigidbody(강체).bodyType : Dynamic(다른 오브젝트에 의한 물리 적용 가능) -> Static(다른 오브젝트에 의한 물리 적용 불가능)
+												       // 몬스터에게 다른 오브젝트(몬스터)에 의한 물리법칙을 적용 불가능하게 변경(다른 오브젝트에 의해 밀리는 현상 불가능)
+        this.gameObject.layer = LayerMask.NameToLayer("Default"); // 몬스터의 레이어 변경 : "Monster" -> "Default"
+															      // 몬스터가 대상(플레이어)과 충돌 불가능 하도록 레이어 변경
+                     
+        // 몬스터 스프라이트 랜더러(이미지) 투명도 감소(Fadeout 효과)
         m_fAlpa = 1;
         m_fAlpa_Shadow = 0.6f;
-        m_bFix = true;
-        m_rRigdbody.bodyType = RigidbodyType2D.Static;
-        this.gameObject.layer = LayerMask.NameToLayer("Default");
         while (m_fAlpa > 0)
         {
             m_sSpriteRenderer.color = new Color(m_Color_OriginalSprite.r, m_Color_OriginalSprite.g, m_Color_OriginalSprite.b, m_fAlpa);
             if (m_fAlpa_Shadow >= 0)
-                if (m_sSpriteRenderer_Shadow != null)
+                if (m_sSpriteRenderer_Shadow != null) // 몬스터 그림자 스프라이트 랜더러가 존재하는 경우
                     m_sSpriteRenderer_Shadow.color = new Color(m_Color_OriginalSprite_Shadow.r, m_Color_OriginalSprite_Shadow.g, m_Color_OriginalSprite_Shadow.b, m_fAlpa_Shadow);
 
             m_fAlpa -= 0.006f;
@@ -163,19 +180,23 @@ public class Monster_Move : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
         m_sSpriteRenderer.color = new Color(m_Color_OriginalSprite.r, m_Color_OriginalSprite.g, m_Color_OriginalSprite.b, 0);
-        if (m_sSpriteRenderer_Shadow != null)
+        if (m_sSpriteRenderer_Shadow != null) // 몬스터 그림자 스프라이트 랜더러가 존재하는 경우
             m_sSpriteRenderer_Shadow.color = new Color(m_Color_OriginalSprite_Shadow.r, m_Color_OriginalSprite_Shadow.g, m_Color_OriginalSprite_Shadow.b, 0);
-        m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.IDLE);
+            
+        m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.IDLE); // 몬스터 동작 FSM : 놓아주기(GOAWAY) -> 평화(IDLE)
     }
 
+    // 몬스터 리스폰 함수
     virtual public void Respone()
     {
-        m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.IDLE);
-        m_rRigdbody.bodyType = RigidbodyType2D.Dynamic;
+        m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.IDLE); // 몬스터 동작 FSM : 평화(IDLE)
+        m_rRigdbody.bodyType = RigidbodyType2D.Dynamic; // Rigidbody(강체).bodyType : Dynamic(다른 오브젝트에 의한 물리 적용 가능)
+                                                        // 몬스터에게 다른 오브젝트(몬스터)에 의한 물리법칙을 적용 가능하도록 변경(다른 오브젝트에 의해 밀리는 현상 가능)
+        this.gameObject.layer = LayerMask.NameToLayer("Monster"); // 몬스터의 레이어 변경 : "Monster" -> "Default"
+                                                                  // 몬스터가 대상(플레이어)과 충돌 불가능 하도록 레이어 변경
         m_sSpriteRenderer.color = m_Color_OriginalSprite;
         m_FadeinAlpa = 0;
         m_bFix = false;
-        this.gameObject.layer = LayerMask.NameToLayer("Monster");
         Fadein();   
     }
 
