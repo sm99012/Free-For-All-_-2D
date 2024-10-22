@@ -33,9 +33,9 @@ public class Player_Move : MonoBehaviour
     // 연계 공격 허용 지속 시간
     Coroutine m_cProcess_Attack_Duration = null;       // 연계 공격 가능 시간 계산 코루틴
     Coroutine m_cProcess_AttackToIdle_Duration = null; // 공격 후 딜레이 계산 코루틴
-    Coroutine m_cProcess_AttackDelay_Duration = null;  // 플레이어 공격 속도 계산 코루틴(다음 공격까지 기다려야하는 시간 계산)
+    Coroutine m_cProcess_AttackDelay_Duration = null;  // 플레이어 공격속도 계산 코루틴(다음 공격까지 기다려야하는 시간 계산)
     float m_fAttack_DurationTime;                      // 연계 공격 가능 시간 계산 변수
-    float m_fAttackDelay_DurationTime;                 // 플레이어 가변 공격 속도
+    float m_fAttackDelay_DurationTime;                 // 플레이어 가변 공격속도
     float m_fAttack1_1DurationTime = 0.6f;      // '기본 공격1' 이후 '기본 공격2' 동작이 가능한 시간
     float m_fAttack1_2DurationTime = 0.4f;      // '기본 공격2' 이후 '기본 공격3' 동작이 가능한 시간
     float m_fAttack1_3DurationTime = 1f;        // '기본 공격3' 이후의 공격은 '기본 공격1'로 되돌아간다. 이후 추가될 '기본 공격4' 등을 위해 설정해둔 임의의 값
@@ -208,9 +208,9 @@ public class Player_Move : MonoBehaviour
         return 0;
     }
 
-    // Player_Total.cs에서 호출되는 플레이어의 공격 속도를 알려주는 함수. 플레이어 공격 속도 계산에 사용된다.
-    // ※ 추후 플레이어 공격 속도 계산을 매개변수를 이용한 방식으로 변경한다면 사용되지 않을 예정
-    public void SetAttackSpeed(float atkspd) // atkspd : 플레이어 공격 속도
+    // Player_Total.cs에서 호출되는 플레이어의 공격속도를 알려주는 함수. 플레이어 공격속도 계산에 사용된다.
+    // ※ 추후 플레이어 공격속도 계산을 매개변수를 이용한 방식으로 변경한다면 사용되지 않을 예정
+    public void SetAttackSpeed(float atkspd) // atkspd : 플레이어 공격속도
     {
           m_fAttackDelay_DurationTime = atkspd;
     }
@@ -283,7 +283,7 @@ public class Player_Move : MonoBehaviour
         m_cProcess_AttackToIdle_Duration = null;
     }
 
-    // 플레이어 공격 속도 계산 함수. 플레이어의 공격 속도에 따라 다음 기본 공격까지 기다려야하는 시간을 계산한다.
+    // 플레이어 공격속도 계산 함수. 플레이어의 공격속도에 따라 다음 기본 공격까지 기다려야하는 시간을 계산한다.
     IEnumerator ProcessAttackDelay()
     {
         m_bAttack = false; // 기본 공격 불가능
@@ -756,10 +756,10 @@ public class Player_Move : MonoBehaviour
                 {
                     if (m_ePlayerMoveState != pms)
                     {
-                        // 플레이어 공격 속도 계산 초기화
+                        // 플레이어 공격속도 계산 초기화
                         if (m_cProcess_AttackDelay_Duration != null)
                             StopCoroutine(m_cProcess_AttackDelay_Duration);
-                        // 플레이어 공격 속도 계산
+                        // 플레이어 공격속도 계산
                         m_cProcess_AttackDelay_Duration = StartCoroutine(ProcessAttackDelay());
                         // 연계 공격 가능 시간 초기화
                         if (m_cProcess_Attack_Duration != null)
@@ -774,10 +774,10 @@ public class Player_Move : MonoBehaviour
                 {
                     if (m_ePlayerMoveState != pms)
                     {
-                        // 플레이어 공격 속도 계산 초기화
+                        // 플레이어 공격속도 계산 초기화
                         if (m_cProcess_AttackDelay_Duration != null)
                             StopCoroutine(m_cProcess_AttackDelay_Duration);
-                        // 플레이어 공격 속도 계산
+                        // 플레이어 공격속도 계산
                         m_cProcess_AttackDelay_Duration = StartCoroutine(ProcessAttackDelay());
                         // 연계 공격 가능 시간 초기화
                         if (m_cProcess_Attack_Duration != null)
@@ -792,10 +792,10 @@ public class Player_Move : MonoBehaviour
                 {
                     if (m_ePlayerMoveState != pms)
                     {
-                        // 플레이어 공격 속도 계산 초기화
+                        // 플레이어 공격속도 계산 초기화
                         if (m_cProcess_AttackDelay_Duration != null)
                             StopCoroutine(m_cProcess_AttackDelay_Duration);
-                        // 플레이어 공격 속도 계산
+                        // 플레이어 공격속도 계산
                         m_cProcess_AttackDelay_Duration = StartCoroutine(ProcessAttackDelay());
                         // 연계 공격 가능 시간 초기화
                         if (m_cProcess_Attack_Duration != null)
