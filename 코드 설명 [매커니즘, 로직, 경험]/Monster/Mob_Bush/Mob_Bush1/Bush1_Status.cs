@@ -34,6 +34,6 @@ public class Bush1_Status : Monster_Status
 
     override public void Goaway()
     {
-        
+        m_bPower = true;
     }
 }
