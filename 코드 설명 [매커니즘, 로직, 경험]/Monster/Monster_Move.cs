@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//
+// ※ 몬스터의 동작을 관리하는 Monster_Move 기반 클래스를 구현한 후 각종 몬스터의 ㆍㆍㆍ_Move 클래스를 상속으로 구현했다.
+//    가상 함수를 이용해 몬스터의 특징에 따른 적절한 동작을 구현했다.
+//
+
 public class Monster_Move : MonoBehaviour
 {
     public SpriteRenderer m_sSpriteRenderer;        // 몬스터 스프라이트 랜더러(이미지 + 색상 정보 등)
