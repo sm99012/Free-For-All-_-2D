@@ -12,8 +12,8 @@ public class Monster_Drop : MonoBehaviour
 {
     protected int m_nRandomNum;
     protected int m_nRandomGold;
-    protected Vector3 m_vItempos;
-    protected Vector3 m_vItemoffset;
+    protected Vector3 m_vItempos = new Vector3(0, 0, 0);
+    protected Vector3 m_vItemoffset = new Vector3(0.001f, 0, 0);
 
     virtual public void DropItem_Death(int monstercode, Vector3 pos)
     {
