@@ -119,7 +119,7 @@ public class Monster_Move : MonoBehaviour
         m_cProcessAttacked = null;
     }
 
-    // 몬스터 사망 함수
+    // 몬스터 사망 함수. Fadeout 효과 관련
     virtual public void Death()
     {
         StartCoroutine(ProcessDeath()); // 몬스터 사망 시간 계산 코루틴
