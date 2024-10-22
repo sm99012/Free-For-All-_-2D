@@ -84,11 +84,6 @@ public class Dummy1_Move : Monster_Move
 
     override public bool Attack(float attackspeed)
     {
-        if (m_eMonsterState == E_MONSTER_MOVE_STATE.CHASE && m_bAttack == true)
-        {
-            // m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.ATTACK, attackspeed);
-            return true;
-        }
         return false;
     }
 
