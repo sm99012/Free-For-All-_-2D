@@ -90,7 +90,7 @@ public class Player_Move : MonoBehaviour
     // 플레이어 이동 함수
     // Player_Total.cs에서 키입력(↑, ↓, ←, →)을 통해 함수 실행. 플레이어의 달리기 동작 수행
     // 플레이어 동작 FSM 정보를 반환
-    public E_PLAYER_MOVE_STATE Move(int h, int v, int nspeed) // h : 수평 이동 값, v : 수직 이동 값, nspeed : 플레이어 이동 속도
+    public E_PLAYER_MOVE_STATE Move(int h, int v, int nspeed) // h : 수평 이동 값, v : 수직 이동 값, nspeed : 플레이어 이동속도
     {
         if (m_bMove == true)
         {
@@ -323,7 +323,7 @@ public class Player_Move : MonoBehaviour
     // 플레이어 피격 함수
     // Monster_Total.cs에서 Player_Total.cs의 함수를 호출해 실행. 플레이어의 피격 동작 수행
     // return true : 피격됨 / return false : 피격안됨
-    public bool Attacked(float time, float speed, Vector3 dir) // time : 넉백 지속 시간, speed : 플레이어 이동 속도, dir : 넉백 방향
+    public bool Attacked(float time, float speed, Vector3 dir) // time : 넉백 지속 시간, speed : 플레이어 이동속도, dir : 넉백 방향
     {
         if (m_bPower == false) // 플레이어 피격 가능할 때
         {
@@ -371,13 +371,13 @@ public class Player_Move : MonoBehaviour
     }
     
     // 넉백 함수. 플레이어 동작 FSM의 상태에 관계 없이 넉백 실행
-    public void KnockBack(float time, float fspeed, Vector3 dir) // time : 넉백 지속 시간, speed : 플레이어 이동 속도, dir : 넉백 방향
+    public void KnockBack(float time, float fspeed, Vector3 dir) // time : 넉백 지속 시간, speed : 플레이어 이동속도, dir : 넉백 방향
     {
         if (m_cProcess_KnockBack == null) // 넉백 중첩 불가능
             m_cProcess_KnockBack = StartCoroutine(ProcessKnockBack(time, fspeed * 0.3f, dir));
     }
     // 넉백 계산 함수
-    IEnumerator ProcessKnockBack(float time, float fspeed, Vector3 dir) // time : 넉백 지속 시간, speed : 플레이어 이동 속도, dir : 넉백 방향
+    IEnumerator ProcessKnockBack(float time, float fspeed, Vector3 dir) // time : 넉백 지속 시간, speed : 플레이어 이동속도, dir : 넉백 방향
     {
         float ftime = time;
         m_bMove = false;
