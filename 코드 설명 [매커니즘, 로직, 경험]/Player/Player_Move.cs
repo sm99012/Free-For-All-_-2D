@@ -90,7 +90,7 @@ public class Player_Move : MonoBehaviour
     // 플레이어 이동 함수
     // Player_Total.cs에서 키입력(↑, ↓, ←, →)을 통해 함수 실행. 플레이어의 달리기 동작 수행
     // 플레이어 동작 FSM 정보를 반환
-    public E_PLAYER_MOVE_STATE Move(int h, int v, int fspeed) // h : 수평 이동 값, v : 수직 이동 값, fspeed : 플레이어 이동 속도
+    public E_PLAYER_MOVE_STATE Move(int h, int v, int nspeed) // h : 수평 이동 값, v : 수직 이동 값, nspeed : 플레이어 이동 속도
     {
         if (m_bMove == true)
         {
@@ -109,12 +109,12 @@ public class Player_Move : MonoBehaviour
                 if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.IDLE || m_ePlayerMoveState == E_PLAYER_MOVE_STATE.RUN) // 달리기 상태
                 {
                     m_fMoveRate = 1f; // 기본 이동 계수
-                    m_rRigdbody.MovePosition(this.gameObject.transform.position + (m_vInputDir * fspeed * 0.016f * 0.01f * m_fMoveRate));
+                    m_rRigdbody.MovePosition(this.gameObject.transform.position + (m_vInputDir * nspeed * 0.016f * 0.01f * m_fMoveRate));
                 }
                 if (m_ePlayerMoveState == E_PLAYER_MOVE_STATE.ROLL) // 구르기 상태
                 {
                     m_fMoveRate = 1.5f; // 달리기보다 빠른 이동이 가능한 구르기 이동 계수
-                    m_rRigdbody.MovePosition(this.gameObject.transform.position + m_vInputDir * fspeed * 0.016f * 0.01f * m_fMoveRate);
+                    m_rRigdbody.MovePosition(this.gameObject.transform.position + m_vInputDir * nspeed * 0.016f * 0.01f * m_fMoveRate);
                 }
             }
             return m_ePlayerMoveState; // 플레이어 동작 FSM 정보를 반환 { IDEL(가만히 있기), RUN(달리기), ROLL(구르기) }
