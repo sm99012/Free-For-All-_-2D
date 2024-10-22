@@ -10,12 +10,14 @@ using UnityEngine;
 
 public class Monster_Drop : MonoBehaviour
 {
-    protected int m_nRandomNum;
-    protected int m_nRandomGold;
-    protected Vector3 m_vItempos = new Vector3(0, 0, 0);
-    protected Vector3 m_vItemoffset = new Vector3(0.001f, 0, 0);
+    protected int m_nRandomNum;  // 아이템 획득 확률 계산 관련 변수
+    protected int m_nRandomGold; // 골드(재화) 획득 관련 변수
+    
+    protected Vector3 m_vItempos = new Vector3(0, 0, 0);         // 아이템 생성 위치
+    protected Vector3 m_vItemoffset = new Vector3(0.001f, 0, 0); // 아이템 생성 위치 오프셋
 
-    public void DropItem_Death(int monstercode, Vector3 pos)
+    // 몬스터 토벌로 인한 아이템 드롭(아이템 필드 생성)
+    public void DropItem_Death(int monstercode, Vector3 pos) // monstercode : 토벌한 몬스터 고유코드, pos : 아이템 생성 위치
     {
         if (MonsterManager.m_Dictionary_Monster.ContainsKey(monstercode) == true)
         {
@@ -71,7 +73,9 @@ public class Monster_Drop : MonoBehaviour
             }
         }
     }
-    public void DropItem_Goaway(int monstercode, Vector3 pos)
+
+    // 몬스터 놓아주기로 인한 아이템 드롭(아이템 필드 생성)
+    public void DropItem_Goaway(int monstercode, Vector3 pos) // monstercode : 놓아주기한 몬스터 고유코드, pos : 아이템 생성 위치
     {
         if (MonsterManager.m_Dictionary_Monster.ContainsKey(monstercode) == true)
         {
