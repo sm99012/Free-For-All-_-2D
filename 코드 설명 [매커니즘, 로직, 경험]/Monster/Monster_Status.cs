@@ -3,35 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+//
+// ※ 몬스터의 스탯(능력치, 평판)을 관리하는 Monster_Status 기반 클래스를 구현한 후 각종 몬스터의 ㆍㆍㆍ_Status 클래스를 상속으로 구현했다.
+//    가상 함수를 이용해 몬스터의 특징에 따른 적절한 동작을 구현했다.
+//
+
+// 오브젝트 타입 : { 몬스터, 오브젝트(장애물(모든 피격 데미지 1 고정)) }
 public enum E_OBJECT_STATE { MONSTER, HURDLE }
+// 몬스터 타입 : { 오브젝트, 인간, 동물, 슬라임, 스켈레톤, 앤트, 마족, 용족, 어둠 }
 public enum E_MONSTER_KIND { OBJECT, HUMAN, ANIMAL, SLIME, SKELETON, ENTS, DEVIL, DRAGON, SHADOW }
 
 public class Monster_Status : MonoBehaviour
 { 
-    public E_OBJECT_STATE m_eObject_State;
+    public string m_sMonsterName;          // 몬스터 이름
+    
+    public int m_nMonsterCode;             //몬스터 고유코드
+    
+    public E_OBJECT_STATE m_eObject_State; // 오브젝트 타입
+    public E_MONSTER_KIND m_eMonster_Kind; // 몬스터 타입
 
-    public E_MONSTER_KIND m_eMonster_Kind;
+    // 몬스터 스탯(능력치) 관련 변수
+    public STATUS m_sStatus_Origin;        // 기본 몬스터 스탯(능력치)
+    public STATUS m_sStatus;               // 합계 몬스터 스탯(능력치)
 
-    public SOC m_sSoc_null;
-    public SOC m_sSoc_Goaway;
-    public SOC m_sSoc_Death;
+    // 몬스터 토벌 시 획득 가능한 스탯(능력치, 평판)
+    public STATUS m_sStatus_Death;         // 몬스터 토벌 시 획득 가능한 스탯(능력치(경험치 + @))
+    public SOC m_sSoc_Death;               // 몬스터 토벌 시 획득 가능한 스탯(평판)
+    // 몬스터 놓아주기 시 획득 가능한 스탯(능력치, 평판)
+    public STATUS m_sStatus_Goaway;        // 몬스터 놓아주기 시 획득 가능한 스탯(능력치(경험치 + @))
+    public SOC m_sSoc_null;                // null값을 가지는 평판. 놓아주기 실패 시 사용된다.
+    public SOC m_sSoc_Goaway;              // 몬스터 놓아주기 시 획득 가능한 스탯(평판)
 
-    public int m_nMonsterCode;
-    public string m_sMonsterName;
-
-    // 공격속도 > 0.5f
-    // 공격속도 최소치 = 0.5f
-    public STATUS m_sStatus_Origin;
-    public STATUS m_sStatus;
-    public STATUS m_sStatus_Goaway;
-    public STATUS m_sStatus_Death;
-
-    // 체력이 0 이 되어도 죽지않는 조건 추가 (좀비몹) 
-    public bool m_bDestroy = true;
-    // 죽음?
-    public bool m_bDeath = false;
-    // 무적상태
-    public bool m_bPower = false;
+    public bool m_bDestroy = true;         // 몬스터 현재체력이 0이 되어도 죽지않는 특수 조건 
+    public bool m_bDeath = false;          // 몬스터 사망 여부
 
     // 데미지 출력 오프셋
     protected Vector3 m_vDamageOffSet;
@@ -55,7 +59,6 @@ public class Monster_Status : MonoBehaviour
 
     virtual public void Respone()
     {
-        m_bPower = false;
         m_sStatus.SetSTATUS(m_sStatus_Origin);
     }
 
@@ -79,30 +82,28 @@ public class Monster_Status : MonoBehaviour
     float m_fDamage;
     virtual public bool Attacked(int dm, float dmrate)
     {
-        if (m_bPower == false)
+        if (m_eObject_State == E_OBJECT_STATE.MONSTER)
         {
-            if (m_eObject_State == E_OBJECT_STATE.MONSTER)
-            {
-                // Defence_Physical
-                m_fDamage = (int)((float)dm * ((float)m_sStatus.GetSTATUS_Defence_Physical() / ((float)(10) + (float)m_sStatus.GetSTATUS_Defence_Physical())));
-                m_nDamage = dm - (int)Mathf.Round(m_fDamage);
-                //m_nDamage = dm - m_sStatus.GetSTATUS_Defence_Physical();
-                if (m_nDamage <= 0)
-                    m_nDamage = -1;
-                else
-                    m_nDamage = (int)(-m_nDamage * dmrate);
-                m_bDeath = Operator_HP(m_nDamage);
-            }
-            else if (m_eObject_State == E_OBJECT_STATE.HURDLE)
-            {
+            // Defence_Physical
+            m_fDamage = (int)((float)dm * ((float)m_sStatus.GetSTATUS_Defence_Physical() / ((float)(10) + (float)m_sStatus.GetSTATUS_Defence_Physical())));
+            m_nDamage = dm - (int)Mathf.Round(m_fDamage);
+            //m_nDamage = dm - m_sStatus.GetSTATUS_Defence_Physical();
+            if (m_nDamage <= 0)
                 m_nDamage = -1;
-                m_bDeath = Operator_HP(m_nDamage);
-            }
-            //GUIManager_Total.Instance.UpdateLog(m_sMonsterName + "이(가) " + Damage.ToString() + " 의 데미지를 입었다.");
-            GameObject obj = Resources.Load("Prefab/GUI/TextMesh_Damage") as GameObject;
-            GameObject copyobj = Instantiate(obj);
-            copyobj.GetComponent<TextMesh_Damage>().InitialSet(this.transform.position + m_vDamageOffSet, -m_nDamage);
+            else
+                m_nDamage = (int)(-m_nDamage * dmrate);
+            m_bDeath = Operator_HP(m_nDamage);
         }
+        else if (m_eObject_State == E_OBJECT_STATE.HURDLE)
+        {
+            m_nDamage = -1;
+            m_bDeath = Operator_HP(m_nDamage);
+        }
+        //GUIManager_Total.Instance.UpdateLog(m_sMonsterName + "이(가) " + Damage.ToString() + " 의 데미지를 입었다.");
+        GameObject obj = Resources.Load("Prefab/GUI/TextMesh_Damage") as GameObject;
+        GameObject copyobj = Instantiate(obj);
+        copyobj.GetComponent<TextMesh_Damage>().InitialSet(this.transform.position + m_vDamageOffSet, -m_nDamage);
+            
         if (m_bDeath == true)
             return true;
         else
