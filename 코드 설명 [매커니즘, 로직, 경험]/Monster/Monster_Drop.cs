@@ -10,93 +10,10 @@ using UnityEngine;
 
 public class Monster_Drop : MonoBehaviour
 {
-    //public List<GameObject> m_List_DropItem;
-    //public List<Item_Equip> m_List_DropItem_Equip;
-    //public List<Item_Use> m_List_DropItem_Use;
-    //public List<Item_Etc> m_List_DropItem_Etc;
-    //public List<int> m_List_DropItem_Gold_Min;
-    //public List<int> m_List_DropItem_Gold_Max;
-
-    //public List<int> m_List_DropPercent;
-    //public List<int> m_List_DropPercent_Equip;
-    //public List<int> m_List_DropPercent_Use;
-    //public List<int> m_List_DropPercent_Etc;
-    //public List<int> m_List_DropPercent_Gold;
-
     protected int m_nRandomNum;
     protected int m_nRandomGold;
     protected Vector3 m_vItempos;
     protected Vector3 m_vItemoffset;
-
-    virtual public void Start()
-    {
-        InitialSet();
-    }
-
-    virtual public void InitialSet()
-    {
-        EssentialSet();
-    }
-    protected void EssentialSet()
-    {
-        //m_List_DropItem = new List<GameObject>();
-        //m_List_DropItem_Equip = new List<Item_Equip>();
-        //m_List_DropItem_Use = new List<Item_Use>();
-        //m_List_DropItem_Etc = new List<Item_Etc>();
-        //m_List_DropItem_Gold_Min = new List<int>();
-        //m_List_DropItem_Gold_Max = new List<int>();
-
-        //m_List_DropPercent = new List<int>();
-        //m_List_DropPercent_Equip = new List<int>();
-        //m_List_DropPercent_Use = new List<int>();
-        //m_List_DropPercent_Etc = new List<int>();
-        //m_List_DropPercent_Gold = new List<int>();
-    }
-
-    virtual public void DropItem(Vector3 pos)
-    {
-        //for (int i = 0; i < m_List_DropItem_Equip.Count; i++)
-        //{
-        //    m_nRandomNum = Random.Range(1, 10001);
-        //    if (m_nRandomNum <= m_List_DropPercent_Equip[i])
-        //    {
-        //        Item item = new Item_Equip(m_List_DropItem_Equip[i], this.transform.position + m_vItempos);
-        //        Destroy(item);
-        //        m_vItempos += m_vItemoffset;
-        //    }
-        //}
-        //for (int i = 0; i < m_List_DropItem_Use.Count; i++)
-        //{
-        //    m_nRandomNum = Random.Range(1, 10001);
-        //    if (m_nRandomNum <= m_List_DropPercent_Use[i])
-        //    {
-        //        Item item = new Item_Use(m_List_DropItem_Use[i], this.transform.position + m_vItempos);
-        //        Destroy(item);
-        //        m_vItempos += m_vItemoffset;
-        //    }
-        //}
-        //for (int i = 0; i < m_List_DropItem_Etc.Count; i++)
-        //{
-        //    m_nRandomNum = Random.Range(1, 10001);
-        //    if (m_nRandomNum <= m_List_DropPercent_Etc[i])
-        //    {
-        //        Item item = new Item_Etc(m_List_DropItem_Etc[i], this.transform.position + m_vItempos);
-        //        Destroy(item);
-        //        m_vItempos += m_vItemoffset;
-        //    }
-        //}
-        //for (int i = 0; i < m_List_DropPercent_Gold.Count; i++)
-        //{
-        //    m_nRandomNum = Random.Range(1, 10001);
-        //    m_nRandomGold = Random.Range(m_List_DropItem_Gold_Min[i], m_List_DropItem_Gold_Max[i]);
-        //    if (m_nRandomNum <= m_List_DropPercent_Gold[i])
-        //    {
-        //        Item item = new Item_Gold(m_nRandomGold, this.transform.position + m_vItempos);
-        //        Destroy(item);
-        //        m_vItempos += m_vItemoffset;
-        //    }
-        //}
-    }
 
     virtual public void DropItem_Death(int monstercode, Vector3 pos)
     {
