@@ -9,6 +9,9 @@ using UnityEngine;
 
 public class Bush1_2_Status : Bush1_Status // 기반이 되는 Bush1_Status 클래스 상속
 {
+    // 몬스터 스탯(평판) 초기 설정 - 부모 클래스인 Bush1_Status의 InitialSet_SOC() 함수를 사용한다.
+    // override public void InitialSet_SOC() {ㆍㆍㆍ}
+    
     // 몬스터 스탯(능력치) 초기 설정
     override public void InitialSet_STATUS()
     {
@@ -18,4 +21,13 @@ public class Bush1_2_Status : Bush1_Status // 기반이 되는 Bush1_Status 클�
         m_sStatus_Goaway = new STATUS();
         m_sStatus_Death = new STATUS(0, 0, 0);
     }
+
+    // 몬스터 피격 시 스탯(능력치) 변동 함수 - 부모 클래스인 Monster_Status의 Attacked() 함수를 사용한다.
+    // virtual public bool Attacked(int dm, float dmrate) {ㆍㆍㆍ}
+
+    // 몬스터 놓아주기 관련 함수 - 부모 클래스인 Bush1_Status의 Goaway() 함수를 사용한다.
+    // override public void Goaway() {ㆍㆍㆍ}
+
+    // 몬스터 리스폰 함수 - 부모 클래스인 Monster_Status의 Respone() 함수를 사용한다.
+    // virtual public void Respone() {ㆍㆍㆍ}
 }
