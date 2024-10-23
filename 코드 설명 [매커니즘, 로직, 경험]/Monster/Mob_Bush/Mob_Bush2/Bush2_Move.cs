@@ -74,8 +74,11 @@ public class Bush2_Move : Bush1_Move // 기반이 되는 Bush1_Move 클래스 �
     // Fadein 효과 연출 함수 - 부모 클래스인 Monster_Move의 Fadein() 함수를 사용한다.
     // virtual public void Fadein() {ㆍㆍㆍ}
 
-    // 몬스터 동작 FSM 변경 함수(가상 함수) - 부모 클래스인 Monster_Move의 SetMonsterMoveState() 함수를 사용한다.
-    // virtual public E_MONSTER_MOVE_STATE SetMonsterMoveState(E_MONSTER_MOVE_STATE ms, float attackspeed = 0) {ㆍㆍㆍ}
+    // 몬스터 동작 FSM 변경 함수(가상 함수) - "훈련용 허수아비"는 몬스터 동작 FSM이 변경될 필요가 없다.
+    override public E_MONSTER_MOVE_STATE SetMonsterMoveState(E_MONSTER_MOVE_STATE ms, float attackspeed = 0)
+    {
+        return ms;
+    }
 
     // 애니메이션 관리(가상 함수) - "가시덤불"은 애니메이션이 존재하지 않는다.
     override public void SetAnimationParameters(string str) { }
