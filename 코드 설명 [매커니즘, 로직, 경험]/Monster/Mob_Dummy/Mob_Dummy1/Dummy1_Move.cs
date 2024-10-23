@@ -32,15 +32,15 @@ public class Dummy1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
         Fadein(); // Fadein 효과 연출 함수
     }
 
-    // 몬스터 이동 함수 - "수풀"은 이동하지 않는다.
+    // 몬스터 이동 함수 - "훈련용 허수아비"는 이동하지 않는다.
     override public void Move(int speed, Vector3 dir) { }
 
-    // 몬스터 방향 설정 - "수풀"은 이동 방향 설정을 하지 않는다.
+    // 몬스터 방향 설정 - "훈련용 허수아비"는 이동 방향 설정을 하지 않는다.
     override public void SetDir(Vector3 dir) { }
 
-    // 몬스터 추격 함수 - "수풀"은 추격하지 않는다.
+    // 몬스터 추격 함수 - "훈련용 허수아비"는 추격하지 않는다.
     override public void Chase(int speed, Vector3 dir) { }
-    // 몬스터 추격 시간 계산 코루틴 - "수풀"은 추격하지 않는다.
+    // 몬스터 추격 시간 계산 코루틴 - "훈련용 허수아비"는 추격하지 않는다.
     override protected IEnumerator ProcessPeaceful() { }
     
     // 몬스터 공격 함수
@@ -48,9 +48,9 @@ public class Dummy1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
     { 
         return false;
     }
-    // 몬스터 공격속도 계산 코루틴 - "수풀"은 공격하지 않는다.
+    // 몬스터 공격속도 계산 코루틴 - "훈련용 허수아비"는 공격하지 않는다.
     override protected IEnumerator ProcessAttack(float attackspeed) { }
-    // 몬스터 공격 종료 함수(가상 함수) - "수풀"은 공격하지 않는다.
+    // 몬스터 공격 종료 함수(가상 함수) - "훈련용 허수아비"는 공격하지 않는다.
     override protected void EndAttack() { }
 
     // 몬스터 피격 함수
@@ -70,9 +70,9 @@ public class Dummy1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
     // 몬스터 사망 시간 계산 코루틴. Fadeout 효과 관련 계산 - 부모 클래스인 Monster_Move의 ProcessDeath() 코루틴을 사용한다.
     // virtual public IEnumerator ProcessDeath() {ㆍㆍㆍ}
     
-    // 몬스터 놓아주기 함수 - "수풀"은 놓아주기가 불가능하다.
+    // 몬스터 놓아주기 함수 - "훈련용 허수아비"는 놓아주기가 불가능하다.
     virtual public void Goaway() { }
-    // 몬스터 놓아주기 시간 계산 코루틴. Fadeout 효과 관련 계산 - "수풀"은 놓아주기가 불가능하다.
+    // 몬스터 놓아주기 시간 계산 코루틴. Fadeout 효과 관련 계산 - "훈련용 허수아비"는 놓아주기가 불가능하다.
     // virtual public IEnumerator ProcessGoaway()
 
     // 몬스터 리스폰 함수
@@ -103,6 +103,6 @@ public class Dummy1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
         return ms;
     }
 
-    // 애니메이션 관리(가상 함수) - "수풀"은 애니메이션이 존재하지 않는다.
+    // 애니메이션 관리(가상 함수) - "훈련용 허수아비"는 애니메이션이 존재하지 않는다.
     override public void SetAnimationParameters(string str) { }
 }
