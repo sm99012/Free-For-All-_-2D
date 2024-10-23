@@ -35,13 +35,13 @@ public class Bush1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
     // 몬스터 이동 함수 - "수풀"은 이동하지 않는다.
     override public void Move(int speed, Vector3 dir) { }
 
-    // 몬스터 방향 설정 함수 - "수풀"은 이동 방향 설정을 하지 않는다.
-    override public void SetDir(Vector3 dir) { }
-
     // 몬스터 추격 함수 - "수풀"은 추격하지 않는다.
     override public void Chase(int speed, Vector3 dir) { }
     // 몬스터 추격 시간 계산 코루틴 - "수풀"은 추격하지 않는다.
     override protected IEnumerator ProcessPeaceful() { }
+
+    // 몬스터 방향 설정 함수 - "수풀"은 이동 방향 설정을 하지 않는다.
+    override public void SetDir(Vector3 dir) { }
     
     // 몬스터 공격 함수 - "수풀"은 공격하지 않는다.
     override public bool Attack(float attackspeed)
