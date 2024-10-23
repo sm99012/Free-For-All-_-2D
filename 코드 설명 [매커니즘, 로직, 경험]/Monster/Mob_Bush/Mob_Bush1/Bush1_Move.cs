@@ -62,9 +62,9 @@ public class Bush1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
             m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.ATTACKED);
     }
     // 몬스터 피격 시간 계산 코루틴1 - 부모 클래스인 Monster_Move의 ProcessAttacked1() 코루틴을 사용한다.
-    // virtual protected IEnumerator ProcessAttacked1()
+    // virtual protected IEnumerator ProcessAttacked1() {ㆍㆍㆍ}
     // 몬스터 피격 시간 계산 코루틴2 - 부모 클래스인 Monster_Move의 ProcessAttacked2() 코루틴을 사용한다.
-    // virtual protected IEnumerator ProcessAttacked2()
+    // virtual protected IEnumerator ProcessAttacked2() {ㆍㆍㆍ}
 
     // 몬스터 사망 함수. Fadeout 효과 관련
     override public void Death()
@@ -73,7 +73,7 @@ public class Bush1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
         StartCoroutine(ProcessDeath());
     }
     // 몬스터 사망 시간 계산 코루틴. Fadeout 효과 관련 계산 - 부모 클래스인 Monster_Move의 ProcessDeath() 코루틴을 사용한다.
-    // virtual public IEnumerator ProcessDeath() { }
+    // virtual public IEnumerator ProcessDeath() {ㆍㆍㆍ}
 
     // 몬스터 놓아주기 함수 - "수풀"은 놓아주기가 불가능하다.
     // virtual public void Goaway() { }
@@ -99,6 +99,12 @@ public class Bush1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
         Fadein();
     }
 
+    // Fadein 효과 연출 함수 - 부모 클래스인 Monster_Move의 Fadein() 함수를 사용한다.
+    // virtual public void Fadein() {ㆍㆍㆍ}
+
     // 몬스터 동작 FSM 변경 함수(가상 함수) - 부모 클래스인 Monster_Move의 SetMonsterMoveState() 함수를 사용한다.
-    // virtual public E_MONSTER_MOVE_STATE SetMonsterMoveState(E_MONSTER_MOVE_STATE ms, float attackspeed = 0) { }
+    // virtual public E_MONSTER_MOVE_STATE SetMonsterMoveState(E_MONSTER_MOVE_STATE ms, float attackspeed = 0) {ㆍㆍㆍ}
+
+    // 애니메이션 관리(가상 함수) - "수풀"은 애니메이션이 존재하지 않는다.
+    // override public void SetAnimationParameters(string str) { }
 }
