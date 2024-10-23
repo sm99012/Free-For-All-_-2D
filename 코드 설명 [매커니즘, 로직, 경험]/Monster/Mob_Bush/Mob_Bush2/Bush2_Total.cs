@@ -2,19 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bush2_Total : Bush1_Total
+//
+// ※ "가시덤불"은 고정형 오브젝트(장애물)로 설계했다. "수풀"을 기반으로 설계 및 구현 되었다.
+//    해당 클래스는 Bush1_Total 클래스를 상속해 스탯(능력치), 몬스터 접촉 시 오브젝트(플레이어) 피격 판정을 다르게 조정한 클래스이다. 따라서 다른 기능은 Bush1_Total 클래스와 동일하다.
+//
+
+public class Bush2_Total : Bush1_Total // 기반이 되는 Bush1_Total 클래스 상속
 {
-    Vector2 m_vOffSet = new Vector2(0, 0.1f);
+    Vector3 m_vSize_HitBody_Offset = new Vector3(0, 0.1f, 0); // 몬스터 접촉 범위 오프셋
+
     void Update()
     {
-        if (m_bPlay == true)
+        if (m_bPlay == true) // 몬스터 동작 가능할 경우
         {
-            if (m_bRelation == true && m_bWait == false)
+            if (m_bRelation == true && m_bWait == false) // 몬스터 접촉 시 오브젝트 피격 가능 && 다른 오브젝트와 상호작용 가능
             {
-                BodyDamage(1.0f, 0.1f, m_vOffSet, 0.3f);
+                BodyDamage(1.0f, 0.1f, m_vSize_HitBody_Offset, 0.3f); // 몬스터 접촉 시 오브젝트(플레이어) 피격 판정 함수(몸박뎀 판정)
             }
         }
-
-        //AnimationTest();
     }
 }
