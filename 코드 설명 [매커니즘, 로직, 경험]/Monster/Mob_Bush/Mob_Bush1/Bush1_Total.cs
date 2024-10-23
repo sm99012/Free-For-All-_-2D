@@ -94,7 +94,7 @@ public class Bush1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
 
                 if (m_ms_Status.Attacked(dm, dmrate) == true) // 몬스터 피격 시 스탯(능력치) 변동 함수
                 {
-                    Death(30); // 몬스터 사망 함수 + 리스폰 함수(리스폰까지 필요한 대기시간 = 30초)
+                    Death(30); // 몬스터 사망 함수 + 리스폰 함수(리스폰까지 필요한 대기시간 : 30초)
                 }
                 else
                     m_mm_Move.Attacked(); // 몬스터 피격 함수
