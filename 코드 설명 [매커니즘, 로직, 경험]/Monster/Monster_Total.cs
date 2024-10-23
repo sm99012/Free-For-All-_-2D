@@ -170,12 +170,12 @@ public class Monster_Total : MonoBehaviour
         Destroy(this.gameObject); // 해당 오브젝트 삭제
     }
     
-    // 몬스터 놓아주기 함수
-    virtual public SOC Goaway()
+    // 몬스터 놓아주기 판정 함수(가상 함수)
+    virtual public SOC Goaway_Check()
     {
         m_bWait = true; // 몬스터 상호작용 불가능
 
-        return m_ms_Status.m_sSoc_Goaway;
+        return m_ms_Status.m_sSoc_Goaway; // null값 에 해당하는 스탯(평판) 반환
     }
 
     // 몬스터 사망 코루틴. 리스폰으로 이어지는 함수
