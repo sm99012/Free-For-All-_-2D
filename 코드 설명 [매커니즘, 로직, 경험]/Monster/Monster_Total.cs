@@ -178,7 +178,7 @@ public class Monster_Total : MonoBehaviour
         return m_ms_Status.m_sSoc_Goaway; // null값 에 해당하는 스탯(평판) 반환
     }
 
-    // 몬스터 사망 코루틴. 리스폰으로 이어지는 함수
+    // 몬스터 사망 코루틴. 리스폰으로 이어진다.
     virtual public IEnumerator ProcessRespone(float time) // time : 리스폰까지 필요한 대기시간
     {
         yield return new WaitForSeconds(time);
