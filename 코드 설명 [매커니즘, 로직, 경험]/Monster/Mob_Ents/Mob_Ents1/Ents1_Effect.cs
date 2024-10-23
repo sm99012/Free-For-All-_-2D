@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ents1_Effect : Monster_Effect
+public class Ents1_Effect : Monster_Effect // 기반이 되는 Monster_Effect 클래스 상속
 {
-    private void Start()
+    void Start()
     {
         m_l_EffectList = new List<GameObject>();
-        GameObject Effect = Resources.Load("Prefab/Effect/Effect_Yellow_3") as GameObject;
+        
+        GameObject Effect = Resources.Load("Prefab/Effect/Effect_Yellow_3") as GameObject; // 몬스터 놓아주기 이펙트
         m_l_EffectList.Add(Effect);
-        Effect = Resources.Load("Prefab/Effect/Monster_Effect_Ents1") as GameObject;
+        
+        Effect = Resources.Load("Prefab/Effect/Monster_Effect_Ents1") as GameObject; // 몬스터 공격 이펙트
         m_l_EffectList.Add(Effect);
     }
 
