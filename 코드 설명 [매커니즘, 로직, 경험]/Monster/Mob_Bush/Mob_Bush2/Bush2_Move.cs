@@ -64,9 +64,9 @@ public class Bush2_Move : Bush1_Move // 기반이 되는 Bush1_Move 클래스 �
     // virtual public IEnumerator ProcessDeath() {ㆍㆍㆍ}
 
     // 몬스터 놓아주기 함수 - "가시덤불"은 놓아주기가 불가능하다.
-    virtual public void Goaway() { }
+    override public void Goaway() { }
     // 몬스터 놓아주기 시간 계산 코루틴. Fadeout 효과 관련 계산 - "가시덤불"은 놓아주기가 불가능하다.
-    // virtual public IEnumerator ProcessGoaway()
+    override public IEnumerator ProcessGoaway() { }
 
     // 몬스터 리스폰 함수 - 부모 클래스인 Bush1_Move의 Fadein() 함수를 사용한다.
     // override public void Respone() {ㆍㆍㆍ}
