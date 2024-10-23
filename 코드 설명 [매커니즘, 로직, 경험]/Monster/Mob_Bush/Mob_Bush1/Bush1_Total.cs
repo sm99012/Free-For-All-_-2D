@@ -34,7 +34,7 @@ public class Bush1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
         {
             if (m_bRelation == true && m_bWait == false)
             {
-                BodyDamage(1, 0, m_vSize_HitBody_Offset); // 몬스터 접촉 시 오브젝트(플레이어) 피격 판정 함수(몸박뎀 판정)
+                BodyDamage(1, 0, m_vSize_HitBody_Offset, 0.3f); // 몬스터 접촉 시 오브젝트(플레이어) 피격 판정 함수(몸박뎀 판정)
             }
         }
     }
