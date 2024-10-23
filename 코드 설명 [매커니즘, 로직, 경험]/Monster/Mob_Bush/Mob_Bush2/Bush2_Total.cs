@@ -11,6 +11,9 @@ public class Bush2_Total : Bush1_Total // 기반이 되는 Bush1_Total 클래스
 {
     Vector3 m_vSize_HitBody_Offset = new Vector3(0, 0.1f, 0); // 몬스터 접촉 범위 오프셋
 
+    // 부모 클래스인 Bush1_Total의 Awake() 함수를 사용한다.
+    // private void Awake() {ㆍㆍㆍ}
+    
     void Update()
     {
         if (m_bPlay == true) // 몬스터 동작 가능할 경우
