@@ -83,12 +83,19 @@ public class Bush1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
     // 몬스터 리스폰 함수
     override public void Respone()
     {
+        // 몬스터 설정 변경(초기화)
         m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.IDLE);
-        m_rRigdbody.bodyType = RigidbodyType2D.Static;
+     	m_bFix = false; // 몬스터 이동 가능
+        m_rRigdbody.bodyType = RigidbodyType2D.Static; // Rigidbody(강체).bodyType : Static(다른 오브젝트에 의한 물리 적용 불가능)
+                                                       // 몬스터에게 다른 오브젝트(몬스터)에 의한 물리법칙을 적용 불가능하도록 변경(다른 오브젝트에 의해 밀리는 현상 불가능)
+        this.gameObject.layer = LayerMask.NameToLayer("Monster"); // 몬스터의 레이어 변경 : "Default" -> "Monster"
+                                                                  // 몬스터가 대상(플레이어)과 충돌 가능 하도록 레이어 변경
+        
+        // 몬스터 스프라이트 랜더러(색상) 변경(초기화)
         m_sSpriteRenderer.color = m_Color_OriginalSprite;
+        
+        // Fadein 효과 연출
         m_FadeinAlpa = 0;
-        m_bFix = false;
-        this.gameObject.layer = LayerMask.NameToLayer("Monster");
         Fadein();
     }
 
