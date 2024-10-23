@@ -120,7 +120,7 @@ public class Monster_Total : MonoBehaviour
 
     // 몬스터 피격 함수
     // return true : 몬스터 피격 O / return false : 몬스터 피격 X
-    virtual public bool Attacked(int dm, float dmrate, GameObject gm, float fresponetime) // dm : 피격 데미지, dmrate : 피격 데미지 계수, gm : 몬스터 타격 대상(플레이어), fresponetime : 리스폰까지 필요한 대기시간
+    virtual public bool Attacked(int dm, float dmrate, GameObject gm) // dm : 피격 데미지, dmrate : 피격 데미지 계수, gm : 몬스터 타격 대상(플레이어)
     {
         if (m_mm_Move.m_bPower == false) // 몬스터 피격 가능할 경우
         {
@@ -128,7 +128,7 @@ public class Monster_Total : MonoBehaviour
 
             if (m_ms_Status.Attacked(dm, dmrate) == true) // 몬스터 피격 시 스탯(능력치) 변동 함수
             {
-                Death(fresponetime); // 몬스터 사망 함수 + 리스폰 함수
+                Death(0); // 몬스터 사망 함수 + 리스폰 함수
             }
             else
                 m_mm_Move.Attacked(); // 몬스터 피격 함수
