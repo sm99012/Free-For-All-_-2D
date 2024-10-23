@@ -46,13 +46,13 @@ public class Monster_Total : MonoBehaviour
         m_mm_Move = this.gameObject.GetComponent<Monster_Move>();
         m_md_Drop = this.gameObject.GetComponent<Monster_Drop>();
         m_me_Effect = this.gameObject.GetComponent<Monster_Effect>();
+        
         m_bRelation = false;
+        m_bWait = false;
+        m_bPlay = false;
 
         // 레이어 설정
         nLayer1 = 1 << LayerMask.NameToLayer("Player"); // 몬스터와 충돌 가능한 오브젝트(플레이어) 레이어
-        
-        m_bWait = false;
-        m_bPlay = false;
     }
 
     // Fadein 효과 연출과 함께 몬스터 리스폰
