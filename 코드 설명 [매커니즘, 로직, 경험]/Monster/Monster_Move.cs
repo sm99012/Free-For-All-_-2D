@@ -49,12 +49,6 @@ public class Monster_Move : MonoBehaviour
 
     }
     
-    // 몬스터 방향 설정 함수(가상 함수)
-    virtual public void SetDir(Vector3 dir) // dir : 방향
-    {
-
-    }
-    
     // 몬스터 추격 함수(가상 함수)
     virtual public void Chase(int speed, Vector3 dir) // speed : 몬스터 이동속도, dir : 몬스터 이동방향
     {
@@ -66,6 +60,12 @@ public class Monster_Move : MonoBehaviour
         yield return new WaitForSeconds(m_fPeacefulTime); // m_fPeacefulTime 만큼 몬스터는 대상(플레이어)을 추격한다.
         m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.IDLE); // 몬스터 동작 FSM : 추격(CHASE) -> 평화(IDLE)
         m_cProcessPeaceful = null;
+    }
+
+    // 몬스터 방향 설정 함수(가상 함수)
+    virtual public void SetDir(Vector3 dir) // dir : 방향
+    {
+
     }
 
     // 몬스터 공격 함수(가상 함수)
