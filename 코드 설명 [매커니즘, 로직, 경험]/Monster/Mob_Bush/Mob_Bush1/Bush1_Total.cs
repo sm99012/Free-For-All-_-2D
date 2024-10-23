@@ -28,8 +28,8 @@ public class Bush1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
         nLayer1 = 1 << LayerMask.NameToLayer("Player"); // 몬스터와 충돌 가능한 오브젝트(플레이어) 레이어
     }
 
-    // Fadein 효과 연출과 함께 몬스터 리스폰
-    // void Start() - 부모 클래스인 Monster_Total의 Start() 함수를 사용한다.
+    // Fadein 효과 연출과 함께 몬스터 리스폰 - 부모 클래스인 Monster_Total의 Start() 함수를 사용한다.
+    // void Start()  {ㆍㆍㆍ}
     
     void Update()
     {
