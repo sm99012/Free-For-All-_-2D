@@ -47,10 +47,10 @@ public class Monster_Status : MonoBehaviour
         
         m_sStatus = new STATUS();
 
-        InitialSet_SOC();
-        InitialSet_STATUS();
+        InitialSet_SOC(); // 몬스터 스탯(평판) 초기 설정
+        InitialSet_STATUS(); // 몬스터 스탯(능력치) 초기 설정
 
-        m_vDamageOffSet = new Vector3(0, 0.05f, 0);
+        m_vDamageOffSet = new Vector3(0, 0.05f, 0); // 몬스터 피격 데미지 출력 오프셋 설정
     }
 
     // 몬스터 스탯(평판) 초기 설정
