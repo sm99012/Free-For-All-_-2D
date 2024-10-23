@@ -33,26 +33,25 @@ public class Bush1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
     }
 
     // 몬스터 이동 함수 - "수풀"은 이동하지 않는다.
-    // override public void Move(int speed, Vector3 dir) { }
+    override public void Move(int speed, Vector3 dir) { }
 
     // 몬스터 방향 설정 - "수풀"은 이동 방향 설정을 하지 않는다.
-    // override public void SetDir(Vector3 dir) { }
+    override public void SetDir(Vector3 dir) { }
 
     // 몬스터 추격 함수 - "수풀"은 추격하지 않는다.
-    // override public void Chase(int speed, Vector3 dir) { }
+    override public void Chase(int speed, Vector3 dir) { }
     // 몬스터 추격 시간 계산 코루틴 - "수풀"은 추격하지 않는다.
-    // override protected IEnumerator ProcessPeaceful() { }
+    override protected IEnumerator ProcessPeaceful() { }
     
     // 몬스터 공격 함수
     override public bool Attack(float attackspeed)
     { 
         return false;
     }
-    // override public bool Attack(float attackspeed) { }
     // 몬스터 공격속도 계산 코루틴 - "수풀"은 공격하지 않는다.
-    // override protected IEnumerator ProcessAttack(float attackspeed) { }
+    override protected IEnumerator ProcessAttack(float attackspeed) { }
     // 몬스터 공격 종료 함수(가상 함수) - "수풀"은 공격하지 않는다.
-    // override protected void EndAttack() { }
+    override protected void EndAttack() { }
 
     // 몬스터 피격 함수
     override public void Attacked()
@@ -76,7 +75,7 @@ public class Bush1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
     // virtual public IEnumerator ProcessDeath() {ㆍㆍㆍ}
 
     // 몬스터 놓아주기 함수 - "수풀"은 놓아주기가 불가능하다.
-    // virtual public void Goaway() { }
+    virtual public void Goaway() { }
     // 몬스터 놓아주기 시간 계산 코루틴. Fadeout 효과 관련 계산 - "수풀"은 놓아주기가 불가능하다.
     // virtual public IEnumerator ProcessGoaway()
 
@@ -106,5 +105,5 @@ public class Bush1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
     // virtual public E_MONSTER_MOVE_STATE SetMonsterMoveState(E_MONSTER_MOVE_STATE ms, float attackspeed = 0) {ㆍㆍㆍ}
 
     // 애니메이션 관리(가상 함수) - "수풀"은 애니메이션이 존재하지 않는다.
-    // override public void SetAnimationParameters(string str) { }
+    override public void SetAnimationParameters(string str) { }
 }
