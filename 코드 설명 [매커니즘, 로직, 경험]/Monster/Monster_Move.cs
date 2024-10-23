@@ -246,6 +246,7 @@ public class Monster_Move : MonoBehaviour
     {
         return ms;
     }
+    
     // 애니메이션 관리(가상 함수)
     virtual public void SetAnimationParameters(string str)
     {
