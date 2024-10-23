@@ -9,6 +9,9 @@ using UnityEngine;
 
 public class Bush1_2_Status : Bush1_Status // 기반이 되는 Bush1_Status 클래스 상속
 {
+    // 부모 클래스인 Bush1_Status의 Start() 함수를 사용한다.
+    // void Start() {ㆍㆍㆍ}
+    
     // 몬스터 스탯(평판) 초기 설정 - 부모 클래스인 Bush1_Status의 InitialSet_SOC() 함수를 사용한다.
     // override public void InitialSet_SOC() {ㆍㆍㆍ}
     
