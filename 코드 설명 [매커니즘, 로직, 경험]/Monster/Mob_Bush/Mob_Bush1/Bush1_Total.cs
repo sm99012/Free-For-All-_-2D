@@ -104,17 +104,17 @@ public class Bush1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
     }
 
     // 몬스터 사망 함수 + 리스폰 함수 - 부모 클래스인 Monster_Total의 Death() 함수를 사용한다.
-    // virtual public void Death(float time) { }
+    // virtual public void Death(float time) {ㆍㆍㆍ}
 
     // 몬스터 놓아주기 판정 함수 - "수풀"은 놓아주기가 불가능하다.
     // override public SOC Goaway_Check() { }
 
     // 몬스터 사망 코루틴 - 부모 클래스인 Monster_Total의 ProcessRespone() 코루틴을 사용한다.
-    // virtual public IEnumerator ProcessRespone(float time) { }
+    // virtual public IEnumerator ProcessRespone(float time) {ㆍㆍㆍ}
 
     // 몬스터 리스폰 함수 - 부모 클래스인 Monster_Total의 Respone() 함수를 사용한다.
-    // virtual public void Respone() { }
+    // virtual public void Respone() {ㆍㆍㆍ}
 
     // Fadein 효과 연출 함수 - 부모 클래스인 Monster_Total의 Fadein() 함수를 사용한다.
-    // virtual public void Fadein() { }
+    // virtual public void Fadein() {ㆍㆍㆍ}
 }
