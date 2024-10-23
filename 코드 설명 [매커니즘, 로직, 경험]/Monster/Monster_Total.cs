@@ -139,7 +139,7 @@ public class Monster_Total : MonoBehaviour
         return false;
     }
 
-    // 몬스터 사망 함수
+    // 몬스터 사망 함수 + 리스폰 함수
     virtual public void Death(float time) // time : 리스폰까지 필요한 대기시간
     {
         m_bWait = true; // 몬스터 상호작용 불가능
@@ -163,7 +163,7 @@ public class Monster_Total : MonoBehaviour
         m_mm_Move.Death(); // 몬스터 사망 함수. Fadeout 효과 관련
         m_md_Drop.DropItem_Death(m_ms_Status.m_nMonsterCode, this.gameObject.transform.position); // 몬스터 토벌로 인한 아이템 드롭(아이템 필드 생성)
     }
-    // 몬스터 사망 _ 일회용 오브젝트 사망(제거) 코루틴
+    // 몬스터 사망 코루틴 _ 일회용 오브젝트 사망(제거)
     virtual public IEnumerator ProcessDeath()
     {
         yield return new WaitForSeconds(5);
