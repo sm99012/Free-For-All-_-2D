@@ -41,7 +41,7 @@ public class Monster_Effect : MonoBehaviour
 
     }
      // 몬스터 ㆍㆍㆍ 이펙트 연출 코루틴
-    virtual public void Effect1(Vector3 pos, int damage, string attackname)
+    virtual public void Effect1(Vector3 pos, int damage, string attackname) // pos : 이펙트 위치, damage : 이펙트 데미지(충돌 시 피격), attackname : 피격 정보(이름)
     {
 
     }
