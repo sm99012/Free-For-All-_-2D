@@ -128,7 +128,7 @@ public class Monster_Total : MonoBehaviour
 
             if (m_ms_Status.Attacked(dm, dmrate) == true) // 몬스터 피격 시 스탯(능력치) 변동 함수
             {
-                Death(0); // 몬스터 사망 함수
+                Death(0); // 몬스터 사망 함수 + 리스폰 함수
             }
             else
                 m_mm_Move.Attacked(); // 몬스터 피격 함수
