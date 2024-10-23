@@ -56,7 +56,10 @@ public class Bush2_Total : Bush1_Total // 기반이 되는 Bush1_Total 클래스
     // virtual public void Death(float time) {ㆍㆍㆍ}
 
     // 몬스터 놓아주기 판정 함수 - "수풀"은 놓아주기가 불가능하다.
-    override public SOC Goaway_Check() { }
+    override public SOC Goaway_Check()    
+    {
+        return m_ms_Status.m_sSoc_null;
+    }
 
     // 몬스터 사망 코루틴 - 부모 클래스인 Monster_Total의 ProcessRespone() 코루틴을 사용한다.
     // virtual public IEnumerator ProcessRespone(float time) {ㆍㆍㆍ}
