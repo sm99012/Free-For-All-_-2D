@@ -104,7 +104,7 @@ public class Monster_Total : MonoBehaviour
     // 오버랩을 이용해 범위내의 모든 오브젝트(플레이어)에 특정 데미지 계수를 적용한 데미지를 가한다.
     virtual public void BodyDamage(float percent, float radius, Vector3 offset, float knockbacktime = 0.3f) // percent : 데미지 계수, radius : 몬스터 접촉 범위, offset : 몬스터 접촉 범위 위치 오프셋, knockbacktime : 넉백 시간
     {
-        co2_2 = Physics2D.OverlapCircleAll(this.transform.position + offset, radius, nLayer1);
+        co2_2 = Physics2D.OverlapCircleAll(this.transform.position + offset, radius, nLayer1); // 오버랩 서클
         if (co2_2.Length > 0)
         {
             for (int i = 0; i < co2_2.Length; i++)
