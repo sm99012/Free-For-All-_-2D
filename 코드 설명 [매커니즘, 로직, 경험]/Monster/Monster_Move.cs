@@ -49,7 +49,7 @@ public class Monster_Move : MonoBehaviour
 
     }
     
-    // 몬스터 방향 설정(가상 함수)
+    // 몬스터 방향 설정 함수(가상 함수)
     virtual public void SetDir(Vector3 dir) // dir : 방향
     {
 
