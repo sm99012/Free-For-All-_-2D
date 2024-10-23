@@ -14,6 +14,9 @@ public class Bush2_Total : Bush1_Total // 기반이 되는 Bush1_Total 클래스
     // 부모 클래스인 Bush1_Total의 Awake() 함수를 사용한다.
     // private void Awake() {ㆍㆍㆍ}
     
+    // Fadein 효과 연출과 함께 몬스터 리스폰- 부모 클래스인 Monster_Total의 Start() 함수를 사용한다.
+    // void Start() {ㆍㆍㆍ}
+    
     void Update()
     {
         if (m_bPlay == true) // 몬스터 동작 가능할 경우
