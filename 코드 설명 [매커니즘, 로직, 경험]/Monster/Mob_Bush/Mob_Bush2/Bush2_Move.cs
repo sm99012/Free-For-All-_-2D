@@ -26,4 +26,51 @@ public class Bush2_Move : Bush1_Move // 기반이 되는 Bush1_Move 클래스 �
             m_fAlpa = m_sSpriteRenderer.color.a;
         }
     }
+
+    // 몬스터 이동 함수 - "수풀"은 이동하지 않는다.
+    // override public void Move(int speed, Vector3 dir) { }
+
+    // 몬스터 방향 설정 - "수풀"은 이동 방향 설정을 하지 않는다.
+    // override public void SetDir(Vector3 dir) { }
+
+    // 몬스터 추격 함수 - "수풀"은 추격하지 않는다.
+    // override public void Chase(int speed, Vector3 dir) { }
+    // 몬스터 추격 시간 계산 코루틴 - "수풀"은 추격하지 않는다.
+    // override protected IEnumerator ProcessPeaceful() { }
+    
+    // 몬스터 공격 함수 - 부모 클래스인 Bush1_Move의 Attack() 함수를 사용한다.
+    // override public bool Attack(float attackspeed) {ㆍㆍㆍ}
+    // 몬스터 공격속도 계산 코루틴 - "수풀"은 공격하지 않는다.
+    // override protected IEnumerator ProcessAttack(float attackspeed) { }
+    // 몬스터 공격 종료 함수(가상 함수) - "수풀"은 공격하지 않는다.
+    // override protected void EndAttack() { }
+
+    // 몬스터 피격 함수 - 부모 클래스인 Bush1_Move의 Attacked() 함수를 사용한다.
+    // override public void Attacked() {ㆍㆍㆍ}
+    // 몬스터 피격 시간 계산 코루틴1 - 부모 클래스인 Monster_Move의 ProcessAttacked1() 코루틴을 사용한다.
+    // virtual protected IEnumerator ProcessAttacked1() {ㆍㆍㆍ}
+    // 몬스터 피격 시간 계산 코루틴2 - 부모 클래스인 Monster_Move의 ProcessAttacked2() 코루틴을 사용한다.
+    // virtual protected IEnumerator ProcessAttacked2() {ㆍㆍㆍ}
+
+    // 몬스터 사망 함수. Fadeout 효과 관련 - 부모 클래스인 Bush1_Move의 Death() 함수를 사용한다.
+    // override public void Death() {ㆍㆍㆍ}
+    // 몬스터 사망 시간 계산 코루틴. Fadeout 효과 관련 계산 - 부모 클래스인 Monster_Move의 ProcessDeath() 코루틴을 사용한다.
+    // virtual public IEnumerator ProcessDeath() {ㆍㆍㆍ}
+
+    // 몬스터 놓아주기 함수 - "수풀"은 놓아주기가 불가능하다.
+    // virtual public void Goaway() { }
+    // 몬스터 놓아주기 시간 계산 코루틴. Fadeout 효과 관련 계산 - "수풀"은 놓아주기가 불가능하다.
+    // virtual public IEnumerator ProcessGoaway()
+
+    // 몬스터 리스폰 함수 - 부모 클래스인 Bush1_Move의 Fadein() 함수를 사용한다.
+    // override public void Respone() {ㆍㆍㆍ}
+
+    // Fadein 효과 연출 함수 - 부모 클래스인 Monster_Move의 Fadein() 함수를 사용한다.
+    // virtual public void Fadein() {ㆍㆍㆍ}
+
+    // 몬스터 동작 FSM 변경 함수(가상 함수) - 부모 클래스인 Monster_Move의 SetMonsterMoveState() 함수를 사용한다.
+    // virtual public E_MONSTER_MOVE_STATE SetMonsterMoveState(E_MONSTER_MOVE_STATE ms, float attackspeed = 0) {ㆍㆍㆍ}
+
+    // 애니메이션 관리(가상 함수) - "수풀"은 애니메이션이 존재하지 않는다.
+    // override public void SetAnimationParameters(string str) { }
 }
