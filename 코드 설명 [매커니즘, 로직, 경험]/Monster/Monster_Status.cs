@@ -31,7 +31,7 @@ public class Monster_Status : MonoBehaviour
     public SOC m_sSoc_Death;               // 몬스터 토벌 시 획득 가능한 스탯(평판)
     // 몬스터 놓아주기 시 획득 가능한 스탯(능력치, 평판)
     public STATUS m_sStatus_Goaway;        // 몬스터 놓아주기 시 획득 가능한 스탯(능력치(경험치 + @))
-    public SOC m_sSoc_null;                // null값을 가지는 평판. 놓아주기 실패 시 사용된다.
+    public SOC m_sSoc_null;                // null값을 가지는 스탯(평판). 놓아주기 실패 시 사용된다.
     public SOC m_sSoc_Goaway;              // 몬스터 놓아주기 시 획득 가능한 스탯(평판)
 
     public bool m_bDestroy = true;         // 몬스터 현재체력이 0 이 되어도 죽지않는 특수 조건 
