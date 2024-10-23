@@ -112,7 +112,7 @@ public class Monster_Total : MonoBehaviour
                 if (co2_2[i].gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
                     m_vKnockBackDir = Vector3.Normalize(co2_2[i].gameObject.transform.position - this.transform.position);
-                    co2_2[i].GetComponent<Player_Total>().Attacked((int)((float)m_ms_Status.m_sStatus.GetSTATUS_Damage_Total() * percent), m_vKnockBackDir, knockbacktime, m_ms_Status.m_sMonsterName);
+                    co2_2[i].GetComponent<Player_Total>().Attacked((int)((float)m_ms_Status.m_sStatus.GetSTATUS_Damage_Total() * percent), m_vKnockBackDir, knockbacktime, m_ms_Status.m_sMonsterName); // 플레이어 피격 함수
                 }
             }
         }
