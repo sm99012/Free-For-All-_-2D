@@ -120,8 +120,8 @@ public class Bush1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
     }
 
     // 몬스터 놓아주기 판정 함수 - "수풀"은 놓아주기가 불가능하다.
-    override public SOC Goaway()
+    override public SOC Goaway_Check()
     {
-        return m_ms_Status.m_sSoc_null;
+        return m_ms_Status.m_sSoc_null; // null값 에 해당하는 스탯(평판) 반환
     }
 }
