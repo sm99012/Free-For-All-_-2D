@@ -40,9 +40,9 @@ public class Puppet2_Move : Dummy1_Move // 기반이 되는 Dummy1_Move 클래�
     // virtual public IEnumerator ProcessDeath() {ㆍㆍㆍ}
     
     // 몬스터 놓아주기 함수 - "전투용 허수아비"는 놓아주기가 불가능하다.
-    virtual public void Goaway() { }
+    override public void Goaway() { }
     // 몬스터 놓아주기 시간 계산 코루틴. Fadeout 효과 관련 계산 - "전투용 허수아비"는 놓아주기가 불가능하다.
-    // virtual public IEnumerator ProcessGoaway()
+    override public IEnumerator ProcessGoaway() { }
     
     // 몬스터 리스폰 함수 - 부모 클래스인 Dummy1_Move의 Respone() 함수를 사용한다.
     override public void Respone() {ㆍㆍㆍ}
