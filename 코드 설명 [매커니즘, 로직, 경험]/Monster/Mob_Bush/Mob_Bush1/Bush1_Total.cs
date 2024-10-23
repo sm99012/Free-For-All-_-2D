@@ -40,22 +40,22 @@ public class Bush1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
     }
 
     // 몬스터 이동 함수 - "수풀"은 이동하지 않는다.
-    // virtual public void Move() { }
+    // override public void Move() { }
 
     // 몬스터 이동 방향 설정 함수 - "수풀"은 이동 방향 설정을 하지 않는다.
-    // virtual public void SetDir() { }
+    // override public void SetDir() { }
     
     // 몬스터 추격 함수 - "수풀"은 추격하지 않는다.
-    // virtual public void Chase() { }
+    // override public void Chase() { }
 
     // 몬스터 탐지 함수 - "수풀"은 탐지하지 않는다.
-    // virtual public void Detect() { }
+    // override public void Detect() { }
 
     // 몬스터 공격 함수 - "수풀"은 공격하지 않는다.
-    // virtual public bool Attack(float attackspeed) { }
+    // override public bool Attack(float attackspeed) { }
 
     // 몬스터 공격 판정 함수 - "수풀"은 공격하지 않기에 공격 판정이 필요 없다.
-    // virtual public void Attack_Check() { }
+    // override public void Attack_Check() { }
 
     // 몬스터 접촉 시 오브젝트(플레이어) 피격 판정 함수(몸박뎀 판정). 오버라이딩을 통해 Monster_Total 부모 클래스의 BodyDamage(ㆍㆍㆍ)와 다르게 구현했다. 
     // 오버랩을 이용해 범위내의 모든 오브젝트(플레이어)에 특정 데미지 계수를 적용한 데미지를 가한다.
@@ -107,7 +107,7 @@ public class Bush1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
     // virtual public void Death(float time) { }
 
     // 몬스터 놓아주기 판정 함수 - "수풀"은 놓아주기가 불가능하다.
-    // virtual public SOC Goaway_Check() { }
+    // override public SOC Goaway_Check() { }
 
     // 몬스터 사망 코루틴 - 부모 클래스인 Monster_Total의 ProcessRespone() 코루틴을 사용한다.
     // virtual public IEnumerator ProcessRespone(float time) { }
