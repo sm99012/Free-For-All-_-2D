@@ -41,7 +41,7 @@ public class Bush2_Move : Bush1_Move // 기반이 되는 Bush1_Move 클래스 �
     // 몬스터 추격 시간 계산 코루틴 - "가시덤불"은 추격하지 않는다.
     override protected IEnumerator ProcessPeaceful() { }
     
-    // 몬스터 공격 함수
+    // 몬스터 공격 함수 - "가시덤불"은 공격하지 않는다.
     override public bool Attack(float attackspeed)
     {
         return false;
