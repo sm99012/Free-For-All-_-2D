@@ -58,7 +58,7 @@ public class Bush1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
     {
         if (m_eMonsterState == E_MONSTER_MOVE_STATE.IDLE || m_eMonsterState == E_MONSTER_MOVE_STATE.RUN ||
             m_eMonsterState == E_MONSTER_MOVE_STATE.CHASE || m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACKED)
-            m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.ATTACKED);
+            m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.ATTACKED); // 몬스터 동작 FSM 변경
     }
     // 몬스터 피격 시간 계산 코루틴1 - 부모 클래스인 Monster_Move의 ProcessAttacked1() 코루틴을 사용한다.
     // virtual protected IEnumerator ProcessAttacked1() {ㆍㆍㆍ}
