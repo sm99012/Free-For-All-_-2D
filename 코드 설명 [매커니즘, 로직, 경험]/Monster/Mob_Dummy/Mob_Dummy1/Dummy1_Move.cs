@@ -71,9 +71,9 @@ public class Dummy1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
     // virtual public IEnumerator ProcessDeath() {ㆍㆍㆍ}
     
     // 몬스터 놓아주기 함수 - "훈련용 허수아비"는 놓아주기가 불가능하다.
-    virtual public void Goaway() { }
+    override public void Goaway() { }
     // 몬스터 놓아주기 시간 계산 코루틴. Fadeout 효과 관련 계산 - "훈련용 허수아비"는 놓아주기가 불가능하다.
-    // virtual public IEnumerator ProcessGoaway()
+    override public IEnumerator ProcessGoaway() { }
 
     // 몬스터 리스폰 함수
     override public void Respone()
