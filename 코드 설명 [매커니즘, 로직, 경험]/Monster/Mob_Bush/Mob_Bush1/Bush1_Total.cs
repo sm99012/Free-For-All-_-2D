@@ -40,19 +40,19 @@ public class Bush1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
     }
 
     // 몬스터 이동 함수 - "수풀"은 이동하지 않는다.
-    // override public void Move() { }
+    // virtual public void Move() { }
 
     // 몬스터 이동 방향 설정 함수 - "수풀"은 이동 방향 설정을 하지 않는다.
-    // override public void SetDir() { }
+    // virtual public void SetDir() { }
     
     // 몬스터 추격 함수 - "수풀"은 추격하지 않는다.
-    // public override void Chase() { }
+    // virtual public void Chase() { }
 
     // 몬스터 탐지 함수 - "수풀"은 탐지하지 않는다.
-    // override public void Detect() { }
+    // virtual public void Detect() { }
 
     // 몬스터 공격 함수 - "수풀"은 공격하지 않는다.
-    // override public bool Attack(float attackspeed) { }
+    // virtual public bool Attack(float attackspeed) { }
 
     // 몬스터 공격 판정 함수 - "수풀"은 공격하지 않기에 공격 판정이 필요 없다.
     // virtual public void Attack_Check() { }
@@ -103,11 +103,11 @@ public class Bush1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
         return false;
     }
 
-    // 몬스터 사망 함수 + 리스폰 함수 - "수풀"은 부모 클래스인 Monster_Total의 Death() 함수를 사용한다.
+    // 몬스터 사망 함수 + 리스폰 함수 - 부모 클래스인 Monster_Total의 Death() 함수를 사용한다.
     // virtual public void Death(float time) { }
 
     // 몬스터 놓아주기 판정 함수 - "수풀"은 놓아주기가 불가능하다.
-    // override public SOC Goaway_Check() { }
+    // virtual public SOC Goaway_Check() { }
 
     // 몬스터 사망 코루틴 - 부모 클래스인 Monster_Total의 ProcessRespone() 코루틴을 사용한다.
     // virtual public IEnumerator ProcessRespone(float time) { }
