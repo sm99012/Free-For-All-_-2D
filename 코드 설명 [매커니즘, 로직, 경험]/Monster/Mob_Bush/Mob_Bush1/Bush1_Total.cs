@@ -59,7 +59,7 @@ public class Bush1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
 
     // 몬스터 접촉 시 오브젝트(플레이어) 피격 판정 함수(몸박뎀 판정). 오버라이딩을 통해 Monster_Total 부모 클래스의 BodyDamage(ㆍㆍㆍ)와 다르게 구현했다. 
     // 오버랩을 이용해 범위내의 모든 오브젝트(플레이어)에 특정 데미지 계수를 적용한 데미지를 가한다.
-    public override void BodyDamage(float percent, float radius, Vector3 offset, float knockbacktime = 0.3F) // percent : 데미지 계수, radius : 몬스터 접촉 범위, offset : 몬스터 접촉 범위 위치 오프셋, knockbacktime : 넉백 시간
+    override public void BodyDamage(float percent, float radius, Vector3 offset, float knockbacktime = 0.3F) // percent : 데미지 계수, radius : 몬스터 접촉 범위, offset : 몬스터 접촉 범위 위치 오프셋, knockbacktime : 넉백 시간
     {
         co2_2 = Physics2D.OverlapBoxAll(this.transform.position + offset, m_vSize_HitBody, 0, nLayer1); // 오버랩 박스
         if (co2_2.Length > 0)
