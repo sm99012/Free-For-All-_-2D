@@ -43,7 +43,7 @@ public class Dummy1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
     // 몬스터 추격 시간 계산 코루틴 - "훈련용 허수아비"는 추격하지 않는다.
     override protected IEnumerator ProcessPeaceful() { }
     
-    // 몬스터 공격 함수
+    // 몬스터 공격 함수 - "훈련용 허수아비"는 공격하지 않는다.
     override public bool Attack(float attackspeed)
     { 
         return false;
