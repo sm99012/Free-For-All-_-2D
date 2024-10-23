@@ -39,11 +39,8 @@ public class Bush2_Status : Bush1_Status // 기반이 되는 Bush1_Status 클래
     // 몬스터 피격 시 스탯(능력치) 변동 함수 - 부모 클래스인 Monster_Status의 Attacked() 함수를 사용한다.
     // virtual public bool Attacked(int dm, float dmrate) {ㆍㆍㆍ}
 
-    // 몬스터 놓아주기 관련 함수
-    override public void Goaway()
-    {
-        m_bPower = true;
-    }
+    // 몬스터 놓아주기 관련 함수 - 부모 클래스인 Bush1_Status의 Goaway() 함수를 사용한다.
+    // override public void Goaway() {ㆍㆍㆍ}
 
     // 몬스터 리스폰 함수 - 부모 클래스인 Monster_Status의 Respone() 함수를 사용한다.
     // virtual public void Respone() {ㆍㆍㆍ}
