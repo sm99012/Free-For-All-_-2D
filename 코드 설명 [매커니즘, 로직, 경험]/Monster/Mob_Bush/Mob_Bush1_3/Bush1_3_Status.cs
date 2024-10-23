@@ -12,7 +12,8 @@ public class Bush1_3_Status : Bush1_Status // 기반이 되는 Bush1_Status 클�
     // 몬스터 스탯(능력치) 초기 설정
     override public void InitialSet_STATUS()
     {
-        m_sStatus = new STATUS(1, 0, 0, 12, 12); // 최대체력 = 12
+        m_sStatus = new STATUS(1, 0, 0, 12, 12);  // 레벨 : 1
+                                                  // 최대체력 : 12
         m_sStatus_Origin.SetSTATUS(m_sStatus);
         m_sStatus_Goaway = new STATUS();
         m_sStatus_Death = new STATUS(0, 0, 0);
