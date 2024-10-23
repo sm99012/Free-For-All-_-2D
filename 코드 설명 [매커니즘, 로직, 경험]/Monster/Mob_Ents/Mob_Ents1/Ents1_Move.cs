@@ -122,7 +122,9 @@ public class Ents1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
     // virtual public void Fadein() {ㆍㆍㆍ}
     // Fadein 효과 계산 코루틴 - 부모 클래스인 Monster_Move의 ProcessFadein() 코루틴을 사용한다.
     // IEnumerator ProcessFadein() {ㆍㆍㆍ}
-    
+
+    // 몬스터 동작 FSM 변경 함수
+    // 몬스터 동작 FSM의 상태는 무조건 아래 FSM 상태 변경 함수를 통해서 변경된다. 상태 변경에 따른 적절한 조치(함수 실행, 애니메이션 병경)가 이루어 진다.
     override public E_MONSTER_MOVE_STATE SetMonsterMoveState(E_MONSTER_MOVE_STATE ms, float attackspeed = 0)
     {
         switch (ms)
@@ -133,8 +135,8 @@ public class Ents1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
                     {
                         if (m_eMonsterState == E_MONSTER_MOVE_STATE.RUN || m_eMonsterState == E_MONSTER_MOVE_STATE.CHASE ||
                             m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACK || m_eMonsterState == E_MONSTER_MOVE_STATE.DEATH ||
-                            m_eMonsterState == E_MONSTER_MOVE_STATE.GOAWAY)
-                            SetAnimationParameters("IDLE");
+                            m_eMonsterState == E_MONSTER_MOVE_STATE.GOAWAY) // 몬스터 동작 FSM 상태 판단
+                            SetAnimationParameters("IDLE"); // 애니메이션 변경 : IDLE
                     }
                 }
                 break;
@@ -142,8 +144,8 @@ public class Ents1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
                 {
                     if (m_eMonsterState != ms)
                     {
-                        if (m_eMonsterState == E_MONSTER_MOVE_STATE.IDLE)
-                            SetAnimationParameters("RUN");
+                        if (m_eMonsterState == E_MONSTER_MOVE_STATE.IDLE) // 몬스터 동작 FSM 상태 판단
+                            SetAnimationParameters("RUN"); // 애니메이션 변경 : RUN
                     }
                 }
                 break;
@@ -151,7 +153,7 @@ public class Ents1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
                 {
                     if (m_eMonsterState == E_MONSTER_MOVE_STATE.IDLE || m_eMonsterState == E_MONSTER_MOVE_STATE.RUN ||
                         m_eMonsterState == E_MONSTER_MOVE_STATE.CHASE || m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACK ||
-                        m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACKED)
+                        m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACKED) // 몬스터 동작 FSM 상태 판단
                     {
                         if (m_cProcessAttacked == null)
                             m_cProcessAttacked = StartCoroutine(ProcessAttacked1());
@@ -175,12 +177,10 @@ public class Ents1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
                 {
                     if (m_eMonsterState != ms)
                     {
-                        if (m_eMonsterState == E_MONSTER_MOVE_STATE.CHASE ||
-                            m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACKED)
+                        if (m_eMonsterState == E_MONSTER_MOVE_STATE.CHASE || m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACKED) // 몬스터 동작 FSM 상태 판단
                         {
-                            if (m_bAttack == true)
+                            if (m_bAttack == true) // 몬스터 공격 가능
                             {
-                                Debug.Log("Attack");
                                 SetAnimationParameters("ATTACK");
                                 StartCoroutine(ProcessAttack(attackspeed));
                             }
@@ -194,7 +194,7 @@ public class Ents1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
                     {
                         if (m_eMonsterState == E_MONSTER_MOVE_STATE.IDLE || m_eMonsterState == E_MONSTER_MOVE_STATE.RUN ||
                             m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACKED || m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACK ||
-                            m_eMonsterState == E_MONSTER_MOVE_STATE.CHASE)
+                            m_eMonsterState == E_MONSTER_MOVE_STATE.CHASE) // 몬스터 동작 FSM 상태 판단
                         {
                             SetAnimationParameters("DEATH");
                             if (m_cProcessAttacked != null)
@@ -208,7 +208,7 @@ public class Ents1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
                 {
                     if (m_eMonsterState != ms)
                     {
-                        if (m_eMonsterState == E_MONSTER_MOVE_STATE.IDLE || m_eMonsterState == E_MONSTER_MOVE_STATE.RUN)
+                        if (m_eMonsterState == E_MONSTER_MOVE_STATE.IDLE || m_eMonsterState == E_MONSTER_MOVE_STATE.RUN) // 몬스터 동작 FSM 상태 판단
                         {
                             SetAnimationParameters("GOAWAY");
                             StartCoroutine(ProcessGoaway());
@@ -220,7 +220,7 @@ public class Ents1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
                 {
                     if (m_eMonsterState != ms)
                     {
-                        if (m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACKED || m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACK)
+                        if (m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACKED || m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACK) // 몬스터 동작 FSM 상태 판단
                             SetAnimationParameters("CHASE");
                     }
                 }
@@ -229,7 +229,8 @@ public class Ents1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
 
         return ms;
     }
-
+    
+    // 애니메이션 관리
     override public void SetAnimationParameters(string str)
     {
         switch (str)
