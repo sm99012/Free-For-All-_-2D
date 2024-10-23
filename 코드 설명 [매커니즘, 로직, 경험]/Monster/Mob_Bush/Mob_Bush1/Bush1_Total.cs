@@ -20,9 +20,10 @@ public class Bush1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
         m_vSize_HitBody = new Vector2(0.1f, 0.07f); // 몬스터 접촉 범위 설정
         m_vSize_HitBody_Offset = new Vector3(0, -0.043f, 0); // 몬스터 접촉 범위 오프셋 설정
 
+        m_bRelation = true; // 몬스터 접촉 시 오브젝트(플레이어) 피격 가능(몬스터 몸박뎀 존재)
+        
         m_bWait = false; // 다른 오브젝트와 상호작용 가능
         m_bSetTime = true; // 몬스터 이동 방향 설정 가능
-        m_bRelation = true; // 몬스터 접촉 시 오브젝트(플레이어) 피격 가능(몬스터 몸박뎀 존재)
 
         // 레이어 설정
         nLayer1 = 1 << LayerMask.NameToLayer("Player"); // 몬스터와 충돌 가능한 오브젝트(플레이어) 레이어
