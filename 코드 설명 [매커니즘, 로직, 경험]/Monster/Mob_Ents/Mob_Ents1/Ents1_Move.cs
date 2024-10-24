@@ -45,7 +45,7 @@ public class Ents1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
 
         if (m_eMonsterState == E_MONSTER_MOVE_STATE.RUN) // 몬스터 동작 FSM 상태 판단
             if (m_bFix == false)
-                m_tTransform.position += (dir * speed * Time.deltaTime * 0.005f);
+                m_tTransform.position += (dir * speed * Time.deltaTime * 0.005f); // 몬스터 위치 이동
     }
 
     // 몬스터 추격 함수 - "짙은 앤트"는 매우 느린 속도로 오브젝트(플레이어)를 추격한다.
