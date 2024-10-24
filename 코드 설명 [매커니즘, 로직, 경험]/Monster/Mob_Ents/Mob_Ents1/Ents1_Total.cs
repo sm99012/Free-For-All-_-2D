@@ -69,7 +69,7 @@ public class Ents1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
         m_mm_Move.Chase(m_ms_Status.m_sStatus.GetSTATUS_Speed(), m_vDir); // 몬스터 추격 함수
     }
 
-    // 몬스터 이동 방향 설정 함수 - "짙은 앤트"는 이동 방향 설정을 하지 않는다.
+    // 몬스터 이동 방향 설정 함수
     override public void SetDir()
     {
         if (m_bSetTime == true) // 몬스터 이동 방향 설정 가능
