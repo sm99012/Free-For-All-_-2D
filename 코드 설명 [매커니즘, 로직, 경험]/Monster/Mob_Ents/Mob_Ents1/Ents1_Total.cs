@@ -212,7 +212,7 @@ public class Ents1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
                 m_md_Drop.DropItem_Goaway(m_ms_Status.m_nMonsterCode, this.gameObject.transform.position); // 몬스터 놓아주기로 인한 아이템 드롭(아이템 필드 생성)
                 m_me_Effect.Effect_Goaway(this.transform.position); // 몬스터 놓아주기 이펙트 연출 함수
 
-                StartCoroutine(ProcessRespone(15f)); // 몬스터 사망 코루틴
+                StartCoroutine(ProcessRespone(15f)); // 몬스터 사망 코루틴(리스폰까지 필요한 대기시간 : 15초)
 
                 return m_ms_Status.m_sSoc_Goaway;
             }
