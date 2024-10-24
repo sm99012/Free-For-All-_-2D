@@ -72,7 +72,7 @@ public class Bush1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
             {
                 if (co2_2[i].gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
-                    m_vKnockBackDir = Vector3.Normalize(co2_2[i].gameObject.transform.position - this.transform.position);
+                    m_vKnockBackDir = Vector3.Normalize(co2_2[i].gameObject.transform.position - this.transform.position); // 피격 대상 오브젝트(플레이어) 넉백 방향 설정
                     co2_2[i].GetComponent<Player_Total>().Attacked((int)((float)m_ms_Status.m_sStatus.GetSTATUS_Damage_Total() * percent), m_vKnockBackDir, knockbacktime, m_ms_Status.m_sMonsterName); // 플레이어 피격 함수
                 }
             }
