@@ -148,7 +148,7 @@ public class Monster_Total : MonoBehaviour
         
         m_gTarget.GetComponent<Player_Total>().MobDeath(this); // 몬스터 토벌 시 플레이어 업데이트(스탯(능력치(경험치 + @), 평판), 퀘스트 현황 업데이트)
 
-        StartCoroutine(ProcessRespone(time)); // 몬스터 사망 코루틴
+        StartCoroutine(ProcessRespone(time)); // 몬스터 리스폰 코루틴(리스폰까지 필요한 대기시간 : time초)
         
         m_mm_Move.Death(); // 몬스터 사망 함수. Fadeout 효과 관련
         m_md_Drop.DropItem_Death(m_ms_Status.m_nMonsterCode, this.gameObject.transform.position); // 몬스터 토벌로 인한 아이템 드롭(아이템 필드 생성)
@@ -180,7 +180,7 @@ public class Monster_Total : MonoBehaviour
         return m_ms_Status.m_sSoc_Goaway; // null값 에 해당하는 스탯(평판) 반환
     }
 
-    // 몬스터 사망 코루틴. 리스폰으로 이어진다.
+    // 몬스터 리스폰 코루틴. 리스폰으로 이어진다.
     virtual public IEnumerator ProcessRespone(float time) // time : 리스폰까지 필요한 대기시간
     {
         yield return new WaitForSeconds(time);
