@@ -19,7 +19,7 @@ public class Ents1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
         m_bFix = false;
 
         m_bAttack = true;
-        m_fPeacefulTime = 10f;
+        m_fPeacefulTime = 10f; // CHASE 상태에서 IDLE 상태로 전환되는 시간 : 10초
         
         m_FadeinAlpa = 0;
         if (m_sSpriteRenderer != null)
