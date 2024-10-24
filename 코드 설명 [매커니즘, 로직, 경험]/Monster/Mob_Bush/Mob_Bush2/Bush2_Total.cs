@@ -19,7 +19,7 @@ public class Bush2_Total : Bush1_Total // 기반이 되는 Bush1_Total 클래스
     
     void Update()
     {
-        if (m_bPlay == true) // 몬스터 동작 가능할 경우
+        if (m_bPlay == true) // 몬스터 동작 가능
         {
             if (m_bRelation == true && m_bWait == false) // 몬스터 접촉 시 오브젝트 피격 가능 && 다른 오브젝트와 상호작용 가능
             {
