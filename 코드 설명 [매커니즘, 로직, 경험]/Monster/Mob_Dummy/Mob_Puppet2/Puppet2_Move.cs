@@ -33,6 +33,11 @@ public class Puppet2_Move : Dummy1_Move // 기반이 되는 Dummy1_Move 클래�
     
     // 몬스터 피격 함수 - 부모 클래스인 Dummy1_Move의 Attacked() 함수를 사용한다.
     // override public void Attacked() {ㆍㆍㆍ}
+    // 몬스터 피격 시간 계산 코루틴1 - 부모 클래스인 Monster_Move의 ProcessAttacked1() 코루틴을 사용한다.
+    // virtual protected IEnumerator ProcessAttacked1() {ㆍㆍㆍ}
+    // 몬스터 피격 시간 계산 코루틴2 - 부모 클래스인 Monster_Move의 ProcessAttacked2() 코루틴을 사용한다.
+    // virtual protected IEnumerator ProcessAttacked2() {ㆍㆍㆍ}
+    
     // 몬스터 사망 함수. Fadeout 효과 관련 - 부모 클래스인 Dummy1_Move의 Death() 함수를 사용한다.
     // override public void Death() {ㆍㆍㆍ}
     
