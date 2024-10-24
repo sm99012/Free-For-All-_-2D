@@ -31,7 +31,6 @@ public class Puppet2_Status : Dummy1_Status
         m_sStatus = new STATUS(1, 0, 0, 100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0); // 레벨 : 1
                                                                                          // 최대체력 : 100
                                                                                          // 방어력(물리방어력) : 10
-                                                                                         // 마법방어력 : 10 ※ 미사용
         m_sStatus_Origin.SetSTATUS(m_sStatus);
         m_sStatus_Goaway = new STATUS();
         m_sStatus_Death = new STATUS(0, 0, 0);
