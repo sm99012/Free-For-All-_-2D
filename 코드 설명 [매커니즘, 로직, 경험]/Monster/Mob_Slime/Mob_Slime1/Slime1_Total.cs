@@ -236,7 +236,7 @@ public class Slime1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
         return m_ms_Status.m_sSoc_null;
     }
     
-    // 몬스터 사망 코루틴 - 부모 클래스인 Monster_Total의 ProcessRespone() 코루틴을 사용한다.
+    // 몬스터 리스폰 코루틴 - 부모 클래스인 Monster_Total의 ProcessRespone() 코루틴을 사용한다.
     // virtual public IEnumerator ProcessRespone(float time) {ㆍㆍㆍ}
 
     // 몬스터 리스폰 함수 - 부모 클래스인 Monster_Total의 Respone() 함수를 사용한다.
