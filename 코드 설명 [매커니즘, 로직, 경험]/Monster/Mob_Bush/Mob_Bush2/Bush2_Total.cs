@@ -30,12 +30,12 @@ public class Bush2_Total : Bush1_Total // 기반이 되는 Bush1_Total 클래스
 
     // 몬스터 이동 함수 - "수풀"은 이동하지 않는다.
     override public void Move() { }
-
-    // 몬스터 이동 방향 설정 함수 - "수풀"은 이동 방향 설정을 하지 않는다.
-    override public void SetDir() { }
     
     // 몬스터 추격 함수 - "수풀"은 추격하지 않는다.
     override public void Chase() { }
+    
+    // 몬스터 이동 방향 설정 함수 - "수풀"은 이동 방향 설정을 하지 않는다.
+    override public void SetDir() { }
 
     // 몬스터 탐지 함수 - "수풀"은 탐지하지 않는다.
     override public void Detect() { }
