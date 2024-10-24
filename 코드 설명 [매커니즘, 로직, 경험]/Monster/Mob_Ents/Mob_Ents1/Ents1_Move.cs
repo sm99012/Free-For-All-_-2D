@@ -36,7 +36,7 @@ public class Ents1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
     // 몬스터 이동 함수 - "짙은 앤트"는 매우 느린 속도로 이동한다.
     override public void Move(int speed, Vector3 dir) // speed : 몬스터 이동속도, dir : 몬스터 이동방향
     {
-        SetDir(dir);
+        SetDir(dir); // 몬스터 방향 설정 함수
 
         if (dir.x == 0 && dir.y == 0)
             m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.IDLE); // 몬스터 동작 FSM 변경 함수
@@ -51,7 +51,7 @@ public class Ents1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
     // 몬스터 추격 함수 - "짙은 앤트"는 매우 느린 속도로 오브젝트(플레이어)를 추격한다.
     override public void Chase(int speed, Vector3 dir) // speed : 몬스터 이동속도, dir : 몬스터 이동방향
     {
-        SetDir(dir);
+        SetDir(dir); // 몬스터 방향 설정 함수
 
         if (m_bFix == false)
             m_tTransform.position += (dir * speed * Time.deltaTime * 0.005f);
