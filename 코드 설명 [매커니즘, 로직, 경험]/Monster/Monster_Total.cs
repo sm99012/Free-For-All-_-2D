@@ -66,17 +66,19 @@ public class Monster_Total : MonoBehaviour
     {
 
     }
-    // 몬스터 이동 방향 설정 함수(가상 함수)
-    virtual public void SetDir()
-    {
-
-    }
 
     // 몬스터 추격 함수(가상 함수)
     virtual public void Chase()
     {
 
     }    
+
+    // 몬스터 이동 방향 설정 함수(가상 함수)
+    virtual public void SetDir()
+    {
+
+    }
+    
     // 몬스터 탐지 함수(가상 함수). 몬스터 공격으로 이어지는 함수
     virtual public void Detect()
     {
