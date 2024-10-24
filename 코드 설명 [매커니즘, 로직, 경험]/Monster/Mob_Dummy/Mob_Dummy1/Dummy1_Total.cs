@@ -38,12 +38,12 @@ public class Dummy1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
 
     // 몬스터 이동 함수 - "훈련용 허수아비"는 이동하지 않는다.
     override public void Move() { }
-
-    // 몬스터 이동 방향 설정 함수 - "훈련용 허수아비"는 이동 방향 설정을 하지 않는다.
-    override public void SetDir() { }
     
     // 몬스터 추격 함수 - "훈련용 허수아비"는 추격하지 않는다.
     override public void Chase() { }
+
+    // 몬스터 이동 방향 설정 함수 - "훈련용 허수아비"는 이동 방향 설정을 하지 않는다.
+    override public void SetDir() { }
 
     // 몬스터 탐지 함수 - "훈련용 허수아비"는 탐지하지 않는다.
     override public void Detect() { }
