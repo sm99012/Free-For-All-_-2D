@@ -2,7 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Slime1_Total : Monster_Total
+//
+// ※ "초원 슬라임"은 이동형 몬스터로 설계했다. 평범한 속도로 이동하며 약하다. 흔히 볼 수 있다.
+//    "초원 슬라임"은 공격 시 몸을 뻗어 오브젝트(플레이어)와 충돌하는 공격을 한다.
+//
+
+public class Slime1_Total : Monster_Total // 기반이 되는 Monster_Total 클래스 상속
 {
     private void Awake()
     {
@@ -11,44 +16,42 @@ public class Slime1_Total : Monster_Total
         m_md_Drop = this.gameObject.GetComponent<Monster_Drop>();
         m_me_Effect = this.gameObject.GetComponent<Monster_Effect>();
 
-        m_bSetTime = true;
-        m_bRelation = false;
+        m_bRelation = false; // 몬스터 접촉 시 오브젝트(플레이어) 피격 불가능(몬스터 몸박뎀 존재하지 않음)
+        
+        m_bWait = false; // 다른 오브젝트와 상호작용 가능
+        m_bSetTime = true; // 몬스터 이동 방향 설정 가능
 
-        nLayer1 = 1 << LayerMask.NameToLayer("Player");
-
-        m_bWait = false;
+        // 레이어 설정
+        nLayer1 = 1 << LayerMask.NameToLayer("Player"); // 몬스터와 충돌 가능한 오브젝트(플레이어) 레이어
     }
 
-    void Start()
-    {
-        Fadein();
-    }
+    // Fadein 효과 연출과 함께 몬스터 리스폰 - 부모 클래스인 Monster_Total의 Start() 함수를 사용한다.
+    // void Start()  {ㆍㆍㆍ}
 
-    // Update is called once per frame
     void Update()
     {
-        if (m_bPlay == true)
+        if (m_bPlay == true) // 몬스터 동작 가능
         {
-            if (m_bWait == false)
+            if (m_bWait == false) // 다른 오브젝트와 상호작용 가능
             {
                 if (m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.IDLE ||
-                    m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.RUN)
+                    m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.RUN) // 몬스터 동작 FSM 상태 판단
                 {
-                    SetDir();
-                    Move();
+                    SetDir(); // 몬스터 이동 방향 설정 함수
+                    Move(); // 몬스터 이동 함수
                 }
                 if (m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.CHASE ||
-                    m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.ATTACKED)
+                    m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.ATTACKED) // 몬스터 동작 FSM 상태 판단
                 {
-                    Chase();
-                    Detect();
+                    Chase(); // 몬스터 추격 함수
+                    Detect(); // 몬스터 탐지 함수
                 }
             }
 
-            if (m_bRelation == true && m_bWait == false)
-            {
-                BodyDamage(0.1f, 0.05f, Vector3.zero);
-            }
+            // if (m_bRelation == true && m_bWait == false)
+            // {
+            //     BodyDamage(0.1f, 0.05f, Vector3.zero);
+            // }
         }
 
         //AnimationTest();
