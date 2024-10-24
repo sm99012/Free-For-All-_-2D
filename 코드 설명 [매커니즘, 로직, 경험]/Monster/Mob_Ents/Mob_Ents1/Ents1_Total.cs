@@ -212,7 +212,7 @@ public class Ents1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
                 m_md_Drop.DropItem_Goaway(m_ms_Status.m_nMonsterCode, this.gameObject.transform.position); // 몬스터 놓아주기로 인한 아이템 드롭(아이템 필드 생성)
                 m_me_Effect.Effect_Goaway(this.transform.position); // 몬스터 놓아주기 이펙트 연출 함수
 
-                StartCoroutine(ProcessRespone(15f)); // 몬스터 사망 코루틴(리스폰까지 필요한 대기시간 : 15초)
+                StartCoroutine(ProcessRespone(15f)); // 몬스터 리스폰 코루틴(리스폰까지 필요한 대기시간 : 15초)
 
                 return m_ms_Status.m_sSoc_Goaway;
             }
@@ -221,7 +221,7 @@ public class Ents1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
         return m_ms_Status.m_sSoc_null;
     }
 
-    // 몬스터 사망 코루틴 - 부모 클래스인 Monster_Total의 ProcessRespone() 코루틴을 사용한다.
+    // 몬스터 리스폰 코루틴 - 부모 클래스인 Monster_Total의 ProcessRespone() 코루틴을 사용한다.
     // virtual public IEnumerator ProcessRespone(float time) {ㆍㆍㆍ}
 
     // 몬스터 리스폰 함수 - 부모 클래스인 Monster_Total의 Respone() 함수를 사용한다.
