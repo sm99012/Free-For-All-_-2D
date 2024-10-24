@@ -9,6 +9,12 @@ using UnityEngine;
 
 public class Ents1_Total : Monster_Total // 기반이 되는 Monster_Total 클래스 상속
 {
+    // 몬스터 탐지 관련 변수
+    Collider2D[] co2_1;                              // 몬스터 탐지 콜라이더
+    Vector3 m_vOffset = new Vector3(0, 0.2f, 0);     // 몬스터 탐지 오프셋
+    Vector2 m_vDetectSize = new Vector2(1.5f, 1.5f); // 몬스터 탐지 범위
+    Vector3 m_vTargetPos;                            // 공격 대상 오브젝트(플레이어) 위치
+    
     private void Awake()
     {
         m_mm_Move = this.gameObject.GetComponent<Monster_Move>();
@@ -131,48 +137,55 @@ public class Ents1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
         m_bSetTime = true; // 몬스터 이동 방향 설정 가능
     }
 
-    // ATTACK 상태에서의 공격
-    Collider2D[] co2_1;
-    Vector3 m_vOffset = new Vector3(0, 0.2f, 0);
-    Vector2 m_vDetectSize = new Vector2(1.5f, 1.5f);
-    Vector3 m_vTargetPos;
+    // 몬스터 탐지 함수 - "짙은 앤트"는 비교적 멀리있는 오브젝트(플레이어)를 탐지해 공격으로 이어간다.
     override public void Detect()
     {
-        co2_1 = Physics2D.OverlapBoxAll(this.transform.position + m_vOffset, m_vDetectSize, 0, nLayer1);
+        co2_1 = Physics2D.OverlapBoxAll(this.transform.position + m_vOffset, m_vDetectSize, 0, nLayer1); // 오버랩 박스
 
         if (co2_1.Length > 0)
         {
             for (int i = 0; i < co2_1.Length; i++)
             {
-                //if (co2_1[i].gameObject == m_gTarget)
-                {
-                    m_vTargetPos = m_gTarget.transform.position;
-                    Attack(m_ms_Status.m_sStatus.GetSTATUS_AttackSpeed());
-                    break;
-                }
+                m_vTargetPos = m_gTarget.transform.position;
+                Attack(m_ms_Status.m_sStatus.GetSTATUS_AttackSpeed()); // 몬스터 공격 함수
+                break;
             }
         }
     }
+    
+    // 몬스터 공격 함수 - 부모 클래스인 Monster_Total의 Attack() 함수를 사용한다.
+    // virtual public bool Attack(float attackspeed) {ㆍㆍㆍ}
 
-    override public bool Attacked(int dm,  float dmrate, GameObject gm)
+    // 몬스터 공격 판정 함수 - 몬스터 공격 애니메이션의 특정 프레임에서 호출된다. "짙은 앤트"는 특별한 공격 이펙트를 연출한다.
+    override public void Attack_Check()
     {
-        if (m_mm_Move.m_bPower == false)
+        m_vTargetPos = m_gTarget.transform.position; // 공격 대상 오브젝트(플레이어) 위치 설정
+        m_me_Effect.Effect1(m_vTargetPos, m_ms_Status.m_sStatus.GetSTATUS_Damage_Total(), m_ms_Status.m_sMonsterName); // "짙은 앤트"의 공격 이펙트 연출 함수
+    }
+
+    // 몬스터 접촉 시 오브젝트(플레이어) 피격 판정 함수(몸박뎀 판정) - "짙은 앤트"는 오브젝트(플레이어) 접촉 판정이 없다.(몸박뎀이 존재하지 않는다.)
+    override public void BodyDamage() { }
+
+    // 몬스터 피격 함수
+    override public bool Attacked(int dm,  float dmrate, GameObject gm) // dm : 피격 데미지, dmrate : 피격 데미지 계수, gm : 몬스터 타격 대상(플레이어)
+    {
+        if (m_mm_Move.m_bPower == false) // 몬스터 피격 가능할 경우
         {
             if (m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.IDLE ||
                 m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.RUN ||
                 m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.CHASE ||
                 m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.ATTACK ||
-                m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.ATTACKED)
+                m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.ATTACKED) // 몬스터 동작 FSM 상태 판단
             {
                 m_gTarget = gm;
 
-                if (m_ms_Status.Attacked(dm, dmrate) == true)
+                if (m_ms_Status.Attacked(dm, dmrate) == true) // 몬스터 피격 시 스탯(능력치) 변동 함수
                 {
-                    Death(10);
+                    Death(10); // 몬스터 사망 함수 + 리스폰 함수(리스폰까지 필요한 대기시간 : 10초)
                 }
                 else
                 {
-                    m_mm_Move.Attacked();
+                    m_mm_Move.Attacked(); // 몬스터 피격 함수
                 }
 
 
@@ -183,20 +196,23 @@ public class Ents1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
         return false;
     }
 
+    // 몬스터 사망 함수 + 리스폰 함수 - 부모 클래스인 Monster_Total의 Death() 함수를 사용한다.
+    // virtual public void Death(float time) {ㆍㆍㆍ}
+
+    // 몬스터 놓아주기 판정 함수
     override public SOC Goaway()
     {
-        if (m_bWait == false)
+        if (m_bWait == false) // 다른 오브젝트와 상호작용 가능
         {
-            if (m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.IDLE || m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.RUN)
+            if (m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.IDLE || m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.RUN) // 몬스터 동작 FSM 상태 판단
             {
-                m_bWait = true;
-                m_ms_Status.Goaway();
-                m_mm_Move.Goaway();
-                //m_md_Drop.DropItem(this.gameObject.transform.position);
-                m_md_Drop.DropItem_Goaway(m_ms_Status.m_nMonsterCode, this.gameObject.transform.position);
-                m_me_Effect.Effect_Goaway(this.transform.position);
+                m_bWait = true; // 다른 오브젝트와 상호작용 불가능
+                m_ms_Status.Goaway(); // 몬스터 놓아주기 판정 함수
+                m_mm_Move.Goaway(); // 몬스터 놓아주기 판정 함수
+                m_md_Drop.DropItem_Goaway(m_ms_Status.m_nMonsterCode, this.gameObject.transform.position); // 몬스터 놓아주기로 인한 아이템 드롭(아이템 필드 생성)
+                m_me_Effect.Effect_Goaway(this.transform.position); // 몬스터 놓아주기 이펙트 연출 함수
 
-                StartCoroutine(ProcessRespone(15f));
+                StartCoroutine(ProcessRespone(15f)); // 몬스터 사망 코루틴
 
                 return m_ms_Status.m_sSoc_Goaway;
             }
@@ -205,50 +221,12 @@ public class Ents1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
         return m_ms_Status.m_sSoc_null;
     }
 
-    // 평시 몸박뎀
-    public void BodyDamage()
-    {
-        co2_2 = Physics2D.OverlapBoxAll(this.transform.position + m_vOffset, m_vDetectSize, 0, nLayer1);
-        if (co2_2.Length > 0)
-        {
-            for (int i = 0; i < co2_2.Length; i++)
-            {
-                if (co2_2[i].gameObject.layer == LayerMask.NameToLayer("Player"))
-                {
-                    m_vKnockBackDir = Vector3.Normalize(co2_2[i].gameObject.transform.position - this.transform.position);
-                    co2_2[i].GetComponent<Player_Total>().Attacked((int)((float)m_ms_Status.m_sStatus.GetSTATUS_Damage_Total() * 0.8f), m_vKnockBackDir, 0.3f, m_ms_Status.m_sMonsterName);
-                }
-            }
-        }
-    }
+    // 몬스터 사망 코루틴 - 부모 클래스인 Monster_Total의 ProcessRespone() 코루틴을 사용한다.
+    // virtual public IEnumerator ProcessRespone(float time) {ㆍㆍㆍ}
 
-    public override void Attack_Check()
-    {
-        m_vTargetPos = m_gTarget.transform.position;
-        m_me_Effect.Effect1(m_vTargetPos, m_ms_Status.m_sStatus.GetSTATUS_Damage_Total(), m_ms_Status.m_sMonsterName);
-    }
+    // 몬스터 리스폰 함수 - 부모 클래스인 Monster_Total의 Respone() 함수를 사용한다.
+    // virtual public void Respone() {ㆍㆍㆍ}
 
-    //IEnumerator ProcessAttack()
-    //{
-    //    // m_mm_Move.Attack(공격속도) 함수 에서 몹의 공격을 관리함 -> 추후 Monster_Total로 코드 변경필요.
-    //    if (m_mm_Move.Attack(m_ms_Status.m_sStatus.GetSTATUS_AttackSpeed()) == true)
-    //    {
-    //        yield return new WaitForSeconds(0.2f);
-    //        m_vTargetPos = m_gTarget.transform.position;
-    //        m_me_Effect.Effect1(m_vTargetPos);
-    //        yield return new WaitForSeconds(0.6f);
-    //        Attack(m_ms_Status.m_sStatus.GetSTATUS_AttackSpeed());
-    //        yield return new WaitForSeconds(0.2f);
-
-    //    }
-    //    else
-    //        yield return new WaitForSeconds(0);
-    //}
-
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(this.transform.position + m_vOffset, m_vDetectSize);
-    }
+    // Fadein 효과 연출 함수 - 부모 클래스인 Monster_Total의 Fadein() 함수를 사용한다.
+    // virtual public void Fadein() {ㆍㆍㆍ}
 }
