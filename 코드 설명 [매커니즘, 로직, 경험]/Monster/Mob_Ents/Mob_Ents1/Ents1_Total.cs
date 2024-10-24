@@ -131,6 +131,29 @@ public class Ents1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
         m_bSetTime = true; // 몬스터 이동 방향 설정 가능
     }
 
+    // ATTACK 상태에서의 공격
+    Collider2D[] co2_1;
+    Vector3 m_vOffset = new Vector3(0, 0.2f, 0);
+    Vector2 m_vDetectSize = new Vector2(1.5f, 1.5f);
+    Vector3 m_vTargetPos;
+    override public void Detect()
+    {
+        co2_1 = Physics2D.OverlapBoxAll(this.transform.position + m_vOffset, m_vDetectSize, 0, nLayer1);
+
+        if (co2_1.Length > 0)
+        {
+            for (int i = 0; i < co2_1.Length; i++)
+            {
+                //if (co2_1[i].gameObject == m_gTarget)
+                {
+                    m_vTargetPos = m_gTarget.transform.position;
+                    Attack(m_ms_Status.m_sStatus.GetSTATUS_AttackSpeed());
+                    break;
+                }
+            }
+        }
+    }
+
     override public bool Attacked(int dm,  float dmrate, GameObject gm)
     {
         if (m_mm_Move.m_bPower == false)
@@ -180,29 +203,6 @@ public class Ents1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
         }
 
         return m_ms_Status.m_sSoc_null;
-    }
-
-    // ATTACK 상태에서의 공격
-    Collider2D[] co2_1;
-    Vector3 m_vOffset = new Vector3(0, 0.2f, 0);
-    Vector2 m_vDetectSize = new Vector2(1.5f, 1.5f);
-    Vector3 m_vTargetPos;
-    override public void Detect()
-    {
-        co2_1 = Physics2D.OverlapBoxAll(this.transform.position + m_vOffset, m_vDetectSize, 0, nLayer1);
-
-        if (co2_1.Length > 0)
-        {
-            for (int i = 0; i < co2_1.Length; i++)
-            {
-                //if (co2_1[i].gameObject == m_gTarget)
-                {
-                    m_vTargetPos = m_gTarget.transform.position;
-                    Attack(m_ms_Status.m_sStatus.GetSTATUS_AttackSpeed());
-                    break;
-                }
-            }
-        }
     }
 
     // 평시 몸박뎀
