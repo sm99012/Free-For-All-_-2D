@@ -156,19 +156,19 @@ public class Ents1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
                         m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACKED) // 몬스터 동작 FSM 상태 판단
                     {
                         if (m_cProcessAttacked == null)
-                            m_cProcessAttacked = StartCoroutine(ProcessAttacked1());
-                        else
+                            m_cProcessAttacked = StartCoroutine(ProcessAttacked1()); // 몬스터 피격 시간 계산 코루틴1
+                        else // 몬스터가 이미 피격 중일 경우
                         {
                             StopCoroutine(m_cProcessAttacked);
-                            m_cProcessAttacked = StartCoroutine(ProcessAttacked2());
+                            m_cProcessAttacked = StartCoroutine(ProcessAttacked2()); // 몬스터 피격 시간 계산 코루틴2
                         }
 
                         if (m_cProcessPeaceful == null)
-                            m_cProcessPeaceful = StartCoroutine(ProcessPeaceful());
-                        else
+                            m_cProcessPeaceful = StartCoroutine(ProcessPeaceful()); // 몬스터 추격 시간 계산 코루틴
+                        else // 몬스터가 이미 오브젝트(플레이어)를 추격하는 중일 경우
                         {
                             StopCoroutine(m_cProcessPeaceful);
-                            m_cProcessPeaceful = StartCoroutine(ProcessPeaceful());
+                            m_cProcessPeaceful = StartCoroutine(ProcessPeaceful()); // 몬스터 추격 시간 계산 코루틴
                         }
                     }
                 }
@@ -181,8 +181,8 @@ public class Ents1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
                         {
                             if (m_bAttack == true) // 몬스터 공격 가능
                             {
-                                SetAnimationParameters("ATTACK");
-                                StartCoroutine(ProcessAttack(attackspeed));
+                                SetAnimationParameters("ATTACK"); // 애니메이션 변경 : ATTACK
+                                StartCoroutine(ProcessAttack(attackspeed)); // 몬스터 공격속도 계산 코루틴
                             }
                         }
                     }
@@ -196,10 +196,10 @@ public class Ents1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
                             m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACKED || m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACK ||
                             m_eMonsterState == E_MONSTER_MOVE_STATE.CHASE) // 몬스터 동작 FSM 상태 판단
                         {
-                            SetAnimationParameters("DEATH");
+                            SetAnimationParameters("DEATH"); // 애니메이션 변경 : DEATH
                             if (m_cProcessAttacked != null)
-                                StopCoroutine(m_cProcessAttacked);
-                            StartCoroutine(ProcessDeath());
+                                StopCoroutine(m_cProcessAttacked); // 몬스터 피격 시간 계산 코루틴 종료
+                            StartCoroutine(ProcessDeath()); // 몬스터 사망 시간 계산 코루틴
                         }
                     }
                 }
@@ -210,8 +210,8 @@ public class Ents1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
                     {
                         if (m_eMonsterState == E_MONSTER_MOVE_STATE.IDLE || m_eMonsterState == E_MONSTER_MOVE_STATE.RUN) // 몬스터 동작 FSM 상태 판단
                         {
-                            SetAnimationParameters("GOAWAY");
-                            StartCoroutine(ProcessGoaway());
+                            SetAnimationParameters("GOAWAY"); // 애니메이션 변경 : GOAWAY
+                            StartCoroutine(ProcessGoaway()); // 몬스터 놓아주기 시간 계산 코루틴
                         }
                     }
                 }
@@ -221,7 +221,7 @@ public class Ents1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
                     if (m_eMonsterState != ms)
                     {
                         if (m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACKED || m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACK) // 몬스터 동작 FSM 상태 판단
-                            SetAnimationParameters("CHASE");
+                            SetAnimationParameters("CHASE"); // 애니메이션 변경 : CHASE
                     }
                 }
                 break;
