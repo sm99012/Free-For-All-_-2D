@@ -9,6 +9,15 @@ using UnityEngine;
 
 public class Slime1_Total : Monster_Total // 기반이 되는 Monster_Total 클래스 상속
 {
+    // 몬스터 탐지 관련 변수
+    Collider2D[] co2_1; // 몬스터 탐지 콜라이더
+
+    // 몬스터 공격 관련 변수
+    protected Collider2D[] co2_3;                                  // 몬스터 공격 콜라이더
+    protected Vector2 m_vSize2 = new Vector2(0.11f, 0.15f);        // 몬스터 공격 범위
+    protected Vector3 m_vOffset1 = new Vector3(0.04f, 0.035f, 0);  // 몬스터 공격 범위 오프셋(오른쪽 방향)
+    protected Vector3 m_vOffset2 = new Vector3(-0.04f, 0.035f, 0); // 몬스터 공격 범위 오프셋(왼쪽 방향)
+    
     private void Awake()
     {
         m_mm_Move = this.gameObject.GetComponent<Monster_Move>();
@@ -47,92 +56,135 @@ public class Slime1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
                     Detect(); // 몬스터 탐지 함수
                 }
             }
-
-            // if (m_bRelation == true && m_bWait == false)
-            // {
-            //     BodyDamage(0.1f, 0.05f, Vector3.zero);
-            // }
         }
-
-        //AnimationTest();
     }
 
+    // 몬스터 이동 함수 - "초원 슬라임"은 평범한 속도로 이동한다.
     override public void Move()
     {
-        m_mm_Move.Move(m_ms_Status.m_sStatus.GetSTATUS_Speed(), m_vDir);
+        m_mm_Move.Move(m_ms_Status.m_sStatus.GetSTATUS_Speed(), m_vDir); // 몬스터 이동 함수
     }
 
+    // 몬스터 추격 함수 - "초원 슬라임"은 평범한 속도로 추격한다.
     public override void Chase()
     {
-        m_vDir = Vector3.Normalize(m_gTarget.transform.position - this.transform.position);
-        m_mm_Move.Chase(m_ms_Status.m_sStatus.GetSTATUS_Speed(), m_vDir);
+        m_vDir = Vector3.Normalize(m_gTarget.transform.position - this.transform.position); // 몬스터 추격 방향 설정
+        m_mm_Move.Chase(m_ms_Status.m_sStatus.GetSTATUS_Speed(), m_vDir); // 몬스터 추격 함수
     }
 
+    // 몬스터 이동 방향 설정 함수
     override public void SetDir()
     {
-        if (m_bSetTime == true)
+        if (m_bSetTime == true) // 몬스터 이동 방향 설정 가능
         {
-            StartCoroutine(ProcessSetTime());
-            m_nRandomNumber = Random.Range(-7, 9);
+            StartCoroutine(ProcessSetTime()); // 몬스터 이동 시간 설정 관련 코루틴
+            m_nRandomNumber = Random.Range(-7, 9); // 몬스터 이동 방향 설정 관련 변수 : -7 ~ 8 (16)
+                                                   // 8 / 16 (50%) 확률로 몬스터 이동
+                                                   // 8 / 16 (50%) 확률로 몬스터 이동하지 않음
             switch (m_nRandomNumber)
             {
-                case -7: case -6: case -5: case -4: case -3: case -2: case -1: case 0:
-                    {
-                        m_vDir = Vector3.Normalize(new Vector3(0, 0, 0));
-                    }
-                    break;
                 case 1:
                     {
-                        m_vDir = Vector3.Normalize(new Vector3(0, 1, 0));
+                        m_vDir = Vector3.Normalize(new Vector3(0, 1, 0)); // 몬스터 ↑ 방향 이동
                     }
                     break;
                 case 2:
                     {
-                        m_vDir = Vector3.Normalize(new Vector3(0, -1, 0));
+                        m_vDir = Vector3.Normalize(new Vector3(0, -1, 0)); // 몬스터 ↓ 방향 이동
                     }
                     break;
                 case 3:
                     {
-                        m_vDir = Vector3.Normalize(new Vector3(1, 0, 0));
+                        m_vDir = Vector3.Normalize(new Vector3(1, 0, 0)); // 몬스터 → 방향 이동
                     }
                     break;
                 case 4:
                     {
-                        m_vDir = Vector3.Normalize(new Vector3(1, 1, 0));
+                        m_vDir = Vector3.Normalize(new Vector3(1, 1, 0)); // 몬스터 ↗ 방향 이동
+
                     }
                     break;
                 case 5:
                     {
-                        m_vDir = Vector3.Normalize(new Vector3(1, -1, 0));
+                        m_vDir = Vector3.Normalize(new Vector3(1, -1, 0)); // 몬스터 ↘ 방향 이동
                     }
                     break;
                 case 6:
                     {
-                        m_vDir = Vector3.Normalize(new Vector3(-1, 0, 0));
+                        m_vDir = Vector3.Normalize(new Vector3(-1, 0, 0)); // 몬스터 ← 방향 이동
                     }
                     break;
                 case 7:
                     {
-                        m_vDir = Vector3.Normalize(new Vector3(-1, 1, 0));
+                        m_vDir = Vector3.Normalize(new Vector3(-1, 1, 0)); // 몬스터 ↖ 방향 이동
                     }
                     break;
                 case 8:
                     {
-                        m_vDir = Vector3.Normalize(new Vector3(-1, -1, 0));
+                        m_vDir = Vector3.Normalize(new Vector3(-1, -1, 0)); // 몬스터 ↙ 방향 이동
                     }
                     break;
+                default:
+                {
+                    m_vDir = Vector3.Normalize(new Vector3(0, 0, 0)); // 몬스터 이동하지 않음
+                } break;
             }
         }
     }
+    // 몬스터 이동 시간 설정 관련 코루틴
     IEnumerator ProcessSetTime()
     {
-        m_bSetTime = false;
+        m_bSetTime = false; // 몬스터 이동 방향 설정 불가능
+        // 1 ~ 5초간 방향 설정 불가능. 1 ~ 5초간 지정된 방향으로 몬스터 이동
         m_fTime = Random.Range(1, 6);
         yield return new WaitForSeconds(m_fTime);
-        m_bSetTime = true;
+        m_bSetTime = true; // 몬스터 이동 방향 설정 가능
     }
 
-    override public bool Attacked(int dm, float dmrate, GameObject gm)
+    // 몬스터 탐지 함수 - "초원 슬라임"은 짧은 거리의 오브젝트(플레이어)를 탐지해 공격으로 이어간다.
+    override public void Detect()
+    {
+        co2_1 = Physics2D.OverlapCircleAll(this.transform.position, 0.1f, nLayer1); // 오버랩 박스
+
+        if (co2_1.Length > 0)
+        {
+            for (int i = 0; i < co2_1.Length; i++)
+            {
+                if (co2_1[i].gameObject == m_gTarget)
+                {
+                    Attack(m_ms_Status.m_sStatus.GetSTATUS_AttackSpeed()); // 몬스터 공격 함수
+                    break;
+                }
+            }
+        }
+    }
+
+    // 몬스터 공격 함수 - 부모 클래스인 Monster_Total의 Attack() 함수를 사용한다.
+    // virtual public bool Attack(float attackspeed) {ㆍㆍㆍ}
+
+    // 몬스터 공격 판정 함수 - 몬스터 공격 애니메이션의 특정 프레임에서 호출된다.
+    override public void Attack_Check()
+    {
+        if (m_vDir.x >= 0)
+            co2_3 = Physics2D.OverlapBoxAll(this.transform.position + m_vOffset1, m_vSize2, 0, nLayer1); // 오버랩 박스
+        else
+            co2_3 = Physics2D.OverlapBoxAll(this.transform.position + m_vOffset2, m_vSize2, 0, nLayer1); // 오버랩 박스
+
+        if (co2_3.Length > 0)
+        {
+            for (int i = 0; i < co2_3.Length; i++)
+            {
+                m_vKnockBackDir = Vector3.Normalize(co2_3[i].gameObject.transform.position - this.transform.position); // 피격 대상 오브젝트(플레이어) 넉백 방향 설정
+                co2_3[i].gameObject.GetComponent<Player_Total>().Attacked((int)((float)m_ms_Status.m_sStatus.GetSTATUS_Damage_Total()), m_vKnockBackDir, 0.3f, m_ms_Status.m_sMonsterName); // 플레이어 피격 함수
+            }
+        }
+    }
+
+    // 몬스터 접촉 시 오브젝트(플레이어) 피격 판정 함수(몸박뎀 판정) - "초원 슬라임"은 오브젝트(플레이어) 접촉 판정이 없다.(몸박뎀이 존재하지 않는다.)
+    override public void BodyDamage() { }
+
+    // 몬스터 피격 함수
+    override public bool Attacked(int dm, float dmrate, GameObject gm) // dm : 피격 데미지, dmrate : 피격 데미지 계수, gm : 몬스터 타격 대상(플레이어)
     {
         if (m_mm_Move.m_bPower == false)
         {
@@ -140,16 +192,16 @@ public class Slime1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
                 m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.RUN ||
                 m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.CHASE ||
                 m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.ATTACK ||
-                m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.ATTACKED)
+                m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.ATTACKED) // 몬스터 동작 FSM 상태 판단
             {
                 m_gTarget = gm;
 
-                if (m_ms_Status.Attacked(dm, dmrate) == true)
+                if (m_ms_Status.Attacked(dm, dmrate) == true) // 몬스터 피격 시 스탯(능력치) 변동 함수
                 {
-                    Death(10);
+                    Death(10); // 몬스터 사망 함수 + 리스폰 함수(리스폰까지 필요한 대기시간 : 10초)
                 }
                 else
-                    m_mm_Move.Attacked();
+                    m_mm_Move.Attacked(); // 몬스터 피격 함수
 
 
                 return true;
@@ -159,20 +211,23 @@ public class Slime1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
         return false;
     }
 
+    // 몬스터 사망 함수 + 리스폰 함수 - 부모 클래스인 Monster_Total의 Death() 함수를 사용한다.
+    // virtual public void Death(float time) {ㆍㆍㆍ}
+
+    // 몬스터 놓아주기 판정 함수
     override public SOC Goaway()
     {
-        if (m_bWait == false)
+        if (m_bWait == false) // 다른 오브젝트와 상호작용 가능
         {
-            if (m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.IDLE || m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.RUN)
+            if (m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.IDLE || m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.RUN) // 몬스터 동작 FSM 상태 판단
             {
-                m_bWait = true;
-                m_ms_Status.Goaway();
-                m_mm_Move.Goaway();
-                //m_md_Drop.DropItem(this.gameObject.transform.position);
-                m_md_Drop.DropItem_Goaway(m_ms_Status.m_nMonsterCode, this.gameObject.transform.position);
-                m_me_Effect.Effect_Goaway(this.transform.position);
+                m_bWait = true; // 다른 오브젝트와 상호작용 불가능
+                m_ms_Status.Goaway(); // 몬스터 놓아주기 판정 함수
+                m_mm_Move.Goaway(); // 몬스터 놓아주기 판정 함수
+                m_md_Drop.DropItem_Goaway(m_ms_Status.m_nMonsterCode, this.gameObject.transform.position); // 몬스터 놓아주기로 인한 아이템 드롭(아이템 필드 생성)
+                m_me_Effect.Effect_Goaway(this.transform.position);// 몬스터 놓아주기 이펙트 연출 함수
 
-                StartCoroutine(ProcessRespone(10));
+                StartCoroutine(ProcessRespone(10)); // 몬스터 리스폰 코루틴(리스폰까지 필요한 대기시간 : 10초)
 
                 return m_ms_Status.m_sSoc_Goaway;
             }
@@ -180,137 +235,13 @@ public class Slime1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
 
         return m_ms_Status.m_sSoc_null;
     }
-
-    // ATTACK 상태에서의 공격
-    protected Collider2D[] co2_1;
-    override public void Detect()
-    {
-        co2_1 = Physics2D.OverlapCircleAll(this.transform.position, 0.1f, nLayer1);
-
-        if (co2_1.Length > 0)
-        {
-            for (int i = 0; i < co2_1.Length; i++)
-            {
-                if (co2_1[i].gameObject == m_gTarget)
-                {
-                    //Debug.Log("Slime1_Total: Detect");
-                    Attack(m_ms_Status.m_sStatus.GetSTATUS_AttackSpeed());
-                    break;
-                }
-            }
-        }
-    }
     
-    protected Collider2D[] co2_3;
-    protected Vector2 m_vSize2 = new Vector2(0.11f, 0.15f);
-    protected Vector3 m_vOffset1 = new Vector3(0.04f, 0.035f, 0);
-    protected Vector3 m_vOffset2 = new Vector3(-0.04f, 0.035f, 0);
-    override public void Attack_Check()
-    {
-        if (m_vDir.x >= 0)
-            co2_3 = Physics2D.OverlapBoxAll(this.transform.position + m_vOffset1, m_vSize2, 0, nLayer1);
-        else
-            co2_3 = Physics2D.OverlapBoxAll(this.transform.position + m_vOffset2, m_vSize2, 0, nLayer1);
+    // 몬스터 사망 코루틴 - 부모 클래스인 Monster_Total의 ProcessRespone() 코루틴을 사용한다.
+    // virtual public IEnumerator ProcessRespone(float time) {ㆍㆍㆍ}
 
-        if (co2_3.Length > 0)
-        {
-            for (int i = 0; i < co2_3.Length; i++)
-            {
-                m_vKnockBackDir = Vector3.Normalize(co2_3[i].gameObject.transform.position - this.transform.position);
-                co2_3[i].gameObject.GetComponent<Player_Total>().Attacked((int)((float)m_ms_Status.m_sStatus.GetSTATUS_Damage_Total()), m_vKnockBackDir, 0.3f, m_ms_Status.m_sMonsterName);
-            }
-        }
-    }
+    // 몬스터 리스폰 함수 - 부모 클래스인 Monster_Total의 Respone() 함수를 사용한다.
+    // virtual public void Respone() {ㆍㆍㆍ}
 
-    // Animation Test
-    void AnimationTest()
-    {
-        if (Input.GetKeyUp(KeyCode.Alpha1))
-        {
-            Debug.Log("Test: Monster: IDLE");
-            m_mm_Move.m_aAnimator.SetBool("IDLE", true);
-            m_mm_Move.m_aAnimator.SetBool("RUN", false);
-            m_mm_Move.m_aAnimator.SetBool("ATTACKED", false);
-            m_mm_Move.m_aAnimator.SetBool("ATTACK", false);
-            m_mm_Move.m_aAnimator.SetBool("DEATH", false);
-            m_mm_Move.m_aAnimator.SetBool("GOAWAY", false);
-            m_mm_Move.m_aAnimator.SetBool("CHASE", false);
-        }
-        if (Input.GetKeyUp(KeyCode.Alpha2))
-        {
-            Debug.Log("Test: Monster: RUN");
-            m_mm_Move.m_aAnimator.SetBool("IDLE", false);
-            m_mm_Move.m_aAnimator.SetBool("RUN", true);
-            m_mm_Move.m_aAnimator.SetBool("ATTACKED", false);
-            m_mm_Move.m_aAnimator.SetBool("ATTACK", false);
-            m_mm_Move.m_aAnimator.SetBool("DEATH", false);
-            m_mm_Move.m_aAnimator.SetBool("GOAWAY", false);
-            m_mm_Move.m_aAnimator.SetBool("CHASE", false);
-        }
-        if (Input.GetKeyUp(KeyCode.Alpha3))
-        {
-            Debug.Log("Test: Monster: ATTACKED");
-            m_mm_Move.m_aAnimator.SetBool("IDLE", false);
-            m_mm_Move.m_aAnimator.SetBool("RUN", false);
-            m_mm_Move.m_aAnimator.SetBool("ATTACKED", true);
-            m_mm_Move.m_aAnimator.SetBool("ATTACK", false);
-            m_mm_Move.m_aAnimator.SetBool("DEATH", false);
-            m_mm_Move.m_aAnimator.SetBool("GOAWAY", false);
-            m_mm_Move.m_aAnimator.SetBool("CHASE", false);
-        }
-        if (Input.GetKeyUp(KeyCode.Alpha4))
-        {
-            Debug.Log("Test: Monster: ATTACK");
-            m_mm_Move.m_aAnimator.SetBool("IDLE", false);
-            m_mm_Move.m_aAnimator.SetBool("RUN", false);
-            m_mm_Move.m_aAnimator.SetBool("ATTACKED", false);
-            m_mm_Move.m_aAnimator.SetBool("ATTACK", true);
-            m_mm_Move.m_aAnimator.SetBool("DEATH", false);
-            m_mm_Move.m_aAnimator.SetBool("GOAWAY", false);
-            m_mm_Move.m_aAnimator.SetBool("CHASE", false);
-        }
-        if (Input.GetKeyUp(KeyCode.Alpha5))
-        {
-            Debug.Log("Test: Monster: DEATH");
-            m_mm_Move.m_aAnimator.SetBool("IDLE", false);
-            m_mm_Move.m_aAnimator.SetBool("RUN", false);
-            m_mm_Move.m_aAnimator.SetBool("ATTACKED", false);
-            m_mm_Move.m_aAnimator.SetBool("ATTACK", false);
-            m_mm_Move.m_aAnimator.SetBool("DEATH", true);
-            m_mm_Move.m_aAnimator.SetBool("GOAWAY", false);
-            m_mm_Move.m_aAnimator.SetBool("CHASE", false);
-        }
-        if (Input.GetKeyUp(KeyCode.Alpha6))
-        {
-            Debug.Log("Test: Monster: GOAWAY");
-            m_mm_Move.m_aAnimator.SetBool("IDLE", false);
-            m_mm_Move.m_aAnimator.SetBool("RUN", false);
-            m_mm_Move.m_aAnimator.SetBool("ATTACKED", false);
-            m_mm_Move.m_aAnimator.SetBool("ATTACK", false);
-            m_mm_Move.m_aAnimator.SetBool("DEATH", false);
-            m_mm_Move.m_aAnimator.SetBool("GOAWAY", true);
-            m_mm_Move.m_aAnimator.SetBool("CHASE", false);
-        }
-        if (Input.GetKeyUp(KeyCode.Alpha7))
-        {
-            Debug.Log("Test: Monster: CHASE");
-            m_mm_Move.m_aAnimator.SetBool("IDLE", false);
-            m_mm_Move.m_aAnimator.SetBool("RUN", false);
-            m_mm_Move.m_aAnimator.SetBool("ATTACKED", false);
-            m_mm_Move.m_aAnimator.SetBool("ATTACK", false);
-            m_mm_Move.m_aAnimator.SetBool("DEATH", false);
-            m_mm_Move.m_aAnimator.SetBool("GOAWAY", false);
-            m_mm_Move.m_aAnimator.SetBool("CHASE", true);
-        }
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(this.transform.position + new Vector3(0, 0.035f, 0), 0.1f);
-        if (m_vDir.x >= 0)
-            Gizmos.DrawWireCube(this.transform.position + m_vOffset1, m_vSize2);
-        else
-            Gizmos.DrawWireCube(this.transform.position + m_vOffset2, m_vSize2);
-    }
+    // Fadein 효과 연출 함수 - 부모 클래스인 Monster_Total의 Fadein() 함수를 사용한다.
+    // virtual public void Fadein() {ㆍㆍㆍ}
 }
