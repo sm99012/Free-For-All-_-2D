@@ -43,7 +43,7 @@ public class Ents1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
         else
             m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.RUN); // 몬스터 동작 FSM 변경 함수
 
-        if (m_eMonsterState == E_MONSTER_MOVE_STATE.RUN)
+        if (m_eMonsterState == E_MONSTER_MOVE_STATE.RUN) // 몬스터 동작 FSM 상태 판단
             if (m_bFix == false)
                 m_tTransform.position += (dir * speed * Time.deltaTime * 0.005f);
     }
