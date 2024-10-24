@@ -11,8 +11,8 @@ public class Ents1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
 {
     // 몬스터 탐지 관련 변수
     Collider2D[] co2_1;                              // 몬스터 탐지 콜라이더
-    Vector3 m_vOffset = new Vector3(0, 0.2f, 0);     // 몬스터 탐지 오프셋
     Vector2 m_vDetectSize = new Vector2(1.5f, 1.5f); // 몬스터 탐지 범위
+    Vector3 m_vOffset = new Vector3(0, 0.2f, 0);     // 몬스터 탐지 오프셋
     Vector3 m_vTargetPos;                            // 공격 대상 오브젝트(플레이어) 위치
     
     private void Awake()
