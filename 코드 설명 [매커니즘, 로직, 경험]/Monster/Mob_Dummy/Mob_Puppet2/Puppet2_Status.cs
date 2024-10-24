@@ -42,7 +42,7 @@ public class Puppet2_Status : Dummy1_Status
     // 몬스터 피격 시 스탯(능력치(몬스터 현재체력)) 계산 함수 - 부모 클래스인 Monster_Status의 Operator_HP() 함수를 사용한다.
     // bool Operator_HP(int dm) {ㆍㆍㆍ}
 
-    // 몬스터 놓아주기 관련 함수
+    // 몬스터 놓아주기 함수
     override public void Goaway()
     {
         m_bPower = true;
