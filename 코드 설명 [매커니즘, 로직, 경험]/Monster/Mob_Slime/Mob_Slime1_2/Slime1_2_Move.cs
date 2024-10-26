@@ -48,11 +48,10 @@ public class Slime1_2_Move : Slime1_Move
     // 몬스터 공격속도 계산 코루틴. 몬스터의 공격속도에 따라 다음 공격까지 기다려야하는 시간을 계산한다. - 부모 클래스인 Monster_Move의 ProcessAttack() 코루틴을 사용한다.
     // virtual protected IEnumerator ProcessAttack(float attackspeed) {ㆍㆍㆍ}
     // 몬스터 공격 종료 함수 - 몬스터 공격 애니메이션의 특정 프레임에서 호출된다.
-    // virtual protected void EndAttack()
     override protected void EndAttack()
     {
-        m_bAttack = false;
-        m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.CHASE);
+        m_bAttack = false; // 몬스터 공격 불가능
+        m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.CHASE); // 몬스터 동작 FSM 변경 함수
     }
 
     // 몬스터 피격 함수 - 부모 클래스인 Slime1_Move의 Attacked() 함수를 사용한다.
