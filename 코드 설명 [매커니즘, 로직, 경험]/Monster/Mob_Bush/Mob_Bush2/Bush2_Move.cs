@@ -27,8 +27,10 @@ public class Bush2_Move : Bush1_Move // 기반이 되는 Bush1_Move 클래스 �
         }
     }
 
-    // 부모 클래스인 Bush1_Move의 Start() 함수를 사용한다.
-    // void Start() {ㆍㆍㆍ}
+    void Start()
+    {
+        Fadein(); // Fadein 효과 연출 함수
+    }
 
     // 몬스터 이동 함수 - "가시덤불"은 이동하지 않는다.
     override public void Move(int speed, Vector3 dir) { }
