@@ -11,286 +11,78 @@ public class Slime1_2_Move : Slime1_Move
         m_rRigdbody = this.gameObject.GetComponent<Rigidbody2D>();
         m_aAnimator = this.gameObject.GetComponent<Animator>();
 
-        m_vRightPos = new Vector3(1, 1, 1);
-        m_vLeftPos = new Vector3(-1, 1, 1);
-
         m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.IDLE);
 
+        m_vRightPos = new Vector3(1, 1, 1);
+        m_vLeftPos = new Vector3(-1, 1, 1);
         m_bFix = false;
+
+        m_bAttack = true;
+        m_fPeacefulTime = 100f; // CHASE 상태에서 IDLE 상태로 전환되는 시간 : 100초
 
         if (m_sSpriteRenderer != null)
         {
             m_fAlpa = m_sSpriteRenderer.color.a;
         }
         m_FadeinAlpa = 0;
-
-        m_fPeacefulTime = 100f;
-
-        m_bAttack = true;
     }
 
-    //void Start()
-    //{
-    //    Fadein();
-    //}
+    void Start()
+    {
+        Fadein(); // Fadein 효과 연출 함수
+    }
 
-    //override public void Move(int speed, Vector3 dir)
-    //{
-    //    SetDir(dir);
+    // 몬스터 이동 함수 - 부모 클래스인 Slime1_Move의 Move() 함수를 사용한다.
+    // override public void Move(int speed, Vector3 dir) {ㆍㆍㆍ}
 
-    //    if (dir.x == 0 && dir.y == 0)
-    //        m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.IDLE);
-    //    else
-    //        m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.RUN);
+    // 몬스터 추격 함수 - 부모 클래스인 Slime1_Move의 Chase() 함수를 사용한다.
+    // override public void Chase(int speed, Vector3 dir) {ㆍㆍㆍ}
+    // 몬스터 추격 시간 계산 코루틴. 몬스터 동작 FSM : 추격(CHASE) -> 평화(IDLE) - 부모 클래스인 Monster_Move의 ProcessPeaceful() 코루틴을 사용한다.
+    // virtual protected IEnumerator ProcessPeaceful() {ㆍㆍㆍ}
 
-    //    if (m_eMonsterState == E_MONSTER_MOVE_STATE.RUN)
-    //        if (m_bFix == false)
-    //            m_tTransform.position += (dir * speed * Time.deltaTime * 0.005f);
-    //    //m_rRigdbody.MovePosition(this.transform.position + (dir * speed * Time.deltaTime * 0.01f));
-    //}
+    // 몬스터 방향 설정 함수 - 부모 클래스인 Slime1_Move의 SetDir() 함수를 사용한다.
+    // override public void SetDir(Vector3 dir) {ㆍㆍㆍ}
 
-    //override public void Chase(int speed, Vector3 dir)
-    //{
-    //    SetDir(dir);
-
-    //    if (m_bFix == false)
-    //        m_tTransform.position += (dir * speed * Time.deltaTime * 0.005f);
-    //    //m_rRigdbody.MovePosition(this.transform.position + (dir * speed * Time.deltaTime * 0.01f));
-    //}
-
-    //override public void SetDir(Vector3 dir)
-    //{
-    //    if (dir.x >= 0)
-    //        m_tTransform.localScale = m_vRightPos;
-    //    else
-    //        m_tTransform.localScale = m_vLeftPos;
-    //}
-
-    //override public void Attacked()
-    //{
-    //    if (m_eMonsterState == E_MONSTER_MOVE_STATE.IDLE || m_eMonsterState == E_MONSTER_MOVE_STATE.RUN ||
-    //        m_eMonsterState == E_MONSTER_MOVE_STATE.CHASE || m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACKED)
-    //        m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.ATTACKED);
-    //}
-
-    //override public void Goaway()
-    //{
-    //    if (m_eMonsterState == E_MONSTER_MOVE_STATE.IDLE || m_eMonsterState == E_MONSTER_MOVE_STATE.RUN)
-    //        m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.GOAWAY);
-    //}
-
-    //override public void Death()
-    //{
-    //    m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.DEATH);
-    //}
-
-    //override public bool Attack(float attackspeed)
-    //{
-    //    m_fAttackSpeed = attackspeed;
-    //    if (m_bAttack == true)
-    //        if (m_eMonsterState == E_MONSTER_MOVE_STATE.CHASE ||
-    //            m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACKED)
-    //        {
-    //            m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.ATTACK);
-    //            return true;
-    //        }
-    //    return false;
-    //}
-
-    //override public E_MONSTER_MOVE_STATE SetMonsterMoveState(E_MONSTER_MOVE_STATE ms)
-    //{
-    //    switch (ms)
-    //    {
-    //        case E_MONSTER_MOVE_STATE.IDLE:
-    //            {
-    //                if (m_eMonsterState != ms)
-    //                {
-    //                    if (m_eMonsterState == E_MONSTER_MOVE_STATE.RUN || m_eMonsterState == E_MONSTER_MOVE_STATE.CHASE ||
-    //                        m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACK || m_eMonsterState == E_MONSTER_MOVE_STATE.DEATH ||
-    //                        m_eMonsterState == E_MONSTER_MOVE_STATE.GOAWAY)
-    //                        SetAnimationParameters("IDLE");
-    //                }
-    //            }
-    //            break;
-    //        case E_MONSTER_MOVE_STATE.RUN:
-    //            {
-    //                if (m_eMonsterState != ms)
-    //                {
-    //                    if (m_eMonsterState == E_MONSTER_MOVE_STATE.IDLE)
-    //                        SetAnimationParameters("RUN");
-    //                }
-    //            }
-    //            break;
-    //        case E_MONSTER_MOVE_STATE.ATTACKED:
-    //            {
-    //                if (m_eMonsterState == E_MONSTER_MOVE_STATE.IDLE || m_eMonsterState == E_MONSTER_MOVE_STATE.RUN ||
-    //                    m_eMonsterState == E_MONSTER_MOVE_STATE.CHASE || m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACK ||
-    //                    m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACKED)
-    //                {
-    //                    if (m_cProcessAttacked == null)
-    //                        m_cProcessAttacked = StartCoroutine(ProcessAttacked1());
-    //                    else
-    //                    {
-    //                        StopCoroutine(m_cProcessAttacked);
-    //                        m_cProcessAttacked = StartCoroutine(ProcessAttacked2());
-    //                    }
-
-    //                    if (m_cProcessPeaceful == null)
-    //                        m_cProcessPeaceful = StartCoroutine(ProcessPeaceful());
-    //                    else
-    //                    {
-    //                        StopCoroutine(m_cProcessPeaceful);
-    //                        m_cProcessPeaceful = StartCoroutine(ProcessPeaceful());
-    //                    }
-    //                }
-    //            }
-    //            break;
-    //        case E_MONSTER_MOVE_STATE.ATTACK:
-    //            {
-    //                if (m_eMonsterState != ms)
-    //                {
-    //                    if (m_eMonsterState == E_MONSTER_MOVE_STATE.CHASE ||
-    //                        m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACKED)
-    //                    {
-    //                        if (m_bAttack == true)
-    //                        {
-    //                            SetAnimationParameters("ATTACK");
-    //                            StartCoroutine(ProcessAttack());
-    //                        }
-    //                    }
-    //                }
-    //            }
-    //            break;
-    //        case E_MONSTER_MOVE_STATE.DEATH:
-    //            {
-    //                if (m_eMonsterState != ms)
-    //                {
-    //                    if (m_eMonsterState == E_MONSTER_MOVE_STATE.IDLE || m_eMonsterState == E_MONSTER_MOVE_STATE.RUN ||
-    //                        m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACKED || m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACK ||
-    //                        m_eMonsterState == E_MONSTER_MOVE_STATE.CHASE)
-    //                    {
-    //                        SetAnimationParameters("DEATH");
-    //                        if (m_cProcessAttacked != null)
-    //                            StopCoroutine(m_cProcessAttacked);
-    //                        StartCoroutine(ProcessDeath());
-    //                    }
-    //                }
-    //            }
-    //            break;
-    //        case E_MONSTER_MOVE_STATE.GOAWAY:
-    //            {
-    //                if (m_eMonsterState != ms)
-    //                {
-    //                    if (m_eMonsterState == E_MONSTER_MOVE_STATE.IDLE || m_eMonsterState == E_MONSTER_MOVE_STATE.RUN)
-    //                    {
-    //                        SetAnimationParameters("GOAWAY");
-    //                        StartCoroutine(ProcessGoaway());
-    //                    }
-    //                }
-    //            }
-    //            break;
-    //        case E_MONSTER_MOVE_STATE.CHASE:
-    //            {
-    //                if (m_eMonsterState != ms)
-    //                {
-    //                    if (m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACKED || m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACK)
-    //                        SetAnimationParameters("CHASE");
-    //                }
-    //            }
-    //            break;
-    //    }
-
-    //    return ms;
-    //}
-
-    // Animator AddEvent
+    // 몬스터 공격 함수 - 부모 클래스인 Slime1_Move의 Attack() 함수를 사용한다.
+    // override public bool Attack(float attackspeed) {ㆍㆍㆍ}
+    // 몬스터 공격속도 계산 코루틴. 몬스터의 공격속도에 따라 다음 공격까지 기다려야하는 시간을 계산한다. - 부모 클래스인 Monster_Move의 ProcessAttack() 코루틴을 사용한다.
+    // virtual protected IEnumerator ProcessAttack(float attackspeed) {ㆍㆍㆍ}
+    // 몬스터 공격 종료 함수 - 몬스터 공격 애니메이션의 특정 프레임에서 호출된다.
+    // virtual protected void EndAttack()
     override protected void EndAttack()
     {
         m_bAttack = false;
         m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.CHASE);
     }
 
-    //override public void SetAnimationParameters(string str)
-    //{
-    //    switch (str)
-    //    {
-    //        case "IDLE":
-    //            {
-    //                m_aAnimator.SetBool("IDLE", true);
-    //                m_aAnimator.SetBool("RUN", false);
-    //                m_aAnimator.SetBool("ATTACKED", false);
-    //                m_aAnimator.SetBool("ATTACK", false);
-    //                m_aAnimator.SetBool("DEATH", false);
-    //                m_aAnimator.SetBool("GOAWAY", false);
-    //                m_aAnimator.SetBool("CHASE", false);
-    //            }
-    //            break;
-    //        case "RUN":
-    //            {
-    //                m_aAnimator.SetBool("IDLE", false);
-    //                m_aAnimator.SetBool("RUN", true);
-    //                m_aAnimator.SetBool("ATTACKED", false);
-    //                m_aAnimator.SetBool("ATTACK", false);
-    //                m_aAnimator.SetBool("DEATH", false);
-    //                m_aAnimator.SetBool("GOAWAY", false);
-    //                m_aAnimator.SetBool("CHASE", false);
-    //            }
-    //            break;
-    //        case "ATTACKED":
-    //            {
-    //                m_aAnimator.SetBool("IDLE", false);
-    //                m_aAnimator.SetBool("RUN", false);
-    //                m_aAnimator.SetBool("ATTACKED", true);
-    //                m_aAnimator.SetBool("ATTACK", false);
-    //                m_aAnimator.SetBool("DEATH", false);
-    //                m_aAnimator.SetBool("GOAWAY", false);
-    //                m_aAnimator.SetBool("CHASE", false);
-    //            }
-    //            break;
-    //        case "ATTACK":
-    //            {
-    //                m_aAnimator.SetBool("IDLE", false);
-    //                m_aAnimator.SetBool("RUN", false);
-    //                m_aAnimator.SetBool("ATTACKED", false);
-    //                m_aAnimator.SetBool("ATTACK", true);
-    //                m_aAnimator.SetBool("DEATH", false);
-    //                m_aAnimator.SetBool("GOAWAY", false);
-    //                m_aAnimator.SetBool("CHASE", false);
-    //            }
-    //            break;
-    //        case "DEATH":
-    //            {
-    //                m_aAnimator.SetBool("IDLE", false);
-    //                m_aAnimator.SetBool("RUN", false);
-    //                m_aAnimator.SetBool("ATTACKED", false);
-    //                m_aAnimator.SetBool("ATTACK", false);
-    //                m_aAnimator.SetBool("DEATH", true);
-    //                m_aAnimator.SetBool("GOAWAY", false);
-    //                m_aAnimator.SetBool("CHASE", false);
-    //            }
-    //            break;
-    //        case "GOAWAY":
-    //            {
-    //                m_aAnimator.SetBool("IDLE", false);
-    //                m_aAnimator.SetBool("RUN", false);
-    //                m_aAnimator.SetBool("ATTACKED", false);
-    //                m_aAnimator.SetBool("ATTACK", false);
-    //                m_aAnimator.SetBool("DEATH", false);
-    //                m_aAnimator.SetBool("GOAWAY", true);
-    //                m_aAnimator.SetBool("CHASE", false);
-    //            }
-    //            break;
-    //        case "CHASE":
-    //            {
-    //                m_aAnimator.SetBool("IDLE", false);
-    //                m_aAnimator.SetBool("RUN", false);
-    //                m_aAnimator.SetBool("ATTACKED", false);
-    //                m_aAnimator.SetBool("ATTACK", false);
-    //                m_aAnimator.SetBool("DEATH", false);
-    //                m_aAnimator.SetBool("GOAWAY", false);
-    //                m_aAnimator.SetBool("CHASE", true);
-    //            }
-    //            break;
-    //    }
-    //}
+    // 몬스터 피격 함수 - 부모 클래스인 Slime1_Move의 Attacked() 함수를 사용한다.
+    // override public void Attacked() {ㆍㆍㆍ}
+    // 몬스터 피격 시간 계산 코루틴1 - 부모 클래스인 Monster_Move의 ProcessAttacked1() 코루틴을 사용한다.
+    // virtual protected IEnumerator ProcessAttacked1() {ㆍㆍㆍ}
+    // 몬스터 피격 시간 계산 코루틴2 - 부모 클래스인 Monster_Move의 ProcessAttacked2() 코루틴을 사용한다.
+    // virtual protected IEnumerator ProcessAttacked2() {ㆍㆍㆍ}
+
+    // 몬스터 사망 함수. Fadeout 효과 관련 - 부모 클래스인 Slime1_Move의 Death() 함수를 사용한다.
+    // override public void Death() {ㆍㆍㆍ}
+    // 몬스터 사망 시간 계산 코루틴. Fadeout 효과 관련 계산 - 부모 클래스인 Monster_Move의 ProcessDeath() 코루틴을 사용한다.
+    // virtual public IEnumerator ProcessDeath() {ㆍㆍㆍ}
+
+    // 몬스터 놓아주기 함수 - 부모 클래스인 Slime1_Move의 Goaway() 함수를 사용한다.
+    // override public void Goaway() {ㆍㆍㆍ}
+    // 몬스터 놓아주기 시간 계산 코루틴. Fadeout 효과 관련 계산 - 부모 클래스인 Monster_Move의 ProcessGoaway() 코루틴을 사용한다.
+    // virtual public IEnumerator ProcessGoaway() {ㆍㆍㆍ}
+
+    // 몬스터 리스폰 함수 - 부모 클래스인 Monster_Move의 Respone() 함수를 사용한다.
+    // virtual public void Respone() {ㆍㆍㆍ}
+
+    // Fadein 효과 연출 함수(가상 함수) - 부모 클래스인 Monster_Move의 Fadein() 함수를 사용한다.
+    // virtual public void Fadein() {ㆍㆍㆍ}
+    // Fadein 효과 계산 코루틴 - 부모 클래스인 Monster_Move의 ProcessFadein() 코루틴을 사용한다.
+    // IEnumerator ProcessFadein() {ㆍㆍㆍ}
+
+    // 몬스터 동작 FSM 변경 함수 - 부모 클래스인 Slime1_Move의 SetMonsterMoveState() 함수를 사용한다.
+    // override public E_MONSTER_MOVE_STATE SetMonsterMoveState(E_MONSTER_MOVE_STATE ms, float attackspeed = 0) {ㆍㆍㆍ}
+
+    // 애니메이션 관리 - 부모 클래스인 Slime1_Move의 SetAnimationParameters() 함수를 사용한다.
+    // override public void SetAnimationParameters(string str)
 }
