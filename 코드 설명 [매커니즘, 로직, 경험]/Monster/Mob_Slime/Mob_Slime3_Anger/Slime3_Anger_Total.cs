@@ -9,7 +9,7 @@ using UnityEngine;
 //    "초원 슬라임"과 비교해 스탯(능력치, 평판)에 차이가 존재한다.
 //
 
-public class Slime3_Anger_Total : Monster_Total
+public class Slime3_Anger_Total : Monster_Total // 기반이 되는 Monster_Total 클래스 상속
 {
     private void Awake()
     {
@@ -18,71 +18,67 @@ public class Slime3_Anger_Total : Monster_Total
         m_md_Drop = this.gameObject.GetComponent<Monster_Drop>();
         m_me_Effect = this.gameObject.GetComponent<Monster_Effect>();
 
-        m_bSetTime = true;
-        m_bRelation = false;
+        m_bRelation = false; // 몬스터 접촉 시 오브젝트(플레이어) 피격 불가능(몬스터 몸박뎀 존재하지 않음)
 
-        nLayer1 = 1 << LayerMask.NameToLayer("Player");
+        m_bWait = false; // 다른 오브젝트와 상호작용 가능
+        m_bSetTime = true; // 몬스터 이동 방향 설정 가능
 
-        m_bWait = false;
+        // 레이어 설정
+        nLayer1 = 1 << LayerMask.NameToLayer("Player"); // 몬스터와 충돌 가능한 오브젝트(플레이어) 레이어
     }
 
-    void Start()
-    {
-        Fadein();
-    }
+    // Fadein 효과 연출과 함께 몬스터 리스폰 - 부모 클래스인 Monster_Total의 Start() 함수를 사용한다.
+    // void Start() {ㆍㆍㆍ}
 
-    // Update is called once per frame
     void Update()
     {
-        if (m_bPlay == true)
+        if (m_bPlay == true) // 몬스터 동작 가능
         {
-            if (m_bWait == false)
+            if (m_bWait == false) // 다른 오브젝트와 상호작용 가능
             {
                 if (m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.IDLE ||
-                    m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.RUN)
+                    m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.RUN) // 몬스터 동작 FSM 상태 판단
                 {
-                    if (m_gTarget == null)
+                    if (m_gTarget == null) // 몬스터 추격 대상이 지정되지 않은 경우 - 무작위 방향 이동
                     {
-                        SetDir();
-                        Move();
+                        SetDir(); // 몬스터 이동 방향 설정 함수
+                        Move(); // 몬스터 이동 함수
                     }
 
-                    Detect();
+                    Detect(); // 몬스터 탐지 함수 - 선공 몬스터이기 때문에 항상 탐지한다.
                 }
                 if (m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.CHASE ||
-                    m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.ATTACKED)
+                    m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.ATTACKED) // 몬스터 동작 FSM 상태 판단
                 {
-                    Chase();
-                    Detect();
+                    Chase(); // 몬스터 추격 함수
+                    Detect(); // 몬스터 탐지 함수
                 }
             }
-
-            if (m_bRelation == true && m_bWait == false)
-            {
-                BodyDamage(0.1f, 0.05f, Vector3.zero);
-            }
         }
-
-        //AnimationTest();
     }
 
+    // 몬스터 이동 함수 - "화가 잔뜩난 꼬마 초원 슬라임"은 평범한 속도로 이동한다.
     override public void Move()
     {
-        m_mm_Move.Move(m_ms_Status.m_sStatus.GetSTATUS_Speed(), m_vDir);
+        m_mm_Move.Move(m_ms_Status.m_sStatus.GetSTATUS_Speed(), m_vDir); // 몬스터 이동 함수
     }
 
+    // 몬스터 추격 함수 - "화가 잔뜩난 꼬마 초원 슬라임"은 평범한 속도로 추격한다.
     public override void Chase()
     {
-        m_vDir = Vector3.Normalize(m_gTarget.transform.position - this.transform.position);
-        m_mm_Move.Chase(m_ms_Status.m_sStatus.GetSTATUS_Speed(), m_vDir);
+        m_vDir = Vector3.Normalize(m_gTarget.transform.position - this.transform.position); // 몬스터 추격 방향 설정
+        m_mm_Move.Chase(m_ms_Status.m_sStatus.GetSTATUS_Speed(), m_vDir); // 몬스터 추격 함수
     }
 
+    // 몬스터 이동 방향 설정 함수
     override public void SetDir()
     {
-        if (m_bSetTime == true)
+        if (m_bSetTime == true) // 몬스터 이동 방향 설정 가능
         {
-            StartCoroutine(ProcessSetTime());
-            m_nRandomNumber = Random.Range(-7, 9);
+            StartCoroutine(ProcessSetTime()); // 몬스터 이동 시간 설정 관련 코루틴
+            m_nRandomNumber = Random.Range(-7, 8); // 몬스터 이동 방향 설정 관련 변수 : -7 ~ 8 (16)
+                                                   // 8 / 16 (50%) 확률로 몬스터 이동
+                                                   // 8 / 16 (50%) 확률로 몬스터 이동하지 않음
             switch (m_nRandomNumber)
             {
                 case -7:
@@ -94,58 +90,60 @@ public class Slime3_Anger_Total : Monster_Total
                 case -1:
                 case 0:
                     {
-                        m_vDir = Vector3.Normalize(new Vector3(0, 0, 0));
+                        m_vDir = Vector3.Normalize(new Vector3(0, 0, 0)); // 몬스터 이동하지 않음
                     }
                     break;
                 case 1:
                     {
-                        m_vDir = Vector3.Normalize(new Vector3(0, 1, 0));
+                        m_vDir = Vector3.Normalize(new Vector3(0, 1, 0)); // 몬스터 ↑ 방향 이동
                     }
                     break;
                 case 2:
                     {
-                        m_vDir = Vector3.Normalize(new Vector3(0, -1, 0));
+                        m_vDir = Vector3.Normalize(new Vector3(0, -1, 0)); // 몬스터 ↓ 방향 이동
                     }
                     break;
                 case 3:
                     {
-                        m_vDir = Vector3.Normalize(new Vector3(1, 0, 0));
+                        m_vDir = Vector3.Normalize(new Vector3(1, 0, 0)); // 몬스터 → 방향 이동
                     }
                     break;
                 case 4:
                     {
-                        m_vDir = Vector3.Normalize(new Vector3(1, 1, 0));
+                        m_vDir = Vector3.Normalize(new Vector3(1, 1, 0)); // 몬스터 ↗ 방향 이동
                     }
                     break;
                 case 5:
                     {
-                        m_vDir = Vector3.Normalize(new Vector3(1, -1, 0));
+                        m_vDir = Vector3.Normalize(new Vector3(1, -1, 0)); // 몬스터 ↘ 방향 이동
                     }
                     break;
                 case 6:
                     {
-                        m_vDir = Vector3.Normalize(new Vector3(-1, 0, 0));
+                        m_vDir = Vector3.Normalize(new Vector3(-1, 0, 0)); // 몬스터 ← 방향 이동
                     }
                     break;
                 case 7:
                     {
-                        m_vDir = Vector3.Normalize(new Vector3(-1, 1, 0));
+                        m_vDir = Vector3.Normalize(new Vector3(-1, 1, 0)); // 몬스터 ↖ 방향 이동
                     }
                     break;
                 case 8:
                     {
-                        m_vDir = Vector3.Normalize(new Vector3(-1, -1, 0));
+                        m_vDir = Vector3.Normalize(new Vector3(-1, -1, 0)); // 몬스터 ↙ 방향 이동
                     }
                     break;
             }
         }
     }
+    // 몬스터 이동 시간 설정 관련 코루틴
     IEnumerator ProcessSetTime()
     {
-        m_bSetTime = false;
-        m_fTime = Random.Range(1, 6);
+        m_bSetTime = false; // 몬스터 이동 방향 설정 불가능
+        // 1 ~ 5초간 방향 설정 불가능. 1 ~ 5초간 지정된 방향으로 몬스터 이동
+        m_fTime = Random.Range(1, 5);
         yield return new WaitForSeconds(m_fTime);
-        m_bSetTime = true;
+        m_bSetTime = true; // 몬스터 이동 방향 설정 가능
     }
 
     override public bool Attacked(int dm, float dmrate, GameObject gm)
