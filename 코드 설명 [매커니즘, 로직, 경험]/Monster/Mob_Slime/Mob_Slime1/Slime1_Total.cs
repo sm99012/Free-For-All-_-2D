@@ -78,7 +78,7 @@ public class Slime1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
         if (m_bSetTime == true) // 몬스터 이동 방향 설정 가능
         {
             StartCoroutine(ProcessSetTime()); // 몬스터 이동 시간 설정 관련 코루틴
-            m_nRandomNumber = Random.Range(-7, 9); // 몬스터 이동 방향 설정 관련 변수 : -7 ~ 8 (16)
+            m_nRandomNumber = Random.Range(-7, 8); // 몬스터 이동 방향 설정 관련 변수 : -7 ~ 8 (16)
                                                    // 8 / 16 (50%) 확률로 몬스터 이동
                                                    // 8 / 16 (50%) 확률로 몬스터 이동하지 않음
             switch (m_nRandomNumber)
