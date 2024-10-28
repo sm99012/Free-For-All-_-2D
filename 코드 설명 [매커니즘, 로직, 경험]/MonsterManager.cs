@@ -2,6 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//
+// ※ 싱글톤패턴을 적용한 MonsterManager 클래스를 이용해 모든 몬스터 관련 정보(몬스터 설명, 출몰 지역, 리스폰 시간, 드랍 아이템, 스탯(능력치, 평판))를 관리한다.
+//    해당 MonsterManager 클래스를 이용해 몬스터 도감 기능을 구현했다. 또한 각각의 몬스터가 보유한 드랍 아이템 저장소를 MonsterManager 클래스로 통합 관리함으로 메모리 최적화를 추구했다.
+//    최적화 관련 정보는 아래 링크를 참조해 주세요.
+//
+//
+
 public class MonsterManager : MonoBehaviour
 {
     private static MonsterManager instance = null;
