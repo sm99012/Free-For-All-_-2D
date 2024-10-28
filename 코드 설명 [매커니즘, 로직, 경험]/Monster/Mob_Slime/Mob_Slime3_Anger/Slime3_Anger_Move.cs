@@ -103,7 +103,7 @@ public class Slime3_Anger_Move : Slime1_Move // 기반이 되는 Slime1_Move 클
                     {
                         if (m_cProcessAttacked == null)
                             m_cProcessAttacked = StartCoroutine(ProcessAttacked1()); // 몬스터 피격 시간 계산 코루틴1
-                        else
+                        else // 몬스터가 이미 피격 중일 경우
                         {
                             StopCoroutine(m_cProcessAttacked);
                             m_cProcessAttacked = StartCoroutine(ProcessAttacked2()); // 몬스터 피격 시간 계산 코루틴2
@@ -111,7 +111,7 @@ public class Slime3_Anger_Move : Slime1_Move // 기반이 되는 Slime1_Move 클
 
                         if (m_cProcessPeaceful == null)
                             m_cProcessPeaceful = StartCoroutine(ProcessPeaceful()); // 몬스터 추격 시간 계산 코루틴
-                        else
+                        else // 몬스터가 이미 오브젝트(플레이어)를 추격하는 중일 경우
                         {
                             StopCoroutine(m_cProcessPeaceful);
                             m_cProcessPeaceful = StartCoroutine(ProcessPeaceful()); // 몬스터 추격 시간 계산 코루틴
