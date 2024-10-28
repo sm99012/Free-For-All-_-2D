@@ -136,7 +136,7 @@ public class Slime1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
     {
         m_bSetTime = false; // 몬스터 이동 방향 설정 불가능
         // 1 ~ 5초간 방향 설정 불가능. 1 ~ 5초간 지정된 방향으로 몬스터 이동
-        m_fTime = Random.Range(1, 6);
+        m_fTime = Random.Range(1, 5);
         yield return new WaitForSeconds(m_fTime);
         m_bSetTime = true; // 몬스터 이동 방향 설정 가능
     }
