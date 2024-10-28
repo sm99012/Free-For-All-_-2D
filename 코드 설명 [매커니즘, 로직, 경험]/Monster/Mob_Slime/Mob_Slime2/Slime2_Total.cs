@@ -2,10 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Slime2_Total : Monster_Total
+//
+// ※ "큰 초원 슬라임"은 "초원 슬라임"이 모종의 이유로 거대해진 개체이다.
+//    "큰 초원 슬라임"은 이동형 몬스터로 설계했다. 매우 느린 속도로 이동하며 제법 강하고 질기다.
+//    "큰 초원 슬라임"은 공격 시 몸을 뻗어 오브젝트(플레이어)와 충돌하는 공격을 한다. 해당 공격에 피격 시 오브젝트(플레이어)에게 상태이상(기절, 둔화)이 적용된다.
+//    "큰 초원 슬라임" 접촉 시 오브젝트(플레이어) 피격이 가능하다.(몸박뎀 존재)
+//    "큰 초원 슬라임" 토벌 시 0 ~ 6마리(90% 확률)의 "초원 슬라임(2)"으로 분열하며 토벌한 오브젝트(플레이어)를 끊임없이(100초) 추격하며 공격한다.
+//
+
+public class Slime2_Total : Monster_Total // 기반이 되는 Monster_Total 클래스 상속
 {
-    // Slime2 사망시 4개의 Slime1로 분열. 해당 슬라임들은 CHASE 상태
-    public List<GameObject> m_gChildPos;
+    public List<GameObject> m_gChildPos; // "큰 초원 슬라임" 토벌 시 분열하는 "초원 슬라임(2)"의 위치 정보 리스트
 
     private void Awake()
     {
@@ -14,10 +21,13 @@ public class Slime2_Total : Monster_Total
         m_md_Drop = this.gameObject.GetComponent<Monster_Drop>();
         m_me_Effect = this.gameObject.GetComponent<Monster_Effect>();
 
-        m_bSetTime = true;
-        m_bRelation = true;
+        m_bRelation = true; // 몬스터 접촉 시 오브젝트(플레이어) 피격 가능(몬스터 몸박뎀 존재)
 
-        nLayer1 = 1 << LayerMask.NameToLayer("Player");
+        m_bWait = false; // 다른 오브젝트와 상호작용 가능
+        m_bSetTime = true; // 몬스터 이동 방향 설정 가능
+
+        // 레이어 설정
+        nLayer1 = 1 << LayerMask.NameToLayer("Player"); // 몬스터와 충돌 가능한 오브젝트(플레이어) 레이어
 
         m_gChildPos.Add(transform.Find("Pos1").gameObject);
         m_gChildPos.Add(transform.Find("Pos2").gameObject);
@@ -27,42 +37,40 @@ public class Slime2_Total : Monster_Total
         m_gChildPos.Add(transform.Find("Pos6").gameObject);
     }
 
-    void Start()
-    {
-        Fadein();
-    }
+    // Fadein 효과 연출과 함께 몬스터 리스폰 - 부모 클래스인 Monster_Total의 Start() 함수를 사용한다.
+    // void Start() {ㆍㆍㆍ}
 
-    // Update is called once per frame
     void Update()
     {
-        if (m_bPlay == true)
+        if (m_bPlay == true) // 몬스터 동작 가능
         {
-            if (m_bWait == false)
+            if (m_bWait == false) // 다른 오브젝트와 상호작용 가능
             {
                 if (m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.IDLE ||
-                m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.RUN)
+                m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.RUN) // 몬스터 동작 FSM 상태 판단
                 {
-                    SetDir();
-                    Move();
+                    SetDir(); // 몬스터 이동 방향 설정 함수
+                    Move(); // 몬스터 이동 함수
                 }
                 if (m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.CHASE ||
-                    m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.ATTACKED)
+                    m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.ATTACKED) // 몬스터 동작 FSM 상태 판단
                 {
-                    Chase();
-                    Detect();
+                    Chase(); // 몬스터 추격 함수
+                    Detect(); // 몬스터 탐지 함수
                 }
             }
 
-            if (m_bRelation == true && m_bWait == false)
+            if (m_bRelation == true && m_bWait == false) // 몬스터 접촉 시 오브젝트 피격 가능 && 다른 오브젝트와 상호작용 가능
             {
-                BodyDamage(0.3f, 0.05f, new Vector2(0, 0.15f), 0.75f);
+                BodyDamage(0.3f, 0.05f, new Vector2(0, 0.15f), 0.75f); // 몬스터 접촉 시 오브젝트(플레이어) 피격 판정 함수(몸박뎀 판정)
             }
         }
     }
 
+    // 몬스터 이동 함수 - "큰 초원 슬라임"은 매우 느린 속도로 이동한다.
     override public void Move()
     {
-        m_mm_Move.Move(m_ms_Status.m_sStatus.GetSTATUS_Speed(), m_vDir);
+        m_mm_Move.Move(m_ms_Status.m_sStatus.GetSTATUS_Speed(), m_vDir); // 몬스터 이동 함수
     }
 
     public override void Chase()
@@ -202,7 +210,7 @@ public class Slime2_Total : Monster_Total
         GameObject obj = Resources.Load("Prefab/Monster/Slime1_2") as GameObject;
         for (int i = 0; i < m_gChildPos.Count; i++)
         {
-            if (Random.Range(0, 11) < 9)
+            if (Random.Range(0, 9) < 9)
             {
                 GameObject dobj = Instantiate(obj);
                 dobj.transform.position = m_gChildPos[i].transform.position;
