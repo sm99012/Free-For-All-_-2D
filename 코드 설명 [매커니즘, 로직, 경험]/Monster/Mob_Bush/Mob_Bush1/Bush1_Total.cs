@@ -99,7 +99,6 @@ public class Bush1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
                 else
                     m_mm_Move.Attacked(); // 몬스터 피격 함수
 
-
                 return true;
             }
         }
