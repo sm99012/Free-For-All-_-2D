@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Slime1_2_Effect : Slime1_Effect
+public class Slime1_2_Effect : Slime1_Effect // 기반이 되는 Slime1_Effect 클래스 상속
 {
     // 부모 클래스인 Monster_Effect의 Start() 함수를 사용한다.
     // void Start() {ㆍㆍㆍ}
