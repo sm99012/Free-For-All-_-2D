@@ -4,33 +4,11 @@ using UnityEngine;
 
 public class Slime1_GrassHair_Move : Slime1_Move // 기반이 되는 Slime1_Move 클래스 상속
 {
-    private void Awake()
-    {
-        m_sSpriteRenderer = this.gameObject.GetComponent<SpriteRenderer>();
-        m_tTransform = this.gameObject.GetComponent<Transform>();
-        m_rRigdbody = this.gameObject.GetComponent<Rigidbody2D>();
-        m_aAnimator = this.gameObject.GetComponent<Animator>();
+    // 부모 클래스인 Slime1_Total의 Awake() 함수를 사용한다.
+    // private void Awake() {ㆍㆍㆍ}
 
-        m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.IDLE);
-
-        m_vRightPos = new Vector3(1, 1, 1);
-        m_vLeftPos = new Vector3(-1, 1, 1);
-        m_bFix = false;
-
-        m_bAttack = true;
-        m_fPeacefulTime = 100f; // CHASE 상태에서 IDLE 상태로 전환되는 시간 : 100초
-
-        if (m_sSpriteRenderer != null)
-        {
-            m_fAlpa = m_sSpriteRenderer.color.a;
-        }
-        m_FadeinAlpa = 0;
-    }
-
-    void Start()
-    {
-        Fadein(); // Fadein 효과 연출 함수
-    }
+    // 부모 클래스인 Slime1_Total의 Start() 함수를 사용한다.
+    // void Start() {ㆍㆍㆍ}
 
     // 몬스터 이동 함수 - 부모 클래스인 Slime1_Move의 Move() 함수를 사용한다.
     // override public void Move(int speed, Vector3 dir) {ㆍㆍㆍ}
@@ -48,11 +26,8 @@ public class Slime1_GrassHair_Move : Slime1_Move // 기반이 되는 Slime1_Move
     // 몬스터 공격속도 계산 코루틴. 몬스터의 공격속도에 따라 다음 공격까지 기다려야하는 시간을 계산한다. - 부모 클래스인 Monster_Move의 ProcessAttack() 코루틴을 사용한다.
     // virtual protected IEnumerator ProcessAttack(float attackspeed) {ㆍㆍㆍ}
     // 몬스터 공격 종료 함수 - 몬스터 공격 애니메이션의 특정 프레임에서 호출된다.
-    override protected void EndAttack()
-    {
-        m_bAttack = false; // 몬스터 공격 불가능
-        m_eMonsterState = SetMonsterMoveState(E_MONSTER_MOVE_STATE.CHASE); // 몬스터 동작 FSM 변경 함수
-    }
+    // 몬스터 공격 종료 함수(가상 함수). 몬스터 공격 애니메이션의 특정 프레임에서 호출된다. - 부모 클래스인 Monster_Move의 EndAttack() 함수를 사용한다.
+    // virtual protected void EndAttack()
 
     // 몬스터 피격 함수 - 부모 클래스인 Slime1_Move의 Attacked() 함수를 사용한다.
     // override public void Attacked() {ㆍㆍㆍ}
