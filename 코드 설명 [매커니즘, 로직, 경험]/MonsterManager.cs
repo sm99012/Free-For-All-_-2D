@@ -625,21 +625,21 @@ public class MonsterDictionary // 몬스터 도감 데이터
     public STATUS m_SMonster_Death_Reward_STATUS;                              // 몬스터 제거(토벌) 보상 스탯(능력치)
     public SOC m_SMonster_Death_Reward_SOC;                                    // 몬스터 제거(토벌) 보상 스탯(평판)
     // 몬스터 제거(놓아주기) 보상 관련 변수
-    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Equip;          // 몬스터 제거(토벌) 보상 장비아이템 고유코드
-    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Equip_DropRate; // 몬스터 제거(토벌) 보상 장비아이템 획득 확률
-    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Equip_Count;    // 몬스터 제거(토벌) 보상 장비아이템 개수
-    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Use;            // 몬스터 제거(토벌) 보상 소비아이템 고유코드
-    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Use_DropRate;   // 몬스터 제거(토벌) 보상 소비아이템 획득 확률
-    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Use_Count;      // 몬스터 제거(토벌) 보상 소비아이템 개수
-    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Etc;            // 몬스터 제거(토벌) 보상 기타아이템 고유코드
-    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Etc_DropRate;   // 몬스터 제거(토벌) 보상 기타아이템 획득 확률
-    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Etc_Count;      // 몬스터 제거(토벌) 보상 기타아이템 개수
-    public int m_nMonster_Goaway_Reward_Gold_Min;                              // 몬스터 제거(토벌) 보상 골드(재화) 최소
-    public int m_nMonster_Goaway_Reward_Gold_Max;                              // 몬스터 제거(토벌) 보상 골드(재화) 최대
-    public int m_nMonster_Goaway_Reward_Gold_Count;                            // 몬스터 제거(토벌) 보상 골드(재화) 개수
-    public int m_nMonster_Goaway_Reward_Gold_DropRate;                         // 몬스터 제거(토벌) 보상 골드(재화) 획득 확률
-    public STATUS m_SMonster_Goaway_Reward_STATUS;                             // 몬스터 제거(토벌) 보상 스탯(능력치)
-    public SOC m_SMonster_Goaway_Reward_SOC;                                   // 몬스터 제거(토벌) 보상 스탯(평판)
+    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Equip;          // 몬스터 제거(놓아주기) 보상 장비아이템 고유코드
+    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Equip_DropRate; // 몬스터 제거(놓아주기) 보상 장비아이템 획득 확률
+    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Equip_Count;    // 몬스터 제거(놓아주기) 보상 장비아이템 개수
+    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Use;            // 몬스터 제거(놓아주기) 보상 소비아이템 고유코드
+    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Use_DropRate;   // 몬스터 제거(놓아주기) 보상 소비아이템 획득 확률
+    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Use_Count;      // 몬스터 제거(놓아주기) 보상 소비아이템 개수
+    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Etc;            // 몬스터 제거(놓아주기) 보상 기타아이템 고유코드
+    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Etc_DropRate;   // 몬스터 제거(놓아주기) 보상 기타아이템 획득 확률
+    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Etc_Count;      // 몬스터 제거(놓아주기) 보상 기타아이템 개수
+    public int m_nMonster_Goaway_Reward_Gold_Min;                              // 몬스터 제거(놓아주기) 보상 골드(재화) 최소
+    public int m_nMonster_Goaway_Reward_Gold_Max;                              // 몬스터 제거(놓아주기) 보상 골드(재화) 최대
+    public int m_nMonster_Goaway_Reward_Gold_Count;                            // 몬스터 제거(놓아주기) 보상 골드(재화) 개수
+    public int m_nMonster_Goaway_Reward_Gold_DropRate;                         // 몬스터 제거(놓아주기) 보상 골드(재화) 획득 확률
+    public STATUS m_SMonster_Goaway_Reward_STATUS;                             // 몬스터 제거(놓아주기) 보상 스탯(능력치)
+    public SOC m_SMonster_Goaway_Reward_SOC;                                   // 몬스터 제거(놓아주기) 보상 스탯(평판)
 
     // 몬스터 도감 데이터 생성자
     public MonsterDictionary(string monstername, int monstercode, string path_sprite, int solvemax, int solvecurrent = 0, E_MONSTER_KIND emk = E_MONSTER_KIND.SLIME, E_MONSTER_GRADE emg = E_MONSTER_GRADE.S1)
@@ -771,7 +771,7 @@ public class MonsterDictionary // 몬스터 도감 데이터
             m_nlMonster_Dictionary_Death_Reward_Item_Etc_Count.Add(item[i]);
         }
     }
-    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(토벌) 보상 골드(재화)
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(놓아주기) 보상 골드(재화)
     public void MonsterDictionary_Add_100P_Death_Reward_Gold(int count = 0, int mingold = 0, int maxgold = 0, int rate = 0) // count : 골드(재화) 개수, mingold : 골드(재화) 최소, maxgold : 골드(재화) 최대, rate : 골드(재화) 획득 확률
     {
         this.m_nMonster_Death_Reward_Gold_Count = count;
@@ -779,94 +779,94 @@ public class MonsterDictionary // 몬스터 도감 데이터
         this.m_nMonster_Death_Reward_Gold_Min = mingold;
         this.m_nMonster_Death_Reward_Gold_DropRate = rate;
     }
-    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(토벌) 보상 스탯(능력치, 평판)
-    public void MonsterDictionary_Add_100P_SS_Death(STATUS rewardstatus, SOC rewardsoc) // rewardstatus : ,
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(놓아주기) 보상 스탯(능력치, 평판)
+    public void MonsterDictionary_Add_100P_SS_Death(STATUS rewardstatus, SOC rewardsoc) // rewardstatus : 몬스터 제거(놓아주기) 보상 스탯(능력치), rewardsoc : 몬스터 제거(놓아주기) 보상 스탯(평판)
     {
         this.m_SMonster_Death_Reward_STATUS = rewardstatus;
         this.m_SMonster_Death_Reward_SOC = rewardsoc;
     }
-    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 
-    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Equip(params int[] item) // item(가변인자) : 
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(놓아주기) 보상 장비아이템 고유코드
+    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Equip(params int[] item) // item(가변인자) : 몬스터 제거(놓아주기) 보상 장비아이템 고유코드
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Goaway_Reward_Item_Equip.Add(item[i]);
         }
     }
-    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 
-    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Equip_DropRate(params int[] item) // item(가변인자) : 
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(놓아주기) 보상 장비아이템 획득 확률
+    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Equip_DropRate(params int[] item) // item(가변인자) : 몬스터 제거(놓아주기) 보상 장비아이템 획득 확률
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Goaway_Reward_Item_Equip_DropRate.Add(item[i]);
         }
     }
-    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 
-    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Equip_Count(params int[] item) // item(가변인자) : 
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(놓아주기) 보상 장비아이템 개수
+    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Equip_Count(params int[] item) // item(가변인자) : 몬스터 제거(놓아주기) 보상 장비아이템 개수
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Goaway_Reward_Item_Equip_Count.Add(item[i]);
         }
     }
-    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 
-    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Use(params int[] item) // item(가변인자) : 
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(놓아주기) 보상 소비아이템 고유코드
+    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Use(params int[] item) // item(가변인자) : 몬스터 제거(놓아주기) 보상 소비아이템 고유코드
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Goaway_Reward_Item_Use.Add(item[i]);
         }
     }
-    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 
-    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Use_DropRate(params int[] item) // item(가변인자) : 
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(놓아주기) 보상 소비아이템 획득 확률
+    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Use_DropRate(params int[] item) // item(가변인자) : 몬스터 제거(놓아주기) 보상 소비아이템 획득 확률
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Goaway_Reward_Item_Use_DropRate.Add(item[i]);
         }
     }
-    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 
-    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Use_Count(params int[] item) // item(가변인자) : 
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(놓아주기) 보상 소비아이템 개수
+    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Use_Count(params int[] item) // item(가변인자) : 몬스터 제거(놓아주기) 보상 소비아이템 개수
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Goaway_Reward_Item_Use_Count.Add(item[i]);
         }
     }
-    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 
-    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Etc(params int[] item) // item(가변인자) : 
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(놓아주기) 보상 기타아이템 고유코드
+    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Etc(params int[] item) // item(가변인자) : 몬스터 제거(놓아주기) 보상 기타아이템 고유코드
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Goaway_Reward_Item_Etc.Add(item[i]);
         }
     }
-    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 
-    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Etc_DropRate(params int[] item) // item(가변인자) : 
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(놓아주기) 보상 기타아이템 획득 확률
+    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Etc_DropRate(params int[] item) // item(가변인자) : 몬스터 제거(놓아주기) 보상 기타아이템 획득 확률
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Goaway_Reward_Item_Etc_DropRate.Add(item[i]);
         }
     }
-    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 
-    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Etc_Count(params int[] item) // item(가변인자) : 
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(놓아주기) 보상 기타아이템 개수
+    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Etc_Count(params int[] item) // item(가변인자) : 몬스터 제거(놓아주기) 보상 기타아이템 개수
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Goaway_Reward_Item_Etc_Count.Add(item[i]);
         }
     }
-    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 
-    public void MonsterDictionary_Add_100P_Goaway_Reward_Gold(int count = 0, int mingold = 0, int maxgold = 0, int rate = 0)
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(놓아주기) 보상 골드(재화)
+    public void MonsterDictionary_Add_100P_Goaway_Reward_Gold(int count = 0, int mingold = 0, int maxgold = 0, int rate = 0) // count : 골드(재화) 개수, mingold : 골드(재화) 최소, maxgold : 골드(재화) 최대, rate : 골드(재화) 획득 확률
     {
         this.m_nMonster_Goaway_Reward_Gold_Count = count;
         this.m_nMonster_Goaway_Reward_Gold_Max = maxgold;
         this.m_nMonster_Goaway_Reward_Gold_Min = mingold;
         this.m_nMonster_Goaway_Reward_Gold_DropRate = rate;
     }
-    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 
-    public void MonsterDictionary_Add_100P_SS_Goaway(STATUS rewardstatus, SOC rewardsoc)
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(놓아주기) 보상 스탯(능력치, 평판)
+    public void MonsterDictionary_Add_100P_SS_Goaway(STATUS rewardstatus, SOC rewardsoc) // rewardstatus : 몬스터 제거(놓아주기) 보상 스탯(능력치), rewardsoc : 몬스터 제거(놓아주기) 보상 스탯(평판)
     {
         this.m_SMonster_Goaway_Reward_STATUS = rewardstatus;
         this.m_SMonster_Goaway_Reward_SOC = rewardsoc;
