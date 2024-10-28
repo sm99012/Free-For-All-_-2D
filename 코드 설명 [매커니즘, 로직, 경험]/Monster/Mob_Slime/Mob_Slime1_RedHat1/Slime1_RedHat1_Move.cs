@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Slime1_RedHat1_Move : Slime1_Move // 기반이 되는 Slime1_Move 클래스 상속
 {
-    // 부모 클래스인 Slime1_Total의 Awake() 함수를 사용한다.
+    // 부모 클래스인 Slime1_Move의 Awake() 함수를 사용한다.
     // private void Awake() {ㆍㆍㆍ}
 
-    // 부모 클래스인 Slime1_Total의 Start() 함수를 사용한다.
+    // 부모 클래스인 Slime1_Move의 Start() 함수를 사용한다.
     // void Start() {ㆍㆍㆍ}
 
     // 몬스터 이동 함수 - 부모 클래스인 Slime1_Move의 Move() 함수를 사용한다.
