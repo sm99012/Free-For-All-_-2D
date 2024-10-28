@@ -225,7 +225,7 @@ public class Slime1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
                 m_ms_Status.Goaway(); // 몬스터 놓아주기 판정 함수
                 m_mm_Move.Goaway(); // 몬스터 놓아주기 판정 함수
                 m_md_Drop.DropItem_Goaway(m_ms_Status.m_nMonsterCode, this.gameObject.transform.position); // 몬스터 놓아주기로 인한 아이템 드롭(아이템 필드 생성)
-                m_me_Effect.Effect_Goaway(this.transform.position);// 몬스터 놓아주기 이펙트 연출 함수
+                m_me_Effect.Effect_Goaway(this.transform.position); // 몬스터 놓아주기 이펙트 연출 함수
 
                 StartCoroutine(ProcessRespone(10)); // 몬스터 리스폰 코루틴(리스폰까지 필요한 대기시간 : 10초)
 
