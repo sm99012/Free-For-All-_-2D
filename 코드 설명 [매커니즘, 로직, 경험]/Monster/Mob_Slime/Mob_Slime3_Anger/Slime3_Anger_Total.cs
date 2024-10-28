@@ -227,7 +227,7 @@ public class Slime3_Anger_Total : Monster_Total // 기반이 되는 Monster_Tota
     // 몬스터 놓아주기 판정 함수
     override public SOC Goaway()
     {
-        if (m_bWait == false)
+        if (m_bWait == false) // 다른 오브젝트와 상호작용 가능
         {
             if (m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.IDLE || m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.RUN) // 몬스터 동작 FSM 상태 판단
             {
