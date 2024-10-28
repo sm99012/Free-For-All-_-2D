@@ -23,7 +23,6 @@ public class MonsterManager : MonoBehaviour
             return instance;
         }
     }
-
     private void Awake()
     {
         if (instance == null)
@@ -36,15 +35,16 @@ public class MonsterManager : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-        InitialSet();
+        InitialSet(); // 변수 초기화 및 몬스터 도감(정보) 데이터 로딩
     }
 
-    public static Dictionary<int, MonsterDictionary> m_Dictionary_Monster;
+    public static Dictionary<int, MonsterDictionary> m_Dictionary_Monster; // 몬스터 도감 딕셔너리. Dictionary <Key : 몬스터 고유코드, Value : 몬스터 도감(정보)>
 
-    // 몬스터 사전 해금 비율 관련 변수.
-    float m_fMonster_Dictionary_Solve_Rate_Before;
-    float m_fMonster_Dictionary_Solve_Rate_After;
+    // 몬스터 도감 해금 비율 계산 관련 변수
+    float m_fMonster_Dictionary_Solve_Rate_Before; // 이전 몬스터 도감 해금 비율
+    float m_fMonster_Dictionary_Solve_Rate_After;  // 이후 몬스터 도감 해금 비율
 
+    // 변수 초기화 및 몬스터 도감(정보) 데이터 로딩
     public void InitialSet()
     {
         m_Dictionary_Monster = new Dictionary<int, MonsterDictionary>();
@@ -486,155 +486,162 @@ public class MonsterManager : MonoBehaviour
         }
     }
 
-    // Update Monster Dictionary 
-    public void Update_Monster_Dictionary(E_MONSTER_KIND emk, int monstercode)
+    // 몬스터 도감 갱신(업데이트) 함수
+    public void Update_Monster_Dictionary(E_MONSTER_KIND emk, int monstercode) // emk : 몬스터 타입, monstercode : 몬스터 고유코드
     {
-        if (m_Dictionary_Monster.ContainsKey(monstercode) == true)
+        if (m_Dictionary_Monster.ContainsKey(monstercode) == true) // 해당 몬스터 고유코드를 가진 몬스터가 존재하는지 판단
         {
-            if (m_Dictionary_Monster[monstercode].m_nMonster_Dictionary_Solve_Max > m_Dictionary_Monster[monstercode].m_nMonster_Dictionary_Solve_Current)
+            if (m_Dictionary_Monster[monstercode].m_nMonster_Dictionary_Solve_Max > m_Dictionary_Monster[monstercode].m_nMonster_Dictionary_Solve_Current) // 몬스터 도감 갱신 최대 마리수 > 몬스터 도감 갱신 현재 마리수
             {
-                m_fMonster_Dictionary_Solve_Rate_Before = m_Dictionary_Monster[monstercode].m_fMonster_Dictionary_Solve_Rate;
+                m_fMonster_Dictionary_Solve_Rate_Before = m_Dictionary_Monster[monstercode].m_fMonster_Dictionary_Solve_Rate; // 이전 몬스터 도감 해금 비율 설정
 
                 m_Dictionary_Monster[monstercode].m_nMonster_Dictionary_Solve_Current += 1;
-                m_Dictionary_Monster[monstercode].m_fMonster_Dictionary_Solve_Rate = Mathf.Round(((float)m_Dictionary_Monster[monstercode].m_nMonster_Dictionary_Solve_Current / (float)m_Dictionary_Monster[monstercode].m_nMonster_Dictionary_Solve_Max) * 100);
+                m_Dictionary_Monster[monstercode].m_fMonster_Dictionary_Solve_Rate = Mathf.Round(((float)m_Dictionary_Monster[monstercode].m_nMonster_Dictionary_Solve_Current / (float)m_Dictionary_Monster[monstercode].m_nMonster_Dictionary_Solve_Max) * 100); // 몬스터 도감 해금 비율 계산
 
-                m_fMonster_Dictionary_Solve_Rate_After = m_Dictionary_Monster[monstercode].m_fMonster_Dictionary_Solve_Rate;
+                m_fMonster_Dictionary_Solve_Rate_After = m_Dictionary_Monster[monstercode].m_fMonster_Dictionary_Solve_Rate; // 이후 몬스터 도감 해금 비율 설정
 
+                // 몬스터 도감 해금 비율에 따른 알림 업데이트
                 if (m_fMonster_Dictionary_Solve_Rate_Before == 0)
                 {
                     if (m_fMonster_Dictionary_Solve_Rate_After > 0)
-                        GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After);
-                    //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 등록.");
+                        GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After); // 몬스터 도감 알림 업데이트 함수
+                         //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 등록.");
                     else if (m_fMonster_Dictionary_Solve_Rate_After >= 25)
-                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After);
-                    //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 25% 달성!");
+                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After); // 몬스터 도감 알림 업데이트 함수
+                         //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 25% 달성!");
                     else if (m_fMonster_Dictionary_Solve_Rate_After >= 50)
-                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After);
-                    //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 50% 달성!!");
+                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After); // 몬스터 도감 알림 업데이트 함수
+                         //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 50% 달성!!");
                     else if (m_fMonster_Dictionary_Solve_Rate_After >= 75)
-                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After);
-                    //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 75% 달성!!!");
+                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After); // 몬스터 도감 알림 업데이트 함수
+                         //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 75% 달성!!!");
                     else if (m_fMonster_Dictionary_Solve_Rate_After >= 100)
-                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After);
-                    //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 100% 달성!!!!");
+                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After); // 몬스터 도감 알림 업데이트 함수
+                         //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 100% 달성!!!!");
                 }
                 else if (m_fMonster_Dictionary_Solve_Rate_Before < 25)
                 {
                     if (m_fMonster_Dictionary_Solve_Rate_After >= 25)
-                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After);
-                    //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 25% 달성!");
+                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After); // 몬스터 도감 알림 업데이트 함수
+                         //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 25% 달성!");
                     else if (m_fMonster_Dictionary_Solve_Rate_After >= 50)
-                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After);
-                    //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 50% 달성!!");
+                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After); // 몬스터 도감 알림 업데이트 함수
+                         //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 50% 달성!!");
                     else if (m_fMonster_Dictionary_Solve_Rate_After >= 75)
-                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After);
-                    //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 75% 달성!!!");
+                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After); // 몬스터 도감 알림 업데이트 함수
+                         //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 75% 달성!!!");
                     else if (m_fMonster_Dictionary_Solve_Rate_After >= 100)
-                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After);
-                    //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 100% 달성!!!!");
+                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After); // 몬스터 도감 알림 업데이트 함수
+                         //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 100% 달성!!!!");
                 }
                 else if (m_fMonster_Dictionary_Solve_Rate_Before < 50 )
                 {
                     if (m_fMonster_Dictionary_Solve_Rate_After >= 50)
-                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After);
-                    //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 50% 달성!!");
+                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After); // 몬스터 도감 알림 업데이트 함수
+                         //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 50% 달성!!");
                     else if (m_fMonster_Dictionary_Solve_Rate_After >= 75)
-                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After);
-                    //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 75% 달성!!!");
+                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After); // 몬스터 도감 알림 업데이트 함수
+                         //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 75% 달성!!!");
                     else if (m_fMonster_Dictionary_Solve_Rate_After >= 100)
-                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After);
-                    //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 100% 달성!!!!");
+                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After); // 몬스터 도감 알림 업데이트 함수
+                         //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 100% 달성!!!!");
                 }
                 else if (m_fMonster_Dictionary_Solve_Rate_Before < 75)
                 {
                     if (m_fMonster_Dictionary_Solve_Rate_After >= 75)
-                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After);
-                    //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 75% 달성!!!");
+                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After); // 몬스터 도감 알림 업데이트 함수
+                         //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 75% 달성!!!");
                     else if (m_fMonster_Dictionary_Solve_Rate_After >= 100)
-                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After);
-                    //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 100% 달성!!!!");
+                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After); // 몬스터 도감 알림 업데이트 함수
+                         //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 100% 달성!!!!");
                 }
                 else if (m_fMonster_Dictionary_Solve_Rate_Before < 100)
                 {
                     if (m_fMonster_Dictionary_Solve_Rate_After >= 100)
-                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After);
-                    //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 100% 달성!!!!");
+                         GUIManager_Total.Instance.Sparkle_GUI_UpBar_Dictionary_ON(emk, monstercode, (int)m_fMonster_Dictionary_Solve_Rate_After); // 몬스터 도감 알림 업데이트 함수
+                         //Debug.Log("[" + m_Dictionary_Monster[monstercode].m_sMonster_Name + "] 해금 100% 달성!!!!");
                 }
             }
         }
     }
 
-    // Update Monster Dictionary_Solve Rate
+    // 몬스터 도감 딕셔너리의 몬스터 도감 해금 비율 설정(저장)
     public void Update_Monster_Dictionary_Solve_Rate()
     {
         foreach(KeyValuePair<int, MonsterDictionary> dictionary in m_Dictionary_Monster)
         {
-            dictionary.Value.m_fMonster_Dictionary_Solve_Rate = Mathf.Round(((float)dictionary.Value.m_nMonster_Dictionary_Solve_Current / (float)dictionary.Value.m_nMonster_Dictionary_Solve_Max) * 100);
+            dictionary.Value.m_fMonster_Dictionary_Solve_Rate = Mathf.Round(((float)dictionary.Value.m_nMonster_Dictionary_Solve_Current / (float)dictionary.Value.m_nMonster_Dictionary_Solve_Max) * 100); // 몬스터 도감 해금 비율 계산
         }
     }
 }
 
+// 몬스터 등급 : { S1, S2, S3, S4, S5, S6, S7, S8, S9 }
 public enum E_MONSTER_GRADE { S1, S2, S3, S4, S5, S6, S7, S8, S9 }
 
-public class MonsterDictionary
+public class MonsterDictionary // 몬스터 도감 데이터
 {
-    public string m_sMonster_Name;
-    public int m_nMonster_Code;
-    public Sprite m_spMonster_Sprite;
-    public E_MONSTER_KIND m_eMonster_Kind;
-    public E_MONSTER_GRADE m_eMonster_Grade;
+    public string m_sMonster_Name;                  // 몬스터 이름
+    
+    public int m_nMonster_Code;                     // 몬스터 고유코드
+    
+    public Sprite m_spMonster_Sprite;               // 몬스터 스프라이트(이미지)
+    
+    public E_MONSTER_KIND m_eMonster_Kind;          // 몬스터 타입
+    public E_MONSTER_GRADE m_eMonster_Grade;        // 몬스터 등급
 
-    // 몬스터 딕셔너리 해금 필요 총 마리수
-    public int m_nMonster_Dictionary_Solve_Max;
-    // 몬스터 딕셔너리 해금 현채 마리수
-    public int m_nMonster_Dictionary_Solve_Current;
-    // 몬스터 딕셔너리 해금 비율: 0 ~ 100
-    public float m_fMonster_Dictionary_Solve_Rate;
+    public int m_nMonster_Dictionary_Solve_Max;     // 몬스터 도감 데이터 갱신 최대 마리수
+    public int m_nMonster_Dictionary_Solve_Current; // 몬스터 도감 데이터 갱신 현재 마리수
+    public float m_fMonster_Dictionary_Solve_Rate;  // 몬스터 도감 데이터 해금 비율 : 0 ~ 100(%)
 
-    // Info
-    // 몬스터 딕셔너리 해금률 0%: +몬스터 이름.
-    // 몬스터 딕셔너리 해금률 25%: +몬스터 이미지, +몬스터 설명1(몬스터 컨셉 설명)
-    public string m_sMonster_Dictionary_Description_25P;
-    // 몬스터 딕셔너리 해금률 50%: +몬스터 설명2(몬스터 특징), +몬스터 출몰 지역
-    public string m_sMonster_Dictionary_Description_50P;
-    public List<string> m_slMonster_Dictionary_AppearArea_50P;
-    // 몬스터 딕셔너리 해금률 75%: +몬스터 설명3(몬스터 리스폰 시간, 드랍 템, 등등의 정보), +몬스터 능력치
-    public string m_sMonster_Dictionary_Description_75P;
-    public STATUS m_SMonster_Dictionary_STATUS;
-    // 몬스터 딕셔너리 해금률 100%: +몬스터 보상(아이템(드랍율 표시), 능력치)
-    // Death
-    public List<int> m_nlMonster_Dictionary_Death_Reward_Item_Equip;
-    public List<int> m_nlMonster_Dictionary_Death_Reward_Item_Equip_DropRate;
-    public List<int> m_nlMonster_Dictionary_Death_Reward_Item_Equip_Count;
-    public List<int> m_nlMonster_Dictionary_Death_Reward_Item_Use;
-    public List<int> m_nlMonster_Dictionary_Death_Reward_Item_Use_DropRate;
-    public List<int> m_nlMonster_Dictionary_Death_Reward_Item_Use_Count;
-    public List<int> m_nlMonster_Dictionary_Death_Reward_Item_Etc;
-    public List<int> m_nlMonster_Dictionary_Death_Reward_Item_Etc_DropRate;
-    public List<int> m_nlMonster_Dictionary_Death_Reward_Item_Etc_Count;
-    public int m_nMonster_Death_Reward_Gold_Min;
-    public int m_nMonster_Death_Reward_Gold_Max;
-    public int m_nMonster_Death_Reward_Gold_Count;
-    public int m_nMonster_Death_Reward_Gold_DropRate;
-    public STATUS m_SMonster_Death_Reward_STATUS;
-    public SOC m_SMonster_Death_Reward_SOC;
-    // Goaway
-    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Equip;
-    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Equip_DropRate;
-    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Equip_Count;
-    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Use;
-    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Use_DropRate;
-    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Use_Count;
-    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Etc;
-    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Etc_DropRate;
-    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Etc_Count;
-    public int m_nMonster_Goaway_Reward_Gold_Min;
-    public int m_nMonster_Goaway_Reward_Gold_Max;
-    public int m_nMonster_Goaway_Reward_Gold_Count;
-    public int m_nMonster_Goaway_Reward_Gold_DropRate;
-    public STATUS m_SMonster_Goaway_Reward_STATUS;
-    public SOC m_SMonster_Goaway_Reward_SOC;
+    // 몬스터 도감 데이터 해금 비율별 몬스터 정보
+    // 몬스터 도감 데이터 해금 비율 0% : 몬스터 이름
+    // 몬스터 도감 데이터 해금 비율 25% : + 몬스터 이미지, 몬스터 설명1(몬스터 컨셉)
+    // 몬스터 도감 데이터 해금 비율 50% : + 몬스터 설명2(몬스터 특징1), 몬스터 출몰 지역
+    // 몬스터 도감 데이터 해금 비율 75% : + 몬스터 설명3(몬스터 특징2), 몬스터 리스폰 시간, 몬스터 스탯(능력치)
+    // 몬스터 도감 데이터 해금 비율 100% : + 몬스터 제거(토벌 + 놓아주기) 보상(아이템(획득 확률), 스탯(능력치, 평판))
 
+    public string m_sMonster_Dictionary_Description_25P; // 몬스터 설명1(몬스터 도감 데이터 해금 비율 : 25%)
+    public string m_sMonster_Dictionary_Description_50P; // 몬스터 설명2(몬스터 도감 데이터 해금 비율 : 50%)
+    public string m_sMonster_Dictionary_Description_75P; // 몬스터 설명3(몬스터 도감 데이터 해금 비율 : 75%)
+
+    public List<string> m_slMonster_Dictionary_AppearArea_50P; // 몬스터 출몰 지역 리스트(몬스터 도감 데이터 해금 비율 : 50%)
+    
+    public STATUS m_SMonster_Dictionary_STATUS; // 몬스터 스탯(능력치)(몬스터 도감 데이터 해금 비율 : 75%)
+    
+    // 몬스터 제거(토벌) 보상 관련 변수
+    public List<int> m_nlMonster_Dictionary_Death_Reward_Item_Equip;           // 몬스터 제거(토벌) 보상 장비아이템 고유코드
+    public List<int> m_nlMonster_Dictionary_Death_Reward_Item_Equip_DropRate;  // 몬스터 제거(토벌) 보상 장비아이템 획득 확률
+    public List<int> m_nlMonster_Dictionary_Death_Reward_Item_Equip_Count;     // 몬스터 제거(토벌) 보상 장비아이템 개수
+    public List<int> m_nlMonster_Dictionary_Death_Reward_Item_Use;             // 몬스터 제거(토벌) 보상 소비아이템 고유코드
+    public List<int> m_nlMonster_Dictionary_Death_Reward_Item_Use_DropRate;    // 몬스터 제거(토벌) 보상 소비아이템 획득 확률
+    public List<int> m_nlMonster_Dictionary_Death_Reward_Item_Use_Count;       // 몬스터 제거(토벌) 보상 소비아이템 개수
+    public List<int> m_nlMonster_Dictionary_Death_Reward_Item_Etc;             // 몬스터 제거(토벌) 보상 기타아이템 고유코드
+    public List<int> m_nlMonster_Dictionary_Death_Reward_Item_Etc_DropRate;    // 몬스터 제거(토벌) 보상 기타아이템 획득 확률
+    public List<int> m_nlMonster_Dictionary_Death_Reward_Item_Etc_Count;       // 몬스터 제거(토벌) 보상 기타아이템 개수
+    public int m_nMonster_Death_Reward_Gold_Min;                               // 몬스터 제거(토벌) 보상 골드(재화) 최소
+    public int m_nMonster_Death_Reward_Gold_Max;                               // 몬스터 제거(토벌) 보상 골드(재화) 최대
+    public int m_nMonster_Death_Reward_Gold_Count;                             // 몬스터 제거(토벌) 보상 골드(재화) 개수
+    public int m_nMonster_Death_Reward_Gold_DropRate;                          // 몬스터 제거(토벌) 보상 골드(재화) 획득 확률
+    public STATUS m_SMonster_Death_Reward_STATUS;                              // 몬스터 제거(토벌) 보상 스탯(능력치)
+    public SOC m_SMonster_Death_Reward_SOC;                                    // 몬스터 제거(토벌) 보상 스탯(평판)
+    // 몬스터 제거(놓아주기) 보상 관련 변수
+    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Equip;          // 몬스터 제거(토벌) 보상 장비아이템 고유코드
+    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Equip_DropRate; // 몬스터 제거(토벌) 보상 장비아이템 획득 확률
+    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Equip_Count;    // 몬스터 제거(토벌) 보상 장비아이템 개수
+    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Use;            // 몬스터 제거(토벌) 보상 소비아이템 고유코드
+    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Use_DropRate;   // 몬스터 제거(토벌) 보상 소비아이템 획득 확률
+    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Use_Count;      // 몬스터 제거(토벌) 보상 소비아이템 개수
+    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Etc;            // 몬스터 제거(토벌) 보상 기타아이템 고유코드
+    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Etc_DropRate;   // 몬스터 제거(토벌) 보상 기타아이템 획득 확률
+    public List<int> m_nlMonster_Dictionary_Goaway_Reward_Item_Etc_Count;      // 몬스터 제거(토벌) 보상 기타아이템 개수
+    public int m_nMonster_Goaway_Reward_Gold_Min;                              // 몬스터 제거(토벌) 보상 골드(재화) 최소
+    public int m_nMonster_Goaway_Reward_Gold_Max;                              // 몬스터 제거(토벌) 보상 골드(재화) 최대
+    public int m_nMonster_Goaway_Reward_Gold_Count;                            // 몬스터 제거(토벌) 보상 골드(재화) 개수
+    public int m_nMonster_Goaway_Reward_Gold_DropRate;                         // 몬스터 제거(토벌) 보상 골드(재화) 획득 확률
+    public STATUS m_SMonster_Goaway_Reward_STATUS;                             // 몬스터 제거(토벌) 보상 스탯(능력치)
+    public SOC m_SMonster_Goaway_Reward_SOC;                                   // 몬스터 제거(토벌) 보상 스탯(평판)
+
+    // 몬스터 도감 데이터 생성자
     public MonsterDictionary(string monstername, int monstercode, string path_sprite, int solvemax, int solvecurrent = 0, E_MONSTER_KIND emk = E_MONSTER_KIND.SLIME, E_MONSTER_GRADE emg = E_MONSTER_GRADE.S1)
     {
         this.m_sMonster_Name = monstername;
@@ -671,12 +678,14 @@ public class MonsterDictionary
         this.m_nMonster_Death_Reward_Gold_Max = 0;
         this.m_nMonster_Death_Reward_Gold_Count = 0;
         this.m_nMonster_Death_Reward_Gold_DropRate = 0;
-}
-    public void MonsterDictionary_Add_25P(string description)
+    }
+    // 몬스터 도감 데이터 해금 비율 25% 설정 함수
+    public void MonsterDictionary_Add_25P(string description) // description : 몬스터 설명1
     {
         this.m_sMonster_Dictionary_Description_25P = description;
     }
-    public void MonsterDictionary_Add_50P(string description, params string[] appeararea)
+    // 몬스터 도감 데이터 해금 비율 50% 설정 함수
+    public void MonsterDictionary_Add_50P(string description, params string[] appeararea) // description : 몬스터 설명2, appeararea(가변인자) : 몬스터 출몰 지역
     {
         this.m_sMonster_Dictionary_Description_50P = description;
         for (int i = 0; i < appeararea.Length; i++)
@@ -684,150 +693,171 @@ public class MonsterDictionary
             this.m_slMonster_Dictionary_AppearArea_50P.Add(appeararea[i]);
         }
     }
-    public void MonsterDictionary_Add_75P(string description, STATUS monsterstatus)
+    // 몬스터 도감 데이터 해금 비율 75% 설정 함수
+    public void MonsterDictionary_Add_75P(string description, STATUS monsterstatus) // description : 몬스터 설명3, monsterstatus : 몬스터 스탯(능력치)
     {
         this.m_sMonster_Dictionary_Description_75P = description;
         this.m_SMonster_Dictionary_STATUS = monsterstatus;
     }
-    public void MonsterDictionary_Add_100P_Death_Reward_Item_Equip(params int[] item)
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(토벌) 보상 장비아이템 고유코드
+    public void MonsterDictionary_Add_100P_Death_Reward_Item_Equip(params int[] item) // item(가변인자) : 몬스터 제거(토벌) 보상 장비아이템 고유코드
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Death_Reward_Item_Equip.Add(item[i]);
         }
     }
-    public void MonsterDictionary_Add_100P_Death_Reward_Item_Equip_DropRate(params int[] item)
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(토벌) 보상 장비아이템 획득 확률
+    public void MonsterDictionary_Add_100P_Death_Reward_Item_Equip_DropRate(params int[] item) // item(가변인자) : 몬스터 제거(토벌) 보상 장비아이템 획득 확률
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Death_Reward_Item_Equip_DropRate.Add(item[i]);
         }
     }
-    public void MonsterDictionary_Add_100P_Death_Reward_Item_Equip_Count(params int [] item)
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(토벌) 보상 장비아이템 개수
+    public void MonsterDictionary_Add_100P_Death_Reward_Item_Equip_Count(params int [] item) // item(가변인자) : 몬스터 제거(토벌) 보상 장비아이템 개수
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Death_Reward_Item_Equip_Count.Add(item[i]);
         }
     }
-    public void MonsterDictionary_Add_100P_Death_Reward_Item_Use(params int[] item)
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(토벌) 보상 소비아이템 고유코드
+    public void MonsterDictionary_Add_100P_Death_Reward_Item_Use(params int[] item) // item(가변인자) : 몬스터 제거(토벌) 보상 소비아이템 고유코드
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Death_Reward_Item_Use.Add(item[i]);
         }
     }
-    public void MonsterDictionary_Add_100P_Death_Reward_Item_Use_DropRate(params int[] item)
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(토벌) 보상 소비아이템 획득 확률
+    public void MonsterDictionary_Add_100P_Death_Reward_Item_Use_DropRate(params int[] item) // item(가변인자) : 몬스터 제거(토벌) 보상 소비아이템 획득 확률
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Death_Reward_Item_Use_DropRate.Add(item[i]);
         }
     }
-    public void MonsterDictionary_Add_100P_Death_Reward_Item_Use_Count(params int[] item)
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(토벌) 보상 소비아이템 개수
+    public void MonsterDictionary_Add_100P_Death_Reward_Item_Use_Count(params int[] item) // item(가변인자) : 몬스터 제거(토벌) 보상 소비아이템 개수
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Death_Reward_Item_Use_Count.Add(item[i]);
         }
     }
-    public void MonsterDictionary_Add_100P_Death_Reward_Item_Etc(params int[] item)
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(토벌) 보상 기타아이템 고유코드
+    public void MonsterDictionary_Add_100P_Death_Reward_Item_Etc(params int[] item) // item(가변인자) : 몬스터 제거(토벌) 보상 기타아이템 고유코드
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Death_Reward_Item_Etc.Add(item[i]);
         }
     }
-    public void MonsterDictionary_Add_100P_Death_Reward_Item_Etc_DropRate(params int[] item)
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(토벌) 보상 기타아이템 획득 확률
+    public void MonsterDictionary_Add_100P_Death_Reward_Item_Etc_DropRate(params int[] item) // item(가변인자) : 몬스터 제거(토벌) 보상 기타아이템 획득 확률
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Death_Reward_Item_Etc_DropRate.Add(item[i]);
         }
     }
-    public void MonsterDictionary_Add_100P_Death_Reward_Item_Etc_Count(params int[] item)
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(토벌) 보상 기타아이템 개수
+    public void MonsterDictionary_Add_100P_Death_Reward_Item_Etc_Count(params int[] item) // item(가변인자) : 몬스터 제거(토벌) 보상 기타아이템 개수
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Death_Reward_Item_Etc_Count.Add(item[i]);
         }
     }
-    public void MonsterDictionary_Add_100P_Death_Reward_Gold(int count = 0, int mingold = 0, int maxgold = 0, int rate = 0)
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(토벌) 보상 골드(재화)
+    public void MonsterDictionary_Add_100P_Death_Reward_Gold(int count = 0, int mingold = 0, int maxgold = 0, int rate = 0) // count : 골드(재화) 개수, mingold : 골드(재화) 최소, maxgold : 골드(재화) 최대, rate : 골드(재화) 획득 확률
     {
         this.m_nMonster_Death_Reward_Gold_Count = count;
         this.m_nMonster_Death_Reward_Gold_Max = maxgold;
         this.m_nMonster_Death_Reward_Gold_Min = mingold;
         this.m_nMonster_Death_Reward_Gold_DropRate = rate;
     }
-    public void MonsterDictionary_Add_100P_SS_Death(STATUS rewardstatus, SOC rewardsoc)
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 몬스터 제거(토벌) 보상 스탯(능력치, 평판)
+    public void MonsterDictionary_Add_100P_SS_Death(STATUS rewardstatus, SOC rewardsoc) // rewardstatus : ,
     {
         this.m_SMonster_Death_Reward_STATUS = rewardstatus;
         this.m_SMonster_Death_Reward_SOC = rewardsoc;
     }
-
-    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Equip(params int[] item)
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 
+    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Equip(params int[] item) // item(가변인자) : 
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Goaway_Reward_Item_Equip.Add(item[i]);
         }
     }
-    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Equip_DropRate(params int[] item)
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 
+    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Equip_DropRate(params int[] item) // item(가변인자) : 
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Goaway_Reward_Item_Equip_DropRate.Add(item[i]);
         }
     }
-    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Equip_Count(params int[] item)
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 
+    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Equip_Count(params int[] item) // item(가변인자) : 
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Goaway_Reward_Item_Equip_Count.Add(item[i]);
         }
     }
-    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Use(params int[] item)
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 
+    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Use(params int[] item) // item(가변인자) : 
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Goaway_Reward_Item_Use.Add(item[i]);
         }
     }
-    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Use_DropRate(params int[] item)
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 
+    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Use_DropRate(params int[] item) // item(가변인자) : 
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Goaway_Reward_Item_Use_DropRate.Add(item[i]);
         }
     }
-    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Use_Count(params int[] item)
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 
+    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Use_Count(params int[] item) // item(가변인자) : 
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Goaway_Reward_Item_Use_Count.Add(item[i]);
         }
     }
-    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Etc(params int[] item)
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 
+    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Etc(params int[] item) // item(가변인자) : 
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Goaway_Reward_Item_Etc.Add(item[i]);
         }
     }
-    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Etc_DropRate(params int[] item)
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 
+    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Etc_DropRate(params int[] item) // item(가변인자) : 
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Goaway_Reward_Item_Etc_DropRate.Add(item[i]);
         }
     }
-    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Etc_Count(params int[] item)
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 
+    public void MonsterDictionary_Add_100P_Goaway_Reward_Item_Etc_Count(params int[] item) // item(가변인자) : 
     {
         for (int i = 0; i < item.Length; i++)
         {
             m_nlMonster_Dictionary_Goaway_Reward_Item_Etc_Count.Add(item[i]);
         }
     }
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 
     public void MonsterDictionary_Add_100P_Goaway_Reward_Gold(int count = 0, int mingold = 0, int maxgold = 0, int rate = 0)
     {
         this.m_nMonster_Goaway_Reward_Gold_Count = count;
@@ -835,6 +865,7 @@ public class MonsterDictionary
         this.m_nMonster_Goaway_Reward_Gold_Min = mingold;
         this.m_nMonster_Goaway_Reward_Gold_DropRate = rate;
     }
+    // 몬스터 도감 데이터 해금 비율 100% 설정 함수 - 
     public void MonsterDictionary_Add_100P_SS_Goaway(STATUS rewardstatus, SOC rewardsoc)
     {
         this.m_SMonster_Goaway_Reward_STATUS = rewardstatus;
