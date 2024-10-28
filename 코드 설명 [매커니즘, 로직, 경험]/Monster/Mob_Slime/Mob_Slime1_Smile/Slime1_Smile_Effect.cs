@@ -12,8 +12,8 @@ public class Slime1_Smile_Effect : Slime1_Effect // 기반이 되는 Slime1_Effe
     // 몬스터 놓아주기 이펙트 연출 코루틴 - 부모 클래스인 Monster_Effect의 ProcessEffect_Goaway() 코루틴을 사용한다.
     // virtual protected IEnumerator ProcessEffect_Goaway(Vector3 pos) {ㆍㆍㆍ}
 
-    // 몬스터 ㆍㆍㆍ 이펙트 연출 함수 - "잔디 머리 초원 슬라임"은 별도의 추가 이펙트를 가지지 않는다.
+    // 몬스터 ㆍㆍㆍ 이펙트 연출 함수 - "웃고있는 초원 슬라임"은 별도의 추가 이펙트를 가지지 않는다.
     override public void Effect1(Vector3 pos) { }
-    // 몬스터 ㆍㆍㆍ 이펙트 연출 코루틴 - "잔디 머리 초원 슬라임"은 별도의 추가 이펙트를 가지지 않는다.
+    // 몬스터 ㆍㆍㆍ 이펙트 연출 코루틴 - "웃고있는 초원 슬라임"은 별도의 추가 이펙트를 가지지 않는다.
     override public void Effect1(Vector3 pos, int damage, string attackname) { }
 }
