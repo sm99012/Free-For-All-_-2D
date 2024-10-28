@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Slime1_2_Move : Slime1_Move
+public class Slime1_2_Move : Slime1_Move // 기반이 되는 Slime1_Move 클래스 상속
 {
     private void Awake()
     {
