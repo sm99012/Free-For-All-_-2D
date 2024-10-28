@@ -189,7 +189,7 @@ public class Slime1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
                     {
                         if (m_eMonsterState == E_MONSTER_MOVE_STATE.IDLE || m_eMonsterState == E_MONSTER_MOVE_STATE.RUN ||
                             m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACKED || m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACK ||
-                            m_eMonsterState == E_MONSTER_MOVE_STATE.CHASE)  // 몬스터 동작 FSM 상태 판단
+                            m_eMonsterState == E_MONSTER_MOVE_STATE.CHASE) // 몬스터 동작 FSM 상태 판단
                         {
                             SetAnimationParameters("DEATH"); // 애니메이션 변경 : DEATH
                             if (m_cProcessAttacked != null)
@@ -202,7 +202,7 @@ public class Slime1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
                 {
                     if (m_eMonsterState != ms)
                     {
-                        if (m_eMonsterState == E_MONSTER_MOVE_STATE.IDLE || m_eMonsterState == E_MONSTER_MOVE_STATE.RUN)  // 몬스터 동작 FSM 상태 판단
+                        if (m_eMonsterState == E_MONSTER_MOVE_STATE.IDLE || m_eMonsterState == E_MONSTER_MOVE_STATE.RUN) // 몬스터 동작 FSM 상태 판단
                         {
                             SetAnimationParameters("GOAWAY"); // 애니메이션 변경 : GOAWAY
                             StartCoroutine(ProcessGoaway()); // 몬스터 놓아주기 시간 계산 코루틴
@@ -213,7 +213,7 @@ public class Slime1_Move : Monster_Move // 기반이 되는 Monster_Move 클래�
                 {
                     if (m_eMonsterState != ms)
                     {
-                        if (m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACKED || m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACK)  // 몬스터 동작 FSM 상태 판단
+                        if (m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACKED || m_eMonsterState == E_MONSTER_MOVE_STATE.ATTACK) // 몬스터 동작 FSM 상태 판단
                             SetAnimationParameters("CHASE"); // 애니메이션 변경 : CHASE
                     }
                 } break;
