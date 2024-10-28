@@ -144,7 +144,7 @@ public class Slime1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
     // 몬스터 탐지 함수 - "초원 슬라임"은 짧은 거리의 오브젝트(플레이어)를 탐지해 공격으로 이어간다.
     override public void Detect()
     {
-        co2_1 = Physics2D.OverlapCircleAll(this.transform.position, 0.1f, nLayer1); // 오버랩 박스
+        co2_1 = Physics2D.OverlapCircleAll(this.transform.position, 0.1f, nLayer1); // 오버랩 써클
 
         if (co2_1.Length > 0)
         {
