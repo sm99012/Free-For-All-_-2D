@@ -66,7 +66,7 @@ public class Slime1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
     }
 
     // 몬스터 추격 함수 - "초원 슬라임"은 평범한 속도로 추격한다.
-    public override void Chase()
+    override public  void Chase()
     {
         m_vDir = Vector3.Normalize(m_gTarget.transform.position - this.transform.position); // 몬스터 추격 방향 설정
         m_mm_Move.Chase(m_ms_Status.m_sStatus.GetSTATUS_Speed(), m_vDir); // 몬스터 추격 함수
