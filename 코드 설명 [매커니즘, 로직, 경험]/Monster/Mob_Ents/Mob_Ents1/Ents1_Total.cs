@@ -75,7 +75,7 @@ public class Ents1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
         if (m_bSetTime == true) // 몬스터 이동 방향 설정 가능
         {
             StartCoroutine(ProcessSetTime()); // 몬스터 이동 시간 설정 관련 코루틴
-            m_nRandomNumber = Random.Range(-23, 9); // 몬스터 이동 방향 설정 관련 변수 : -23 ~ 8 (32)
+            m_nRandomNumber = Random.Range(-23, 8); // 몬스터 이동 방향 설정 관련 변수 : -23 ~ 8 (32)
                                                     //  8 / 32 (25%) 확률로 몬스터 이동
                                                     // 24 / 32 (75%) 확률로 몬스터 이동하지 않음
             switch (m_nRandomNumber)
@@ -132,7 +132,7 @@ public class Ents1_Total : Monster_Total // 기반이 되는 Monster_Total 클�
     {
         m_bSetTime = false; // 몬스터 이동 방향 설정 불가능
         // 1 ~ 5초간 방향 설정 불가능. 1 ~ 5초간 지정된 방향으로 몬스터 이동
-        m_fTime = Random.Range(1, 6);
+        m_fTime = Random.Range(1, 5);
         yield return new WaitForSeconds(m_fTime);
         m_bSetTime = true; // 몬스터 이동 방향 설정 가능
     }
