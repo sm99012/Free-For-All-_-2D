@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//
+// ※ "화가 잔뜩난 꼬마 초원 슬라임"은 공격을 받지 않아도 먼저 공격하는 선공 몬스터이다.
+//
+
 public class Slime3_Anger_Move : Slime1_Move // 기반이 되는 Slime1_Move 클래스 상속
 {
         // 부모 클래스인 Slime1_Total의 Awake() 함수를 사용한다.
