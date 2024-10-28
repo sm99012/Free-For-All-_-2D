@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class Slime3_Anger_Move : Slime1_Move // 기반이 되는 Slime1_Move 클래스 상속
 {
-        // 부모 클래스인 Slime1_Total의 Awake() 함수를 사용한다.
+    // 부모 클래스인 Slime1_Total의 Awake() 함수를 사용한다.
     // private void Awake() {ㆍㆍㆍ}
 
     // 부모 클래스인 Slime1_Total의 Start() 함수를 사용한다.
