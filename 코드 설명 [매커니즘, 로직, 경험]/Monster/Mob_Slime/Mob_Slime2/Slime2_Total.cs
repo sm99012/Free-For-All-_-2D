@@ -261,7 +261,7 @@ public class Slime2_Total : Monster_Total // 기반이 되는 Monster_Total 클�
     }
 
     // 몬스터 놓아주기 판정 함수
-    override public SOC Goaway()
+    override public SOC Goaway_Check()
     {
         if (m_bWait == false) // 다른 오브젝트와 상호작용 가능
         {
