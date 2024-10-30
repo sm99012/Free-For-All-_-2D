@@ -50,7 +50,7 @@ public class Slime1_Smile_Total : Slime1_Total // 기반이 되는 Slime1_Total 
     // virtual public void Death(float time) {ㆍㆍㆍ}
 
     // 몬스터 놓아주기 판정 함수 - 부모 클래스인 Slime1_Total의 Goaway() 함수를 사용한다.
-    // override public SOC Goaway() {ㆍㆍㆍ}
+    // override public SOC Goaway_Check() {ㆍㆍㆍ}
 
     // 몬스터 리스폰 코루틴 - 부모 클래스인 Monster_Total의 ProcessRespone() 코루틴을 사용한다.
     // virtual public IEnumerator ProcessRespone(float time) {ㆍㆍㆍ}
