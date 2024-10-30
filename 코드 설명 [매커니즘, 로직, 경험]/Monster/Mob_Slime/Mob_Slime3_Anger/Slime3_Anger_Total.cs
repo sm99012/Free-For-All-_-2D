@@ -225,7 +225,7 @@ public class Slime3_Anger_Total : Monster_Total // 기반이 되는 Monster_Tota
     // virtual public void Death(float time) {ㆍㆍㆍ}
 
     // 몬스터 놓아주기 판정 함수
-    override public SOC Goaway()
+    override public SOC Goaway_Check()
     {
         if (m_bWait == false) // 다른 오브젝트와 상호작용 가능
         {
