@@ -57,7 +57,7 @@ public class Slime1_2_Total : Slime1_Total // 기반이 되는 Slime1_Total 클�
     }
 
     // 몬스터 놓아주기 판정 함수
-    override public SOC Goaway()
+    override public SOC Goaway_Check()
     {
         if (m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.IDLE || m_mm_Move.m_eMonsterState == Monster_Move.E_MONSTER_MOVE_STATE.RUN) // 몬스터 동작 FSM 상태 판단
         {
