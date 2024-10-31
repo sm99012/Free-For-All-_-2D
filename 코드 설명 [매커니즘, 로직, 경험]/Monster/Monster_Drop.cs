@@ -16,7 +16,7 @@ public class Monster_Drop : MonoBehaviour
     protected Vector3 m_vItempos = new Vector3(0, 0, 0);         // 아이템 생성 위치
     protected Vector3 m_vItemoffset = new Vector3(0.001f, 0, 0); // 아이템 생성 위치 오프셋
 
-    // 몬스터 토벌로 인한 아이템 드롭(아이템 필드 생성)
+    // 몬스터 토벌로 인한 아이템 드랍(아이템 필드 생성)
     public void DropItem_Death(int monstercode, Vector3 pos) // monstercode : 토벌한 몬스터 고유코드, pos : 아이템 생성 위치
     {
         if (MonsterManager.m_Dictionary_Monster.ContainsKey(monstercode) == true) // MonsterManager 에 해당 고유코드를 보유한 몬스터가 존재하는지
@@ -82,7 +82,7 @@ public class Monster_Drop : MonoBehaviour
         }
     }
 
-    // 몬스터 놓아주기로 인한 아이템 드롭(아이템 필드 생성)
+    // 몬스터 놓아주기로 인한 아이템 드랍(아이템 필드 생성)
     public void DropItem_Goaway(int monstercode, Vector3 pos) // monstercode : 놓아주기한 몬스터 고유코드, pos : 아이템 생성 위치
     {
         if (MonsterManager.m_Dictionary_Monster.ContainsKey(monstercode) == true)
