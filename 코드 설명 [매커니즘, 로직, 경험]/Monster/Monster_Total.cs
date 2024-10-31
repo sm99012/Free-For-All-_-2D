@@ -15,14 +15,6 @@ public class Monster_Total : MonoBehaviour
     public Monster_Drop m_md_Drop;     // 몬스터 아이템 드랍
     public Monster_Effect m_me_Effect; // 몬스터 이펙트
 
-    public GameObject m_gTarget; // 몬스터 추격 대상
-
-    // 몬스터 접촉 시 오브젝트(플레이어) 피격 (몸박뎀 판정) 관련 변수
-    public bool m_bRelation;           // 몬스터 접촉 시 오브젝트(플레이어) 피격 여부(몸박뎀 존재 여부) (m_bRelation == true : 몬스터 접촉 시 오브젝트 피격 가능 / m_bRelation == false : 몬스터 접촉 시 오브젝트 피격 불가능)
-    protected Collider2D[] co2_2;      // 몬스터 접촉 콜라이더
-    protected Vector2 m_vSize_HitBody; // 몬스터 접촉 범위
-    protected Vector3 m_vKnockBackDir; // 몬스터 접촉 시 오브젝트(플레이어) 넉백 방향
-
     public bool m_bWait; // 몬스터 상호작용 가능 여부 (m_bWait == true : 다른 오브젝트와 상호작용 불가능 / m_bWait == false : 다른 오브젝트와 상호작용 가능)
                          // 몬스터 리스폰 관련 변수
                          
@@ -30,6 +22,14 @@ public class Monster_Total : MonoBehaviour
                          // 최적화를 위해 고안한 방법으로, 플레이어가 위치한 맵 내의 몬스터만 동작이 가능하다.
 
     public int nLayer1; // 몬스터와 충돌 가능한 오브젝트(플레이어) 레이어
+
+    public GameObject m_gTarget; // 몬스터 추격 대상
+
+    // 몬스터 접촉 시 오브젝트(플레이어) 피격 (몸박뎀 판정) 관련 변수
+    public bool m_bRelation;           // 몬스터 접촉 시 오브젝트(플레이어) 피격 여부(몸박뎀 존재 여부) (m_bRelation == true : 몬스터 접촉 시 오브젝트 피격 가능 / m_bRelation == false : 몬스터 접촉 시 오브젝트 피격 불가능)
+    protected Collider2D[] co2_2;      // 몬스터 접촉 콜라이더
+    protected Vector2 m_vSize_HitBody; // 몬스터 접촉 범위
+    protected Vector3 m_vKnockBackDir; // 몬스터 접촉 시 오브젝트(플레이어) 넉백 방향
 
     // 몬스터 이동 방향 설정 관련 변수
     public Vector3 m_vDir = Vector3.right; // 몬스터 이동 방향
