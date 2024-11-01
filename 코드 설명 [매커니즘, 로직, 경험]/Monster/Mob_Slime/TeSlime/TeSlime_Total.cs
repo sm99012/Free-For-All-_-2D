@@ -266,7 +266,7 @@ public class TeSlime_Total : MonoBehaviour
             {
                 Vector3 m_vKnockBackDir = Vector3.Normalize(co2_1[i].gameObject.transform.position - this.transform.position);
                 if (co2_1[i].GetComponent<Player_Total>().Attacked((int)((float)m_ts_Status.m_sStatus.GetSTATUS_Damage_Total()), m_vKnockBackDir, 0.3f, m_ts_Status.m_sMonsterName) == true)
-                    co2_1[i].GetComponent<Player_Total>().ApplySkill(m_ts_Skill.m_Dictionary_Skill["TeSlime_Slow1"]);
+                    co2_1[i].GetComponent<Player_Total>().ApplySkill(m_ts_Skill.m_Dictionary_Skill["Lv1 TeSlime_Slow"]);
             }
         }
     }
