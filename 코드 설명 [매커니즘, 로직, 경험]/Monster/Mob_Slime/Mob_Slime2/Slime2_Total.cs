@@ -192,7 +192,7 @@ public class Slime2_Total : Monster_Total // 기반이 되는 Monster_Total 클�
             {
                 m_vKnockBackDir = Vector3.Normalize(co2_3[i].gameObject.transform.position - this.transform.position); // 피격 대상 오브젝트(플레이어) 넉백 방향 설정
                 if (co2_3[i].gameObject.GetComponent<Player_Total>().Attacked((int)((float)m_ms_Status.m_sStatus.GetSTATUS_Damage_Total()), m_vKnockBackDir, 0.75f, m_ms_Status.m_sMonsterName) == true) // 플레이어 피격 함수
-                    co2_3[i].gameObject.GetComponent<Player_Total>().ApplySkill(SkillManager.Instance.m_Dictionary_Skill["Slime2_AttackEffect1"]); // 플레이어 스킬(버프ㆍ디버프, 상태이상) 적용 함수
+                    co2_3[i].gameObject.GetComponent<Player_Total>().ApplySkill(SkillManager.Instance.m_Dictionary_Skill["Skill Lv1 Slime2_Shock/Slow"]); // 플레이어 스킬(버프ㆍ디버프, 상태이상) 적용 함수
             }
         }
     }
