@@ -66,7 +66,7 @@ public class Mob_Effect_Ent1 : MonoBehaviour
     }
 
     // 공격 이펙트 방향 설정 함수
-    void SetDir(Vector3 startpos, Vector3 endpos) // 
+    void SetDir(Vector3 startpos, Vector3 endpos)
     {
         if (startpos.x >= endpos.x)
             this.transform.localScale = new Vector3(1, 1, 1);
