@@ -565,7 +565,7 @@ public class MonsterManager : MonoBehaviour
         }
     }
 
-    // 몬스터 도감 딕셔너리의 몬스터 도감 해금 비율 설정(저장)
+    // 몬스터 도감 딕셔너리의 몬스터 도감 해금 비율 업데이트 함수
     public void Update_Monster_Dictionary_Solve_Rate()
     {
         foreach(KeyValuePair<int, MonsterDictionary> dictionary in m_Dictionary_Monster)
