@@ -526,4 +526,44 @@ public class NPC_Total : MonoBehaviour
 
         return 0;
     }
+
+    // NPC가 보유한 퀘스트의 진행 상태를 판단하는 함수. 진행 상태는 m_nList_Accept, m_nList_Clear, m_nList_Process 변수에 할당된다.
+    private void UpdateIcon_Quest(Quest quest) // quest : 진행 상태를 판단할 퀘스트
+    {
+        if (quest.Check_Condition_Total() == true) // 퀘스트 진행 사전 조건 판단 함수 == true : 퀘스트 진행 가능
+        {
+            if (quest.m_bClear == false) // 퀘스트 완료 여부 == false : 퀘스트를 완료하지 않은 경우
+            {
+                // 1. 수락 가능한 퀘스트의 경우
+                if (quest.m_bProcess == false && quest.m_bCondition == false)
+                {
+                    // 수락 가능한 퀘스트의 경우 퀘스트 발행 NPC의 아이콘만 활성화된다. 퀘스트 완료 NPC의 경우 별도의 아이콘 갱신이 이루어지지 않는다.
+                    if (quest.m_nNPC == m_nNPCCode) // 퀘스트 발행 NPC와 NPC 고유코드가 동일한지 판단
+                    {
+                        m_nList_Accept.Add(quest.m_nQuest_Code); // 수락 가능한 퀘스트 고유코드 목록 추가
+                    }
+                }
+                // 2. 완료 가능한 퀘스트의 경우
+                if (quest.m_bCondition == true)
+                {
+                    // 퀘스트 완료 NPC의 경우 퀘스트 완료 가능 아이콘이 활성화된다.
+                    if (quest.m_nNPC_Clear == m_nNPCCode) // 퀘스트 완료 NPC와 NPC 고유코드가 동일한지 판단
+                    {
+                        m_nList_Clear.Add(quest.m_nQuest_Code); // 완료 가능한 퀘스트 고유코드 목록 추가
+                    }
+                    // 퀘스트 발행 NPC의 경우 퀘스트 진행중 아이콘이 활성화된다.
+                    else if (quest.m_nNPC == m_nNPCCode) // 퀘스트 발행 NPC와 NPC 고유코드가 동일한지 판단
+                    {
+                        m_nList_Process.Add(quest.m_nQuest_Code); // 진행중인 퀘스트 고유코드 목록 추가
+                    }
+                }
+                // 3. 진행중인 퀘스트의 경우
+                if (quest.m_bCondition == false && quest.m_bProcess == true)
+                {
+                    // 퀘스트 발행 NPC, 퀘스트 완료 NPC의 퀘스트 진행중 아이콘이 활성화된다.
+                    m_nList_Process.Add(quest.m_nQuest_Code); // 진행중인 퀘스트 고유코드 목록 추가
+                }
+            }
+        }
+    }
 }
