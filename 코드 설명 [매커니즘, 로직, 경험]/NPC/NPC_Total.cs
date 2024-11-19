@@ -229,36 +229,41 @@ public class NPC_Total : MonoBehaviour
                     }
                 }
             }
-            for (int i = 0; i < m_ql_QuestList_GOAWAY_TYPE.Count; i++)
+            // 4. 특정 몬스터 타입 놓아주기 퀘스트 아이콘 갱신
+            for (int i = 0; i < m_ql_QuestList_GOAWAY_TYPE.Count; i++) // NPC가 보유한 특정 몬스터 놓아주기 퀘스트 데이터 만큼 반복
             {
-                if (m_ql_QuestList_GOAWAY_TYPE[i].Check_Condition_Total() == true)
+                if (m_ql_QuestList_GOAWAY_TYPE[i].Check_Condition_Total() == true) // 퀘스트 진행 사전 조건 판단 함수 == true : 퀘스트 진행 가능
                 {
-                    if (m_ql_QuestList_GOAWAY_TYPE[i].m_bClear == false)
+                    if (m_ql_QuestList_GOAWAY_TYPE[i].m_bClear == false) // 퀘스트 완료 여부 == false : 퀘스트를 완료하지 않은 경우
                     {
-                        // Quest 수락 가능.
+                        // 4_1. 수락 가능한 퀘스트의 경우
                         if (m_ql_QuestList_GOAWAY_TYPE[i].m_bProcess == false && m_ql_QuestList_GOAWAY_TYPE[i].m_bCondition == false)
                         {
-                            if (QuestManager.Instance.GetQuest_GOAWAY_TYPE(m_ql_QuestList_GOAWAY_TYPE[i].m_nQuest_Code).m_nNPC == m_nNPCCode)
+                            // 수락 가능한 퀘스트의 경우 퀘스트 발행 NPC의 아이콘만 활성화된다. 퀘스트 완료 NPC의 경우 별도의 아이콘 갱신이 이루어지지 않는다.
+                            if (QuestManager.Instance.GetQuest_GOAWAY_TYPE(m_ql_QuestList_GOAWAY_TYPE[i].m_nQuest_Code).m_nNPC == m_nNPCCode) // 퀘스트 발행 NPC와 NPC 고유코드가 동일한지 판단
                             {
-                                m_nList_Accept.Add(m_ql_QuestList_GOAWAY_TYPE[i].m_nQuest_Code);
+                                m_nList_Accept.Add(m_ql_QuestList_GOAWAY_TYPE[i].m_nQuest_Code); // 수락 가능한 퀘스트 고유코드 목록 추가
                             }
                         }
-                        // Quest 클리어 가능.
+                        // 4_2. 완료 가능한 퀘스트의 경우
                         if (m_ql_QuestList_GOAWAY_TYPE[i].m_bCondition == true)
                         {
-                            if (QuestManager.Instance.GetQuest_GOAWAY_TYPE(m_ql_QuestList_GOAWAY_TYPE[i].m_nQuest_Code).m_nNPC_Clear == m_nNPCCode)
+                            // 퀘스트 완료 NPC의 경우 퀘스트 완료 가능 아이콘이 활성화된다.
+                            if (QuestManager.Instance.GetQuest_GOAWAY_TYPE(m_ql_QuestList_GOAWAY_TYPE[i].m_nQuest_Code).m_nNPC_Clear == m_nNPCCode) // 퀘스트 완료 NPC와 NPC 고유코드가 동일한지 판단
                             {
-                                m_nList_Clear.Add(m_ql_QuestList_GOAWAY_TYPE[i].m_nQuest_Code);
+                                m_nList_Clear.Add(m_ql_QuestList_GOAWAY_TYPE[i].m_nQuest_Code); // 완료 가능한 퀘스트 고유코드 목록 추가
                             }
-                            else if (QuestManager.Instance.GetQuest_GOAWAY_TYPE(m_ql_QuestList_GOAWAY_TYPE[i].m_nQuest_Code).m_nNPC == m_nNPCCode)
+                            // 퀘스트 발행 NPC의 경우 퀘스트 진행중 아이콘이 활성화된다.
+                            else if (QuestManager.Instance.GetQuest_GOAWAY_TYPE(m_ql_QuestList_GOAWAY_TYPE[i].m_nQuest_Code).m_nNPC == m_nNPCCode) // 퀘스트 발행 NPC와 NPC 고유코드가 동일한지 판단
                             {
-                                m_nList_Process.Add(m_ql_QuestList_GOAWAY_TYPE[i].m_nQuest_Code);
+                                m_nList_Process.Add(m_ql_QuestList_GOAWAY_TYPE[i].m_nQuest_Code); // 진행중인 퀘스트 고유코드 목록 추가
                             }
                         }
-                        // Quest 진행중.
+                        // 4_3. 진행중인 퀘스트의 경우
                         if (m_ql_QuestList_GOAWAY_TYPE[i].m_bCondition == false && m_ql_QuestList_GOAWAY_TYPE[i].m_bProcess == true)
                         {
-                            m_nList_Process.Add(m_ql_QuestList_GOAWAY_TYPE[i].m_nQuest_Code);
+                            // 퀘스트 발행 NPC, 퀘스트 완료 NPC의 퀘스트 진행중 아이콘이 활성화된다.
+                            m_nList_Process.Add(m_ql_QuestList_GOAWAY_TYPE[i].m_nQuest_Code); // 진행중인 퀘스트 고유코드 목록 추가
                         }
                     }
                 }
