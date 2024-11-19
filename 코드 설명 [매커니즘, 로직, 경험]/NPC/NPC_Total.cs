@@ -52,12 +52,7 @@ public class NPC_Total : MonoBehaviour
     virtual public void InitialSet()
     {
         InitialSet_Icon(); // NPC가 보유한 퀘스트, 거래 상태를 알려주기 위한 아이콘 초기 설정
-    }
-
-    // 거래 설정 함수(가상 함수)
-    virtual public void InitialSet_Store()
-    {
-
+        InitialSet_Store(); // 거래 설정 함수
     }
 
     // NPC가 보유한 퀘스트, 거래 상태를 알려주기 위한 아이콘 초기 설정 함수
@@ -82,15 +77,7 @@ public class NPC_Total : MonoBehaviour
         m_nList_Process = new List<int>();
 
         StartCoroutine(ProcessStart()); // NPC가 보유한 퀘스트, 거래 상태를 알려주기 위한 아이콘 초기 설정 코루틴
-    }
-
-    // 거래 갱신 함수. NPC가 보유한 거래가 초기화(갱신) 된다. 판매 아이템 종류, 수량, 매매 가격 등이 변경된다.
-    public void Update_Store()
-    {
-        for (int i = 0; i < m_List_NPC_Store.Count; i++)
-        {
-            m_List_NPC_Store[i].Initialization(); // 거래 갱신 함수. 거래가 초기화(갱신) 된다. 판매 아이템 종류, 수량, 매매 가격 등이 변경된다.
-        }
+                                        // 다른 데이터의 로딩을 마치고 실행하기 위해 1초의 대기시간을 가진다.(수정이 필요하다.)
     }
 
     // NPC가 보유한 퀘스트, 거래 상태를 알려주기 위한 아이콘 초기 설정 코루틴. 게임 로딩 이후 퀘스트, 거래 상태를 알려주기 위함으로 최초 1회만 실행된다.
@@ -98,6 +85,21 @@ public class NPC_Total : MonoBehaviour
     {
         yield return new WaitForSeconds(1f); // 1초 대기
         UpdateIcon(); // NPC가 보유한 퀘스트, 거래 상태를 알려주기 위한 아이콘 갱신 함수
+    }
+
+    // 거래 설정 함수(가상 함수)
+    virtual public void InitialSet_Store()
+    {
+
+    }
+
+    // 거래 갱신 함수. NPC가 보유한 거래가 초기화(갱신) 된다. 판매 아이템 종류, 수량, 매매 가격 등이 변경된다.
+    public void Update_Store()
+    {
+        for (int i = 0; i < m_List_NPC_Store.Count; i++)
+        {
+            m_List_NPC_Store[i].Initialization(); // 거래 갱신 함수. 5분마다 거래가 초기화(갱신) 된다. 판매 아이템 종류, 수량, 매매 가격 등이 변경된다.
+        }
     }
 
     // NPC가 보유한 퀘스트, 거래 상태를 알려주기 위한 아이콘 갱신 함수(가상 함수)
