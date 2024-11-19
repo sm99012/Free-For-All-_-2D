@@ -1571,6 +1571,48 @@ public class QuestManager : MonoBehaviour
 
         return null;
     }
+    // 퀘스트를 반환하는 함수 - 기본적인 Quest 클래스의 조건 판단 시 사용한다.(NPC_Total.UpdateIcon_Quest(Quest quest) 함수 등에서 사용된다.)
+    public Quest GetQuest(int questcode)
+    {
+        if (m_Dictionary_QuestList_KILL_MONSTER.ContainsKey(questcode) == true)
+        {
+            return m_Dictionary_QuestList_KILL_MONSTER[questcode];
+        }
+        else if (m_Dictionary_QuestList_KILL_TYPE.ContainsKey(questcode) == true)
+        {
+            return m_Dictionary_QuestList_KILL_TYPE[questcode];
+        }
+        else if (m_Dictionary_QuestList_GOAWAY_MONSTER.ContainsKey(questcode) == true)
+        {
+            return m_Dictionary_QuestList_GOAWAY_MONSTER[questcode];
+        }
+        else if (m_Dictionary_QuestList_GOAWAY_TYPE.ContainsKey(questcode) == true)
+        {
+            return m_Dictionary_QuestList_GOAWAY_TYPE[questcode];
+        }
+        else if (m_Dictionary_QuestList_COLLECT.ContainsKey(questcode) == true)
+        {
+            return m_Dictionary_QuestList_COLLECT[questcode];
+        }
+        else if (m_Dictionary_QuestList_CONVERSATION.ContainsKey(questcode) == true)
+        {
+            return m_Dictionary_QuestList_CONVERSATION[questcode];
+        }
+        else if (m_Dictionary_QuestList_ROLL.ContainsKey(questcode) == true)
+        {
+            return m_Dictionary_QuestList_ROLL[questcode];
+        }
+        else if (m_Dictionary_QuestList_ELIMINATE_MONSTER.ContainsKey(questcode) == true)
+        {
+            return m_Dictionary_QuestList_ELIMINATE_MONSTER[questcode];
+        }
+        else if (m_Dictionary_QuestList_ELIMINATE_TYPE.ContainsKey(questcode) == true)
+        {
+            return m_Dictionary_QuestList_ELIMINATE_TYPE[questcode];
+        }
+        else
+            return null;
+    }
 
     // 퀘스트 타입을 반환하는 함수
     public E_QUEST_TYPE GetQuestType(int questcode)
