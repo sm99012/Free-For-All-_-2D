@@ -112,46 +112,58 @@ public class NPC_Total : MonoBehaviour
             m_nList_Clear.Clear();
             m_nList_Process.Clear();
 
+            // 1. NPC가 보유한 모든 퀘스트의 진행 상태를 판단한다.
+            // 1_1. NPC가 보유한 퀘스트(특정 몬스터 토벌 퀘스트)의 진행 상태를 판단하는 함수
             for (int i = 0; i < m_ql_QuestList_KILL_MONSTER.Count; i++)
             {
                 UpdateIcon_Quest(m_ql_QuestList_KILL_MONSTER[i]);
             }
+            // 1_2. NPC가 보유한 퀘스트(특정 몬스터 타입 토벌 퀘스트)의 진행 상태를 판단하는 함수
             for (int i = 0; i < m_ql_QuestList_KILL_TYPE.Count; i++)
             {
-                UpdateIcon_Quest(m_ql_QuestList_KILL_TYPE[i]);
+                UpdateIcon_Quest(m_ql_QuestList_KILL_TYPE[i]); 
             }
+            // 1_3. NPC가 보유한 퀘스트(특정 몬스터 놓아주기 퀘스트)의 진행 상태를 판단하는 함수
             for (int i = 0; i < m_ql_QuestList_GOAWAY_MONSTER.Count; i++)
             {
-                UpdateIcon_Quest(m_ql_QuestList_GOAWAY_MONSTER[i]);
+                UpdateIcon_Quest(m_ql_QuestList_GOAWAY_MONSTER[i]); 
             }
+            // 1_4. NPC가 보유한 퀘스트(특정 몬스터 타입 놓아주기 퀘스트)의 진행 상태를 판단하는 함수
             for (int i = 0; i < m_ql_QuestList_GOAWAY_TYPE.Count; i++)
             {
-                UpdateIcon_Quest(m_ql_QuestList_GOAWAY_TYPE[i]);
+                UpdateIcon_Quest(m_ql_QuestList_GOAWAY_TYPE[i]); 
             }
+            // 1_5. NPC가 보유한 퀘스트(수집 퀘스트)의 진행 상태를 판단하는 함수
             for (int i = 0; i < m_ql_QuestList_COLLECT.Count; i++)
             {
-                UpdateIcon_Quest(m_ql_QuestList_COLLECT[i]);
+                UpdateIcon_Quest(m_ql_QuestList_COLLECT[i]); 
             }
+            // 1_6. NPC가 보유한 퀘스트(대화 퀘스트)의 진행 상태를 판단하는 함수
             for (int i = 0; i < m_ql_QuestList_CONVERSATION.Count; i++)
             {
-                UpdateIcon_Quest(m_ql_QuestList_CONVERSATION[i]);
+                UpdateIcon_Quest(m_ql_QuestList_CONVERSATION[i]); 
             }
+            // 1_7. NPC가 보유한 퀘스트(구르기 퀘스트)의 진행 상태를 판단하는 함수
             for (int i = 0; i < m_ql_QuestList_ROLL.Count; i++)
             {
-                UpdateIcon_Quest(m_ql_QuestList_ROLL[i]);
+                UpdateIcon_Quest(m_ql_QuestList_ROLL[i]); 
             }
+            // 1_8. NPC가 보유한 퀘스트(특정 몬스터 제거(토벌 + 놓아주기) 퀘스트)의 진행 상태를 판단하는 함수
             for (int i = 0; i < m_ql_QuestList_ELIMINATE_MONSTER.Count; i++)
             {
-                UpdateIcon_Quest(m_ql_QuestList_ELIMINATE_MONSTER[i]);
+                UpdateIcon_Quest(m_ql_QuestList_ELIMINATE_MONSTER[i]); 
             }
+            // 1_9. NPC가 보유한 퀘스트(특정 몬스터 타입 제거(토벌 + 놓아주기) 퀘스트)의 진행 상태를 판단하는 함수
             for (int i = 0; i < m_ql_QuestList_ELIMINATE_TYPE.Count; i++)
             {
-                UpdateIcon_Quest(m_ql_QuestList_ELIMINATE_TYPE[i]);
+                UpdateIcon_Quest(m_ql_QuestList_ELIMINATE_TYPE[i]); 
             }
 
-            // Icon Display
+            // 2. 퀘스트 진행 상태에 따라 퀘스트 아이콘(활성화 / 비활성화)을 갱신한다. 이때 별도의 규칙을 따른다.
+            // 2_1. 진행중인 퀘스트가 존재하는 경우
             if (m_nList_Process.Count > 0)
             {
+                // 2_1_1. 수락 가능한 퀘스트, 완료 가능한 퀘스트가 모두 존재하지 않는 경우 : 퀘스트 진행중[ㆍㆍㆍ] 아이콘 활성화
                 if (m_nList_Accept.Count <= 0 && m_nList_Clear.Count <= 0)
                 {
                     m_gIcon_Quest_Accept_Possible.SetActive(false);
@@ -160,6 +172,7 @@ public class NPC_Total : MonoBehaviour
                     m_gIcon_Quest_Process_.SetActive(true);
                     m_gIcon_Quest_Process.SetActive(false);
                 }
+                // 2_1_2. 수락 가능한 퀘스트는 존재하고, 완료 가능한 퀘스트는 존재하지 않는 경우 : 퀘스트 수락 가능[?], 퀘스트 진행중[ㆍㆍㆍ] 아이콘 활성화
                 if (m_nList_Accept.Count > 0 && m_nList_Clear.Count <= 0)
                 {
                     m_gIcon_Quest_Accept_Possible.SetActive(true);
@@ -168,6 +181,7 @@ public class NPC_Total : MonoBehaviour
                     m_gIcon_Quest_Process_.SetActive(false);
                     m_gIcon_Quest_Process.SetActive(true);
                 }
+                // 2_1_3. 수락 가능한 퀘스트는 존재하지 않고, 완료 가능한 퀘스트는 존재하는 경우 : 퀘스트 완료 가능[!], 퀘스트 진행중[ㆍㆍㆍ] 아이콘 활성화
                 if (m_nList_Accept.Count <= 0 && m_nList_Clear.Count > 0)
                 {
                     m_gIcon_Quest_Accept_Possible.SetActive(false);
@@ -176,6 +190,7 @@ public class NPC_Total : MonoBehaviour
                     m_gIcon_Quest_Process_.SetActive(false);
                     m_gIcon_Quest_Process.SetActive(true);
                 }
+                // 2_1_4. 수락 가능한 퀘스트, 완료 가능한 퀘스트가 모두 존재하는 경우 : 퀘스트 수락/완료 가능[?!], 퀘스트 진행중[ㆍㆍㆍ] 아이콘 활성화
                 if (m_nList_Accept.Count > 0 && m_nList_Clear.Count > 0)
                 {
                     m_gIcon_Quest_Accept_Possible.SetActive(false);
@@ -185,8 +200,10 @@ public class NPC_Total : MonoBehaviour
                     m_gIcon_Quest_Process.SetActive(true);
                 }
             }
+            // 2_2. 진행중인 퀘스트가 존재하지 않는 경우
             else
             {
+                // 2_2_1. 수락 가능한 퀘스트, 완료 가능한 퀘스트가 모두 존재하지 않는 경우 : 모든 아이콘 비활성화
                 if (m_nList_Accept.Count <= 0 && m_nList_Clear.Count <= 0)
                 {
                     m_gIcon_Quest_Accept_Possible.SetActive(false);
@@ -195,6 +212,7 @@ public class NPC_Total : MonoBehaviour
                     m_gIcon_Quest_Process_.SetActive(false);
                     m_gIcon_Quest_Process.SetActive(false);
                 }
+                // 2_2_2. 수락 가능한 퀘스트는 존재하고, 완료 가능한 퀘스트는 존재하지 않는 경우 : 퀘스트 수락 가능[?] 아이콘 활성화
                 if (m_nList_Accept.Count > 0 && m_nList_Clear.Count <= 0)
                 {
                     m_gIcon_Quest_Accept_Possible.SetActive(true);
@@ -203,6 +221,7 @@ public class NPC_Total : MonoBehaviour
                     m_gIcon_Quest_Process_.SetActive(false);
                     m_gIcon_Quest_Process.SetActive(false);
                 }
+                // 2_2_3. 수락 가능한 퀘스트는 존재하지 않고, 완료 가능한 퀘스트는 존재하는 경우 : 퀘스트 완료 가능[!] 아이콘 활성화
                 if (m_nList_Accept.Count <= 0 && m_nList_Clear.Count > 0)
                 {
                     m_gIcon_Quest_Accept_Possible.SetActive(false);
@@ -211,6 +230,7 @@ public class NPC_Total : MonoBehaviour
                     m_gIcon_Quest_Process_.SetActive(false);
                     m_gIcon_Quest_Process.SetActive(false);
                 }
+                // 2_2_4. 수락 가능한 퀘스트, 완료 가능한 퀘스트가 모두 존재하는 경우 : 퀘스트 수락/완료 가능[?!] 아이콘 활성화
                 if (m_nList_Accept.Count > 0 && m_nList_Clear.Count > 0)
                 {
                     m_gIcon_Quest_Accept_Possible.SetActive(false);
@@ -221,24 +241,25 @@ public class NPC_Total : MonoBehaviour
                 }
             }
 
+            // 3. NPC가 보유한 거래의 존재 유무에 따라 거래 아이콘(활성화 / 비활성화)을 갱신한다.
             if (m_bNPC_Store == true)
             {
                 for (int i = 0; i < m_List_NPC_Store.Count; i++)
                 {
-                    if (m_List_NPC_Store[i].Check_Condition_Store() == true)
+                    if (m_List_NPC_Store[i].Check_Condition_Store() == true) // 거래 이용 사전 조건 판단 함수 == true : 거래 이용 가능
                     {
-                        m_gIcon_Store.SetActive(true);
+                        m_gIcon_Store.SetActive(true); // 거래 아이콘[STORE] 활성화
                         return 0;
                     }
                 }
-                m_gIcon_Store.SetActive(false);
+                
+                m_gIcon_Store.SetActive(false); // 이용 가능한 거래가 존재하지 않는 경우 거래 아이콘[STORE] 비활성화
             }
 
         }
 
         return 0;
     }
-
     // NPC가 보유한 퀘스트의 진행 상태를 판단하는 함수. 진행 상태는 m_nList_Accept, m_nList_Clear, m_nList_Process 변수에 할당된다.
     private void UpdateIcon_Quest(Quest quest) // quest : 진행 상태를 판단할 퀘스트
     {
@@ -249,7 +270,7 @@ public class NPC_Total : MonoBehaviour
                 // 1. 수락 가능한 퀘스트의 경우
                 if (quest.m_bProcess == false && quest.m_bCondition == false)
                 {
-                    // 수락 가능한 퀘스트의 경우 퀘스트 발행 NPC의 아이콘만 활성화된다. 퀘스트 완료 NPC의 경우 별도의 아이콘 갱신이 이루어지지 않는다.
+                    // 퀘스트 발행 NPC의 퀘스트 수락 가능 아이콘만 활성화된다. 퀘스트 완료 NPC의 경우 별도의 아이콘 갱신이 이루어지지 않는다.
                     if (quest.m_nNPC == m_nNPCCode) // 퀘스트 발행 NPC와 NPC 고유코드가 동일한지 판단
                     {
                         m_nList_Accept.Add(quest.m_nQuest_Code); // 수락 가능한 퀘스트 고유코드 목록 추가
