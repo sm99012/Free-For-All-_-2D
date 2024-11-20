@@ -2,36 +2,43 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//
+// ※ 플레이어는 NPC와의 거래를 통해 아이템을 매매할 수 있다.
+//    NPC마다 선호, 비선호 아이템이 다르기에 매매 가격 또한 다르다. 선호, 비선호 하지 않는 평범한 아이템의 경우 매매 상수를 적용한 가격으로 매매한다.
+//
+
+// 거래 등급 : { S1, S2, S3, S4, S5, S6, S7, S8, S9, S10 }
 public enum E_STORE_LEVEL { S1, S2, S3, S4, S5, S6, S7, S8, S9, S10 }
 
 public class NPC_Store : MonoBehaviour
 {
-    public string m_sStore_Name;
-    public Sprite m_Sprite_NPC;
-    public E_STORE_LEVEL m_eStoreLevel;
-    // 대사 스크립트.
-    public string m_sDescription;
+    public string m_sStore_Name;        // 거래 제목
+    public string m_sDescription;       // 거래 내용(설명)
 
-    public int m_nStore_Code;
+    public int m_nStore_Code;           // 거래 고유코드
+    
+    public Sprite m_Sprite_NPC;         // 거래 주관 NPC 스프라이트(이미지)
+    
+    public E_STORE_LEVEL m_eStoreLevel; // 거래 등급
 
-    public STATUS m_sStatus_Necessity_Up;
-    public STATUS m_sStatus_Necessity_Down;
-    public SOC m_sSoc_Necessity_Up;
-    public SOC m_sSoc_Necessity_Down;
+    // 거래 이용 사전 조건 관련 변수
+    // 거래 이용 사전 조건 - 스탯(능력치) 상한ㆍ하한
+    public STATUS m_sStatus_Necessity_Up;   // 스탯(능력치) 상한(플레이어의 스탯(능력치) 합계가 거래 이용 사전 조건(해당 조건)을 초과한 경우 제한)
+    public STATUS m_sStatus_Necessity_Down; // 스탯(능력치) 하한(플레이어의 스탯(능력치) 합계가 거래 이용 사전 조건(해당 조건)에 미달한 경우 제한)
+    // 거래 이용 사전 조건 - 스탯(평판) 상한ㆍ하한
+    public SOC m_sSoc_Necessity_Up;         // 스탯(평판) 상한(플레이어의 스탯(평판) 합계가 거래 이용 사전 조건(해당 조건)을 초과한 경우 제한)
+    public SOC m_sSoc_Necessity_Down;       // 스탯(평판) 하한(플레이어의 스탯(평판) 합계가 거래 이용 사전 조건(해당 조건)에 미달한 경우 제한)
+    // 거래 이용 사전 조건 - 퀘스트 연관
+    public List<Quest> m_ql_Quest_Necessity_Clear;      // 필수 완료 퀘스트(해당 리스트에 포함된 퀘스트가 완료되지 않은 경우 제한)
+    public List<Quest> m_ql_Quest_Necessity_NonClear;   // 필수 미완료 퀘스트(해당 리스트에 포함된 퀘스트가 완료된 경우 제한)
+    public List<Quest> m_ql_Quest_Necessity_Process;    // 필수 진행 퀘스트(해당 리스트에 포함된 퀘스트가 진행 중이지 않은 경우 제한)
+    public List<Quest> m_ql_Quest_Necessity_NonProcess; // 필수 미진행 퀘스트(해당 리스트에 포함된 퀘스트가 진행 중인 경우 제한)
 
-    // 해당 퀘스트 클리어 기록이 존재하면 상점 이용 가능.
-    public List<Quest> m_ql_Quest_Necessity_Clear;
-    // 해당 퀘스트 클리어 기록이 존재하면 상점 이용 불가능.
-    public List<Quest> m_ql_Quest_Necessity_NonClear;
-    // 해당 퀘스트를 진행중이면 상점 이용 가능.
-    public List<Quest> m_ql_Quest_Necessity_Process;
-    // 해당 퀘스트를 진행중이면 상점 이용 불가능.
-    public List<Quest> m_ql_Quest_Necessity_NonProcess;
-
-    // 구매 목록. (NPC 가 판매하는 품목)
+    // 거래 관련 변수
+    // 판매(NPC가 판매) 품목 관련 변수
     public List<Item_Equip> m_List_Sale_Item_Equip;
     // 구매 확률. 0 ~ 10000
-    public List<int> m_List_Sale_Item_Equip_Probability;
+    public List<int> m_List_Sale_Item_Equip_Probability; // 
     // 최소, 최대 구매 수량.
     public List<int> m_List_Sale_Item_Equip_Count_Min;
     public List<int> m_List_Sale_Item_Equip_Count_Max;
