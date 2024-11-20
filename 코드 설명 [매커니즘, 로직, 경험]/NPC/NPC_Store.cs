@@ -47,44 +47,31 @@ public class NPC_Store : MonoBehaviour
     public List<int> m_List_Sale_Item_Equip_Count;          // 장비아이템 실제 판매 수량
     public List<int> m_List_Sale_Item_Equip_Price;          // 장비아이템 실제 판매 가격
 
+    // 판매(NPC가 판매) 품목 관련 변수 - 소비아이템
+    public List<Item_Use> m_List_Sale_Item_Use;         // 소비아이템 판매 목록
+    public List<int> m_List_Sale_Item_Use_Probability;  // 소비아이템 판매 확률(1 ~ 10000)
+    public List<int> m_List_Sale_Item_Use_Count_Min;    // 소비아이템 판매 최소 수량
+    public List<int> m_List_Sale_Item_Use_Count_Max;    // 소비아이템 판매 최대 수량
+    public List<int> m_List_Sale_Item_Use_Price_Min;    // 소비아이템 판매 하한(최소 가격)
+    public List<int> m_List_Sale_Item_Use_Price_Max;    // 소비아이템 판매 상한(최대 가격)
+    
+    public List<Item_Use> m_List_Sale_Item_Use_Current; // 소비아이템 실제 판매 목록
+    public List<int> m_List_Sale_Item_Use_Count;        // 소비아이템 실제 판매 수량
+    public List<int> m_List_Sale_Item_Use_Price;        // 소비아이템 실제 판매 가격
 
-    // 구매 목록.
-    public List<Item_Use> m_List_Sale_Item_Use;
-    // 구매 확률. 0 ~ 10000
-    public List<int> m_List_Sale_Item_Use_Probability;
-    // 최소, 최대 구매 수량.
-    public List<int> m_List_Sale_Item_Use_Count_Min;
-    public List<int> m_List_Sale_Item_Use_Count_Max;
-    // 실 구매 목록.
-    public List<Item_Use> m_List_Sale_Item_Use_Current;
-    // 실 구매 수량.
-    public List<int> m_List_Sale_Item_Use_Count;
-    // 최소, 최대 가격.
-    public List<int> m_List_Sale_Item_Use_Price_Min;
-    public List<int> m_List_Sale_Item_Use_Price_Max;
-    // 실 구매 가격.
-    public List<int> m_List_Sale_Item_Use_Price;
+    // 판매(NPC가 판매) 품목 관련 변수 - 기타아이템
+    public List<Item_Etc> m_List_Sale_Item_Etc;         // 기타아이템 판매 목록
+    public List<int> m_List_Sale_Item_Etc_Probability;  // 기타아이템 판매 확률(1 ~ 10000)
+    public List<int> m_List_Sale_Item_Etc_Count_Min;    // 기타아이템 판매 최소 수량
+    public List<int> m_List_Sale_Item_Etc_Count_Max;    // 기타아이템 판매 최대 수량
+    public List<int> m_List_Sale_Item_Etc_Price_Min;    // 기타아이템 판매 하한(최소 가격)
+    public List<int> m_List_Sale_Item_Etc_Price_Max;    // 기타아이템 판매 상한(최대 가격)
 
+    public List<Item_Etc> m_List_Sale_Item_Etc_Current; // 기타아이템 실제 판매 목록
+    public List<int> m_List_Sale_Item_Etc_Count;        // 기타아이템 실제 판매 수량
+    public List<int> m_List_Sale_Item_Etc_Price;        // 기타아이템 실제 판매 가격
 
-    // 구매 목록.
-    public List<Item_Etc> m_List_Sale_Item_Etc;
-    // 구매 확률. 0 ~ 10000
-    public List<int> m_List_Sale_Item_Etc_Probability;
-    // 최소, 최대 구매 수량.
-    public List<int> m_List_Sale_Item_Etc_Count_Min;
-    public List<int> m_List_Sale_Item_Etc_Count_Max;
-    // 실 구매 목록.
-    public List<Item_Etc> m_List_Sale_Item_Etc_Current;
-    // 실 구매 수량.
-    public List<int> m_List_Sale_Item_Etc_Count;
-    // 최소, 최대 가격.
-    public List<int> m_List_Sale_Item_Etc_Price_Min;
-    public List<int> m_List_Sale_Item_Etc_Price_Max;
-    // 실 구매 가격.
-    public List<int> m_List_Sale_Item_Etc_Price;
-
-
-    // 특별 판매 목록.
+    // 
     public List<Item> m_List_Buy_Item;
     // 특별 판매 최소, 최대 가격.
     public List<int> m_List_Buy_Item_Price_Min;
