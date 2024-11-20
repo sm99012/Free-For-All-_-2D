@@ -236,73 +236,71 @@ public class NPC_Store : MonoBehaviour
     // return true : 조건 충족 / return false : 조건 미흡
     bool Check_Condition_Store_STATUS()
     {
-        if (Player_Total.Instance.m_ps_Status.m_sStatus.CheckCondition_Min(m_sStatus_Necessity_Down) == true &&
-            Player_Total.Instance.m_ps_Status.m_sStatus.CheckCondition_Max(m_sStatus_Necessity_Up) == true) // 스탯(능력치) 조건 판단(상한ㆍ하한)
-            return true;
-        else
-            return false;
+        return (Player_Total.Instance.m_ps_Status.m_sStatus.CheckCondition_Min(m_sStatus_Necessity_Down) == true && 
+                Player_Total.Instance.m_ps_Status.m_sStatus.CheckCondition_Max(m_sStatus_Necessity_Up) == true);
     }
     // 거래 이용 사전 조건 판단 함수 - 스탯(평판) 상한ㆍ하한
     // return true : 조건 충족 / return false : 조건 미흡
     bool Check_Condition_Store_SOC()
     {
-        if (Player_Total.Instance.m_ps_Status.m_sSoc.CheckCondition_Min(m_sSoc_Necessity_Down) == true &&
-            Player_Total.Instance.m_ps_Status.m_sSoc.CheckCondition_Max(m_sSoc_Necessity_Up) == true) // 스탯(평판) 조건 판단(상한ㆍ하한)
-            return true;
-        else
-            return false;
+        return (Player_Total.Instance.m_ps_Status.m_sSoc.CheckCondition_Min(m_sSoc_Necessity_Down) == true && 
+                Player_Total.Instance.m_ps_Status.m_sSoc.CheckCondition_Max(m_sSoc_Necessity_Up) == true);
     }
 
-    // 상점 초기화.
+    // 거래 갱신(초기화) 함수. 판매 아이템 종류, 수량, 매매 가격 등이 변경된다.
     public void Initialization()
     {
+        // 아이템 실제 판매 데이터 초기화 - 장비아이템
         m_List_Sale_Item_Equip_Current.Clear();
         m_List_Sale_Item_Equip_Count.Clear();
         m_List_Sale_Item_Equip_Price.Clear();
-
+        // 아이템 실제 판매 데이터 초기화 - 소비아이템
         m_List_Sale_Item_Use_Current.Clear();
         m_List_Sale_Item_Use_Count.Clear();
         m_List_Sale_Item_Use_Price.Clear();
-
+        // 아이템 실제 판매 데이터 초기화 - 기타아이템
         m_List_Sale_Item_Etc_Current.Clear();
         m_List_Sale_Item_Etc_Count.Clear();
         m_List_Sale_Item_Etc_Price.Clear();
 
+        // 아이템 실제 구매 가격 초기화 - 장비아이템, 소비아이템, 기타아이템
         m_List_Buy_Item_Price.Clear();
 
+        // 아이템 실제 판매 데이터 설정(추가) - 장비아이템
         for (int i = 0; i < m_List_Sale_Item_Equip.Count; i++)
         {
-            if (Random.Range(0, 10000) < m_List_Sale_Item_Equip_Probability[i])
+            if (Random.Range(0, 10000) < m_List_Sale_Item_Equip_Probability[i]) // 장비아이템 판매 여부 판단
             {
                 m_List_Sale_Item_Equip_Current.Add(m_List_Sale_Item_Equip[i]);
-                m_List_Sale_Item_Equip_Count.Add(Random.Range(m_List_Sale_Item_Equip_Count_Min[i], m_List_Sale_Item_Equip_Count_Max[i]));
-                m_List_Sale_Item_Equip_Price.Add(Random.Range(m_List_Sale_Item_Equip_Price_Min[i], m_List_Sale_Item_Equip_Price_Max[i]));
+                m_List_Sale_Item_Equip_Count.Add(Random.Range(m_List_Sale_Item_Equip_Count_Min[i], m_List_Sale_Item_Equip_Count_Max[i])); // 장비아이템 실제 판매 수량 설정
+                m_List_Sale_Item_Equip_Price.Add(Random.Range(m_List_Sale_Item_Equip_Price_Min[i], m_List_Sale_Item_Equip_Price_Max[i])); // 장비아이템 실제 판매 가격 설정
             }
         }
-
+        // 아이템 실제 판매 데이터 설정(추가) - 소비아이템
         for (int i = 0; i < m_List_Sale_Item_Use.Count; i++)
         {
-            if (Random.Range(0, 10000) < m_List_Sale_Item_Use_Probability[i])
+            if (Random.Range(0, 10000) < m_List_Sale_Item_Use_Probability[i]) // 소비아이템 판매 여부 판단
             {
                 m_List_Sale_Item_Use_Current.Add(m_List_Sale_Item_Use[i]);
-                m_List_Sale_Item_Use_Count.Add(Random.Range(m_List_Sale_Item_Use_Count_Min[i], m_List_Sale_Item_Use_Count_Max[i]));
-                m_List_Sale_Item_Use_Price.Add(Random.Range(m_List_Sale_Item_Use_Price_Min[i], m_List_Sale_Item_Use_Price_Max[i]));
+                m_List_Sale_Item_Use_Count.Add(Random.Range(m_List_Sale_Item_Use_Count_Min[i], m_List_Sale_Item_Use_Count_Max[i])); // 소비아이템 실제 판매 수량 설정
+                m_List_Sale_Item_Use_Price.Add(Random.Range(m_List_Sale_Item_Use_Price_Min[i], m_List_Sale_Item_Use_Price_Max[i])); // 소비아이템 실제 판매 가격 설정
             }
         }
-
+        // 아이템 실제 판매 데이터 설정(추가) - 기타아이템
         for (int i = 0; i < m_List_Sale_Item_Etc.Count; i++)
         {
-            if (Random.Range(0, 10000) < m_List_Sale_Item_Etc_Probability[i])
+            if (Random.Range(0, 10000) < m_List_Sale_Item_Etc_Probability[i]) // 기타아이템 판매 여부 판단
             {
                 m_List_Sale_Item_Etc_Current.Add(m_List_Sale_Item_Etc[i]);
-                m_List_Sale_Item_Etc_Count.Add(Random.Range(m_List_Sale_Item_Etc_Count_Min[i], m_List_Sale_Item_Etc_Count_Max[i]));
-                m_List_Sale_Item_Etc_Price.Add(Random.Range(m_List_Sale_Item_Etc_Price_Min[i], m_List_Sale_Item_Etc_Price_Max[i]));
+                m_List_Sale_Item_Etc_Count.Add(Random.Range(m_List_Sale_Item_Etc_Count_Min[i], m_List_Sale_Item_Etc_Count_Max[i])); // 기타아이템 실제 판매 수량 설정
+                m_List_Sale_Item_Etc_Price.Add(Random.Range(m_List_Sale_Item_Etc_Price_Min[i], m_List_Sale_Item_Etc_Price_Max[i])); // 기타아이템 실제 판매 가격 설정
             }
         }
-
+        
+        // 아이템 실제 구매 가격 설정(추가) - 장비아이템, 소비아이템, 기타아이템
         for (int i = 0; i < m_List_Buy_Item.Count; i++)
         {
-            m_List_Buy_Item_Price.Add(Random.Range(m_List_Buy_Item_Price_Min[i], m_List_Buy_Item_Price_Max[i]));
+            m_List_Buy_Item_Price.Add(Random.Range(m_List_Buy_Item_Price_Min[i], m_List_Buy_Item_Price_Max[i])); // 아이템 실제 구매 가격 설정
         }
     }
 }
