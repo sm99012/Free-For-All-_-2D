@@ -35,22 +35,17 @@ public class NPC_Store : MonoBehaviour
     public List<Quest> m_ql_Quest_Necessity_NonProcess; // 필수 미진행 퀘스트(해당 리스트에 포함된 퀘스트가 진행 중인 경우 제한)
 
     // 거래 관련 변수
-    // 판매(NPC가 판매) 품목 관련 변수
-    public List<Item_Equip> m_List_Sale_Item_Equip;
-    // 구매 확률. 0 ~ 10000
-    public List<int> m_List_Sale_Item_Equip_Probability; // 
-    // 최소, 최대 구매 수량.
-    public List<int> m_List_Sale_Item_Equip_Count_Min;
-    public List<int> m_List_Sale_Item_Equip_Count_Max;
-    // 실 구매 목록.
-    public List<Item_Equip> m_List_Sale_Item_Equip_Current;
-    // 실 구매 수량.
-    public List<int> m_List_Sale_Item_Equip_Count;
-    // 구매 최소, 최대 가격.
-    public List<int> m_List_Sale_Item_Equip_Price_Min;
-    public List<int> m_List_Sale_Item_Equip_Price_Max;
-    // 실 구매 가격.
-    public List<int> m_List_Sale_Item_Equip_Price;
+    // 판매(NPC가 판매) 품목 관련 변수 - 장비아이템
+    public List<Item_Equip> m_List_Sale_Item_Equip;         // 장비아이템 판매 목록
+    public List<int> m_List_Sale_Item_Equip_Probability;    // 장비아이템 판매 확률(1 ~ 10000)
+    public List<int> m_List_Sale_Item_Equip_Count_Min;      // 장비아이템 판매 최소 수량
+    public List<int> m_List_Sale_Item_Equip_Count_Max;      // 장비아이템 판매 최대 수량
+    public List<int> m_List_Sale_Item_Equip_Price_Min;      // 장비아이템 판매 하한(최소 가격)
+    public List<int> m_List_Sale_Item_Equip_Price_Max;      // 장비아이템 판매 상한(최대 가격)
+    
+    public List<Item_Equip> m_List_Sale_Item_Equip_Current; // 장비아이템 실제 판매 목록
+    public List<int> m_List_Sale_Item_Equip_Count;          // 장비아이템 실제 판매 수량
+    public List<int> m_List_Sale_Item_Equip_Price;          // 장비아이템 실제 판매 가격
 
 
     // 구매 목록.
