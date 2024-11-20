@@ -87,13 +87,13 @@ public class NPC_Total : MonoBehaviour
         UpdateIcon(); // NPC가 보유한 퀘스트, 거래 상태를 알려주기 위한 아이콘 갱신 함수
     }
 
-    // 거래 설정 함수(가상 함수)
+    // NPC가 보유한 거래 설정 함수(가상 함수)
     virtual public void InitialSet_Store()
     {
 
     }
 
-    // 거래 갱신 함수. NPC가 보유한 거래가 초기화(갱신) 된다. 판매 아이템 종류, 수량, 매매 가격 등이 변경된다.
+    // NPC가 보유한 거래 갱신 함수. NPC가 보유한 거래가 초기화(갱신) 된다. 판매 아이템 종류, 수량, 매매 가격 등이 변경된다.
     public void Update_Store()
     {
         for (int i = 0; i < m_List_NPC_Store.Count; i++)
