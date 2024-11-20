@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//
+// ※ 싱글톤패턴을 적용한 NPCManager_Total 클래스를 이용해 현재 위치한 게임 씬 내부의 모든 NPC를 관리한다.
+//    해당 클래스에서는 5분마다 
+//
+
 public class NPCManager_Total : MonoBehaviour
 {
     private static NPCManager_Total instance = null;
@@ -18,7 +23,6 @@ public class NPCManager_Total : MonoBehaviour
     }
 
     public static Dictionary<int, NPC_Total> m_Dictionary_NPC;
-    public static List<Coroutine> m_CoroutineList_NPC_Store;
 
     private void Awake()
     {
@@ -33,7 +37,6 @@ public class NPCManager_Total : MonoBehaviour
         }
 
         m_Dictionary_NPC = new Dictionary<int, NPC_Total>();
-        m_CoroutineList_NPC_Store = new List<Coroutine>();
     }
 
     static float m_fUpdateTime = 300f;
@@ -55,11 +58,6 @@ public class NPCManager_Total : MonoBehaviour
         {
             GUIManager_Total.Instance.Update_StoreTime(m_fCurrentTime);
         }
-
-        //if (Input.GetKeyDown(KeyCode.Insert))
-        //{
-        //    UpdateNPC_Fix();
-        //}
     }
 
     // 주기적인 NPC 업데이트.
@@ -102,17 +100,5 @@ public class NPCManager_Total : MonoBehaviour
             GUIManager_Total.Instance.m_GUI_Store.Press_Btn_Exit();
             GUIManager_Total.Instance.Display_GUI_Store_Exit_Information();
         }
-    }
-
-    public void InitialSet()
-    {
-        //int num = 0;
-        //foreach (KeyValuePair<int, NPC_Total> npc in m_Dictionary_NPC)
-        //{
-        //    npc.Value.InitialSet();
-        //    Debug.Log(npc.Value.m_sNPCName);
-        //    num += 1;
-        //}
-        //Debug.Log(num);
     }
 }
