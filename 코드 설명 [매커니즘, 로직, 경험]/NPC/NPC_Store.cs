@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //
-// ※ 플레이어는 NPC와의 거래를 통해 아이템을 매매할 수 있다.
+// ※ 유저는 NPC와의 거래를 통해 아이템을 매매할 수 있다.
 //    NPC마다 선호, 비선호 아이템이 다르기에 매매 가격 또한 다르다. 선호, 비선호 하지 않는 평범한 아이템의 경우 매매 상수를 적용한 가격으로 매매한다.
 //
 
@@ -59,7 +59,7 @@ public class NPC_Store : MonoBehaviour
     public List<int> m_List_Sale_Item_Use_Count;        // 소비아이템 실제 판매 수량
     public List<int> m_List_Sale_Item_Use_Price;        // 소비아이템 실제 판매 가격
 
-    // 판매(NPC가 판매) 품목 관련 변수 - 기타아이템
+    // 판매(NPC가 판매, 유저가 구매) 품목 관련 변수 - 기타아이템
     public List<Item_Etc> m_List_Sale_Item_Etc;         // 기타아이템 판매 목록
     public List<int> m_List_Sale_Item_Etc_Probability;  // 기타아이템 판매 확률(1 ~ 10000)
     public List<int> m_List_Sale_Item_Etc_Count_Min;    // 기타아이템 판매 최소 수량
@@ -71,33 +71,31 @@ public class NPC_Store : MonoBehaviour
     public List<int> m_List_Sale_Item_Etc_Count;        // 기타아이템 실제 판매 수량
     public List<int> m_List_Sale_Item_Etc_Price;        // 기타아이템 실제 판매 가격
 
-    // 
-    public List<Item> m_List_Buy_Item;
-    // 특별 판매 최소, 최대 가격.
-    public List<int> m_List_Buy_Item_Price_Min;
-    public List<int> m_List_Buy_Item_Price_Max;
-    // 실 특별 판매 가격.
-    public List<int> m_List_Buy_Item_Price;
-    // 일반 판매 상수.
-    // ㄴ 특별 판매 목록에 없는 아이템일 경우 '일반 판매 상수' 를 곱한 가격에 판매.
-    // ㄴ 0 ~ 1
-    // ㄴ 기본값: 1
-    public float m_fBuy_Item_Equip_Value;
-    public float m_fBuy_Item_Use_Value;
-    public float m_fBuy_Item_Etc_Value;
+    // 구매(NPC가 구매, 유저가 판매) 품목 관련 변수 - 별도의 아이템 구매가 지정
+    public List<Item> m_List_Buy_Item;          // 아이템 구매 목록
+    public List<int> m_List_Buy_Item_Price_Min; // 아이템 구매 하한(최소 가격)
+    public List<int> m_List_Buy_Item_Price_Max; // 아이템 구매 상한(최대 가격)
 
+    public List<int> m_List_Buy_Item_Price;     // 아이템 실제 구매 가격
+
+    // 아이템 구매 상수 : 별도의 아이템 구매 목록에 없는 아이템의 경우 아이템 원가격에 '아이템 구매 상수'를 곱한 가격에 구매한다.
+    public float m_fBuy_Item_Equip_Value; // 장비아이템 구매 상수(0.0 ~ 1.0)
+    public float m_fBuy_Item_Use_Value;   // 소비아이템 구매 상수(0.0 ~ 1.0)
+    public float m_fBuy_Item_Etc_Value;   // 기타아이템 구매 상수(0.0 ~ 1.0)
+    
+    // 거래 데이터를 생성하는 생성자
     public NPC_Store(string name, int code, Sprite sprite, E_STORE_LEVEL sl)
     {
         this.m_sStore_Name = name;
+        this.m_nStore_Code = code;
         this.m_Sprite_NPC = sprite;
         this.m_eStoreLevel = sl;
-        this.m_nStore_Code = code;
-
-        m_sStatus_Necessity_Up = new STATUS(10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000);
-        m_sStatus_Necessity_Down = new STATUS(-10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000);
-        m_sSoc_Necessity_Up = new SOC(10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000);
-        m_sSoc_Necessity_Down = new SOC(-10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000, -10000);
-
+    
+        m_sStatus_Necessity_Up = new STATUS(true);
+        m_sStatus_Necessity_Down = new STATUS(false);
+        m_sSoc_Necessity_Up = new SOC(true);
+        m_sSoc_Necessity_Down = new SOC(false);
+        
         m_ql_Quest_Necessity_Clear = new List<Quest>();
         m_ql_Quest_Necessity_NonClear = new List<Quest>();
         m_ql_Quest_Necessity_Process = new List<Quest>();
@@ -107,95 +105,99 @@ public class NPC_Store : MonoBehaviour
         m_List_Sale_Item_Equip_Probability = new List<int>();
         m_List_Sale_Item_Equip_Count_Min = new List<int>();
         m_List_Sale_Item_Equip_Count_Max = new List<int>();
-        m_List_Sale_Item_Equip_Current = new List<Item_Equip>();
-        m_List_Sale_Item_Equip_Count = new List<int>();
         m_List_Sale_Item_Equip_Price_Min = new List<int>();
         m_List_Sale_Item_Equip_Price_Max = new List<int>();
+
+        m_List_Sale_Item_Equip_Current = new List<Item_Equip>();
+        m_List_Sale_Item_Equip_Count = new List<int>();
         m_List_Sale_Item_Equip_Price = new List<int>();
 
         m_List_Sale_Item_Use = new List<Item_Use>();
         m_List_Sale_Item_Use_Probability = new List<int>();
         m_List_Sale_Item_Use_Count_Min = new List<int>();
         m_List_Sale_Item_Use_Count_Max = new List<int>();
-        m_List_Sale_Item_Use_Current = new List<Item_Use>();
-        m_List_Sale_Item_Use_Count = new List<int>();
         m_List_Sale_Item_Use_Price_Min = new List<int>();
         m_List_Sale_Item_Use_Price_Max = new List<int>();
+        
+        m_List_Sale_Item_Use_Current = new List<Item_Use>();
+        m_List_Sale_Item_Use_Count = new List<int>();
         m_List_Sale_Item_Use_Price = new List<int>();
 
         m_List_Sale_Item_Etc = new List<Item_Etc>();
         m_List_Sale_Item_Etc_Probability = new List<int>();
         m_List_Sale_Item_Etc_Count_Min = new List<int>();
         m_List_Sale_Item_Etc_Count_Max = new List<int>();
-        m_List_Sale_Item_Etc_Current = new List<Item_Etc>();
-        m_List_Sale_Item_Etc_Count = new List<int>();
         m_List_Sale_Item_Etc_Price_Min = new List<int>();
         m_List_Sale_Item_Etc_Price_Max = new List<int>();
+        
+        m_List_Sale_Item_Etc_Current = new List<Item_Etc>();
+        m_List_Sale_Item_Etc_Count = new List<int>();
         m_List_Sale_Item_Etc_Price = new List<int>();
 
         m_List_Buy_Item = new List<Item>();
         m_List_Buy_Item_Price_Min = new List<int>();
         m_List_Buy_Item_Price_Max = new List<int>();
+        
         m_List_Buy_Item_Price = new List<int>();
 
         m_fBuy_Item_Equip_Value = 1.0f;
         m_fBuy_Item_Use_Value = 1.0f;
         m_fBuy_Item_Etc_Value = 1.0f;
-
-        //Debug.Log(name);
     }
 
-    // 일반 판매 상수 설정.
+    // 아이템 구매 상수 설정 함수
     public void Set_Buy_Item_Value(float fitemequip, float fitemuse, float fitemetc)
     {
-        this.m_fBuy_Item_Equip_Value = fitemequip;
-        this.m_fBuy_Item_Use_Value = fitemuse;
-        this.m_fBuy_Item_Etc_Value = fitemetc;
+        this.m_fBuy_Item_Equip_Value = fitemequip; // 장비아이템 구매 상수 설정
+        this.m_fBuy_Item_Use_Value = fitemuse;     // 소비아이템 구매 상수 설정
+        this.m_fBuy_Item_Etc_Value = fitemetc;     // 기타아이템 구매 상수 설정
     }
 
-    // 구매 목록 삭제.
-    public void Remove_Sale_Item(E_ITEMSLOT ei, int index)
+    // 아이템 실제 판매 데이터(아이템 실제 판매 목록, 아이템 실제 판매 수량, 아이템 실제 판매 가격) 삭제
+    public void Remove_Sale_Item(E_ITEMSLOT ei, int index) // ei : 아이템 타입, index : 삭제할 아이템 순번
     {
         switch(ei)
         {
             case E_ITEMSLOT.EQUIP:
                 {
-                    m_List_Sale_Item_Equip_Current.RemoveAt(index);
-                    m_List_Sale_Item_Equip_Count.RemoveAt(index);
-                    m_List_Sale_Item_Equip_Price.RemoveAt(index);
+                    m_List_Sale_Item_Equip_Current.RemoveAt(index); // 장비아이템 실제 판매 목록에서 해당 순번 삭제
+                    m_List_Sale_Item_Equip_Count.RemoveAt(index);   // 장비아이템 실제 판매 수량에서 해당 순번 삭제
+                    m_List_Sale_Item_Equip_Price.RemoveAt(index);   // 장비아이템 실제 판매 가격에서 해당 순번 삭제
 
                 } break;
             case E_ITEMSLOT.USE:
                 {
-                    m_List_Sale_Item_Use_Current.RemoveAt(index);
-                    m_List_Sale_Item_Use_Count.RemoveAt(index);
-                    m_List_Sale_Item_Use_Price.RemoveAt(index);
+                    m_List_Sale_Item_Use_Current.RemoveAt(index); // 소비아이템 실제 판매 목록에서 해당 순번 삭제
+                    m_List_Sale_Item_Use_Count.RemoveAt(index);   // 소비아이템 실제 판매 수량에서 해당 순번 삭제
+                    m_List_Sale_Item_Use_Price.RemoveAt(index);   // 소비아이템 실제 판매 가격에서 해당 순번 삭제
                 } break;
             case E_ITEMSLOT.ETC:
                 {
-                    m_List_Sale_Item_Etc_Current.RemoveAt(index);
-                    m_List_Sale_Item_Etc_Count.RemoveAt(index);
-                    m_List_Sale_Item_Etc_Price.RemoveAt(index);
+                    m_List_Sale_Item_Etc_Current.RemoveAt(index); // 기타아이템 실제 판매 목록에서 해당 순번 삭제
+                    m_List_Sale_Item_Etc_Count.RemoveAt(index);   // 기타아이템 실제 판매 수량에서 해당 순번 삭제
+                    m_List_Sale_Item_Etc_Price.RemoveAt(index);   // 기타아이템 실제 판매 가격에서 해당 순번 삭제
                 } break;
         }
     }
 
-    // 상점 이용 여부 판단.
+    // 거래 이용 사전 조건 판단 함수
+    // return true : 거래 이용 가능 / return false : 거래 이용 불가능
     public bool Check_Condition_Store()
     {
-        if (Check_Condition_Store_Quest() == false)
+        if (Check_Condition_Store_Quest() == false) // 거래 이용 사전 조건 판단 함수 - 퀘스트 연관
             return false;
-
-        if (Check_Condition_Store_SOC() == false)
+        if (Check_Condition_Store_STATUS() == false) // 거래 이용 사전 조건 판단 함수 - 스탯(능력치) 상한ㆍ하한
             return false;
-
-        if (Check_Condition_Store_STATUS() == false)
+        if (Check_Condition_Store_SOC() == false) // 거래 이용 사전 조건 판단 함수 - 스탯(평판) 상한ㆍ하한
             return false;
 
         return true;
     }
+    // 거래 이용 사전 조건 판단 함수 - 퀘스트 연관
+    // return true : 조건 충족 / return false : 조건 미흡
     bool Check_Condition_Store_Quest()
     {
+        // 거래 이용 사전 조건 판단 - 필수 완료 퀘스트(해당 리스트에 포함된 퀘스트가 완료되지 않은 경우 제한)
         for (int i = 0; i < m_ql_Quest_Necessity_Clear.Count; i++)
         {
             if (m_ql_Quest_Necessity_Clear[i].m_bClear == false)
@@ -203,7 +205,7 @@ public class NPC_Store : MonoBehaviour
             else
                 continue;
         }
-
+        // 거래 이용 사전 조건 판단 - 필수 미완료 퀘스트(해당 리스트에 포함된 퀘스트가 완료된 경우 제한)
         for (int i = 0; i < m_ql_Quest_Necessity_NonClear.Count; i++)
         {
             if (m_ql_Quest_Necessity_NonClear[i].m_bClear == true)
@@ -211,7 +213,7 @@ public class NPC_Store : MonoBehaviour
             else
                 continue;
         }
-
+        // 거래 이용 사전 조건 판단 - 필수 진행 퀘스트(해당 리스트에 포함된 퀘스트가 진행 중이지 않은 경우 제한)
         for (int i = 0; i < m_ql_Quest_Necessity_Process.Count; i++)
         {
             if (m_ql_Quest_Necessity_Process[i].m_bProcess == false)
@@ -219,7 +221,7 @@ public class NPC_Store : MonoBehaviour
             else
                 continue;
         }
-
+        // 거래 이용 사전 조건 판단 - 필수 미진행 퀘스트(해당 리스트에 포함된 퀘스트가 진행 중인 경우 제한)
         for (int i = 0; i < m_ql_Quest_Necessity_NonProcess.Count; i++)
         {
             if (m_ql_Quest_Necessity_NonProcess[i].m_bProcess == true)
@@ -230,18 +232,22 @@ public class NPC_Store : MonoBehaviour
 
         return true;
     }
-    bool Check_Condition_Store_SOC()
+    // 거래 이용 사전 조건 판단 함수 - 스탯(능력치) 상한ㆍ하한
+    // return true : 조건 충족 / return false : 조건 미흡
+    bool Check_Condition_Store_STATUS()
     {
-        if (Player_Total.Instance.m_ps_Status.m_sSoc.CheckCondition_Min(m_sSoc_Necessity_Down) == true &&
-            Player_Total.Instance.m_ps_Status.m_sSoc.CheckCondition_Max(m_sSoc_Necessity_Up) == true)
+        if (Player_Total.Instance.m_ps_Status.m_sStatus.CheckCondition_Min(m_sStatus_Necessity_Down) == true &&
+            Player_Total.Instance.m_ps_Status.m_sStatus.CheckCondition_Max(m_sStatus_Necessity_Up) == true) // 스탯(능력치) 조건 판단(상한ㆍ하한)
             return true;
         else
             return false;
     }
-    bool Check_Condition_Store_STATUS()
+    // 거래 이용 사전 조건 판단 함수 - 스탯(평판) 상한ㆍ하한
+    // return true : 조건 충족 / return false : 조건 미흡
+    bool Check_Condition_Store_SOC()
     {
-        if (Player_Total.Instance.m_ps_Status.m_sStatus.CheckCondition_Min(m_sStatus_Necessity_Down) == true &&
-            Player_Total.Instance.m_ps_Status.m_sStatus.CheckCondition_Max(m_sStatus_Necessity_Up) == true)
+        if (Player_Total.Instance.m_ps_Status.m_sSoc.CheckCondition_Min(m_sSoc_Necessity_Down) == true &&
+            Player_Total.Instance.m_ps_Status.m_sSoc.CheckCondition_Max(m_sSoc_Necessity_Up) == true) // 스탯(평판) 조건 판단(상한ㆍ하한)
             return true;
         else
             return false;
