@@ -74,7 +74,7 @@ public class GUI_Soc : MonoBehaviour
         m_BTN_SOC_UD.onClick.AddListener(delegate { Btn_Press_UD(); });
     }
 
-    // (버튼) GUI 펼치기/접기 클릭 이벤트 함수 - 플레이어 스탯(평판) GUI를 접거나 펼친다.
+    // (버튼) GUI 펼치기/접기 클릭 이벤트 함수 - 플레이어 스탯(평판) GUI를 펼치거나 접는다.
     void Btn_Press_UD()
     {
         if (m_bDisplaySOC == false)
