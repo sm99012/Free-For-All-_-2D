@@ -82,7 +82,7 @@ public class GUI_Soc : MonoBehaviour
             m_bDisplaySOC = true;
             m_TMP_BTN_SOC_UD.text = "+"; // (텍스트) GUI 펼치기/접기 = "+"
 
-            m_gPanel_SOC_Total.SetActive(false); // 관련 GUI 비활성화
+            m_gPanel_SOC_Total.SetActive(false); // GUI 오브젝트 비활성화
             m_gPanel_SOC.transform.SetAsLastSibling();
         }
         else
@@ -90,7 +90,7 @@ public class GUI_Soc : MonoBehaviour
             m_bDisplaySOC = false;
             m_TMP_BTN_SOC_UD.text = "-"; // (텍스트) GUI 펼치기/접기 = "-"
 
-            m_gPanel_SOC_Total.SetActive(true); // 관련 GUI 활성화
+            m_gPanel_SOC_Total.SetActive(true); // GUI 오브젝트 활성화
             m_gPanel_SOC.transform.SetAsLastSibling();
         }
     }
