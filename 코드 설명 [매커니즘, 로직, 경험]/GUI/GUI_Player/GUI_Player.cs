@@ -37,19 +37,17 @@ public class GUI_Player : MonoBehaviour
         m_gPanel_PlayerStatus = GameObject.Find("Panel_PlayerStatus");
 
         m_gPanel_PlayerStatus_HPBar = m_gPanel_PlayerStatus.transform.Find("Panel_PlayerStatus_HPBar").gameObject;
-        m_IMG_HP = m_gPanel_PlayerStatus_HPBar.transform.Find("IMG_PlayerStatus_HPBar_Current").gameObject.GetComponent<Image>();
         m_TMP_HP = m_gPanel_PlayerStatus_HPBar.transform.Find("TMP_PlayerStatus_HPBar").gameObject.GetComponent<TextMeshProUGUI>();
+        m_IMG_HP = m_gPanel_PlayerStatus_HPBar.transform.Find("IMG_PlayerStatus_HPBar_Current").gameObject.GetComponent<Image>();
         
         m_gPanel_PlayerStatus_MPBar = m_gPanel_PlayerStatus.transform.Find("Panel_PlayerStatus_MPBar").gameObject;
-        m_IMG_MP = m_gPanel_PlayerStatus_MPBar.transform.Find("IMG_PlayerStatus_MPBar_Current").gameObject.GetComponent<Image>();
         m_TMP_MP = m_gPanel_PlayerStatus_MPBar.transform.Find("TMP_PlayerStatus_MPBar").gameObject.GetComponent<TextMeshProUGUI>();
-
-        m_gPanel_DownBar = GameObject.Find("Panel_DownBar");
-
-        m_IMG_EXP = m_gPanel_DownBar.transform.Find("IMG_DownBar_EXPBar_Current").gameObject.GetComponent<Image>();
-        m_TMP_EXP = m_gPanel_DownBar.transform.Find("TMP_DownBar_EXPBar").gameObject.GetComponent<TextMeshProUGUI>();
+        m_IMG_MP = m_gPanel_PlayerStatus_MPBar.transform.Find("IMG_PlayerStatus_MPBar_Current").gameObject.GetComponent<Image>();
         
+        m_gPanel_DownBar = GameObject.Find("Panel_DownBar");
         m_TMP_LV = m_gPanel_DownBar.transform.Find("TMP_DownBar_LVBar").gameObject.GetComponent<TextMeshProUGUI>();
+        m_TMP_EXP = m_gPanel_DownBar.transform.Find("TMP_DownBar_EXPBar").gameObject.GetComponent<TextMeshProUGUI>();
+        m_IMG_EXP = m_gPanel_DownBar.transform.Find("IMG_DownBar_EXPBar_Current").gameObject.GetComponent<Image>();
     }
 
     private void Update()
