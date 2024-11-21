@@ -71,7 +71,7 @@ public class GUI_Status : MonoBehaviour
     // 초기 Button 이벤트 설정.
     void InitialSet_Button()
     {
-        (버튼) GUI 비활성화 클릭 클릭 이벤트 함수 설정
+        // (버튼) GUI 비활성화 클릭 클릭 이벤트 함수 설정
         //m_BTN_DetailStatus_Exit.onClick.RemoveAllListeners();
         //m_BTN_DetailStatus_Exit.onClick.AddListener(delegate { Btn_Press_Exit(); });
     }
