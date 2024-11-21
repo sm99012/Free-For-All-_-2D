@@ -15,8 +15,8 @@ public class GUI_Soc : MonoBehaviour
     [SerializeField] GameObject m_gPanel_SOC;
     
     [SerializeField] GameObject m_gPanel_SOC_Bar;
-    [SerializeField] Button m_BTN_SOC_UD;    // (버튼) GUI 펼치기/접기 버튼
-    public TextMeshProUGUI m_TMP_BTN_SOC_UD; // (텍스트) GUI 펼치기/접기 버튼 ("+" / "-")
+    [SerializeField] Button m_BTN_SOC_UD;    // (버튼) GUI 펼치기/접기
+    public TextMeshProUGUI m_TMP_BTN_SOC_UD; // (텍스트) GUI 펼치기/접기 ("+" / "-")
     bool m_bDisplaySOC;                      // GUI 펼치기/접기 상태 (m_bDisplaySOC == true : GUI 펼치기 상태 / m_bDisplaySOC == false : GUI 접기 상태)
     
     [SerializeField] GameObject m_gPanel_SOC_Total;
@@ -80,7 +80,7 @@ public class GUI_Soc : MonoBehaviour
         if (m_bDisplaySOC == false)
         {
             m_bDisplaySOC = true;
-            m_TMP_BTN_SOC_UD.text = "+"; // (텍스트) GUI 펼치기/접기 버튼  = "+"
+            m_TMP_BTN_SOC_UD.text = "+"; // (텍스트) GUI 펼치기/접기 = "+"
 
             m_gPanel_SOC_Total.SetActive(false); // 관련 GUI 비활성화
             m_gPanel_SOC.transform.SetAsLastSibling();
@@ -88,7 +88,7 @@ public class GUI_Soc : MonoBehaviour
         else
         {
             m_bDisplaySOC = false;
-            m_TMP_BTN_SOC_UD.text = "-"; // (텍스트) GUI 펼치기/접기 버튼  = "-"
+            m_TMP_BTN_SOC_UD.text = "-"; // (텍스트) GUI 펼치기/접기 = "-"
 
             m_gPanel_SOC_Total.SetActive(true); // 관련 GUI 활성화
             m_gPanel_SOC.transform.SetAsLastSibling();
