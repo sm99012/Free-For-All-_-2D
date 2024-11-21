@@ -13,14 +13,13 @@ public class GUI_Soc : MonoBehaviour
 {
     // GUI 오브젝트
     [SerializeField] GameObject m_gPanel_SOC;
-    [SerializeField] GameObject m_gPanel_SOC_Bar;
-    [SerializeField] GameObject m_gPanel_SOC_Total;
-
-    [SerializeField] Button m_BTN_SOC_UD;    // GUI 펼치기/접기 버튼
-    [SerializeField] bool m_bDisplaySOC;     // GUI 펼치기/접기 상태 (m_bDisplaySOC == true : GUI 펼치기 상태 / m_bDisplaySOC == false : GUI 접기 상태)
-    public TextMeshProUGUI m_TMP_BTN_SOC_UD; // GUI 펼치기/접기 버튼 텍스트
     
-    [Space(20)]
+    [SerializeField] GameObject m_gPanel_SOC_Bar;
+    [SerializeField] Button m_BTN_SOC_UD;    // (버튼) GUI 펼치기/접기 버튼
+    public TextMeshProUGUI m_TMP_BTN_SOC_UD; // (텍스트) GUI 펼치기/접기 버튼 ("+" / "-")
+    bool m_bDisplaySOC;                      // GUI 펼치기/접기 상태 (m_bDisplaySOC == true : GUI 펼치기 상태 / m_bDisplaySOC == false : GUI 접기 상태)
+    
+    [SerializeField] GameObject m_gPanel_SOC_Total;
     public TextMeshProUGUI m_TMP_Soc_Honor;    // (텍스트) 명예
     public TextMeshProUGUI m_TMP_Soc_Human;    // (텍스트) 인간 종족 평판
     public TextMeshProUGUI m_TMP_Soc_Animal;   // (텍스트) 동물 종족 평판
@@ -31,10 +30,11 @@ public class GUI_Soc : MonoBehaviour
     public TextMeshProUGUI m_TMP_Soc_Dragon;   // (텍스트) 용족 평판
     public TextMeshProUGUI m_TMP_Soc_Shadow;   // (텍스트) 어둠 평판
 
+    // GUI 초기 설정
     public void InitialSet()
     {
-        InitialSet_Object();
-        InitialSet_Button();
+        InitialSet_Object(); // GUI 오브젝트 초기 설정
+        InitialSet_Button(); // GUI 버튼 설정
 
         m_bDisplaySOC = false;
 
@@ -43,8 +43,7 @@ public class GUI_Soc : MonoBehaviour
         m_gPanel_SOC_Total.SetActive(true);
         m_gPanel_SOC.transform.SetAsLastSibling();
     }
-
-    // 초기 Object 불러오기.
+    // GUI 오브젝트 초기 설정
     void InitialSet_Object()
     {
         m_gPanel_SOC = GameObject.Find("Panel_SOC");
@@ -65,37 +64,38 @@ public class GUI_Soc : MonoBehaviour
         m_TMP_Soc_Shadow = m_gPanel_SOC_Total.transform.Find("Panel_SOC_Shadow").gameObject.transform.Find("TMP_SOC_Shadow").gameObject.GetComponent<TextMeshProUGUI>();
 
     }
-    // 초기 Button 이벤트 설정.
+    // GUI 버튼 설정
     void InitialSet_Button()
     {
         m_bDisplaySOC = true;
-
+        
+        // (버튼) GUI 펼치기/접기 클릭 이벤트 함수 설정
         m_BTN_SOC_UD.onClick.RemoveAllListeners();
         m_BTN_SOC_UD.onClick.AddListener(delegate { Btn_Press_UD(); });
     }
 
-    // Button 에 이벤트 추가.
+    // (버튼) GUI 펼치기/접기 클릭 이벤트 함수
     void Btn_Press_UD()
     {
         if (m_bDisplaySOC == false)
         {
             m_bDisplaySOC = true;
-            m_TMP_BTN_SOC_UD.text = "+";
+            m_TMP_BTN_SOC_UD.text = "+"; // (텍스트) GUI 펼치기/접기 버튼  = "+"
 
-            m_gPanel_SOC_Total.SetActive(false);
+            m_gPanel_SOC_Total.SetActive(false); // 관련 GUI 비활성화
             m_gPanel_SOC.transform.SetAsLastSibling();
         }
         else
         {
             m_bDisplaySOC = false;
-            m_TMP_BTN_SOC_UD.text = "-";
+            m_TMP_BTN_SOC_UD.text = "-"; // (텍스트) GUI 펼치기/접기 버튼  = "-"
 
-            m_gPanel_SOC_Total.SetActive(true);
+            m_gPanel_SOC_Total.SetActive(true); // 관련 GUI 활성화
             m_gPanel_SOC.transform.SetAsLastSibling();
         }
     }
 
-    // 평판 상태창 갱신.
+    // 플레이어 스탯(평판) GUI 업데이트
     public void UpdateSoc()
     {
         m_TMP_Soc_Honor.text = "명        예: " + Player_Total.Instance.m_ps_Status.m_sSoc.GetSOC_Honor();
