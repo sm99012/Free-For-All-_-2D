@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+// ※ 플레이어 스탯(평판) GUI
+
 public class GUI_Soc : MonoBehaviour
 {
     // SOC UI 활성화 / 비활성화
