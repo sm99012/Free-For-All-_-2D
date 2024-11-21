@@ -4,26 +4,23 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+//
 // ※ 플레이어 스탯(평판) GUI
+//    실시간으로 변화하는 플레이어의 스탯(평판)을 확인할 수 있다. GUI 펼치기/접기 기능을 구현해 유저에 편의를 제공했다.
+//
 
 public class GUI_Soc : MonoBehaviour
 {
-    // SOC UI 활성화 / 비활성화
-    // 활성화 시: 종족별 평판 확인 가능.
-    // 비활성화 시: 종족별 평판 확인 불가능.
+    // GUI 오브젝트
     [SerializeField] GameObject m_gPanel_SOC;
     [SerializeField] GameObject m_gPanel_SOC_Bar;
     [SerializeField] GameObject m_gPanel_SOC_Total;
 
-    // 평판 상태창 펼치기 / 접기
-    // m_bDisplaySOC = false: 접기.
-    // m_bDisplaySOC = true: 펼치기.
-    [SerializeField] Button m_BTN_SOC_UD;
-    [SerializeField] bool m_bDisplaySOC;
-
+    [SerializeField] Button m_BTN_SOC_UD; // GUI 펼치기/접기 버튼
+    [SerializeField] bool m_bDisplaySOC;  // GUI 펼치기/접기 상태 (m_bDisplaySOC == true : GUI 펼치기 상태 / m_bDisplaySOC == false : GUI 접기 상태)
+    public TextMeshProUGUI m_TMP_BTN_SOC_UD; // GUI 펼치기/접기 버튼 텍스트
+    
     [Space(20)]
-    public TextMeshProUGUI m_TMP_BTN_SOC_UD;
-
     public TextMeshProUGUI m_TMP_Soc_Honor;
     public TextMeshProUGUI m_TMP_Soc_Human;
     public TextMeshProUGUI m_TMP_Soc_Animal;
