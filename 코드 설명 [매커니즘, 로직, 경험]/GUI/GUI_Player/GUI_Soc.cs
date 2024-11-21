@@ -16,20 +16,20 @@ public class GUI_Soc : MonoBehaviour
     [SerializeField] GameObject m_gPanel_SOC_Bar;
     [SerializeField] GameObject m_gPanel_SOC_Total;
 
-    [SerializeField] Button m_BTN_SOC_UD; // GUI 펼치기/접기 버튼
-    [SerializeField] bool m_bDisplaySOC;  // GUI 펼치기/접기 상태 (m_bDisplaySOC == true : GUI 펼치기 상태 / m_bDisplaySOC == false : GUI 접기 상태)
+    [SerializeField] Button m_BTN_SOC_UD;    // GUI 펼치기/접기 버튼
+    [SerializeField] bool m_bDisplaySOC;     // GUI 펼치기/접기 상태 (m_bDisplaySOC == true : GUI 펼치기 상태 / m_bDisplaySOC == false : GUI 접기 상태)
     public TextMeshProUGUI m_TMP_BTN_SOC_UD; // GUI 펼치기/접기 버튼 텍스트
     
     [Space(20)]
-    public TextMeshProUGUI m_TMP_Soc_Honor;
-    public TextMeshProUGUI m_TMP_Soc_Human;
-    public TextMeshProUGUI m_TMP_Soc_Animal;
-    public TextMeshProUGUI m_TMP_Soc_Slime;
-    public TextMeshProUGUI m_TMP_Soc_Skeleton;
-    public TextMeshProUGUI m_TMP_Soc_Ents;
-    public TextMeshProUGUI m_TMP_Soc_Devil;
-    public TextMeshProUGUI m_TMP_Soc_Dragon;
-    public TextMeshProUGUI m_TMP_Soc_Shadow;
+    public TextMeshProUGUI m_TMP_Soc_Honor;    // (텍스트) 명예
+    public TextMeshProUGUI m_TMP_Soc_Human;    // (텍스트) 인간 종족 평판
+    public TextMeshProUGUI m_TMP_Soc_Animal;   // (텍스트) 동물 종족 평판
+    public TextMeshProUGUI m_TMP_Soc_Slime;    // (텍스트) 슬라임 종족 평판
+    public TextMeshProUGUI m_TMP_Soc_Skeleton; // (텍스트) 스켈레톤 종족 평판
+    public TextMeshProUGUI m_TMP_Soc_Ents;     // (텍스트) 앤트 종족 평판
+    public TextMeshProUGUI m_TMP_Soc_Devil;    // (텍스트) 마족 평판
+    public TextMeshProUGUI m_TMP_Soc_Dragon;   // (텍스트) 용족 평판
+    public TextMeshProUGUI m_TMP_Soc_Shadow;   // (텍스트) 어둠 평판
 
     public void InitialSet()
     {
