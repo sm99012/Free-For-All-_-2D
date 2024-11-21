@@ -18,14 +18,14 @@ public class GUI_Player : MonoBehaviour
     [Space(20)]
     [SerializeField] GameObject m_gPanel_DownBar;
 
-    TextMeshProUGUI m_TMP_LV;  // 플레이어 레벨 텍스트
-    TextMeshProUGUI m_TMP_HP;  // 플레이어 현재체력 / 최대체력 텍스트
-    TextMeshProUGUI m_TMP_MP;  // 플레이어 현재마나 / 최대마나 텍스트
-    TextMeshProUGUI m_TMP_EXP; // 플레이어 현재경험치 / 최대경험치 텍스트
+    TextMeshProUGUI m_TMP_LV;  // (텍스트) 플레이어 레벨
+    TextMeshProUGUI m_TMP_HP;  // (텍스트) 플레이어 현재체력 / 최대체력
+    TextMeshProUGUI m_TMP_MP;  // (텍스트) 플레이어 현재마나 / 최대마나
+    TextMeshProUGUI m_TMP_EXP; // (텍스트) 플레이어 현재경험치 / 최대경험치
 
-    Image m_IMG_HP;  // 체력 이미지
-    Image m_IMG_MP;  // 마나 이미지
-    Image m_IMG_EXP; // 경험치 이미지
+    Image m_IMG_HP;  // (이미지) 체력
+    Image m_IMG_MP;  // (이미지) 마나
+    Image m_IMG_EXP; // (이미지) 경험치
 
     // GUI 초기 설정
     public void InitialSet()
