@@ -4,7 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+//
 // ※ 플레이어 스탯(능력치(체력, 마나, 경험치)) GUI
+//
 
 public class GUI_Player : MonoBehaviour
 {
