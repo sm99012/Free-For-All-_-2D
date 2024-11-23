@@ -13,10 +13,10 @@ using TMPro;
 
 public class Equipslot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-    // Equipslot 에서 아이템 확인 UI.
-    [SerializeField] Image m_IMG_ItemSprite;
-    [SerializeField] Image m_IMG_BackgroundSprite;
-    [SerializeField] Image m_IMG_RedMask;
+    // GUI 오브젝트
+    [SerializeField] Image m_IMG_ItemSprite;       // (이미지) 장비아이템 외형
+    [SerializeField] Image m_IMG_BackgroundSprite; // (이미지) 장비창 슬롯 GUI 배경
+    [SerializeField] Image m_IMG_RedMask;          // (이미지) 장비아이템 착용 조건 불충족 시 활성화되는 마스크
     
     // 0: Hat 
     // 1: Top
@@ -25,8 +25,15 @@ public class Equipslot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     // 4: Gloves
     // 5: MainWeapon
     // 6: SubWeapon
-    public int m_nAryNumber;
-
+    public int m_nAryNumber; // 장비창 슬롯 고유코드. 해당 고유코드는 장비아이템 타입을 의미하며, 중복된 값을 가질 수 없다.
+                             // 0 : 모자
+                             // 1 : 
+                             // 2 : 
+                             // 3 : 
+                             // 4 : 
+                             // 5 : 
+                             // 6 : 
+    
     float m_fPanelCoordination_x;
     float m_fPanelCoordination_y;
 
