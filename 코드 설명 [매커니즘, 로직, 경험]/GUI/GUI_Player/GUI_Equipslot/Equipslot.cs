@@ -8,7 +8,7 @@ using TMPro;
 //
 // ※ 장비창 슬롯 GUI
 //    해당 GUI는 장비창GUI에 포함된 각각의 장비창 슬롯에 해당한다.
-//    착용중인 장비아이템의 외형이 해당 GUI를 통해 표시되며, 마우스 이벤트 함수를 이용해 해당 GUI 클릭 시 장비아이템의 세부 정보를 확인할 수 있는 GUI를 활성화하는 기능이 존재한다.
+//    착용중인 장비아이템의 외형이 해당 GUI를 통해 표시되며, 마우스 이벤트 함수를 이용해 해당 GUI 클릭 시 장비아이템의 세부 정보를 확인할 수 있는 GUI가 활성화되는 기능을 구현했다.
 //
 
 public class Equipslot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
