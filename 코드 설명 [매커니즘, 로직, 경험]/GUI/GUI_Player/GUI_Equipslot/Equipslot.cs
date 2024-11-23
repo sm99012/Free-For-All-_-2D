@@ -7,7 +7,8 @@ using TMPro;
 
 //
 // ※ 장비창 슬롯 GUI
-//    해당 GUI를 활성화 하여 플레이어가 현재 착용중인 장비아이템을 확인할 수 있다.
+//    해당 GUI는 장비창GUI에 포함된 각각의 장비창 슬롯에 해당한다.
+//    착용중인 장비아이템의 외형이 해당 GUI를 통해 표시되며, 마우스 이벤트 함수를 이용해 해당 GUI 클릭 시 장비아이템의 세부 정보를 확인할 수 있는 GUI로 연계된다. 
 //
 
 public class Equipslot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
@@ -16,6 +17,7 @@ public class Equipslot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     [SerializeField] Image m_IMG_ItemSprite;
     [SerializeField] Image m_IMG_BackgroundSprite;
     [SerializeField] Image m_IMG_RedMask;
+    
     // 0: Hat 
     // 1: Top
     // 2: Bottoms
