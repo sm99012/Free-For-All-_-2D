@@ -7,7 +7,7 @@ using TMPro;
 
 //
 // ※ 장비아이템 착용 해제 알림 GUI
-//    플레이어의 스탯(능력치, 평판) 변동으로 인해 착용중인 장비아이템이 해제될 경우 활성화된다.
+//    해당 GUI는 플레이어의 스탯(능력치, 평판) 변동으로 인해 착용중인 장비아이템이 해제될 경우 활성화된다.
 //
 
 public class GUI_Equipslot_Remove_Information : MonoBehaviour
