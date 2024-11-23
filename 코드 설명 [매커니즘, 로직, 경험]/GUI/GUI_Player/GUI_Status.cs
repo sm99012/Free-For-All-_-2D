@@ -94,6 +94,7 @@ public class GUI_Status : MonoBehaviour
         m_TMP_DetailStatus_Content_Speed.text = "이동속도: " + Player_Total.Instance.m_ps_Status.m_sStatus.GetSTATUS_Speed();
         m_TMP_DetailStatus_Content_AttackSpeed.text = "공격속도: " + (float)Math.Round(Player_Total.Instance.m_ps_Status.m_sStatus.GetSTATUS_AttackSpeed(), 2);
     }
+    
     // 현재 적용중인 아이템 세트효과 업데이트
     public void UpdateStatus_SetItemEffect(Dictionary<int, int> setitemdictionary) // setitemdictionary : 현재 적용중인 아이템 세트효과 데이터. Dictionary <Key : 아이템 세트효과 고유코드, Value : 아이템 세트효과 고유코드를 보유한 착용중인 장비아이템 개수>
     {
