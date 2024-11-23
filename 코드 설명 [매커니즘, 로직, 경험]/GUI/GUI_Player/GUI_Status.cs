@@ -68,7 +68,7 @@ public class GUI_Status : MonoBehaviour
         m_gTMP_DetailStatus_SetItemEffect_Content = m_gViewport_DetailStatus_SetItemEffect_Content.transform.Find("TMP_DetailStatus_SetItemEffect_Content").gameObject;
         m_TMP_DetailStatus_SetItemEffect_Content = m_gTMP_DetailStatus_SetItemEffect_Content.GetComponent<TextMeshProUGUI>();
     }
-    // 초기 Button 이벤트 설정.
+    // GUI 버튼 설정
     void InitialSet_Button()
     {
         // (버튼) GUI 비활성화 클릭 클릭 이벤트 함수 설정
