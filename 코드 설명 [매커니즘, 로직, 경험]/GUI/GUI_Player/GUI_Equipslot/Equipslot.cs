@@ -5,6 +5,11 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 
+//
+// ※ 장비창 슬롯 GUI
+//    해당 GUI를 활성화 하여 플레이어가 현재 착용중인 장비아이템을 확인할 수 있다.
+//
+
 public class Equipslot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     // Equipslot 에서 아이템 확인 UI.
