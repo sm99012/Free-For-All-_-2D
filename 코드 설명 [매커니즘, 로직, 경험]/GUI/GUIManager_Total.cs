@@ -235,6 +235,11 @@ public class GUIManager_Total : MonoBehaviour
         m_GUI_Equipslot_Equip_Information.UnDisplay_GUI_Equipslot_Equip_Information();
     }
     
+    public void Display_GUI_Equipslot_Remove_Information()
+    {
+        m_GUI_Equipslot_Remove_Information.Display_GUI_Equipslot_Remove_Information();
+    }
+    
     public void Display_GUI_Reinforcement(int arynumber = -1, Item_Use item_reinforcement = null)
     {
         if (m_GUI_Reinforcement.Display_GUI_Reinforcement(arynumber, item_reinforcement) == true)
