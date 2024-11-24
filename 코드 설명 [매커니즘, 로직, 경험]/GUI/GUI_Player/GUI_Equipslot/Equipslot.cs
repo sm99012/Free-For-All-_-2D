@@ -62,95 +62,57 @@ public class Equipslot : MonoBehaviour, IPointerClickHandler
     }
 
     // 마우스 클릭 이벤트 함수
-    // 장비창 슬롯 GUI 클릭 시 장비아이템의 세부 정보를 확인할 수 있는 GUI 활성화
+    // 장비창 슬롯 GUI 클릭 시 장비아이템 세부 정보 GUI 활성화
     void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
     {
         switch (m_nAryNumber) // 장비창 슬롯 고유코드
         {
             case 0:
                 {
-                    if (Player_Equipment.m_bEquipment_Hat == true) // 착용중인 장비아이템(모자)이 존재하는 경우
-                    {
-                        GUIManager_Total.Instance.m_GUI_Equipslot_Equip_Information.m_bEquip_Condition_Check = true;
-                        GUIManager_Total.Instance.Update_Equipslot_Equip_Information(Player_Equipment.m_gEquipment_Hat, m_nAryNumber); // 착용중인 장비아이템(모자) 세부 정보 GUI 업데이트
-                        GUIManager_Total.Instance.Display_GUI_Equipslot_Equip_Information(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.y)); // 장비아이템 세부 정보 GUI 활성화
-                    }
-                    else
-                        GUIManager_Total.Instance.UnDisplay_GUI_Equipslot_Equip_Information(); // 장비아이템 세부 정보 GUI 비활성화
+                    OnPointerClick_C(Player_Equipment.m_bEquipment_Hat, Player_Equipment.m_gEquipment_Hat); // 장비아이템(모자) 세부 정보 GUI 활성화 함수
                 }
                 break;
             case 1:
                 {
-                    if (Player_Equipment.m_bEquipment_Top == true) // 착용중인 장비아이템(상의)이 존재하는 경우
-                    {
-                        GUIManager_Total.Instance.m_GUI_Equipslot_Equip_Information.m_bEquip_Condition_Check = true;
-                        GUIManager_Total.Instance.Update_Equipslot_Equip_Information(Player_Equipment.m_gEquipment_Top, m_nAryNumber); // 착용중인 장비아이템(상의) 세부 정보 GUI 업데이트
-                        GUIManager_Total.Instance.Display_GUI_Equipslot_Equip_Information(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.y)); // 장비아이템 세부 정보 GUI 활성화
-                    }
-                    else
-                        GUIManager_Total.Instance.UnDisplay_GUI_Equipslot_Equip_Information(); // 장비아이템 세부 정보 GUI 비활성화
+                    OnPointerClick_C(Player_Equipment.m_bEquipment_Top, Player_Equipment.m_gEquipment_Top); // 장비아이템(상의) 세부 정보 GUI 활성화 함수
                 }
                 break;
             case 2:
                 {
-                    if (Player_Equipment.m_bEquipment_Bottoms == true) // 착용중인 장비아이템(하의)이 존재하는 경우
-                    {
-                        GUIManager_Total.Instance.m_GUI_Equipslot_Equip_Information.m_bEquip_Condition_Check = true;
-                        GUIManager_Total.Instance.Update_Equipslot_Equip_Information(Player_Equipment.m_gEquipment_Bottoms, m_nAryNumber); // 착용중인 장비아이템(하의) 세부 정보 GUI 업데이트
-                        GUIManager_Total.Instance.Display_GUI_Equipslot_Equip_Information(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.y)); // 장비아이템 세부 정보 GUI 활성화
-                    }
-                    else
-                        GUIManager_Total.Instance.UnDisplay_GUI_Equipslot_Equip_Information(); // 장비아이템 세부 정보 GUI 비활성화
+                    OnPointerClick_C(Player_Equipment.m_bEquipment_Bottoms, Player_Equipment.m_gEquipment_Bottoms); // 장비아이템(하의) 세부 정보 GUI 활성화 함수
                 }
                 break;
             case 3:
                 {
-                    if (Player_Equipment.m_bEquipment_Shoes == true) // 착용중인 장비아이템(신발)이 존재하는 경우
-                    {
-                        GUIManager_Total.Instance.m_GUI_Equipslot_Equip_Information.m_bEquip_Condition_Check = true;
-                        GUIManager_Total.Instance.Update_Equipslot_Equip_Information(Player_Equipment.m_gEquipment_Shoes, m_nAryNumber); // 착용중인 장비아이템(신발) 세부 정보 GUI 업데이트
-                        GUIManager_Total.Instance.Display_GUI_Equipslot_Equip_Information(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.y)); // 장비아이템 세부 정보 GUI 활성화
-                    }
-                    else
-                        GUIManager_Total.Instance.UnDisplay_GUI_Equipslot_Equip_Information(); // 장비아이템 세부 정보 GUI 비활성화
+                    OnPointerClick_C(Player_Equipment.m_bEquipment_Shoes, Player_Equipment.m_gEquipment_Shoes); // 장비아이템(신발) 세부 정보 GUI 활성화 함수
                 }
                 break;
             case 4:
                 {
-                    if (Player_Equipment.m_bEquipment_Gloves == true) // 착용중인 장비아이템(장갑)이 존재하는 경우
-                    {
-                        GUIManager_Total.Instance.m_GUI_Equipslot_Equip_Information.m_bEquip_Condition_Check = true;
-                        GUIManager_Total.Instance.Update_Equipslot_Equip_Information(Player_Equipment.m_gEquipment_Gloves, m_nAryNumber); // 착용중인 장비아이템(장갑) 세부 정보 GUI 업데이트
-                        GUIManager_Total.Instance.Display_GUI_Equipslot_Equip_Information(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.y)); // 장비아이템 세부 정보 GUI 활성화
-                    }
-                    else
-                        GUIManager_Total.Instance.UnDisplay_GUI_Equipslot_Equip_Information(); // 장비아이템 세부 정보 GUI 비활성화
+                    OnPointerClick_C(Player_Equipment.m_bEquipment_Gloves, Player_Equipment.m_gEquipment_Gloves); // 장비아이템(장갑) 세부 정보 GUI 활성화 함수
                 }
                 break;
             case 5:
                 {
-                    if (Player_Equipment.m_bEquipment_Mainweapon == true) // 착용중인 장비아이템(주무기)이 존재하는 경우
-                    {
-                        GUIManager_Total.Instance.m_GUI_Equipslot_Equip_Information.m_bEquip_Condition_Check = true;
-                        GUIManager_Total.Instance.Update_Equipslot_Equip_Information(Player_Equipment.m_gEquipment_Mainweapon, m_nAryNumber); // 착용중인 장비아이템(주무기) 세부 정보 GUI 업데이트
-                        GUIManager_Total.Instance.Display_GUI_Equipslot_Equip_Information(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.y)); // 장비아이템 세부 정보 GUI 활성화
-                    }
-                    else
-                        GUIManager_Total.Instance.UnDisplay_GUI_Equipslot_Equip_Information(); // 장비아이템 세부 정보 GUI 비활성화
+                    OnPointerClick_C(Player_Equipment.m_bEquipment_Mainweapon, Player_Equipment.m_gEquipment_Mainweapon); // 장비아이템(주무기) 세부 정보 GUI 활성화 함수
                 }
                 break;
             case 6:
                 {
-                    if (Player_Equipment.m_bEquipment_Subweapon == true) // 착용중인 장비아이템(보조무기)이 존재하는 경우
-                    {
-                        GUIManager_Total.Instance.m_GUI_Equipslot_Equip_Information.m_bEquip_Condition_Check = true;
-                        GUIManager_Total.Instance.Update_Equipslot_Equip_Information(Player_Equipment.m_gEquipment_Subweapon, m_nAryNumber); // 착용중인 장비아이템(보조무기) 세부 정보 GUI 업데이트
-                        GUIManager_Total.Instance.Display_GUI_Equipslot_Equip_Information(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.y)); // 장비아이템 세부 정보 GUI 활성화
-                    }
-                    else
-                        GUIManager_Total.Instance.UnDisplay_GUI_Equipslot_Equip_Information(); // 장비아이템 세부 정보 GUI 비활성화
+                    OnPointerClick_C(Player_Equipment.m_bEquipment_Subweapon, Player_Equipment.m_gEquipment_Subweapon); // 장비아이템(보조무기) 세부 정보 GUI 활성화 함수
             }
                 break;
         }
+    }
+    // 장비아이템 세부 정보 GUI 활성화 함수
+    void OnPointerClick_C(bool bequipment, Item_Equip item_equip) // bequipment : 착용중인 장비아이템(타입) 존재 유무, item_equip : 착용중인 장비아이템(타입)
+    {
+        if (bequipment == true) // 착용중인 장비아이템(타입)이 존재하는 경우
+        {
+            GUIManager_Total.Instance.Update_Equipslot_Equip_Information(item_equip, m_nAryNumber); // 착용중인 장비아이템 세부 정보 GUI 업데이트
+            GUIManager_Total.Instance.Display_GUI_Equipslot_Equip_Information(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.y)); // 장비아이템 세부 정보 GUI 활성화
+        }
+        else
+            GUIManager_Total.Instance.UnDisplay_GUI_Equipslot_Equip_Information(); // 장비아이템 세부 정보 GUI 비활성화
     }
 }
