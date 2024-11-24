@@ -31,8 +31,7 @@ public class GUI_Equipslot : MonoBehaviour
     [Space(20)]
     // 장비아이템 세부설명 UI.
     [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information;
-    // 장비아이템 장착 해제시 경고 UI.
-    [SerializeField] GameObject m_gPanel_Equipslot_Remove_Information;
+
 
     public GameObject[] m_gary_Equipslot;
 
@@ -80,7 +79,6 @@ public class GUI_Equipslot : MonoBehaviour
 
         m_gPanel_Equipslot = GameObject.Find("Canvas_GUI").gameObject.transform.Find("Panel_ES").gameObject.transform.Find("Panel_Equipslot").gameObject;
         m_gPanel_Equipslot_Equip_Information = GameObject.Find("Canvas_GUI").gameObject.transform.Find("Panel_Equipslot_Equip_Information").gameObject;
-        m_gPanel_Equipslot_Remove_Information = GameObject.Find("Canvas_GUI").gameObject.transform.Find("Panel_Equipslot_Remove_Information").gameObject;
 
         m_gPanel_Equipslot_Exit = m_gPanel_Equipslot.transform.Find("Panel_Equipslot_Exit").gameObject;
         m_gPanel_Equipslot_Content = m_gPanel_Equipslot.transform.Find("Panel_Equipslot_Content").gameObject;
@@ -125,8 +123,7 @@ public class GUI_Equipslot : MonoBehaviour
             else
             {
                 m_gary_Equipslot[0].GetComponent<Equipslot>().SetItem_Equip_NotApply();
-                m_gPanel_Equipslot_Remove_Information.transform.SetAsLastSibling();
-                m_gPanel_Equipslot_Remove_Information.SetActive(true);
+                GUIManager_Total.Instance.Display_GUI_Equipslot_Remove_Information();
             }
         }
         if (Player_Equipment.m_bEquipment_Top == false)
@@ -140,8 +137,7 @@ public class GUI_Equipslot : MonoBehaviour
             else
             {
                 m_gary_Equipslot[1].GetComponent<Equipslot>().SetItem_Equip_NotApply();
-                m_gPanel_Equipslot_Remove_Information.transform.SetAsLastSibling();
-                m_gPanel_Equipslot_Remove_Information.SetActive(true);
+                GUIManager_Total.Instance.Display_GUI_Equipslot_Remove_Information();
             }
         }
         if (Player_Equipment.m_bEquipment_Bottoms == false)
@@ -155,8 +151,7 @@ public class GUI_Equipslot : MonoBehaviour
             else
             {
                 m_gary_Equipslot[2].GetComponent<Equipslot>().SetItem_Equip_NotApply();
-                m_gPanel_Equipslot_Remove_Information.transform.SetAsLastSibling();
-                m_gPanel_Equipslot_Remove_Information.SetActive(true);
+                GUIManager_Total.Instance.Display_GUI_Equipslot_Remove_Information();
             }
         }
         if (Player_Equipment.m_bEquipment_Shose == false)
@@ -170,8 +165,7 @@ public class GUI_Equipslot : MonoBehaviour
             else
             {
                 m_gary_Equipslot[3].GetComponent<Equipslot>().SetItem_Equip_NotApply();
-                m_gPanel_Equipslot_Remove_Information.transform.SetAsLastSibling();
-                m_gPanel_Equipslot_Remove_Information.SetActive(true);
+                GUIManager_Total.Instance.Display_GUI_Equipslot_Remove_Information();
             }
         }
         if (Player_Equipment.m_bEquipment_Gloves == false)
@@ -185,8 +179,7 @@ public class GUI_Equipslot : MonoBehaviour
             else
             {
                 m_gary_Equipslot[4].GetComponent<Equipslot>().SetItem_Equip_NotApply();
-                m_gPanel_Equipslot_Remove_Information.transform.SetAsLastSibling();
-                m_gPanel_Equipslot_Remove_Information.SetActive(true);
+                GUIManager_Total.Instance.Display_GUI_Equipslot_Remove_Information();
             }
         }
         if (Player_Equipment.m_bEquipment_Mainweapon == false)
@@ -200,8 +193,7 @@ public class GUI_Equipslot : MonoBehaviour
             else
             {
                 m_gary_Equipslot[5].GetComponent<Equipslot>().SetItem_Equip_NotApply();
-                m_gPanel_Equipslot_Remove_Information.transform.SetAsLastSibling();
-                m_gPanel_Equipslot_Remove_Information.SetActive(true);
+                GUIManager_Total.Instance.Display_GUI_Equipslot_Remove_Information();
             }
         }
         if (Player_Equipment.m_bEquipment_Subweapon == false)
@@ -215,8 +207,7 @@ public class GUI_Equipslot : MonoBehaviour
             else
             {
                 m_gary_Equipslot[6].GetComponent<Equipslot>().SetItem_Equip_NotApply();
-                m_gPanel_Equipslot_Remove_Information.transform.SetAsLastSibling();
-                m_gPanel_Equipslot_Remove_Information.SetActive(true);
+                GUIManager_Total.Instance.Display_GUI_Equipslot_Remove_Information();
             }
         }
     }
