@@ -11,7 +11,7 @@ using TMPro;
 //    착용중인 장비아이템의 외형이 해당 GUI를 통해 표시되며, 마우스 이벤트 함수를 이용해 해당 GUI 클릭 시 장비아이템의 세부 정보를 확인할 수 있는 GUI가 활성화되는 기능을 구현했다.
 //
 
-public class Equipslot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+public class Equipslot : MonoBehaviour, IPointerClickHandler
 {
     // GUI 오브젝트
     [SerializeField] Image m_IMG_ItemSprite;       // (이미지) 장비아이템 외형
@@ -66,16 +66,6 @@ public class Equipslot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         m_IMG_RedMask.color = new Color(1, 0, 0, 0);
     }
 
-    void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
-    {
-
-    }
-
-    void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
-    {
-        
-    }
-
     void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
     {
         switch (m_nAryNumber)
@@ -97,7 +87,7 @@ public class Equipslot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
                     if (Player_Equipment.m_bEquipment_Top == true)
                     {
                         GUIManager_Total.Instance.m_GUI_Equipslot_Equip_Information.m_bEquip_Condition_Check = true;
-                        GUIManager_Total.Instance.Update_Equipslot_Equip_Information(Player_Equipment.m_gEquipment_Hat, m_nAryNumber);
+                        GUIManager_Total.Instance.Update_Equipslot_Equip_Information(Player_Equipment.m_gEquipment_Top, m_nAryNumber);
                         GUIManager_Total.Instance.Display_GUI_Equipslot_Equip_Information(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.y));
                     }
                     else
@@ -109,7 +99,7 @@ public class Equipslot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
                     if (Player_Equipment.m_bEquipment_Bottoms == true)
                     {
                         GUIManager_Total.Instance.m_GUI_Equipslot_Equip_Information.m_bEquip_Condition_Check = true;
-                        GUIManager_Total.Instance.Update_Equipslot_Equip_Information(Player_Equipment.m_gEquipment_Hat, m_nAryNumber);
+                        GUIManager_Total.Instance.Update_Equipslot_Equip_Information(Player_Equipment.m_gEquipment_Bottoms, m_nAryNumber);
                         GUIManager_Total.Instance.Display_GUI_Equipslot_Equip_Information(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.y));
                     }
                     else
@@ -121,7 +111,7 @@ public class Equipslot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
                     if (Player_Equipment.m_bEquipment_Shoes == true)
                     {
                         GUIManager_Total.Instance.m_GUI_Equipslot_Equip_Information.m_bEquip_Condition_Check = true;
-                        GUIManager_Total.Instance.Update_Equipslot_Equip_Information(Player_Equipment.m_gEquipment_Hat, m_nAryNumber);
+                        GUIManager_Total.Instance.Update_Equipslot_Equip_Information(Player_Equipment.m_gEquipment_Shoes, m_nAryNumber);
                         GUIManager_Total.Instance.Display_GUI_Equipslot_Equip_Information(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.y));
                     }
                     else
@@ -133,7 +123,7 @@ public class Equipslot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
                     if (Player_Equipment.m_bEquipment_Gloves == true)
                     {
                         GUIManager_Total.Instance.m_GUI_Equipslot_Equip_Information.m_bEquip_Condition_Check = true;
-                        GUIManager_Total.Instance.Update_Equipslot_Equip_Information(Player_Equipment.m_gEquipment_Hat, m_nAryNumber);
+                        GUIManager_Total.Instance.Update_Equipslot_Equip_Information(Player_Equipment.m_gEquipment_Gloves, m_nAryNumber);
                         GUIManager_Total.Instance.Display_GUI_Equipslot_Equip_Information(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.y));
                     }
                     else
@@ -145,7 +135,7 @@ public class Equipslot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
                     if (Player_Equipment.m_bEquipment_Mainweapon == true)
                     {
                         GUIManager_Total.Instance.m_GUI_Equipslot_Equip_Information.m_bEquip_Condition_Check = true;
-                        GUIManager_Total.Instance.Update_Equipslot_Equip_Information(Player_Equipment.m_gEquipment_Hat, m_nAryNumber);
+                        GUIManager_Total.Instance.Update_Equipslot_Equip_Information(Player_Equipment.m_gEquipment_Mainweapon, m_nAryNumber);
                         GUIManager_Total.Instance.Display_GUI_Equipslot_Equip_Information(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.y));
                     }
                     else
@@ -157,14 +147,15 @@ public class Equipslot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
                     if (Player_Equipment.m_bEquipment_Subweapon == true)
                     {
                         GUIManager_Total.Instance.m_GUI_Equipslot_Equip_Information.m_bEquip_Condition_Check = true;
-                        GUIManager_Total.Instance.Update_Equipslot_Equip_Information(Player_Equipment.m_gEquipment_Hat, m_nAryNumber);
+                        GUIManager_Total.Instance.Update_Equipslot_Equip_Information(Player_Equipment.m_gEquipment_Subweapon, m_nAryNumber);
                         GUIManager_Total.Instance.Display_GUI_Equipslot_Equip_Information(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.y));
                     }
                     else
                         GUIManager_Total.Instance.UnDisplay_GUI_Equipslot_Equip_Information();
-        }
+            }
                 break;
         }
     }
 }
+
 
