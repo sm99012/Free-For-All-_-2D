@@ -389,6 +389,17 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
         UpdateItemEquipInformation_SetItemEffect_UpBar();
     }
 
+    public void Display_GUI_Equipslot_Equip_Information(float fcoordination_x, float fcoordination_y)
+    {
+        m_gPanel_Equipslot_Equip_Information.SetActive(true);
+        m_gPanel_Equipslot_Equip_Information.transform.SetAsLastSibling();
+        m_gPanel_Equipslot_Equip_Information.transform.position = new Vector2(fcoordination_x, fcoordination_y);
+    }
+    public void UnDisplay_GUI_Equipslot_Equip_Information()
+    {
+        m_gPanel_Equipslot_Equip_Information.SetActive(false);
+    }
+
     // 장비 아이템 설명 창 세부 설정.
     public void UpdateItemEquipInformation(Item_Equip item, int arynumber)
     {
