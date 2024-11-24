@@ -34,9 +34,6 @@ public class Equipslot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
                              // 5 : 주무기
                              // 6 : 보조무기
 
-    // Equipslot_Equip_Information 에서 확인 할 수 있는 장비 아이템 정보 UI.
-    [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information;
-
     public void Awake()
     {
         InitialSet_Object();
