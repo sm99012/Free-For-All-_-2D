@@ -44,4 +44,11 @@ public class GUI_Equipslot_Remove_Information : MonoBehaviour
     {
         m_gPanel_Equipslot_Remove_Information.SetActive(false);
     }
+
+    // 장비아이템 해제 알림 GUI 활성화
+    public void Display_GUI_Equipslot_Remove_Information()
+    {
+        m_gPanel_Equipslot_Remove_Information.transform.SetAsLastSibling();
+        m_gPanel_Equipslot_Remove_Information.SetActive(true);
+    }
 }
