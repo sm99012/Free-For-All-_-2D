@@ -226,6 +226,15 @@ public class GUIManager_Total : MonoBehaviour
         m_GUI_Status.Display_GUI_Status();
     }
 
+    public void Display_GUI_Equipslot_Equip_Information(float fcoordination_x, float fcoordination_y)
+    {
+        m_GUI_Equipslot_Equip_Information.Display_GUI_Equipslot_Equip_Information(fcoordination_x, fcoordination_y);
+    }
+    public void UnDisplay_GUI_Equipslot_Equip_Information()
+    {
+        m_GUI_Equipslot_Equip_Information.UnDisplay_GUI_Equipslot_Equip_Information();
+    }
+    
     public void Display_GUI_Reinforcement(int arynumber = -1, Item_Use item_reinforcement = null)
     {
         if (m_GUI_Reinforcement.Display_GUI_Reinforcement(arynumber, item_reinforcement) == true)
