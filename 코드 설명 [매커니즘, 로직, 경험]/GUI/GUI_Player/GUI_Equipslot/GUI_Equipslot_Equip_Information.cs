@@ -106,8 +106,8 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
 
     [SerializeField] List<int> m_nList_SetItemEffect_Code; // 아이템 세트효과 순서 목록
     // 아이템 세트효과 정보
-    int m_nSetItemEffect_List_Index;                       // 아이템 세트효과 정보 순번. 현재 유저가 확인중인 아이템 세트효과 (Ex) [초보 모험가 세트효과] 3세트 정보 확인중)
-    int m_nSetItemEffect_Current;                          // 아이템 세트효과 정보 순번
+    int m_nSetItemEffect_List_Index;                       // 아이템 세트효과 정보 순번. 아이템 세트효과 존재 판단에 사용되는 변수
+    int m_nSetItemEffect_Current;                          // 아이템 세트효과 정보 순번. 현재 유저가 확인중인 아이템 세트효과 (Ex) [초보 모험가 세트효과] 3세트 정보 확인중)
     
     // 아이템 세트효과 적용 여부 판단 관련 변수
     int m_nPlayerEquipment_SetItemEffect_Current;          // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 (Ex) [초보 모험가 세트효과] 2세트 적용중)
@@ -367,8 +367,8 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
         m_nSetItemEffect_List_Index -= 1;
         m_nSetItemEffect_Current = m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index];
 
-        UpdateItemEquipInformation_SetItemEffect_Content();
-        UpdateItemEquipInformation_SetItemEffect_UpBar();
+        UpdateItemEquipInformation_SetItemEffect_UpBar();   // 아이템 세트효과 세부 정보 GUI 업데이트 - (버튼) 아이템 세트효과 단계별 정보 변경(L, R) 활성화 / 비활성화 여부 판단
+        UpdateItemEquipInformation_SetItemEffect_Content(); // 아이템 세트효과 세부 정보 GUI 업데이트 - 아이템 세트효과 정보
     }
     // (버튼) 아이템 세트효과 단계별 정보 변경(R) 클릭 이벤트 함수
     void Set_BTN_SetItemEffect_UpBar_Right()
@@ -376,8 +376,8 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
         m_nSetItemEffect_List_Index += 1;
         m_nSetItemEffect_Current = m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index];
 
-        UpdateItemEquipInformation_SetItemEffect_Content();
-        UpdateItemEquipInformation_SetItemEffect_UpBar();
+        UpdateItemEquipInformation_SetItemEffect_UpBar();   // 아이템 세트효과 세부 정보 GUI 업데이트 - (버튼) 아이템 세트효과 단계별 정보 변경(L, R) 활성화 / 비활성화 여부 판단
+        UpdateItemEquipInformation_SetItemEffect_Content(); // 아이템 세트효과 세부 정보 GUI 업데이트 - 아이템 세트효과 정보
     }
 
     // 장비아이템 세부 정보 GUI 활성화 함수
@@ -530,6 +530,10 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
         // 장비아이템 강화 상태 설정
         m_TMP_Equipslot_Equip_Information_Content_ItemInformation.text += "강화 상태: " + item.m_nReinforcementCount_Current + " / " + item.m_nReinforcementCount_Max;
 
+        // 장비아이템 설명 설정
+        m_TMP_Equipslot_Equip_Information_Content_ItemDescription_Content.text = "";
+        m_TMP_Equipslot_Equip_Information_Content_ItemDescription_Content.text += item.GetItemDescription();
+
         // 장비아이템 착용효과(스탯(능력치)) 설정
         m_TMP_Equipslot_Equip_Information_Content_Effect_Status_L.text = "";
         m_TMP_Equipslot_Equip_Information_Content_Effect_Status_L.text += Refine_Condition("레        벨:", item.m_sStatus_Effect.GetSTATUS_LV(), item.m_STATUS_AdditionalOption.GetSTATUS_LV(), item.m_STATUS_ReinforcementValue.GetSTATUS_LV());
@@ -581,90 +585,90 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
         m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_R.text += Refine_Condition("마        족: ", "\n", item.m_sSoc_Limit_Min.GetSOC_Devil(), item.m_sSoc_Limit_Max.GetSOC_Devil(), player.m_sSoc.GetSOC_Devil());
         m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_R.text += Refine_Condition("용        족: ", "\n", item.m_sSoc_Limit_Min.GetSOC_Dragon(), item.m_sSoc_Limit_Max.GetSOC_Dragon(), player.m_sSoc.GetSOC_Dragon());
         m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_R.text += Refine_Condition("어        듬: ", "", item.m_sSoc_Limit_Min.GetSOC_Shadow(), item.m_sSoc_Limit_Max.GetSOC_Shadow(), player.m_sSoc.GetSOC_Shadow());
-
-        // 장비아이템 설명 설정
-        m_TMP_Equipslot_Equip_Information_Content_ItemDescription_Content.text = "";
-        m_TMP_Equipslot_Equip_Information_Content_ItemDescription_Content.text += item.GetItemDescription();
     }
-    //
-    //
-    //
-    // 아이템창이 가득 차있으면 장비해제 못하도록 코드 수정 필요.
     // 장비아이템 세부 정보 GUI 업데이트 - 장비아이템 착용 해제
     void UpdateItemEquipInformation_EquipRemove(Item_Equip item, int arynumber) // item : 장비아이템, arynumber : 장비창 슬롯 고유코드
     {
         m_TMP_Equipslot_Equip_Information_EquipPossibility.text = m_sColor_White + "장비해제" + m_sColor_End;
+        // (버튼) 장비아이템 착용 해제 클릭 이벤트 함수 설정
         m_BTN_Equipslot_Equip_Information_EquipPossibility.onClick.RemoveAllListeners();
         m_BTN_Equipslot_Equip_Information_EquipPossibility.onClick.AddListener(delegate { Set_BTN_Equip_Remove(arynumber); });
     }
     // 장비아이템 세부 정보 GUI 업데이트 - 아이템 세트효과 정보
     void UpdateItemEquipInformation_SetItemEffect(Item_Equip item) // item : 장비아이템
     {
-        m_nList_SetItemEffect_Code.Clear();
-        int setitemeffectnumber = ItemSetEffectManager.instance.Return_SetItemEffect(item.m_nItemCode);
-        if (setitemeffectnumber == 0)
+        m_nList_SetItemEffect_Code.Clear(); // 아이템 세트효과 순서 목록 초기화
+        int setitemeffectnumber = ItemSetEffectManager.instance.Return_SetItemEffect(item.m_nItemCode); // 아이템 세트효과 고유코드
+        if (setitemeffectnumber == 0) // 장비아이템의 아이템 세트효과가 존재하지 않는 경우
         {
-            m_gPanel_SetItemEffect.SetActive(false);
+            m_gPanel_SetItemEffect.SetActive(false); // 아이템 세트효과 세부 정보 GUI 비활성화
 
             m_ISE = null;
         }
-        else
+        else // 장비아이템의 아이템 세트효과가 존재하는 경우
         {
             m_gPanel_SetItemEffect.SetActive(true);
 
-            m_ISE = ItemSetEffectManager.m_Dictionary_ItemSetEffect[setitemeffectnumber];
+            m_ISE = ItemSetEffectManager.m_Dictionary_ItemSetEffect[setitemeffectnumber]; // 장비아이템의 아이템 세트효과 설정
 
             m_TMP_SetItemEffect_Name.text = m_ISE.m_sItemSetEffect_Name;
 
-            m_nSetItemEffect_Count = m_ISE.m_Dictionary_Item_Equip_Code.Count;
+            m_nSetItemEffect_Count = m_ISE.m_Dictionary_Item_Equip_Code.Count; // 아이템 세트효과 풀 세트 개수 설정
             for (int i = 0; i < m_nSetItemEffect_Count; i++)
             {
                 if (m_ISE.m_Dictionary_STATUS_Effect[i + 1].CheckIdentity(new STATUS(0)) == false ||
-                    m_ISE.m_Dictionary_SOC_Effect[i + 1].CheckIdentity(new SOC(0)) == false)
+                    m_ISE.m_Dictionary_SOC_Effect[i + 1].CheckIdentity(new SOC(0)) == false) // 아이템 세트효과가 존재하는 경우
                 {
-                    m_nList_SetItemEffect_Code.Add(i + 1);
+                    m_nList_SetItemEffect_Code.Add(i + 1); // 아이템 세트효과 순서 목록 추가(설정)
                 }
             }
+
+            // 아이템 세트효과 세부 정보 GUI 초기 설정
             m_nSetItemEffect_Current = m_nList_SetItemEffect_Code[0];
             m_nSetItemEffect_List_Index = 0;
             m_TMP_SetItemEffect_Content_UpBar_Name.text = m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index].ToString() + "개 아이템 세트 효과";
             
-            UpdateItemEquipInformation_SetItemEffect_UpBar();   // 장비아이템 세부 정보 GUI 업데이트 - 아이템 세트효과 정보1
-            UpdateItemEquipInformation_SetItemEffect_Content(); // 장비아이템 세부 정보 GUI 업데이트 - 아이템 세트효과 정보2
+            UpdateItemEquipInformation_SetItemEffect_UpBar();   // 아이템 세트효과 세부 정보 GUI 업데이트 - (버튼) 아이템 세트효과 단계별 정보 변경(L, R) 활성화 / 비활성화 여부 판단
+            UpdateItemEquipInformation_SetItemEffect_Content(); // 아이템 세트효과 세부 정보 GUI 업데이트 - 아이템 세트효과 정보
 
+            // (버튼) 아이템 세트효과 단계별 정보 변경(L) 클릭 이벤트 함수 설정
             m_BTN_SetItemEffect_Content_UpBar_Left.onClick.RemoveAllListeners();
             m_BTN_SetItemEffect_Content_UpBar_Left.onClick.AddListener(delegate { Set_BTN_SetItemEffect_UpBar_Left(); });
+            // (버튼) 아이템 세트효과 단계별 정보 변경(R) 클릭 이벤트 함수 설정
             m_BTN_SetItemEffect_Content_UpBar_Right.onClick.RemoveAllListeners();
             m_BTN_SetItemEffect_Content_UpBar_Right.onClick.AddListener(delegate { Set_BTN_SetItemEffect_UpBar_Right(); });
         }
     }
-    // 장비아이템 세부 정보 GUI 업데이트 - 아이템 세트효과 정보1
+    // 아이템 세트효과 세부 정보 GUI 업데이트 - (버튼) 아이템 세트효과 단계별 정보 변경(L, R) 활성화 / 비활성화 여부 판단
     void UpdateItemEquipInformation_SetItemEffect_UpBar()
     {
-        if (m_nSetItemEffect_Current == m_nList_SetItemEffect_Code[0])
+        if (m_nSetItemEffect_Current == m_nList_SetItemEffect_Code[0]) // 이전 단계의 아이템 세트효과가 존재하지 않는 경우
         {
-            m_gBTN_SetItemEffect_Content_UpBar_Left.SetActive(false);
+            m_gBTN_SetItemEffect_Content_UpBar_Left.SetActive(false); // (버튼) 아이템 세트효과 단계별 정보 변경(L) 비활성화
         }
-        else
+        else // 이전 단계의 아이템 세트효과가 존재하는 경우
         {
-            m_gBTN_SetItemEffect_Content_UpBar_Left.SetActive(true);
+            m_gBTN_SetItemEffect_Content_UpBar_Left.SetActive(true); // (버튼) 아이템 세트효과 단계별 정보 변경(L) 활성화
         }
-        if (m_nSetItemEffect_Current == m_nList_SetItemEffect_Code[m_nList_SetItemEffect_Code.Count - 1])
+        if (m_nSetItemEffect_Current == m_nList_SetItemEffect_Code[m_nList_SetItemEffect_Code.Count - 1]) // 다음 단계의 아이템 세트효과가 존재하지 않는 경우
         {
-            m_gBTN_SetItemEffect_Content_UpBar_Right.SetActive(false);
+            m_gBTN_SetItemEffect_Content_UpBar_Right.SetActive(false); // (버튼) 아이템 세트효과 단계별 정보 변경(R) 비활성화
         }
-        else
+        else // 다음 단계의 아이템 세트효과가 존재하는 경우
         {
-            m_gBTN_SetItemEffect_Content_UpBar_Right.SetActive(true);
+            m_gBTN_SetItemEffect_Content_UpBar_Right.SetActive(true); // (버튼) 아이템 세트효과 단계별 정보 변경(R) 활성화
         }
     }
-    // 장비아이템 세부 정보 GUI 업데이트 - 아이템 세트효과 정보2
+    // 아이템 세트효과 세부 정보 GUI 업데이트 - 아이템 세트효과 정보
     void UpdateItemEquipInformation_SetItemEffect_Content()
     {
+        // 아이템 세트효과 이름 설정
         m_TMP_SetItemEffect_Content_UpBar_Name.text = Refine_Condition(m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index].ToString() + "개 아이템 세트 효과");
 
+        // 아이템 세트효과 설명 설정
         m_TMP_SetItemEffect_Content_SS_Description.text = Refine_Condition(m_ISE.m_Dictionary_Description[m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index]], false);
 
+        // 아이템 세트효과 효과(스탯(능력치)) 설정
         m_TMP_SetItemEffect_Content_SS_Status_L.text = Refine_Condition("레        벨:", m_ISE.m_Dictionary_STATUS_Effect[m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index]].GetSTATUS_LV());
         m_TMP_SetItemEffect_Content_SS_Status_L.text += Refine_Condition("\n체        력:", m_ISE.m_Dictionary_STATUS_Effect[m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index]].GetSTATUS_HP_Max());
         m_TMP_SetItemEffect_Content_SS_Status_L.text += Refine_Condition("\n데  미  지:", m_ISE.m_Dictionary_STATUS_Effect[m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index]].GetSTATUS_Damage_Total());
@@ -673,7 +677,8 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
         m_TMP_SetItemEffect_Content_SS_Status_R.text += Refine_Condition("\n마        나:", m_ISE.m_Dictionary_STATUS_Effect[m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index]].GetSTATUS_MP_Max());
         m_TMP_SetItemEffect_Content_SS_Status_R.text += Refine_Condition("\n방  어  력:", m_ISE.m_Dictionary_STATUS_Effect[m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index]].GetSTATUS_Defence_Physical());
         m_TMP_SetItemEffect_Content_SS_Status_R.text += Refine_Condition("\n공격속도:", m_ISE.m_Dictionary_STATUS_Effect[m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index]].GetSTATUS_AttackSpeed());
-
+        
+        // 아이템 세트효과 효과(스탯(평판)) 설정
         m_TMP_SetItemEffect_Content_SS_Soc_L.text = "";
         m_TMP_SetItemEffect_Content_SS_Soc_L.text += Refine_Condition("명        예:", m_ISE.m_Dictionary_SOC_Effect[m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index]].GetSOC_Honor());
         m_TMP_SetItemEffect_Content_SS_Soc_L.text += Refine_Condition("\n인        간:", m_ISE.m_Dictionary_SOC_Effect[m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index]].GetSOC_Human());
