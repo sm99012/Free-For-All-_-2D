@@ -5,147 +5,145 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
+//
+// ※ 장비아이템 세부 정보 GUI
+//    해당 GUI를 활성화 하여 플레이어가 현재 착용중인 장비아이템의 세부 정보를 확인할 수 있다.
+//
+
 public class GUI_Equipslot_Equip_Information : MonoBehaviour
 {
-    // Equipslot_Equip_Information 에서 확인 할 수 있는 장비 아이템 정보 UI.
-    [SerializeField] public GameObject m_gPanel_Equipslot_Equip_Information;
-    [Space(20)]
-
+    // GUI 오브젝트
+    public GameObject m_gPanel_Equipslot_Equip_Information;
+    
+    // GUI 오브젝트 - 장비아이템 세부 정보 GUI
     [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_UpBar;
-    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_UpBar;
-    [SerializeField] Button m_BTN_Equipslot_Equip_Information_UpBar_Exit;
-    [Space(20)]
-
+    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_UpBar; // (텍스트) 장비아이템 이름, 강화 상태
+    [SerializeField] Button m_BTN_Equipslot_Equip_Information_UpBar_Exit;     // (버튼) 장비아이템 세부정보 GUI 비활성화
+    
     [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_Content;
-    [Space(10)]
 
+    // 1. 장비아이템 이미지
     [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_Content_Image;
     [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_Content_Image_ItemSprite;
-    [SerializeField] Image m_IMG_Equipslot_Equip_Information_Content_Image_ItemSprite;
-    [Space(10)]
+    [SerializeField] Image m_IMG_Equipslot_Equip_Information_Content_Image_ItemSprite; // (이미지) 장비아이템 이미지
 
+    // 2. 장비아이템 분류, 등급, 추가 옵션 등급, 강화 상태
     [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_Content_ItemInformation;
-    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_ItemInformation;
-    [Space(10)]
+    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_ItemInformation; // (텍스트) 장비아이템 분류, 등급, 추가 옵션 등급, 강화 상태
 
-    [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_Content_Effect;
+    [SerializeField] Button m_BTN_Equipslot_Equip_Information_Content_ChangeInformation_L; // (버튼) 장비아이템 정보 변경(L)
+    [SerializeField] Button m_BTN_Equipslot_Equip_Information_Content_ChangeInformation_R; // (버튼) 장비아이템 정보 변경(R)
 
-    [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_Content_Effect_Name;
-    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_Effect_Name;
-    [Space(5)]
-    [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_Content_Effect_Status;
-    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_Effect_Status_L;
-    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_Effect_Status_R;
-    [Space(5)]
-    [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_Content_Effect_Soc;
-    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_Effect_Soc_L;
-    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_Effect_Soc_R;
-    [Space(10)]
-
-    [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_Content_Condition;
-
-    [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_Content_Condition_Name;
-    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_Condition_Name;
-    [Space(5)]
-    [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_Content_Condition_Status;
-    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_Condition_Status_L;
-    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_Condition_Status_R;
-    [Space(5)]
-    [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_Content_Condition_Soc;
-    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_L;
-    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_R;
-    [Space(10)]
-
+    // 3. 장비아이템 정보 - 장비아이템 설명
     [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_Content_ItemDescription;
-
     [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_Content_ItemDescription_Name;
-    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_ItemDescription_Name;
-    [Space(5)]
+    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_ItemDescription_Name;     // (텍스트) "아이템 설명"
     [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_Content_ItemDescription_Content;
     [SerializeField] GameObject m_gSV_Equipslot_Equip_Information_Content_ItemDescription_Content;
     [SerializeField] GameObject m_gViewport_Equipslot_Equip_Information_Content_ItemDescription_Content;
-    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_ItemDescription_Content;
-    [SerializeField] Scrollbar m_Scrollbar_Equipslot_Equip_Information_Content_ItemDescription_Content;
-    [Space(10)]
+    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_ItemDescription_Content;  // (텍스트) 장비아이템 설명
+    [SerializeField] Scrollbar m_Scrollbar_Equipslot_Equip_Information_Content_ItemDescription_Content;  // (스크롤바) 장비아이템 설명
+    
+    // 4. 장비아이템 정보 - 장비아이템 착용효과
+    [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_Content_Effect;
+    [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_Content_Effect_Name;
+    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_Effect_Name;     // (텍스트) "착용효과"
+    [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_Content_Effect_Status;
+    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_Effect_Status_L; // (텍스트) 장비아이템 착용효과(스탯(능력치))_L
+    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_Effect_Status_R; // (텍스트) 장비아이템 착용효과(스탯(능력치))_R
+    [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_Content_Effect_Soc;
+    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_Effect_Soc_L;    // (텍스트) 장비아이템 착용효과(스탯(평판))_L
+    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_Effect_Soc_R;    // (텍스트) 장비아이템 착용효과(스탯(평판))_R
 
-    [SerializeField] Button m_BTN_Equipslot_Equip_Information_Content_ChangeInformation_R;
-    [SerializeField] Button m_BTN_Equipslot_Equip_Information_Content_ChangeInformation_L;
-    [Space(20)]
+    // 5. 장비아이템 정보 - 장비아이템 착용조건
+    [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_Content_Condition;
+    [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_Content_Condition_Name;
+    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_Condition_Name;     // (텍스트) "착용조건"
+    [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_Content_Condition_Status;
+    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_Condition_Status_L; // (텍스트) 장비아이템 착용조건(스탯(능력치))_L
+    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_Condition_Status_R; // (텍스트) 장비아이템 착용조건(스탯(능력치))_R
+    [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_Content_Condition_Soc;
+    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_L;    // (텍스트) 장비아이템 착용조건(스탯(평판))_L
+    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_R;    // (텍스트) 장비아이템 착용조건(스탯(평판))_R
 
     [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_EquipPossibility;
-    [SerializeField] Button m_BTN_Equipslot_Equip_Information_EquipPossibility;
-    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_EquipPossibility;
-    [Space(20)]
+    [SerializeField] Button m_BTN_Equipslot_Equip_Information_EquipPossibility;          // (버튼) 장비아이템 착용 해제
+    [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_EquipPossibility; // (텍스트) "장비해제"
 
+
+
+    // GUI 오브젝트 - 아이템 세트효과 세부 정보 GUI
     [SerializeField] GameObject m_gPanel_SetItemEffect;
     [SerializeField] GameObject m_gPanel_SetItemEffect_Name;
-    [SerializeField] TextMeshProUGUI m_TMP_SetItemEffect_Name;
-    [Space(5)]
+    [SerializeField] TextMeshProUGUI m_TMP_SetItemEffect_Name; // (텍스트) 아이템 세트효과 이름
+
     [SerializeField] GameObject m_gPanel_SetItemEffect_Content;
-    [Space(5)]
+
     [SerializeField] GameObject m_gPanel_SetItemEffect_Content_UpBar;
-    [SerializeField] TextMeshProUGUI m_TMP_SetItemEffect_Content_UpBar_Name;
+    [SerializeField] TextMeshProUGUI m_TMP_SetItemEffect_Content_UpBar_Name; // (텍스트) 아이템 세트효과 단계
     [SerializeField] GameObject m_gBTN_SetItemEffect_Content_UpBar_Left;
-    [SerializeField] Button m_BTN_SetItemEffect_Content_UpBar_Left;
+    [SerializeField] Button m_BTN_SetItemEffect_Content_UpBar_Left;          // (버튼) 아이템 세트효과 단계별 정보 변경(L)
     [SerializeField] GameObject m_gBTN_SetItemEffect_Content_UpBar_Right;
-    [SerializeField] Button m_BTN_SetItemEffect_Content_UpBar_Right;
-    [Space(5)]
+    [SerializeField] Button m_BTN_SetItemEffect_Content_UpBar_Right;         // (버튼) 아이템 세트효과 단계별 정보 변경(R)
+
     [SerializeField] GameObject m_gPanel_SetItemEffect_Content_SS;
+    
     [SerializeField] GameObject m_gPanel_SetItemEffect_Content_SS_Description;
     [SerializeField] GameObject m_gSV_SetItemEffect_Content_SS_Description;
     [SerializeField] GameObject m_gViewport_SetItemEffect_Content_SS_Description;
-    [SerializeField] TextMeshProUGUI m_TMP_SetItemEffect_Content_SS_Description;
-    [SerializeField] Scrollbar m_Scrollbar_SetItemEffect_Content_SS_Description;
+    [SerializeField] TextMeshProUGUI m_TMP_SetItemEffect_Content_SS_Description; // (텍스트) 아이템 세트효과 설명
+    [SerializeField] Scrollbar m_Scrollbar_SetItemEffect_Content_SS_Description; // (스크롤바) 아이템 세트효과 설명
 
     [SerializeField] GameObject m_gPanel_SetItemEffect_Content_SS_Status;
-    [SerializeField] TextMeshProUGUI m_TMP_SetItemEffect_Content_SS_Status_L;
-    [SerializeField] TextMeshProUGUI m_TMP_SetItemEffect_Content_SS_Status_R;
+    [SerializeField] TextMeshProUGUI m_TMP_SetItemEffect_Content_SS_Status_L; // (텍스트) 아이템 세트효과(스탯(능력치))_L
+    [SerializeField] TextMeshProUGUI m_TMP_SetItemEffect_Content_SS_Status_R; // (텍스트) 아이템 세트효과(스탯(능력치))_R
+    
     [SerializeField] GameObject m_gPanel_SetItemEffect_Content_SS_Soc;
-    [SerializeField] TextMeshProUGUI m_TMP_SetItemEffect_Content_SS_Soc_L;
-    [SerializeField] TextMeshProUGUI m_TMP_SetItemEffect_Content_SS_Soc_R;
-    [Space(20)]
+    [SerializeField] TextMeshProUGUI m_TMP_SetItemEffect_Content_SS_Soc_L;    // (텍스트) 아이템 세트효과(스탯(평판))_L
+    [SerializeField] TextMeshProUGUI m_TMP_SetItemEffect_Content_SS_Soc_R;    // (텍스트) 아이템 세트효과(스탯(평판))_R
 
-    int m_nSetItemEffect_Count;
-    int m_nSetItemEffect_Current;
-    [SerializeField] List<int> m_nList_SetItemEffect_Code;
-    int m_nSetItemEffect_List_Index;
-    int m_nPlayerEquipment_SetItemEffect_Current;
+    ItemSetEffect m_ISE; // 장비아이템의 아이템 세트효과
 
-    ItemSetEffect m_ISE;
+    [SerializeField] List<int> m_nList_SetItemEffect_Code; // 아이템 세트효과 순서 목록
+    // 아이템 세트효과 정보
+    int m_nSetItemEffect_List_Index;                       // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 (Ex) [초보 모험가 세트효과] 2세트 적용중)
+    int m_nSetItemEffect_Current;                          // 현재 아이템 세트효과
+    
+    // 아이템 세트효과 적용 여부 판단 관련 변수
+    int m_nPlayerEquipment_SetItemEffect_Current;          // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 (Ex) [초보 모험가 세트효과] 2세트 적용중)
+    int m_nSetItemEffect_Count;                            // 아이템 세트효과 총개수                                            (Ex) [초보 모험가 세트효과] 총 4세트)
 
-
-    // 기능.
+    // 아이템 정보 타입 : { 효과, 조건, 설명 }
     public enum E_Equipslot_Equip_Information_PageNumber { EFFECT, CONDITION, DESCRIPTION }
-    public E_Equipslot_Equip_Information_PageNumber m_eInformationPage;
+    public E_Equipslot_Equip_Information_PageNumber m_eInformationPage; // 아이템 정보 타입
 
-    // Text 임시 저장소.
-    string m_sBuffer;
-    // Color.
-    string m_sColor_White = "<color=#ffffff>";
-    string m_sColor_WhiteGray = "<color=#808080>";
-    string m_sColor_Red = "<color=#FF0000>";
-    string m_sColor_Brown = "<color=#915446>";
-    string m_sColor_End = "</color>";
+    // 아이템 정보 문자열  색 표시 관련 변수
+    bool m_bRefine_Condition_Check; // 문자열 색 설정 관련 변수
+    public bool m_bEquip_Condition_Check; // 장비아이템 착용 가능 여부
+                                          // m_bEquip_Condition_Check == true : 스탯(능력치, 평판) 적용 가능
+                                          // m_bEquip_Condition_Check == false : 스탯(능력치, 평판) 적용 불가능. 빨간색으로 표시
+                                          
+    string m_sBuffer; // 문자열 임시 저장소. 표시할 정보가 많기에 임시 저장소를 사용한다.
+    // 색 문자열 정보
+    string m_sColor_White = "<color=#ffffff>";     // 흰색
+    string m_sColor_WhiteGray = "<color=#808080>"; // 회색
+    string m_sColor_Red = "<color=#FF0000>";       // 빨간색
+    string m_sColor_Brown = "<color=#915446>";     // 갈색
+    string m_sColor_End = "</color>";              // 색상 문자열 끝
 
-    // Text 정제 관련 변수.
-    bool m_bRefine_Condition_Check;
-    // 장비 착용 가능 여부.
-    // true: 능력치 적용 됨.
-    // false: 능력치 적용 안됨. - 붉은색 표기, 팝업창을 통한 표시.
-    public bool m_bEquip_Condition_Check;
+    Player_Status player; // 플레이어 스탯(능력치, 평판) 변수
 
-    // Player 정보.
-    Player_Status player;
-
+    // GUI 초기 설정
     public void InitialSet()
     {
-        InitialSet_Object();
-        InitialSet_Button();
+        InitialSet_Object(); // GUI 오브젝트 초기 설정
+        InitialSet_Button(); // GUI 버튼 설정
+        
         m_eInformationPage = E_Equipslot_Equip_Information_PageNumber.DESCRIPTION;
-        player = Player_Total.Instance.m_ps_Status;
+        
+        player = Player_Total.Instance.m_ps_Status; // 플레이어 스탯(능력치, 평판) 설정
     }
-
-    // 초기 Object 불러오기.
+    // GUI 오브젝트 초기 설정
     void InitialSet_Object()
     {
         m_gPanel_Equipslot_Equip_Information = GameObject.Find("Canvas_GUI").transform.Find("Panel_Equipslot_Equip_Information").gameObject;
@@ -247,54 +245,24 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
 
         m_nList_SetItemEffect_Code = new List<int>();
     }
-    // 초기 Button 이벤트 설정.
+    // GUI 버튼 설정
     void InitialSet_Button()
     {
+        // (버튼) 장비아이템 세부정보 GUI 비활성화 클릭 이벤트 함수 설정
         m_BTN_Equipslot_Equip_Information_UpBar_Exit.onClick.RemoveAllListeners();
         m_BTN_Equipslot_Equip_Information_UpBar_Exit.onClick.AddListener(delegate { Set_BTN_Exit(); });
-        m_BTN_Equipslot_Equip_Information_Content_ChangeInformation_R.onClick.RemoveAllListeners();
-        m_BTN_Equipslot_Equip_Information_Content_ChangeInformation_R.onClick.AddListener(delegate { Set_BTN_ChangeInformationPageNumber_R(); });
+        // (버튼) 장비아이템 정보 변경(L) 클릭 이벤트 함수 설정
         m_BTN_Equipslot_Equip_Information_Content_ChangeInformation_L.onClick.RemoveAllListeners();
         m_BTN_Equipslot_Equip_Information_Content_ChangeInformation_L.onClick.AddListener(delegate { Set_BTN_ChangeInformationPageNumber_L(); });
+        // (버튼) 장비아이템 정보 변경(R) 클릭 이벤트 함수 설정
+        m_BTN_Equipslot_Equip_Information_Content_ChangeInformation_R.onClick.RemoveAllListeners();
+        m_BTN_Equipslot_Equip_Information_Content_ChangeInformation_R.onClick.AddListener(delegate { Set_BTN_ChangeInformationPageNumber_R(); });
     }
-
-    // Equip Button 이벤트 설정.
-    // 장비 아이템 설명 창 페이지 변경.
+    
+    // (버튼) 장비아이템 세부정보 GUI 비활성화 클릭 이벤트 함수 - 장비아이템 세부 정보 GUI를 비활성화한다.
     void Set_BTN_Exit()
     {
         m_gPanel_Equipslot_Equip_Information.SetActive(false);
-    }
-    void Set_BTN_ChangeInformationPageNumber_R()
-    {
-        switch (m_eInformationPage)
-        {
-            case E_Equipslot_Equip_Information_PageNumber.EFFECT:
-                {
-                    m_eInformationPage = E_Equipslot_Equip_Information_PageNumber.CONDITION;
-                    m_gPanel_Equipslot_Equip_Information_Content_Effect.SetActive(false);
-                    m_gPanel_Equipslot_Equip_Information_Content_Condition.SetActive(true);
-                    m_gPanel_Equipslot_Equip_Information_Content_ItemDescription.SetActive(false);
-                }
-                break;
-            case E_Equipslot_Equip_Information_PageNumber.CONDITION:
-                {
-                    m_eInformationPage = E_Equipslot_Equip_Information_PageNumber.DESCRIPTION;
-                    m_gPanel_Equipslot_Equip_Information_Content_Effect.SetActive(false);
-                    m_gPanel_Equipslot_Equip_Information_Content_Condition.SetActive(false);
-                    m_gPanel_Equipslot_Equip_Information_Content_ItemDescription.SetActive(true);
-                    m_Scrollbar_Equipslot_Equip_Information_Content_ItemDescription_Content.value = 1;
-                    m_Scrollbar_SetItemEffect_Content_SS_Description.value = 1;
-                }
-                break;
-            case E_Equipslot_Equip_Information_PageNumber.DESCRIPTION:
-                {
-                    m_eInformationPage = E_Equipslot_Equip_Information_PageNumber.EFFECT;
-                    m_gPanel_Equipslot_Equip_Information_Content_Effect.SetActive(true);
-                    m_gPanel_Equipslot_Equip_Information_Content_Condition.SetActive(false);
-                    m_gPanel_Equipslot_Equip_Information_Content_ItemDescription.SetActive(false);
-                }
-                break;
-        }
     }
     void Set_BTN_ChangeInformationPageNumber_L()
     {
@@ -323,6 +291,38 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
                     m_eInformationPage = E_Equipslot_Equip_Information_PageNumber.CONDITION;
                     m_gPanel_Equipslot_Equip_Information_Content_Effect.SetActive(false);
                     m_gPanel_Equipslot_Equip_Information_Content_Condition.SetActive(true);
+                    m_gPanel_Equipslot_Equip_Information_Content_ItemDescription.SetActive(false);
+                }
+                break;
+        }
+    }
+    void Set_BTN_ChangeInformationPageNumber_R()
+    {
+        switch (m_eInformationPage)
+        {
+            case E_Equipslot_Equip_Information_PageNumber.EFFECT:
+                {
+                    m_eInformationPage = E_Equipslot_Equip_Information_PageNumber.CONDITION;
+                    m_gPanel_Equipslot_Equip_Information_Content_Effect.SetActive(false);
+                    m_gPanel_Equipslot_Equip_Information_Content_Condition.SetActive(true);
+                    m_gPanel_Equipslot_Equip_Information_Content_ItemDescription.SetActive(false);
+                }
+                break;
+            case E_Equipslot_Equip_Information_PageNumber.CONDITION:
+                {
+                    m_eInformationPage = E_Equipslot_Equip_Information_PageNumber.DESCRIPTION;
+                    m_gPanel_Equipslot_Equip_Information_Content_Effect.SetActive(false);
+                    m_gPanel_Equipslot_Equip_Information_Content_Condition.SetActive(false);
+                    m_gPanel_Equipslot_Equip_Information_Content_ItemDescription.SetActive(true);
+                    m_Scrollbar_Equipslot_Equip_Information_Content_ItemDescription_Content.value = 1;
+                    m_Scrollbar_SetItemEffect_Content_SS_Description.value = 1;
+                }
+                break;
+            case E_Equipslot_Equip_Information_PageNumber.DESCRIPTION:
+                {
+                    m_eInformationPage = E_Equipslot_Equip_Information_PageNumber.EFFECT;
+                    m_gPanel_Equipslot_Equip_Information_Content_Effect.SetActive(true);
+                    m_gPanel_Equipslot_Equip_Information_Content_Condition.SetActive(false);
                     m_gPanel_Equipslot_Equip_Information_Content_ItemDescription.SetActive(false);
                 }
                 break;
