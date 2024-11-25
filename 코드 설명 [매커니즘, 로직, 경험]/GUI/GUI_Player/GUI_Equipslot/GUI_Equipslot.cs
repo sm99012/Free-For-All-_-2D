@@ -11,16 +11,16 @@ using UnityEngine.EventSystems;
 
 public class GUI_Equipslot : MonoBehaviour
 {
+    // GUI 오브젝트 - 상태창 GUI
     [SerializeField] GameObject m_gPanel_ES;
-    // Equipslot UI.
+
+    // GUI 오브젝트 - 장비창 GUI
     [SerializeField] GameObject m_gPanel_Equipslot;
 
     [SerializeField] GameObject m_gPanel_Equipslot_Exit;
-    [SerializeField] GameObject m_gPanel_Equipslot_Content;
-    [Space(20)]
     [SerializeField] Button m_BTN_Equipslot_Exit;
 
-    [Space(20)]
+    [SerializeField] GameObject m_gPanel_Equipslot_Content;
     [SerializeField] GameObject m_gPanel_Equipslot_Content_Hat;
     [SerializeField] GameObject m_gPanel_Equipslot_Content_Top;
     [SerializeField] GameObject m_gPanel_Equipslot_Content_Bottoms;
@@ -28,63 +28,37 @@ public class GUI_Equipslot : MonoBehaviour
     [SerializeField] GameObject m_gPanel_Equipslot_Content_Gloves;
     [SerializeField] GameObject m_gPanel_Equipslot_Content_MainWeapon;
     [SerializeField] GameObject m_gPanel_Equipslot_Content_SubWeapon;
-    [Space(20)]
-    // 장비아이템 세부설명 UI.
-    [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information;
 
+    public GameObject[] m_gary_Equipslot; // 장비창 슬롯 GUI 배열. 각각의 장비창 슬롯 GUI를 배열로 저장한다.
+                                          // 0: 모자
+                                          // 1: 상의
+                                          // 2: 하의
+                                          // 3: 신발
+                                          // 4: 장갑
+                                          // 5: 주무기
+                                          // 6: 보조무기
 
-    public GameObject[] m_gary_Equipslot;
-
-    // 각각의 장비슬롯의 해당하는 장비 분류를 배열로 저장.
-    // m_gary_Equipslot: 착용중인 분류의 장비 아이템.
-    // m_bary_Equipslot: 착용중이면 true, 착용중이 아니면 false.
-    // 0: Hat 
-    // 1: Top
-    // 2: Bottoms
-    // 3: Shose
-    // 4: Gloves
-    // 5: MainWeapon
-    // 6: SubWeapon
-
+    // GUI 초기 설정
     public void InitialSet()
     {
-        InitialSet_Object();
-        InitialSet_Button();
-        InitialSet_Itemslot();
+        InitialSet_Object();    // GUI 오브젝트 초기 설정
+        InitialSet_Button();    // GUI 버튼 설정
+        InitialSet_Equipslot(); // 장비창 슬롯 GUI 초기 설정
+        
         m_gPanel_ES.SetActive(false);
         m_gPanel_Equipslot.SetActive(false);
     }
-
-    // 수정필요
-    private void Update()
-    {
-        if (Total_Manager.Instance.m_bStart == true)
-        {
-            if (m_gPanel_Equipslot.activeSelf == true)
-            {
-
-            }
-            else
-            {
-                m_gPanel_Equipslot_Equip_Information.SetActive(false);
-
-            }
-        }
-    }
-
-    // 초기 Object 불러오기.
+    // GUI 오브젝트 초기 설정
     void InitialSet_Object()
     {
         m_gPanel_ES = GameObject.Find("Canvas_GUI").gameObject.transform.Find("Panel_ES").gameObject;
 
         m_gPanel_Equipslot = GameObject.Find("Canvas_GUI").gameObject.transform.Find("Panel_ES").gameObject.transform.Find("Panel_Equipslot").gameObject;
-        m_gPanel_Equipslot_Equip_Information = GameObject.Find("Canvas_GUI").gameObject.transform.Find("Panel_Equipslot_Equip_Information").gameObject;
 
         m_gPanel_Equipslot_Exit = m_gPanel_Equipslot.transform.Find("Panel_Equipslot_Exit").gameObject;
-        m_gPanel_Equipslot_Content = m_gPanel_Equipslot.transform.Find("Panel_Equipslot_Content").gameObject;
-
         m_BTN_Equipslot_Exit = m_gPanel_Equipslot_Exit.transform.Find("BTN_Equipslot_Exit").gameObject.GetComponent<Button>();
 
+        m_gPanel_Equipslot_Content = m_gPanel_Equipslot.transform.Find("Panel_Equipslot_Content").gameObject;
         m_gPanel_Equipslot_Content_Hat = m_gPanel_Equipslot_Content.transform.Find("Panel_Equipslot_Content_Hat").gameObject;
         m_gPanel_Equipslot_Content_Top = m_gPanel_Equipslot_Content.transform.Find("Panel_Equipslot_Content_Top").gameObject;
         m_gPanel_Equipslot_Content_Bottoms = m_gPanel_Equipslot_Content.transform.Find("Panel_Equipslot_Content_Bottoms").gameObject;
@@ -93,14 +67,15 @@ public class GUI_Equipslot : MonoBehaviour
         m_gPanel_Equipslot_Content_MainWeapon = m_gPanel_Equipslot_Content.transform.Find("Panel_Equipslot_Content_MainWeapon").gameObject;
         m_gPanel_Equipslot_Content_SubWeapon = m_gPanel_Equipslot_Content.transform.Find("Panel_Equipslot_Content_SubWeapon").gameObject;
     }
-    // 초기 Button 이벤트 설정.
+    // GUI 버튼 설정
     void InitialSet_Button()
     {
-        m_BTN_Equipslot_Exit.GetComponent<Button>().onClick.AddListener(delegate { Btn_Press_Exit(); });
+        // (버튼) 장비창 GUI 비활성화 클릭 이벤트 함수 설정
+        m_BTN_Equipslot_Exit.onClick.RemoveAllListeners();
+        m_BTN_Equipslot_Exit.onClick.AddListener(delegate { Btn_Press_Exit(); });
     }
-
-    // Equipslot 초기 설정
-    public void InitialSet_Itemslot()
+    // 장비창 슬롯 GUI 초기 설정
+    public void InitialSet_Equipslot()
     {
         m_gary_Equipslot = new GameObject[7];
         for (int i = 0; i < 7; i++)
@@ -110,108 +85,127 @@ public class GUI_Equipslot : MonoBehaviour
         }
     }
 
+    // (버튼) 장비창 GUI 비활성화 클릭 이벤트 함수 - 장비창 GUI를 비활성화한다.
+    public void Btn_Press_Exit()
+    {
+        m_BTN_Equipslot_Exit.GetComponent<Image>().color = new Color(.75f, .75f, .75f, 1);
+        GUIManager_Total.Instance.Display_GUI_ES(); // 상태창 GUI 비활성화
+        GUIManager_Total.Instance.UnDisplay_GUI_Equipslot_Equip_Information(); // 장비아이템 세부 정보 GUI 비활성화
+        GUIManager_Total.Instance.Delete_GUI_Priority(16); // GUI 우선순위 제거
+    }
+
+    // 장비창 GUI 업데이트
     public void UpdateEquipslot()
     {
-        if (Player_Equipment.m_bEquipment_Hat == false)
+        // 장비창 GUI 업데이트 - 장비아이템(모자)
+        if (Player_Equipment.m_bEquipment_Hat == false) // 착용중인 장비아이템(모자)이 존재하지 않는 경우
         {
-            m_gary_Equipslot[0].GetComponent<Equipslot>().SetNull();
+            m_gary_Equipslot[0].GetComponent<Equipslot>().SetNull(); // 장비아이템(모자)에 해당하는 장비창 슬롯 GUI 초기화
         }
         else
         {
-            m_gary_Equipslot[0].GetComponent<Equipslot>().SetItem_Equip(Player_Equipment.m_gEquipment_Hat);
-            if (Player_Total.Instance.CheckCondition_Item_Equip_Hat() == true) { }
+            m_gary_Equipslot[0].GetComponent<Equipslot>().SetItem_Equip(Player_Equipment.m_gEquipment_Hat); // 장비아이템(모자)에 해당하는 장비창 슬롯 GUI 장비아이템 외형 표시
+            if (Player_Total.Instance.CheckCondition_Item_Equip_Hat() == true) { } // 착용중인 장비아이템(모자) 착용 조건 판단
             else
             {
-                m_gary_Equipslot[0].GetComponent<Equipslot>().SetItem_Equip_NotApply();
-                GUIManager_Total.Instance.Display_GUI_Equipslot_Remove_Information();
+                m_gary_Equipslot[0].GetComponent<Equipslot>().SetItem_Equip_NotApply(); // 착용 조건을 불충족한 장비아이템 마스크 적용(활성화)
+                GUIManager_Total.Instance.Display_GUI_Equipslot_Remove_Information(); // 장비아이템 해제 알림 GUI 활성화
             }
         }
-        if (Player_Equipment.m_bEquipment_Top == false)
+        // 장비창 GUI 업데이트 - 장비아이템(상의)
+        if (Player_Equipment.m_bEquipment_Top == false) // 착용중인 장비아이템(상의)이 존재하지 않는 경우
         {
-            m_gary_Equipslot[1].GetComponent<Equipslot>().SetNull();
+            m_gary_Equipslot[1].GetComponent<Equipslot>().SetNull(); // 장비아이템(상의)에 해당하는 장비창 슬롯 GUI 초기화
         }
         else
         {
-            m_gary_Equipslot[1].GetComponent<Equipslot>().SetItem_Equip(Player_Equipment.m_gEquipment_Top);
-            if (Player_Total.Instance.CheckCondition_Item_Equip_Top() == true) { }
+            m_gary_Equipslot[1].GetComponent<Equipslot>().SetItem_Equip(Player_Equipment.m_gEquipment_Top); // 장비아이템(상의)에 해당하는 장비창 슬롯 GUI 장비아이템 외형 표시
+            if (Player_Total.Instance.CheckCondition_Item_Equip_Top() == true) { } // 착용중인 장비아이템(상의) 착용 조건 판단
             else
             {
-                m_gary_Equipslot[1].GetComponent<Equipslot>().SetItem_Equip_NotApply();
-                GUIManager_Total.Instance.Display_GUI_Equipslot_Remove_Information();
+                m_gary_Equipslot[1].GetComponent<Equipslot>().SetItem_Equip_NotApply(); // 착용 조건을 불충족한 장비아이템 마스크 적용(활성화)
+                GUIManager_Total.Instance.Display_GUI_Equipslot_Remove_Information(); // 장비아이템 해제 알림 GUI 활성화
             }
         }
-        if (Player_Equipment.m_bEquipment_Bottoms == false)
+        // 장비창 GUI 업데이트 - 장비아이템(하의)
+        if (Player_Equipment.m_bEquipment_Bottoms == false) // 착용중인 장비아이템(하의)이 존재하지 않는 경우
         {
-            m_gary_Equipslot[2].GetComponent<Equipslot>().SetNull();
+            m_gary_Equipslot[2].GetComponent<Equipslot>().SetNull(); // 장비아이템(하의)에 해당하는 장비창 슬롯 GUI 초기화
         }
         else
         {
-            m_gary_Equipslot[2].GetComponent<Equipslot>().SetItem_Equip(Player_Equipment.m_gEquipment_Bottoms);
-            if (Player_Total.Instance.CheckCondition_Item_Equip_Bottoms() == true) { }
+            m_gary_Equipslot[2].GetComponent<Equipslot>().SetItem_Equip(Player_Equipment.m_gEquipment_Bottoms); // 장비아이템(하의)에 해당하는 장비창 슬롯 GUI 장비아이템 외형 표시
+            if (Player_Total.Instance.CheckCondition_Item_Equip_Bottoms() == true) { } // 착용중인 장비아이템(하의) 착용 조건 판단
             else
             {
-                m_gary_Equipslot[2].GetComponent<Equipslot>().SetItem_Equip_NotApply();
-                GUIManager_Total.Instance.Display_GUI_Equipslot_Remove_Information();
+                m_gary_Equipslot[2].GetComponent<Equipslot>().SetItem_Equip_NotApply(); // 착용 조건을 불충족한 장비아이템 마스크 적용(활성화)
+                GUIManager_Total.Instance.Display_GUI_Equipslot_Remove_Information(); // 장비아이템 해제 알림 GUI 활성화
             }
         }
-        if (Player_Equipment.m_bEquipment_Shose == false)
+        // 장비창 GUI 업데이트 - 장비아이템(신발)
+        if (Player_Equipment.m_bEquipment_Shose == false) // 착용중인 장비아이템(신발)이 존재하지 않는 경우
         {
-            m_gary_Equipslot[3].GetComponent<Equipslot>().SetNull();
+            m_gary_Equipslot[3].GetComponent<Equipslot>().SetNull(); // 장비아이템(신발)에 해당하는 장비창 슬롯 GUI 초기화
         }
         else
         {
-            m_gary_Equipslot[3].GetComponent<Equipslot>().SetItem_Equip(Player_Equipment.m_gEquipment_Shose);
-            if (Player_Total.Instance.CheckCondition_Item_Equip_Shose() == true) { }
+            m_gary_Equipslot[3].GetComponent<Equipslot>().SetItem_Equip(Player_Equipment.m_gEquipment_Shose); // 장비아이템(신발)에 해당하는 장비창 슬롯 GUI 장비아이템 외형 표시
+            if (Player_Total.Instance.CheckCondition_Item_Equip_Shose() == true) { } // 착용중인 장비아이템(신발) 착용 조건 판단
             else
             {
-                m_gary_Equipslot[3].GetComponent<Equipslot>().SetItem_Equip_NotApply();
-                GUIManager_Total.Instance.Display_GUI_Equipslot_Remove_Information();
+                m_gary_Equipslot[3].GetComponent<Equipslot>().SetItem_Equip_NotApply(); // 착용 조건을 불충족한 장비아이템 마스크 적용(활성화)
+                GUIManager_Total.Instance.Display_GUI_Equipslot_Remove_Information(); // 장비아이템 해제 알림 GUI 활성화
             }
         }
-        if (Player_Equipment.m_bEquipment_Gloves == false)
+        // 장비창 GUI 업데이트 - 장비아이템(장갑)
+        if (Player_Equipment.m_bEquipment_Gloves == false) // 착용중인 장비아이템(장갑)이 존재하지 않는 경우
         {
-            m_gary_Equipslot[4].GetComponent<Equipslot>().SetNull();
+            m_gary_Equipslot[4].GetComponent<Equipslot>().SetNull(); // 장비아이템(장갑)에 해당하는 장비창 슬롯 GUI 초기화
         }
         else
         {
-            m_gary_Equipslot[4].GetComponent<Equipslot>().SetItem_Equip(Player_Equipment.m_gEquipment_Gloves);
-            if (Player_Total.Instance.CheckCondition_Item_Equip_Gloves() == true) { }
+            m_gary_Equipslot[4].GetComponent<Equipslot>().SetItem_Equip(Player_Equipment.m_gEquipment_Gloves); // 장비아이템(장갑)에 해당하는 장비창 슬롯 GUI 장비아이템 외형 표시
+            if (Player_Total.Instance.CheckCondition_Item_Equip_Gloves() == true) { } // 착용중인 장비아이템(장갑) 착용 조건 판단
             else
             {
-                m_gary_Equipslot[4].GetComponent<Equipslot>().SetItem_Equip_NotApply();
-                GUIManager_Total.Instance.Display_GUI_Equipslot_Remove_Information();
+                m_gary_Equipslot[4].GetComponent<Equipslot>().SetItem_Equip_NotApply(); // 착용 조건을 불충족한 장비아이템 마스크 적용(활성화)
+                GUIManager_Total.Instance.Display_GUI_Equipslot_Remove_Information(); // 장비아이템 해제 알림 GUI 활성화
             }
         }
-        if (Player_Equipment.m_bEquipment_Mainweapon == false)
+        // 장비창 GUI 업데이트 - 장비아이템(주무기)
+        if (Player_Equipment.m_bEquipment_Mainweapon == false) // 착용중인 장비아이템(주무기)이 존재하지 않는 경우
         {
-            m_gary_Equipslot[5].GetComponent<Equipslot>().SetNull();
+            m_gary_Equipslot[5].GetComponent<Equipslot>().SetNull(); // 장비아이템(주무기)에 해당하는 장비창 슬롯 GUI 초기화
         }
         else
         {
-            m_gary_Equipslot[5].GetComponent<Equipslot>().SetItem_Equip(Player_Equipment.m_gEquipment_Mainweapon);
-            if (Player_Total.Instance.CheckCondition_Item_Equip_MainWeapon() == true) { }
+            m_gary_Equipslot[5].GetComponent<Equipslot>().SetItem_Equip(Player_Equipment.m_gEquipment_Mainweapon); // 장비아이템(주무기)에 해당하는 장비창 슬롯 GUI 장비아이템 외형 표시
+            if (Player_Total.Instance.CheckCondition_Item_Equip_MainWeapon() == true) { } // 착용중인 장비아이템(주무기) 착용 조건 판단
             else
             {
-                m_gary_Equipslot[5].GetComponent<Equipslot>().SetItem_Equip_NotApply();
-                GUIManager_Total.Instance.Display_GUI_Equipslot_Remove_Information();
+                m_gary_Equipslot[5].GetComponent<Equipslot>().SetItem_Equip_NotApply(); // 착용 조건을 불충족한 장비아이템 마스크 적용(활성화)
+                GUIManager_Total.Instance.Display_GUI_Equipslot_Remove_Information(); // 장비아이템 해제 알림 GUI 활성화
             }
         }
-        if (Player_Equipment.m_bEquipment_Subweapon == false)
+        // 장비창 GUI 업데이트 - 장비아이템(보조무기)
+        if (Player_Equipment.m_bEquipment_Subweapon == false) // 착용중인 장비아이템(보조무기)이 존재하지 않는 경우
         {
-            m_gary_Equipslot[6].GetComponent<Equipslot>().SetNull();
+            m_gary_Equipslot[6].GetComponent<Equipslot>().SetNull(); // 장비아이템(보조무기)에 해당하는 장비창 슬롯 GUI 초기화
         }
         else
         {
-            m_gary_Equipslot[6].GetComponent<Equipslot>().SetItem_Equip(Player_Equipment.m_gEquipment_Subweapon);
-            if (Player_Total.Instance.CheckCondition_Item_Equip_SubWeapon() == true) { }
+            m_gary_Equipslot[6].GetComponent<Equipslot>().SetItem_Equip(Player_Equipment.m_gEquipment_Subweapon); // 장비아이템(보조무기)에 해당하는 장비창 슬롯 GUI 장비아이템 외형 표시
+            if (Player_Total.Instance.CheckCondition_Item_Equip_SubWeapon() == true) { } // 착용중인 장비아이템(보조무기) 착용 조건 판단
             else
             {
-                m_gary_Equipslot[6].GetComponent<Equipslot>().SetItem_Equip_NotApply();
-                GUIManager_Total.Instance.Display_GUI_Equipslot_Remove_Information();
+                m_gary_Equipslot[6].GetComponent<Equipslot>().SetItem_Equip_NotApply(); // 착용 조건을 불충족한 장비아이템 마스크 적용(활성화)
+                GUIManager_Total.Instance.Display_GUI_Equipslot_Remove_Information(); // 장비아이템 해제 알림 GUI 활성화
             }
         }
     }
 
+    // 장비창(상태창) GUI 활성화 / 비활성화 함수
+    // return true : 장비창(상태창) GUI 활성화 / return false : 장비창(상태창) GUI 비활성화
     public bool Display_GUI_Equipslot()
     {
         if (m_gPanel_Equipslot.activeSelf == true)
@@ -226,22 +220,11 @@ public class GUI_Equipslot : MonoBehaviour
             m_BTN_Equipslot_Exit.GetComponent<Image>().color = new Color(1, 1, 1, 1);
             m_gPanel_ES.SetActive(true);
             m_gPanel_Equipslot.SetActive(true);
-            m_gPanel_Equipslot.transform.SetAsLastSibling();
+
             m_gPanel_ES.transform.SetAsLastSibling();
+            m_gPanel_Equipslot.transform.SetAsLastSibling();
 
             return true;
         }
-    }
-
-    // 버튼 이벤트 처리
-    public void Btn_Press_Exit()
-    {
-        m_BTN_Equipslot_Exit.GetComponent<Image>().color = new Color(.75f, .75f, .75f, 1);
-        //m_gPanel_Equipslot.SetActive(false);
-        GUIManager_Total.Instance.Display_GUI_ES();
-        m_gPanel_ES.SetActive(false);
-        m_gPanel_Equipslot_Equip_Information.SetActive(false);
-
-        GUIManager_Total.Instance.Delete_GUI_Priority(16);
     }
 }
