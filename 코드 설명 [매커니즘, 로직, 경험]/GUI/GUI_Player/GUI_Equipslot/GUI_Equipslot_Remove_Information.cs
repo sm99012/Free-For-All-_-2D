@@ -39,7 +39,7 @@ public class GUI_Equipslot_Remove_Information : MonoBehaviour
         m_BTN_Equipslot_Remove_Information_Content_Ok.onClick.AddListener(delegate { Btn_Press_Ok(); });
     }
 
-    // (버튼) GUI 비활성화 클릭 이벤트 함수 - 장비아이템 착용 해제 알림 GUI를 비활성화 한다.
+    // (버튼) GUI 비활성화 클릭 이벤트 함수 - 장비아이템 착용 해제 알림 GUI를 비활성화한다.
     void Btn_Press_Ok()
     {
         m_gPanel_Equipslot_Remove_Information.SetActive(false);
