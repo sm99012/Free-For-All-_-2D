@@ -33,7 +33,7 @@ public class Equipslot : MonoBehaviour, IPointerClickHandler
         InitialSet_Object(); // GUI 오브젝트 초기 설정
     }
 
-     // GUI 오브젝트 초기 설정
+    // GUI 오브젝트 초기 설정
     void InitialSet_Object()
     {
         m_IMG_ItemSprite = this.gameObject.transform.Find("Panel_ItemSprite").GetComponent<Image>();
