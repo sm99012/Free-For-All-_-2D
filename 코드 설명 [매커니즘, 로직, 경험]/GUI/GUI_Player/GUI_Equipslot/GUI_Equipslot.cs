@@ -19,7 +19,7 @@ public class GUI_Equipslot : MonoBehaviour
     [SerializeField] GameObject m_gPanel_Equipslot;
 
     [SerializeField] GameObject m_gPanel_Equipslot_Exit;
-    [SerializeField] Button m_BTN_Equipslot_Exit; // (버튼) 장비창 GUI 비활성화 클릭
+    [SerializeField] Button m_BTN_Equipslot_Exit; // (버튼) 장비창 GUI 비활성화. 현재 상태창GUI 비활성화 버튼으로 사용한다.
 
     [SerializeField] GameObject m_gPanel_Equipslot_Content;
     [SerializeField] GameObject m_gPanel_Equipslot_Content_Hat;
