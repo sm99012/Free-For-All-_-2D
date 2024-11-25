@@ -401,30 +401,30 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
         m_Scrollbar_Equipslot_Equip_Information_Content_ItemDescription_Content.value = 1; // (스크롤바) 장비아이템 설명 정보 초기화
         m_Scrollbar_SetItemEffect_Content_SS_Description.value = 1;                        // (스크롤바) 아이템 세트효과 정보 초기화
         
-        UpdateItemEquipInformation_UpBar(item);                  // 장비아이템 세부 정보 GUI 업데이트 - 장비아이템 정보1
-        UpdateItemEquipInformation_Content(item);                // 장비아이템 세부 정보 GUI 업데이트 - 장비아이템 정보2
+        UpdateItemEquipInformation_UpBar(item);                  // 장비아이템 세부 정보 GUI 업데이트 - 장비아이템 이름, 강화 상태
+        UpdateItemEquipInformation_Content(item);                // 장비아이템 세부 정보 GUI 업데이트 - 장비아이템 정보
         UpdateItemEquipInformation_EquipRemove(item, arynumber); // 장비아이템 세부 정보 GUI 업데이트 - 장비아이템 착용 해제
         UpdateItemEquipInformation_SetItemEffect(item);          // 장비아이템 세부 정보 GUI 업데이트 - 아이템 세트효과 정보
     }
-    // 장비아이템 세부 정보 GUI 업데이트 - 장비아이템 정보1
+    // 장비아이템 세부 정보 GUI 업데이트 - 장비아이템 이름, 강화 상태
     void UpdateItemEquipInformation_UpBar(Item_Equip item) // item : 장비아이템
     {
-        // 장비 아이템 이름, 강화 상태.
         m_TMP_Equipslot_Equip_Information_UpBar.text = item.m_sItemName;
-        if (item.m_nReinforcementCount_Current > 0)
+        
+        if (item.m_nReinforcementCount_Current > 0) // 장비아이템이 강화된 경우(장비아이템 현재 강화 횟수 > 0)
             m_TMP_Equipslot_Equip_Information_UpBar.text += " + " + item.m_nReinforcementCount_Current;
     }
-    // 장비아이템 세부 정보 GUI 업데이트 - 장비아이템 정보2
+    // 장비아이템 세부 정보 GUI 업데이트 - 장비아이템 정보
     void UpdateItemEquipInformation_Content(Item_Equip item) // item : 장비아이템
     {
-        // 장비 아이템 이미지.
+        // 장비아이템 이미지 설정
         m_IMG_Equipslot_Equip_Information_Content_Image_ItemSprite.sprite = item.m_sp_Sprite;
         m_IMG_Equipslot_Equip_Information_Content_Image_ItemSprite.color = new Color(1, 1, 1, 0.75f);
 
-        // 장비 아이템 분류, 등급, 추가 옵션 등급, 강화 상태.
-        // 분류.
-        m_TMP_Equipslot_Equip_Information_Content_ItemInformation.text = "";
-        if (item.m_eItemEquipType == E_ITEM_EQUIP_TYPE.MAINWEAPON)
+        m_TMP_Equipslot_Equip_Information_Content_ItemInformation.text = ""; // 초기화
+        
+        // 장비아이템 분류 설정
+        if (item.m_eItemEquipType == E_ITEM_EQUIP_TYPE.MAINWEAPON) // 장비아이템 타입이 주무기인 경우
         {
             switch (item.m_eItemEquipMainWeaponType)
             {
@@ -445,7 +445,7 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
                     break;
             }
         }
-        else
+        else // 장비아이템 타입이 주무기가 아닌 경우
         {
             switch (item.m_eItemEquipType)
             {
@@ -487,7 +487,8 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
             }
         }
         m_TMP_Equipslot_Equip_Information_Content_ItemInformation.text += "분류: " + m_sBuffer + "\n";
-        // 등급.
+        
+        // 장비아이템 등급 설정
         switch (item.m_eItemGrade)
         {
             case E_ITEM_GRADE.NORMAL:
@@ -522,13 +523,14 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
                 break;
         }
         m_TMP_Equipslot_Equip_Information_Content_ItemInformation.text += "등급: " + m_sBuffer + "\n";
-        // 추가 옵션 등급.
+        
+        // 장비아이템 추가 옵션 등급 설정
         m_TMP_Equipslot_Equip_Information_Content_ItemInformation.text += "추가 옵션 등급: " + item.m_eItemEquip_SpecialRatio_STATUS + " / " + item.m_eItemEquip_SpecialRatio_SOC + "\n";
-        // 강화 상태.
+        
+        // 장비아이템 강화 상태 설정
         m_TMP_Equipslot_Equip_Information_Content_ItemInformation.text += "강화 상태: " + item.m_nReinforcementCount_Current + " / " + item.m_nReinforcementCount_Max;
 
-        // 장비 아이템 효과.
-        // 장비 아이템 효과 Status.
+        // 장비아이템 착용효과(스탯(능력치)) 설정
         m_TMP_Equipslot_Equip_Information_Content_Effect_Status_L.text = "";
         m_TMP_Equipslot_Equip_Information_Content_Effect_Status_L.text += Refine_Condition("레        벨:", item.m_sStatus_Effect.GetSTATUS_LV(), item.m_STATUS_AdditionalOption.GetSTATUS_LV(), item.m_STATUS_ReinforcementValue.GetSTATUS_LV());
         m_TMP_Equipslot_Equip_Information_Content_Effect_Status_L.text += Refine_Condition("\n체        력:", item.m_sStatus_Effect.GetSTATUS_HP_Max(), item.m_STATUS_AdditionalOption.GetSTATUS_HP_Max(), item.m_STATUS_ReinforcementValue.GetSTATUS_HP_Max());
@@ -539,7 +541,8 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
         m_TMP_Equipslot_Equip_Information_Content_Effect_Status_R.text += Refine_Condition("마        나:", item.m_sStatus_Effect.GetSTATUS_MP_Max(), item.m_STATUS_AdditionalOption.GetSTATUS_MP_Max(), item.m_STATUS_ReinforcementValue.GetSTATUS_MP_Max());
         m_TMP_Equipslot_Equip_Information_Content_Effect_Status_R.text += Refine_Condition("\n방  어  력:", item.m_sStatus_Effect.GetSTATUS_Defence_Physical(), item.m_STATUS_AdditionalOption.GetSTATUS_Defence_Physical(), item.m_STATUS_ReinforcementValue.GetSTATUS_Defence_Physical());
         m_TMP_Equipslot_Equip_Information_Content_Effect_Status_R.text += Refine_Condition("\n공격속도:", item.m_sStatus_Effect.GetSTATUS_AttackSpeed(), item.m_STATUS_AdditionalOption.GetSTATUS_AttackSpeed(), item.m_STATUS_ReinforcementValue.GetSTATUS_AttackSpeed());
-        // 장비 아이템 효과 Soc.
+        
+        // 장비아이템 착용효과(스탯(평판)) 설정
         m_TMP_Equipslot_Equip_Information_Content_Effect_Soc_L.text = "";
         m_TMP_Equipslot_Equip_Information_Content_Effect_Soc_L.text += Refine_Condition("명        예:", item.m_sSoc_Effect.GetSOC_Honor(), item.m_SOC_AdditionalOption.GetSOC_Honor(), item.m_SOC_ReinforcementValue.GetSOC_Honor());
         m_TMP_Equipslot_Equip_Information_Content_Effect_Soc_L.text += Refine_Condition("\n인        간:", item.m_sSoc_Effect.GetSOC_Human(), item.m_SOC_AdditionalOption.GetSOC_Human(), item.m_SOC_ReinforcementValue.GetSOC_Human());
@@ -553,50 +556,33 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
         m_TMP_Equipslot_Equip_Information_Content_Effect_Soc_R.text += Refine_Condition("\n용        족:", item.m_sSoc_Effect.GetSOC_Dragon(), item.m_SOC_AdditionalOption.GetSOC_Dragon(), item.m_SOC_ReinforcementValue.GetSOC_Dragon());
         m_TMP_Equipslot_Equip_Information_Content_Effect_Soc_R.text += Refine_Condition("\n어        둠:", item.m_sSoc_Effect.GetSOC_Shadow(), item.m_SOC_AdditionalOption.GetSOC_Shadow(), item.m_SOC_ReinforcementValue.GetSOC_Shadow());
 
-        // 장비 아이템 착용 조건.
-        // 장비 아이템 착용 조건 Status.
+        // 장비아이템 착용조건(스탯(능력치)) 설정
         m_TMP_Equipslot_Equip_Information_Content_Condition_Status_L.text = "";
-        //m_TMP_Equipslot_Equip_Information_Content_Condition_Status_L.text += "레        벨: " + Refine_Condition(item.m_sStatus_Limit_Min.GetSTATUS_LV(), item.m_sStatus_Limit_Max.GetSTATUS_LV()) + "\n";
         m_TMP_Equipslot_Equip_Information_Content_Condition_Status_L.text += Refine_Condition("레        벨: ", "\n", item.m_sStatus_Limit_Min.GetSTATUS_LV(), item.m_sStatus_Limit_Max.GetSTATUS_LV(), player.m_sStatus.GetSTATUS_LV());
-        //m_TMP_Equipslot_Equip_Information_Content_Condition_Status_L.text += "체        력: " + Refine_Condition(item.m_sStatus_Limit_Min.GetSTATUS_HP_Max(), item.m_sStatus_Limit_Max.GetSTATUS_HP_Max()) + "\n";
         m_TMP_Equipslot_Equip_Information_Content_Condition_Status_L.text += Refine_Condition("체        력: ", "\n", item.m_sStatus_Limit_Min.GetSTATUS_HP_Max(), item.m_sStatus_Limit_Max.GetSTATUS_HP_Max(), player.m_sStatus.GetSTATUS_HP_Max());
-        //m_TMP_Equipslot_Equip_Information_Content_Condition_Status_L.text += "데  미  지: " + Refine_Condition(item.m_sStatus_Limit_Min.GetSTATUS_Damage_Total(), item.m_sStatus_Limit_Max.GetSTATUS_Damage_Total()) + "\n";
         m_TMP_Equipslot_Equip_Information_Content_Condition_Status_L.text += Refine_Condition("데  미  지: ", "\n", item.m_sStatus_Limit_Min.GetSTATUS_Damage_Total(), item.m_sStatus_Limit_Max.GetSTATUS_Damage_Total(), player.m_sStatus.GetSTATUS_Damage_Total());
-        //m_TMP_Equipslot_Equip_Information_Content_Condition_Status_L.text += "이동속도: " + Refine_Condition(item.m_sStatus_Limit_Min.GetSTATUS_Speed(), item.m_sStatus_Limit_Max.GetSTATUS_Speed());
         m_TMP_Equipslot_Equip_Information_Content_Condition_Status_L.text += Refine_Condition("이동속도: ", "", item.m_sStatus_Limit_Min.GetSTATUS_Speed(), item.m_sStatus_Limit_Max.GetSTATUS_Speed(), player.m_sStatus.GetSTATUS_Speed());
         m_TMP_Equipslot_Equip_Information_Content_Condition_Status_R.text = "";
         m_TMP_Equipslot_Equip_Information_Content_Condition_Status_R.text += "\n";
-        //m_TMP_Equipslot_Equip_Information_Content_Condition_Status_R.text += "마        나: " + Refine_Condition(item.m_sStatus_Limit_Min.GetSTATUS_MP_Max(), item.m_sStatus_Limit_Max.GetSTATUS_MP_Max()) + "\n";
         m_TMP_Equipslot_Equip_Information_Content_Condition_Status_R.text += Refine_Condition("마        나: ", "\n", item.m_sStatus_Limit_Min.GetSTATUS_MP_Max(), item.m_sStatus_Limit_Max.GetSTATUS_MP_Max(), player.m_sStatus.GetSTATUS_MP_Max());
-        //m_TMP_Equipslot_Equip_Information_Content_Condition_Status_R.text += "방  어  력: " + Refine_Condition(item.m_sStatus_Limit_Min.GetSTATUS_Defence_Physical(), item.m_sStatus_Limit_Max.GetSTATUS_Defence_Physical()) + "\n";
         m_TMP_Equipslot_Equip_Information_Content_Condition_Status_R.text += Refine_Condition("방  어  력: ", "\n", item.m_sStatus_Limit_Min.GetSTATUS_Defence_Physical(), item.m_sStatus_Limit_Max.GetSTATUS_Defence_Physical(), player.m_sStatus.GetSTATUS_Defence_Physical());
-        //m_TMP_Equipslot_Equip_Information_Content_Condition_Status_R.text += "공격속도: " + Refine_Condition(item.m_sStatus_Limit_Min.GetSTATUS_AttackSpeed(), item.m_sStatus_Limit_Max.GetSTATUS_AttackSpeed());
         m_TMP_Equipslot_Equip_Information_Content_Condition_Status_R.text += Refine_Condition("공격속도: ", "", item.m_sStatus_Limit_Min.GetSTATUS_AttackSpeed(), item.m_sStatus_Limit_Max.GetSTATUS_AttackSpeed(), player.m_sStatus.GetSTATUS_AttackSpeed());
 
-        // 장비 아이템 조건 Soc.
+        // 장비아이템 착용조건(스탯(평판)) 설정
         m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_L.text = "";
-        //m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_L.text += "평        판: " + Refine_Condition(item.m_sSoc_Limit_Min.GetSOC_Honor(), item.m_sSoc_Limit_Max.GetSOC_Honor()) + "\n";
         m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_L.text += Refine_Condition("명        예: ", "\n", item.m_sSoc_Limit_Min.GetSOC_Honor(), item.m_sSoc_Limit_Max.GetSOC_Honor(), player.m_sSoc.GetSOC_Honor());
-        //m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_L.text += "인        간: " + Refine_Condition(item.m_sSoc_Limit_Min.GetSOC_Human(), item.m_sSoc_Limit_Max.GetSOC_Human()) + "\n";
         m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_L.text += Refine_Condition("인        간: ", "\n", item.m_sSoc_Limit_Min.GetSOC_Human(), item.m_sSoc_Limit_Max.GetSOC_Human(), player.m_sSoc.GetSOC_Human());
-        //m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_L.text += "동        물: " + Refine_Condition(item.m_sSoc_Limit_Min.GetSOC_Animal(), item.m_sSoc_Limit_Max.GetSOC_Animal()) + "\n";
         m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_L.text += Refine_Condition("동        물: ", "\n", item.m_sSoc_Limit_Min.GetSOC_Animal(), item.m_sSoc_Limit_Max.GetSOC_Animal(), player.m_sSoc.GetSOC_Animal());
-        //m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_L.text += "슬  라  임: " + Refine_Condition(item.m_sSoc_Limit_Min.GetSOC_Slime(), item.m_sSoc_Limit_Max.GetSOC_Slime()) + "\n";
         m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_L.text += Refine_Condition("슬  라  임: ", "\n", item.m_sSoc_Limit_Min.GetSOC_Slime(), item.m_sSoc_Limit_Max.GetSOC_Slime(), player.m_sSoc.GetSOC_Slime());
-        //m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_L.text += "스켈레톤: " + Refine_Condition(item.m_sSoc_Limit_Min.GetSOC_Skeleton(), item.m_sSoc_Limit_Max.GetSOC_Skeleton());
         m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_L.text += Refine_Condition("스켈레톤: ", "", item.m_sSoc_Limit_Min.GetSOC_Skeleton(), item.m_sSoc_Limit_Max.GetSOC_Skeleton(), player.m_sSoc.GetSOC_Skeleton());
         m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_R.text = "";
         m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_R.text += "\n";
-        //m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_R.text += "앤        트: " + Refine_Condition(item.m_sSoc_Limit_Min.GetSOC_Ents(), item.m_sSoc_Limit_Max.GetSOC_Ents()) + "\n";
         m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_R.text += Refine_Condition("앤        트: ", "\n", item.m_sSoc_Limit_Min.GetSOC_Ents(), item.m_sSoc_Limit_Max.GetSOC_Ents(), player.m_sSoc.GetSOC_Ents());
-        //m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_R.text += "마        족: " + Refine_Condition(item.m_sSoc_Limit_Min.GetSOC_Devil(), item.m_sSoc_Limit_Max.GetSOC_Devil()) + "\n";
         m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_R.text += Refine_Condition("마        족: ", "\n", item.m_sSoc_Limit_Min.GetSOC_Devil(), item.m_sSoc_Limit_Max.GetSOC_Devil(), player.m_sSoc.GetSOC_Devil());
-        //m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_R.text += "용        족: " + Refine_Condition(item.m_sSoc_Limit_Min.GetSOC_Dragon(), item.m_sSoc_Limit_Max.GetSOC_Dragon()) + "\n";
         m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_R.text += Refine_Condition("용        족: ", "\n", item.m_sSoc_Limit_Min.GetSOC_Dragon(), item.m_sSoc_Limit_Max.GetSOC_Dragon(), player.m_sSoc.GetSOC_Dragon());
-        //m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_R.text += "어        둠: " + Refine_Condition(item.m_sSoc_Limit_Min.GetSOC_Shadow(), item.m_sSoc_Limit_Max.GetSOC_Shadow());
         m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_R.text += Refine_Condition("어        듬: ", "", item.m_sSoc_Limit_Min.GetSOC_Shadow(), item.m_sSoc_Limit_Max.GetSOC_Shadow(), player.m_sSoc.GetSOC_Shadow());
 
-        // 장비 아이템 설명.
+        // 장비아이템 설명 설정
         m_TMP_Equipslot_Equip_Information_Content_ItemDescription_Content.text = "";
         m_TMP_Equipslot_Equip_Information_Content_ItemDescription_Content.text += item.GetItemDescription();
     }
