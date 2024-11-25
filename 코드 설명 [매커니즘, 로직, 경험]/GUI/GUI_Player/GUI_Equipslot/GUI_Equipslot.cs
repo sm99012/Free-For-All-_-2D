@@ -6,7 +6,8 @@ using UnityEngine.EventSystems;
 
 //
 // ※ 장비창 GUI
-//    해당 GUI를 활성화 하여 플레이어가 현재 착용중인 장비아이템을 확인할 수 있다. 해당 GUI는 상태창(능력치창 + 장비창 + 아이템 세트효과창)GUI로 통합 되었다.
+//    해당 GUI를 활성화 하여 플레이어가 현재 착용중인 장비아이템을 확인할 수 있다. 해당 GUI는 상태창(능력치창 + 장비창 + 아이템 세트효과창) GUI로 통합 되었다.
+//    해당 클래스에 상태창 GUI를 총괄하는 패널이 존재한다.
 //
 
 public class GUI_Equipslot : MonoBehaviour
