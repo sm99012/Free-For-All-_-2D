@@ -119,11 +119,11 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
     public enum E_Equipslot_Equip_Information_PageNumber { EFFECT, CONDITION, DESCRIPTION }
     public E_Equipslot_Equip_Information_PageNumber m_eInformationPage; // 아이템 정보 타입
 
-    // 아이템 정보 문자열  색 표시 관련 변수
-    bool m_bRefine_Condition_Check; // 문자열 색 설정 관련 변수
+    // 장비아이템 착용 조건 + 아이템 정보 문자열 색 표시 관련 변수 
     public bool m_bEquip_Condition_Check; // 장비아이템 착용 가능 여부
-                                          // m_bEquip_Condition_Check == true : 스탯(능력치, 평판) 적용 가능
-                                          // m_bEquip_Condition_Check == false : 스탯(능력치, 평판) 적용 불가능. 빨간색으로 표시
+                                          // m_bEquip_Condition_Check == true : 장비아이템 착용 불가능(장비아이템 착용 해제)
+                                          // m_bEquip_Condition_Check == false : 장비아이템 착용 가능. 빨간색으로 표시
+    bool m_bRefine_Condition_Check;       // 문자열 색 설정 관련 변수
                                           
     string m_sBuffer; // 문자열 임시 저장소. 표시할 정보가 많기에 임시 저장소를 사용한다.
     // 색 문자열 정보
