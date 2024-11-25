@@ -123,14 +123,16 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
     public bool m_bEquip_Condition_Check; // 장비아이템 착용 가능 여부
                                           // m_bEquip_Condition_Check == true : 장비아이템 착용 불가능(장비아이템 착용 해제)
                                           // m_bEquip_Condition_Check == false : 장비아이템 착용 가능. 빨간색으로 표시
-    bool m_bRefine_Condition_Check;       // 문자열 색 설정 관련 변수
+    bool m_bRefine_Condition_Check;       // 문자열 정제 관련 변수. 장비아이템 착용효과, 착용조건, 아이템 세트효과 등의 정보를 효율적으로 표시(강조)하기 위해 존재한다.
+                                          // m_bRefine_Condition_Check == true : 문자열 정제 필요
+                                          // m_bRefine_Condition_Check == false : 문자열 정제 불필요
                                           
     string m_sBuffer; // 문자열 임시 저장소. 표시할 정보가 많기에 임시 저장소를 사용한다.
     // 색 문자열 정보
-    string m_sColor_White = "<color=#ffffff>";     // 흰색
-    string m_sColor_WhiteGray = "<color=#808080>"; // 회색
-    string m_sColor_Red = "<color=#FF0000>";       // 빨간색
-    string m_sColor_Brown = "<color=#915446>";     // 갈색
+    string m_sColor_White = "<color=#ffffff>";     // 흰색 - 이로운 효과, 부합한 조건
+    string m_sColor_WhiteGray = "<color=#808080>"; // 회색 - 해로운 효과
+    string m_sColor_Red = "<color=#FF0000>";       // 빨간색 - 부적합한 조건
+    string m_sColor_Brown = "<color=#915446>";     // 갈색 - 존재하지 않는 효과, 조건
     string m_sColor_End = "</color>";              // 색상 문자열 끝
 
     Player_Status player; // 플레이어 스탯(능력치, 평판) 변수
@@ -693,149 +695,133 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
         m_TMP_SetItemEffect_Content_SS_Soc_R.text += Refine_Condition("\n어        듬:", m_ISE.m_Dictionary_SOC_Effect[m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index]].GetSOC_Shadow());
     }
 
-    // 착용조건에 대한 Text 문장 정제 함수.
-    // ex)
-    // 장비 아이템 A 의 착용조건에 LV 제한 '10 <= LV <= 19' 이 있을때 -> 레벨: 10 ~ 19 라고 Text 정제.
-    // 장비 아이템 A 의 착용조건에 LV 제한 '-10000 <= LV <= 19' 이 있을때 -> 레벨: ~ 19 라고 Text 정제.
-    // 장비 아이템 A 의 착용조건에 LV 제한 '10 <= LV <= 10000' 이 있을때 -> 레벨: 10 ~ 라고 Text 정제.
-    // -10000, 10000 은 최소, 최대 제한이 없다는것을 의미.
-    string Refine_Condition(float min, float max)
+    // 텍스트(문자열) 정제 함수. 장비아이템 착용효과, 착용조건, 아이템 세트효과 등의 정보를 효율적으로 표시(강조)한다.
+    // ~(물결표)를 이용해 장비아이템의 착용조건을 표시한다. 스탯(능력치, 평판) 최대 상한(+10000)ㆍ최소 하한(-10000)은 표시하지 않는다.
+    
+    // 텍스트(문자열) 정제 함수 - 장비아이템 착용조건
+    string Refine_Condition(string beforesentence, string aftersentence, float condition_min, float condition_max, float current_condition) // beforesentence : 이전 문장, aftersentence : 이후 문장
+                                                                                                                                            // condition_min : 장비아이템 착용조건 - 스탯(능력치, 평판) 하한
+                                                                                                                                            // condition_max : 장비아이템 착용조건 - 스탯(능력치, 평판) 상한
+                                                                                                                                            // current_condition : 플레이어 스탯(능력치, 평판)
     {
-        m_bRefine_Condition_Check = false;
+        if (condition_min == -10000 && condition_max == 10000) // 별도의 스탯(능력치, 평판) 효과, 조건 등이 존재하지 않는 경우
+            m_bRefine_Condition_Check = false; // 문자열 정제 불필요
+        else // 별도의 스탯(능력치, 평판) 효과, 조건 등이 존재하는 경우
+            m_bRefine_Condition_Check = true; // 문자열 정제 필요
 
-        if (min == -10000 && max == 10000)
-            m_bRefine_Condition_Check = false;
-        else
-            m_bRefine_Condition_Check = true;
-
-        m_sBuffer = "";
-        if (min != -10000)
-            m_sBuffer += min;
-        if (m_bRefine_Condition_Check == true)
-            m_sBuffer += " ~ ";
-        else
-            m_sBuffer = "X";
-        if (max != 10000)
-            m_sBuffer += max;
-
-        return m_sBuffer;
-    }
-    string Refine_Condition(string beforesentence, string aftersentence, float condition_min, float condition_max, float current_condition)
-    {
-        m_bRefine_Condition_Check = false;
-
-        if (condition_min == -10000 && condition_max == 10000)
-            m_bRefine_Condition_Check = false;
-        else
-            m_bRefine_Condition_Check = true;
-
-        m_sBuffer = "";
-        if (condition_min != -10000)
+        m_sBuffer = ""; // 문자열 임시 저장소 초기화
+        
+        if (condition_min != -10000) // 장비아이템 착용 조건 - 스탯(능력치, 평판) 하한이 존재하는 경우(!= 최소 하한)
             m_sBuffer += condition_min;
-        if (m_bRefine_Condition_Check == true)
+            
+        if (m_bRefine_Condition_Check == true) // 문자열 정제가 필요한 경우
             m_sBuffer += " ~ ";
         else
             m_sBuffer = "";
-        if (condition_max != 10000)
+            
+        if (condition_max != 10000) // 장비아이템 착용 조건 - 스탯(능력치, 평판) 상한이 존재하는 경우(!= 최대 상한)
             m_sBuffer += condition_max;
 
         m_sBuffer = beforesentence + m_sBuffer;
 
-        if (m_bRefine_Condition_Check == true)
+        if (m_bRefine_Condition_Check == true) // 문자열 정제가 필요한 경우
         {
-            if (condition_min <= current_condition && current_condition <= condition_max)
+            if (condition_min <= current_condition && current_condition <= condition_max) // 플레이어 스탯(능력치, 평판)이 장비아이템 착용조건 - 스탯(능력치, 평판)에 부합하는 경우
             {
-                m_sBuffer = m_sColor_White + m_sBuffer + m_sColor_End + aftersentence;
+                m_sBuffer = m_sColor_White + m_sBuffer + m_sColor_End + aftersentence; // 문자열 흰색 설정
             }
-            else
+            else // 플레이어 스탯(능력치, 평판)이 장비아이템 착용조건 - 스탯(능력치, 평판)에 미달하거나 초과하는 경우
             {
-                m_sBuffer = m_sColor_Red + m_sBuffer + m_sColor_End + aftersentence;
-                m_bEquip_Condition_Check = false;
+                m_sBuffer = m_sColor_Red + m_sBuffer + m_sColor_End + aftersentence; // 문자열 빨간색 설정
+                m_bEquip_Condition_Check = false; // 장비아이템 착용 불가능(장비아이템 착용 해제)
             }
         }
-        else
+        else // 문자열 정제가 불필요한 경우
         {
-            m_sBuffer = m_sColor_Brown + m_sBuffer + m_sColor_End + aftersentence;
+            m_sBuffer = m_sColor_Brown + m_sBuffer + m_sColor_End + aftersentence; // 문자열 갈색 설정
         }
 
-        return m_sBuffer;
+        return m_sBuffer; // 문자열 임시 저장소 반환
     }
-    // 아이템 세트 효과 개수.
-    string Refine_Condition(string sentence, bool isname = true)
+    // 텍스트(문자열) 정제 함수 - 아이템 세트효과 개수
+    string Refine_Condition(string sentence, bool isname = true) // sentence : 문장, isname : 아이템 세트효과 이름인지 판단
     {
-        m_nPlayerEquipment_SetItemEffect_Current = 0;
-        if (Player_Equipment.m_bEquipment_Hat == true)
+        m_nPlayerEquipment_SetItemEffect_Current = 0; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수
+
+        // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 판단
+        if (Player_Equipment.m_bEquipment_Hat == true) // 착용중인 장비아이템(모자)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Hat.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Hat.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(모자)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Hat() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Hat() == true) // 착용중인 장비아이템(모자) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Top == true)
+        if (Player_Equipment.m_bEquipment_Top == true) // 착용중인 장비아이템(상의)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Top.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Top.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(상의)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Top() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Top() == true) // 착용중인 장비아이템(상의) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Bottoms == true)
+        if (Player_Equipment.m_bEquipment_Bottoms == true) // 착용중인 장비아이템(하의)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Bottoms.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Bottoms.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(하의)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Bottoms() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Bottoms() == true) // 착용중인 장비아이템(하의) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Shose == true)
+        if (Player_Equipment.m_bEquipment_Shose == true) // 착용중인 장비아이템(신발)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Shose.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Shose.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(신발)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Shose() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Shose() == true) // 착용중인 장비아이템(신발) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Gloves == true)
+        if (Player_Equipment.m_bEquipment_Gloves == true) // 착용중인 장비아이템(장갑)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Gloves.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Gloves.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(장갑)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Gloves() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Gloves() == true) // 착용중인 장비아이템(장갑) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Mainweapon == true)
+        if (Player_Equipment.m_bEquipment_Mainweapon == true) // 착용중인 장비아이템(주무기)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Mainweapon.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Mainweapon.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(주무기)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_MainWeapon() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_MainWeapon() == true) // 착용중인 장비아이템(주무기) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Subweapon == true)
+        if (Player_Equipment.m_bEquipment_Subweapon == true) // 착용중인 장비아이템(보조무기)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Subweapon.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Subweapon.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(보조무기)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_SubWeapon() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_SubWeapon() == true) // 착용중인 장비아이템(보조무기) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
 
-        if (m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index] <= m_nPlayerEquipment_SetItemEffect_Current)
+        if (m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index] <= m_nPlayerEquipment_SetItemEffect_Current) // 해당 아이템 세트효과가 적용중인 경우
         {
-            if (isname == true)
-                return m_sColor_White + sentence + " 적용" + m_sColor_End;
-            else
-                return m_sColor_White + sentence + m_sColor_End;
+            if (isname == true) // 아이템 세트효과 이름인 경우
+                return m_sColor_White + sentence + " 적용" + m_sColor_End; // 문자열 흰색 설정 + "적용"
+            else // 아이템 세트효과 이름이 아닌 경우(아이템 세트효과 설명인 경우)
+                return m_sColor_White + sentence + m_sColor_End; // 문자열 흰색 설정
         }
-        else
+        else // 해당 아이템 세트효과가 적용중이지 않을 경우
         {
-            if (isname == true)
-                return m_sColor_Brown + sentence + " 미적용" + m_sColor_End;
-            else
-                return m_sColor_Brown + sentence + m_sColor_End;
+            if (isname == true) // 아이템 세트효과 이름인 경우
+                return m_sColor_Brown + sentence + " 미적용" + m_sColor_End; // 문자열 갈색 설정 + "적미용"
+            else // 아이템 세트효과 이름이 아닌 경우(아이템 세트효과 설명인 경우)
+                return m_sColor_Brown + sentence + m_sColor_End; // 문자열 갈색 설정
         }
     }
+    // 텍스트(문자열) 정제 함수 - 아이템 세트효과 개수
     // 각각의 옵션.(고정된 아이템 세트 효과)
     string Refine_Condition(string sentence, int number)
     {
