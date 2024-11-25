@@ -743,7 +743,7 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
 
         return m_sBuffer; // 문자열 임시 저장소 반환
     }
-    // 텍스트(문자열) 정제 함수 - 아이템 세트효과 개수
+    // 텍스트(문자열) 정제 함수 - 아이템 세트효과 이름, 설명
     string Refine_Condition(string sentence, bool isname = true) // sentence : 문장, isname : 아이템 세트효과 이름인지 판단
     {
         m_nPlayerEquipment_SetItemEffect_Current = 0; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수
@@ -821,82 +821,77 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
                 return m_sColor_Brown + sentence + m_sColor_End; // 문자열 갈색 설정
         }
     }
-    // 텍스트(문자열) 정제 함수 - 아이템 세트효과 개수
-    // 각각의 옵션.(고정된 아이템 세트 효과)
-    string Refine_Condition(string sentence, int number)
+    // 텍스트(문자열) 정제 함수 - 아이템 세트효과(int)
+    string Refine_Condition(string sentence, int number) // sentence : 문장, number : 아이템 세트효과 스탯(능력치, 평판)
     {
-        m_nPlayerEquipment_SetItemEffect_Current = 0;
-        if (Player_Equipment.m_bEquipment_Hat == true)
+        m_nPlayerEquipment_SetItemEffect_Current = 0; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수
+
+        // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 판단
+        if (Player_Equipment.m_bEquipment_Hat == true) // 착용중인 장비아이템(모자)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Hat.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Hat.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(모자)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Hat() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Hat() == true) // 착용중인 장비아이템(모자) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Top == true)
+        if (Player_Equipment.m_bEquipment_Top == true) // 착용중인 장비아이템(상의)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Top.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Top.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(상의)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Top() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Top() == true) // 착용중인 장비아이템(상의) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Bottoms == true)
+        if (Player_Equipment.m_bEquipment_Bottoms == true) // 착용중인 장비아이템(하의)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Bottoms.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Bottoms.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(하의)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Bottoms() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Bottoms() == true) // 착용중인 장비아이템(하의) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Shose == true)
+        if (Player_Equipment.m_bEquipment_Shose == true) // 착용중인 장비아이템(신발)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Shose.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Shose.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(신발)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Shose() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Shose() == true) // 착용중인 장비아이템(신발) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Gloves == true)
+        if (Player_Equipment.m_bEquipment_Gloves == true) // 착용중인 장비아이템(장갑)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Gloves.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Gloves.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(장갑)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Gloves() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Gloves() == true) // 착용중인 장비아이템(장갑) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Mainweapon == true)
+        if (Player_Equipment.m_bEquipment_Mainweapon == true) // 착용중인 장비아이템(주무기)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Mainweapon.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Mainweapon.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(주무기)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_MainWeapon() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_MainWeapon() == true) // 착용중인 장비아이템(주무기) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Subweapon == true)
+        if (Player_Equipment.m_bEquipment_Subweapon == true) // 착용중인 장비아이템(보조무기)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Subweapon.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Subweapon.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(보조무기)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_SubWeapon() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_SubWeapon() == true) // 착용중인 장비아이템(보조무기) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
 
-        //if (m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index] <= m_nPlayerEquipment_SetItemEffect_Current)
-        //{
-        if (number > 0)
-            return m_sColor_White + sentence + " " + number.ToString() + m_sColor_End;
-        else if (number < 0)
-            return m_sColor_WhiteGray + sentence + " " + number.ToString() + m_sColor_End;
-        else
-            return m_sColor_Brown + sentence + " " + number.ToString() + m_sColor_End;
-        //}
-        //else
-        //{
-        //    return m_sColor_Brown + sentence + " " + number.ToString() + m_sColor_End;
-        //}
+        if (number > 0) // 이로운 효과(아이템 세트효과 스탯(능력치, 평판) > 0)
+            return m_sColor_White + sentence + " " + number.ToString() + m_sColor_End; // 문자열 흰색 + 아이템 세트효과 스탯(능력치, 평판)
+        else if (number < 0) // 해로운 효과(아이템 세트효과 스탯(능력치, 평판) < 0)
+            return m_sColor_WhiteGray + sentence + " " + number.ToString() + m_sColor_End; // 문자열 회색 + 아이템 세트효과 스탯(능력치, 평판)
+        else // 존재하지 않는 효과
+            return m_sColor_Brown + sentence + " " + number.ToString() + m_sColor_End; // 문자열 갈색 + 아이템 세트효과 스탯(능력치, 평판)
     }
+    // 텍스트(문자열) 정제 함수 - 아이템 세트효과(float)
     string Refine_Condition(string sentence, float number)
     {
         m_nPlayerEquipment_SetItemEffect_Current = 0;
@@ -971,7 +966,7 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
         //    return m_sColor_Brown + sentence + " " + number.ToString() + m_sColor_End;
         //}
     }
-    // 각각의 옵션.(유동적인 아이템 효과)
+    // 텍스트(문자열) 정제 함수 - 장비아이템 착용효과(int)
     string Refine_Condition(string sentence, int option, int option_additional, int option_reinforcement)
     {
         if (option != 0)
@@ -1006,6 +1001,7 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
             }
         }
     }
+    // 텍스트(문자열) 정제 함수 - 장비아이템 착용효과(float)
     string Refine_Condition(string sentence, float option, float option_additional, float option_reinforcement)
     {
         if (option != 0)
