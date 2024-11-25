@@ -699,9 +699,9 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
     // ~(물결표)를 이용해 장비아이템의 착용조건을 표시한다. 스탯(능력치, 평판) 최대 상한(+10000)ㆍ최소 하한(-10000)은 표시하지 않는다.
     
     // 텍스트(문자열) 정제 함수 - 장비아이템 착용조건
-    string Refine_Condition(string beforesentence, string aftersentence, float condition_min, float condition_max, float current_condition) // beforesentence : 이전 문장, aftersentence : 이후 문장
-                                                                                                                                            // condition_min : 장비아이템 착용조건 - 스탯(능력치, 평판) 하한
-                                                                                                                                            // condition_max : 장비아이템 착용조건 - 스탯(능력치, 평판) 상한
+    string Refine_Condition(string beforesentence, string aftersentence, float condition_min, float condition_max, float current_condition) // beforesentence : 이전 문장, aftersentence : 이후 문장,
+                                                                                                                                            // condition_min : 장비아이템 착용조건 - 스탯(능력치, 평판) 하한,
+                                                                                                                                            // condition_max : 장비아이템 착용조건 - 스탯(능력치, 평판) 상한,
                                                                                                                                             // current_condition : 플레이어 스탯(능력치, 평판)
     {
         if (condition_min == -10000 && condition_max == 10000) // 별도의 스탯(능력치, 평판) 효과, 조건 등이 존재하지 않는 경우
@@ -892,112 +892,128 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
             return m_sColor_Brown + sentence + " " + number.ToString() + m_sColor_End; // 문자열 갈색 + 아이템 세트효과 스탯(능력치, 평판)
     }
     // 텍스트(문자열) 정제 함수 - 아이템 세트효과(float)
-    string Refine_Condition(string sentence, float number)
+    string Refine_Condition(string sentence, float number) // sentence : 문장, number : 아이템 세트효과 스탯(능력치, 평판)
     {
-        m_nPlayerEquipment_SetItemEffect_Current = 0;
-        if (Player_Equipment.m_bEquipment_Hat == true)
+        m_nPlayerEquipment_SetItemEffect_Current = 0; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수
+        
+        // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 판단
+        if (Player_Equipment.m_bEquipment_Hat == true) // 착용중인 장비아이템(모자)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Hat.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Hat.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(모자)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Hat() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Hat() == true) // 착용중인 장비아이템(모자) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Top == true)
+        if (Player_Equipment.m_bEquipment_Top == true) // 착용중인 장비아이템(상의)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Top.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Top.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(상의)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Top() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Top() == true) // 착용중인 장비아이템(상의) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Bottoms == true)
+        if (Player_Equipment.m_bEquipment_Bottoms == true) // 착용중인 장비아이템(하의)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Bottoms.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Bottoms.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(하의)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Bottoms() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Bottoms() == true) // 착용중인 장비아이템(하의) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Shose == true)
+        if (Player_Equipment.m_bEquipment_Shose == true) // 착용중인 장비아이템(신발)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Shose.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Shose.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(신발)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Shose() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Shose() == true) // 착용중인 장비아이템(신발) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Gloves == true)
+        if (Player_Equipment.m_bEquipment_Gloves == true) // 착용중인 장비아이템(장갑)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Gloves.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Gloves.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(장갑)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Gloves() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Gloves() == true) // 착용중인 장비아이템(장갑) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Mainweapon == true)
+        if (Player_Equipment.m_bEquipment_Mainweapon == true) // 착용중인 장비아이템(주무기)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Mainweapon.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Mainweapon.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(주무기)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_MainWeapon() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_MainWeapon() == true) // 착용중인 장비아이템(주무기) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Subweapon == true)
+        if (Player_Equipment.m_bEquipment_Subweapon == true) // 착용중인 장비아이템(보조무기)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Subweapon.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Subweapon.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(보조무기)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_SubWeapon() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_SubWeapon() == true) // 착용중인 장비아이템(보조무기) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
 
-        //if (m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index] <= m_nPlayerEquipment_SetItemEffect_Current)
-        //{
-        if (number > 0)
-            return m_sColor_WhiteGray + sentence + " " + number.ToString() + m_sColor_End;
-        else if (number < 0)
-            return m_sColor_White + sentence + " " + number.ToString() + m_sColor_End;
-        else
-            return m_sColor_Brown + sentence + " " + number.ToString() + m_sColor_End;
-        //}
-        //else
-        //{
-        //    return m_sColor_Brown + sentence + " " + number.ToString() + m_sColor_End;
-        //}
+        if (number > 0) // 이로운 효과(아이템 세트효과 스탯(능력치, 평판) > 0)
+            return m_sColor_WhiteGray + sentence + " " + number.ToString() + m_sColor_End; // 문자열 흰색 + 아이템 세트효과 스탯(능력치, 평판)
+        else if (number < 0) // 해로운 효과(아이템 세트효과 스탯(능력치, 평판) < 0)
+            return m_sColor_White + sentence + " " + number.ToString() + m_sColor_End; // 문자열 회색 + 아이템 세트효과 스탯(능력치, 평판)
+        else // 존재하지 않는 효과
+            return m_sColor_Brown + sentence + " " + number.ToString() + m_sColor_End; // 문자열 갈색 + 아이템 세트효과 스탯(능력치, 평판)
     }
     // 텍스트(문자열) 정제 함수 - 장비아이템 착용효과(int)
-    string Refine_Condition(string sentence, int option, int option_additional, int option_reinforcement)
+    string Refine_Condition(string sentence, int option, int option_additional, int option_reinforcement) // sentence : 문장,
+                                                                                                          // option : 장비아이템 스탯(능력치, 평판), 
+                                                                                                          // option_additional : 장비아이템 추가 옵셥 스탯(능력치, 평판), 
+                                                                                                          // option_reinforcement : 장비아이템 강화 스탯(능력치, 평판)
     {
-        if (option != 0)
+        if (option != 0) // 장비아이템 스탯(능력치, 평판) != 0
         {
-            if (option_additional + option_reinforcement != 0)
+            if (option_additional + option_reinforcement != 0) // 장비아이템 추가 옵셥 스탯(능력치, 평판) + 장비아이템 강화 스탯(능력치, 평판) != 0
             {
-                if (option > 0)
-                    return m_sColor_White + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End;
+                if (option > 0) // 장비아이템 스탯(능력치, 평판) > 0
+                    return m_sColor_White + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End; // 문자열 흰색 설정 +
+                                                                                                                                                                   // 장비아이템 스탯(능력치, 평판) +
+                                                                                                                                                                   // 장비아이템 추가 옵셥 스탯(능력치, 평판) +
+                                                                                                                                                                   // 장비아이템 강화 스탯(능력치, 평판)
                 else
-                    return m_sColor_WhiteGray + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End;
+                    return m_sColor_WhiteGray + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End; // 문자열 회색 설정 + 
+                                                                                                                                                                       // 장비아이템 스탯(능력치, 평판) +
+                                                                                                                                                                       // 장비아이템 추가 옵셥 스탯(능력치, 평판) +
+                                                                                                                                                                       // 장비아이템 강화 스탯(능력치, 평판)
             }
-            else
+            else // 장비아이템 추가 옵셥 스탯(능력치, 평판) + 장비아이템 강화 스탯(능력치, 평판) == 0
             {
-                if (option > 0)
-                    return m_sColor_White + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End;
+                if (option > 0) // 장비아이템 스탯(능력치, 평판) > 0
+                    return m_sColor_White + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End; // 문자열 흰색 설정 + 
+                                                                                                                                                                   // 장비아이템 스탯(능력치, 평판) +
+                                                                                                                                                                   // 장비아이템 추가 옵셥 스탯(능력치, 평판) +
+                                                                                                                                                                   // 장비아이템 강화 스탯(능력치, 평판)
                 else
-                    return m_sColor_WhiteGray + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End;
+                    return m_sColor_WhiteGray + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End; // 문자열 회색 설정 + 
+                                                                                                                                                                       // 장비아이템 스탯(능력치, 평판) +
+                                                                                                                                                                       // 장비아이템 추가 옵셥 스탯(능력치, 평판) +
+                                                                                                                                                                       // 장비아이템 강화 스탯(능력치, 평판)
             }
         }
-        else
+        else // 장비아이템 스탯(능력치, 평판) == 0
         {
-            if (option_additional + option_reinforcement != 0)
+            if (option_additional + option_reinforcement != 0) // 장비아이템 추가 옵셥 스탯(능력치, 평판) + 장비아이템 강화 스탯(능력치, 평판) != 0
             {
-                return m_sColor_Brown + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End;
+                return m_sColor_Brown + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End; // 문자열 갈색 설정 + 
+                                                                                                                                                               // 장비아이템 스탯(능력치, 평판) +
+                                                                                                                                                               // 장비아이템 추가 옵셥 스탯(능력치, 평판) +
+                                                                                                                                                               // 장비아이템 강화 스탯(능력치, 평판)
             }
-            else
+            else // 장비아이템 추가 옵셥 스탯(능력치, 평판) + 장비아이템 강화 스탯(능력치, 평판) == 0
             {
-                if (option_additional != 0 || option_reinforcement != 0)
-                    return m_sColor_Brown + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End;
-                else
-                    return m_sColor_Brown + sentence + " " + option.ToString() + m_sColor_End;
+                if (option_additional != 0 || option_reinforcement != 0) // 장비아이템 추가 옵셥 스탯(능력치, 평판) != 0 || 장비아이템 강화 스탯(능력치, 평판) != 0
+                    return m_sColor_Brown + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End; // 문자열 갈색 설정 + 
+                                                                                                                                                                   // 장비아이템 스탯(능력치, 평판) +
+                                                                                                                                                                   // 장비아이템 추가 옵셥 스탯(능력치, 평판) +
+                                                                                                                                                                   // 장비아이템 강화 스탯(능력치, 평판)
+                else // 장비아이템 추가 옵셥 스탯(능력치, 평판) == 0 && 장비아이템 강화 스탯(능력치, 평판) == 0
+                    return m_sColor_Brown + sentence + " " + option.ToString() + m_sColor_End; // 문자열 갈색 설정 + 장비아이템 스탯(능력치, 평판)
             }
         }
     }
