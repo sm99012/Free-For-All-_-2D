@@ -106,12 +106,14 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
 
     [SerializeField] List<int> m_nList_SetItemEffect_Code; // 아이템 세트효과 순서 목록
     // 아이템 세트효과 정보
-    int m_nSetItemEffect_List_Index;                       // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 (Ex) [초보 모험가 세트효과] 2세트 적용중)
-    int m_nSetItemEffect_Current;                          // 현재 아이템 세트효과
+    int m_nSetItemEffect_List_Index;                       // 아이템 세트효과 정보 순번. 현재 유저가 확인중인 아이템 세트효과 (Ex) [초보 모험가 세트효과] 3세트 정보 확인중)
+    int m_nSetItemEffect_Current;                          // 아이템 세트효과 정보 순번
     
     // 아이템 세트효과 적용 여부 판단 관련 변수
     int m_nPlayerEquipment_SetItemEffect_Current;          // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 (Ex) [초보 모험가 세트효과] 2세트 적용중)
-    int m_nSetItemEffect_Count;                            // 아이템 세트효과 총개수                                            (Ex) [초보 모험가 세트효과] 총 4세트)
+    int m_nSetItemEffect_Count;                            // 아이템 세트효과 풀 세트 개수
+
+
 
     // 아이템 정보 타입 : { 효과, 조건, 설명 }
     public enum E_Equipslot_Equip_Information_PageNumber { EFFECT, CONDITION, DESCRIPTION }
@@ -148,65 +150,50 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
     {
         m_gPanel_Equipslot_Equip_Information = GameObject.Find("Canvas_GUI").transform.Find("Panel_Equipslot_Equip_Information").gameObject;
 
-
         m_gPanel_Equipslot_Equip_Information_UpBar = m_gPanel_Equipslot_Equip_Information.transform.Find("Panel_Equipslot_Equip_Information_UpBar").gameObject;
         m_TMP_Equipslot_Equip_Information_UpBar = m_gPanel_Equipslot_Equip_Information_UpBar.transform.Find("TMP_Equipslot_Equip_Information_UpBar").gameObject.GetComponent<TextMeshProUGUI>();
         m_BTN_Equipslot_Equip_Information_UpBar_Exit = m_gPanel_Equipslot_Equip_Information_UpBar.transform.Find("BTN_Equipslot_Equip_Information_UpBar_Exit").gameObject.GetComponent<Button>();
 
-
         m_gPanel_Equipslot_Equip_Information_Content = m_gPanel_Equipslot_Equip_Information.transform.Find("Panel_Equipslot_Equip_Information_Content").gameObject;
-
 
         m_gPanel_Equipslot_Equip_Information_Content_Image = m_gPanel_Equipslot_Equip_Information_Content.transform.Find("Panel_Equipslot_Equip_Information_Content_Image").gameObject;
         m_gPanel_Equipslot_Equip_Information_Content_Image_ItemSprite = m_gPanel_Equipslot_Equip_Information_Content_Image.transform.Find("Panel_Equipslot_Equip_Information_Content_Image_ItemSprite").gameObject;
         m_IMG_Equipslot_Equip_Information_Content_Image_ItemSprite = m_gPanel_Equipslot_Equip_Information_Content_Image_ItemSprite.GetComponent<Image>();
 
-
         m_gPanel_Equipslot_Equip_Information_Content_ItemInformation = m_gPanel_Equipslot_Equip_Information_Content.transform.Find("Panel_Equipslot_Equip_Information_Content_ItemInformation").gameObject;
         m_TMP_Equipslot_Equip_Information_Content_ItemInformation = m_gPanel_Equipslot_Equip_Information_Content_ItemInformation.transform.Find("TMP_Equipslot_Equip_Information_Content_ItemInformation").gameObject.GetComponent<TextMeshProUGUI>();
 
-
-        m_gPanel_Equipslot_Equip_Information_Content_Effect = m_gPanel_Equipslot_Equip_Information_Content.transform.Find("Panel_Equipslot_Equip_Information_Content_Effect").gameObject;
-
-        m_gPanel_Equipslot_Equip_Information_Content_Effect_Name = m_gPanel_Equipslot_Equip_Information_Content_Effect.transform.Find("Panel_Equipslot_Equip_Information_Content_Effect_Name").gameObject;
-        m_TMP_Equipslot_Equip_Information_Content_Effect_Name = m_gPanel_Equipslot_Equip_Information_Content_Effect_Name.transform.Find("TMP_Equipslot_Equip_Information_Content_Effect_Name").gameObject.GetComponent<TextMeshProUGUI>();
-
-        m_gPanel_Equipslot_Equip_Information_Content_Effect_Status = m_gPanel_Equipslot_Equip_Information_Content_Effect.transform.Find("Panel_Equipslot_Equip_Information_Content_Effect_Status").gameObject;
-        m_TMP_Equipslot_Equip_Information_Content_Effect_Status_L = m_gPanel_Equipslot_Equip_Information_Content_Effect_Status.transform.Find("TMP_Equipslot_Equip_Information_Content_Effect_Status_L").gameObject.GetComponent<TextMeshProUGUI>();
-        m_TMP_Equipslot_Equip_Information_Content_Effect_Status_R = m_gPanel_Equipslot_Equip_Information_Content_Effect_Status.transform.Find("TMP_Equipslot_Equip_Information_Content_Effect_Status_R").gameObject.GetComponent<TextMeshProUGUI>();
-
-        m_gPanel_Equipslot_Equip_Information_Content_Effect_Soc = m_gPanel_Equipslot_Equip_Information_Content_Effect.transform.Find("Panel_Equipslot_Equip_Information_Content_Effect_Soc").gameObject;
-        m_TMP_Equipslot_Equip_Information_Content_Effect_Soc_L = m_gPanel_Equipslot_Equip_Information_Content_Effect_Soc.transform.Find("TMP_Equipslot_Equip_Information_Content_Effect_Soc_L").gameObject.GetComponent<TextMeshProUGUI>();
-        m_TMP_Equipslot_Equip_Information_Content_Effect_Soc_R = m_gPanel_Equipslot_Equip_Information_Content_Effect_Soc.transform.Find("TMP_Equipslot_Equip_Information_Content_Effect_Soc_R").gameObject.GetComponent<TextMeshProUGUI>();
-
-
-        m_gPanel_Equipslot_Equip_Information_Content_Condition = m_gPanel_Equipslot_Equip_Information_Content.transform.Find("Panel_Equipslot_Equip_Information_Content_Condition").gameObject;
-
-        m_gPanel_Equipslot_Equip_Information_Content_Condition_Name = m_gPanel_Equipslot_Equip_Information_Content_Condition.transform.Find("Panel_Equipslot_Equip_Information_Content_Condition_Name").gameObject;
-        m_TMP_Equipslot_Equip_Information_Content_Condition_Name = m_gPanel_Equipslot_Equip_Information_Content_Condition_Name.transform.Find("TMP_Equipslot_Equip_Information_Content_Condition_Name").gameObject.GetComponent<TextMeshProUGUI>();
-
-        m_gPanel_Equipslot_Equip_Information_Content_Condition_Status = m_gPanel_Equipslot_Equip_Information_Content_Condition.transform.Find("Panel_Equipslot_Equip_Information_Content_Condition_Status").gameObject;
-        m_TMP_Equipslot_Equip_Information_Content_Condition_Status_L = m_gPanel_Equipslot_Equip_Information_Content_Condition_Status.transform.Find("TMP_Equipslot_Equip_Information_Content_Condition_Status_L").gameObject.GetComponent<TextMeshProUGUI>();
-        m_TMP_Equipslot_Equip_Information_Content_Condition_Status_R = m_gPanel_Equipslot_Equip_Information_Content_Condition_Status.transform.Find("TMP_Equipslot_Equip_Information_Content_Condition_Status_R").gameObject.GetComponent<TextMeshProUGUI>();
-
-        m_gPanel_Equipslot_Equip_Information_Content_Condition_Soc = m_gPanel_Equipslot_Equip_Information_Content_Condition.transform.Find("Panel_Equipslot_Equip_Information_Content_Condition_Soc").gameObject;
-        m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_L = m_gPanel_Equipslot_Equip_Information_Content_Condition_Soc.transform.Find("TMP_Equipslot_Equip_Information_Content_Condition_Soc_L").gameObject.GetComponent<TextMeshProUGUI>();
-        m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_R = m_gPanel_Equipslot_Equip_Information_Content_Condition_Soc.transform.Find("TMP_Equipslot_Equip_Information_Content_Condition_Soc_R").gameObject.GetComponent<TextMeshProUGUI>();
-
+        m_BTN_Equipslot_Equip_Information_Content_ChangeInformation_L = m_gPanel_Equipslot_Equip_Information_Content.transform.Find("BTN_Equipslot_Equip_Information_Content_ChangeInformation_L").gameObject.GetComponent<Button>();
+        m_BTN_Equipslot_Equip_Information_Content_ChangeInformation_R = m_gPanel_Equipslot_Equip_Information_Content.transform.Find("BTN_Equipslot_Equip_Information_Content_ChangeInformation_R").gameObject.GetComponent<Button>();
 
         m_gPanel_Equipslot_Equip_Information_Content_ItemDescription = m_gPanel_Equipslot_Equip_Information_Content.transform.Find("Panel_Equipslot_Equip_Information_Content_ItemDescription").gameObject;
-
         m_gPanel_Equipslot_Equip_Information_Content_ItemDescription_Name = m_gPanel_Equipslot_Equip_Information_Content_ItemDescription.transform.Find("Panel_Equipslot_Equip_Information_Content_ItemDescription_Name").gameObject;
         m_TMP_Equipslot_Equip_Information_Content_ItemDescription_Name = m_gPanel_Equipslot_Equip_Information_Content_ItemDescription_Name.transform.Find("TMP_Equipslot_Equip_Information_Content_ItemDescription_Name").gameObject.GetComponent<TextMeshProUGUI>();
-
         m_gPanel_Equipslot_Equip_Information_Content_ItemDescription_Content = m_gPanel_Equipslot_Equip_Information_Content_ItemDescription.transform.Find("Panel_Equipslot_Equip_Information_Content_ItemDescription_Content").gameObject;
         m_gSV_Equipslot_Equip_Information_Content_ItemDescription_Content = m_gPanel_Equipslot_Equip_Information_Content_ItemDescription_Content.transform.Find("SV_Equipslot_Equip_Information_Content_ItemDescription_Content").gameObject;
         m_gViewport_Equipslot_Equip_Information_Content_ItemDescription_Content = m_gSV_Equipslot_Equip_Information_Content_ItemDescription_Content.transform.Find("Viewport_Equipslot_Equip_Information_Content_ItemDescription_Content").gameObject;
         m_TMP_Equipslot_Equip_Information_Content_ItemDescription_Content = m_gViewport_Equipslot_Equip_Information_Content_ItemDescription_Content.transform.Find("TMP_Equipslot_Equip_Information_Content_ItemDescription_Content").gameObject.GetComponent<TextMeshProUGUI>();
         m_Scrollbar_Equipslot_Equip_Information_Content_ItemDescription_Content = m_gSV_Equipslot_Equip_Information_Content_ItemDescription_Content.transform.Find("Scrollbar_Equipslot_Equip_Information_Content_ItemDescription_Content").gameObject.GetComponent<Scrollbar>();
 
-        m_BTN_Equipslot_Equip_Information_Content_ChangeInformation_R = m_gPanel_Equipslot_Equip_Information_Content.transform.Find("BTN_Equipslot_Equip_Information_Content_ChangeInformation_R").gameObject.GetComponent<Button>();
-        m_BTN_Equipslot_Equip_Information_Content_ChangeInformation_L = m_gPanel_Equipslot_Equip_Information_Content.transform.Find("BTN_Equipslot_Equip_Information_Content_ChangeInformation_L").gameObject.GetComponent<Button>();
+        m_gPanel_Equipslot_Equip_Information_Content_Effect = m_gPanel_Equipslot_Equip_Information_Content.transform.Find("Panel_Equipslot_Equip_Information_Content_Effect").gameObject;
+        m_gPanel_Equipslot_Equip_Information_Content_Effect_Name = m_gPanel_Equipslot_Equip_Information_Content_Effect.transform.Find("Panel_Equipslot_Equip_Information_Content_Effect_Name").gameObject;
+        m_TMP_Equipslot_Equip_Information_Content_Effect_Name = m_gPanel_Equipslot_Equip_Information_Content_Effect_Name.transform.Find("TMP_Equipslot_Equip_Information_Content_Effect_Name").gameObject.GetComponent<TextMeshProUGUI>();
+        m_gPanel_Equipslot_Equip_Information_Content_Effect_Status = m_gPanel_Equipslot_Equip_Information_Content_Effect.transform.Find("Panel_Equipslot_Equip_Information_Content_Effect_Status").gameObject;
+        m_TMP_Equipslot_Equip_Information_Content_Effect_Status_L = m_gPanel_Equipslot_Equip_Information_Content_Effect_Status.transform.Find("TMP_Equipslot_Equip_Information_Content_Effect_Status_L").gameObject.GetComponent<TextMeshProUGUI>();
+        m_TMP_Equipslot_Equip_Information_Content_Effect_Status_R = m_gPanel_Equipslot_Equip_Information_Content_Effect_Status.transform.Find("TMP_Equipslot_Equip_Information_Content_Effect_Status_R").gameObject.GetComponent<TextMeshProUGUI>();
+        m_gPanel_Equipslot_Equip_Information_Content_Effect_Soc = m_gPanel_Equipslot_Equip_Information_Content_Effect.transform.Find("Panel_Equipslot_Equip_Information_Content_Effect_Soc").gameObject;
+        m_TMP_Equipslot_Equip_Information_Content_Effect_Soc_L = m_gPanel_Equipslot_Equip_Information_Content_Effect_Soc.transform.Find("TMP_Equipslot_Equip_Information_Content_Effect_Soc_L").gameObject.GetComponent<TextMeshProUGUI>();
+        m_TMP_Equipslot_Equip_Information_Content_Effect_Soc_R = m_gPanel_Equipslot_Equip_Information_Content_Effect_Soc.transform.Find("TMP_Equipslot_Equip_Information_Content_Effect_Soc_R").gameObject.GetComponent<TextMeshProUGUI>();
+
+        m_gPanel_Equipslot_Equip_Information_Content_Condition = m_gPanel_Equipslot_Equip_Information_Content.transform.Find("Panel_Equipslot_Equip_Information_Content_Condition").gameObject;
+        m_gPanel_Equipslot_Equip_Information_Content_Condition_Name = m_gPanel_Equipslot_Equip_Information_Content_Condition.transform.Find("Panel_Equipslot_Equip_Information_Content_Condition_Name").gameObject;
+        m_TMP_Equipslot_Equip_Information_Content_Condition_Name = m_gPanel_Equipslot_Equip_Information_Content_Condition_Name.transform.Find("TMP_Equipslot_Equip_Information_Content_Condition_Name").gameObject.GetComponent<TextMeshProUGUI>();
+        m_gPanel_Equipslot_Equip_Information_Content_Condition_Status = m_gPanel_Equipslot_Equip_Information_Content_Condition.transform.Find("Panel_Equipslot_Equip_Information_Content_Condition_Status").gameObject;
+        m_TMP_Equipslot_Equip_Information_Content_Condition_Status_L = m_gPanel_Equipslot_Equip_Information_Content_Condition_Status.transform.Find("TMP_Equipslot_Equip_Information_Content_Condition_Status_L").gameObject.GetComponent<TextMeshProUGUI>();
+        m_TMP_Equipslot_Equip_Information_Content_Condition_Status_R = m_gPanel_Equipslot_Equip_Information_Content_Condition_Status.transform.Find("TMP_Equipslot_Equip_Information_Content_Condition_Status_R").gameObject.GetComponent<TextMeshProUGUI>();
+        m_gPanel_Equipslot_Equip_Information_Content_Condition_Soc = m_gPanel_Equipslot_Equip_Information_Content_Condition.transform.Find("Panel_Equipslot_Equip_Information_Content_Condition_Soc").gameObject;
+        m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_L = m_gPanel_Equipslot_Equip_Information_Content_Condition_Soc.transform.Find("TMP_Equipslot_Equip_Information_Content_Condition_Soc_L").gameObject.GetComponent<TextMeshProUGUI>();
+        m_TMP_Equipslot_Equip_Information_Content_Condition_Soc_R = m_gPanel_Equipslot_Equip_Information_Content_Condition_Soc.transform.Find("TMP_Equipslot_Equip_Information_Content_Condition_Soc_R").gameObject.GetComponent<TextMeshProUGUI>();
 
         m_gPanel_Equipslot_Equip_Information_EquipPossibility = m_gPanel_Equipslot_Equip_Information.transform.Find("Panel_Equipslot_Equip_Information_EquipPossibility").gameObject;
         m_BTN_Equipslot_Equip_Information_EquipPossibility = m_gPanel_Equipslot_Equip_Information_EquipPossibility.transform.Find("BTN_Equipslot_Equip_Information_EquipPossibility").gameObject.GetComponent<Button>();
@@ -241,8 +228,6 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
         m_TMP_SetItemEffect_Content_SS_Soc_L = m_gPanel_SetItemEffect_Content_SS_Soc.transform.Find("TMP_SetItemEffect_Content_SS_Soc_L").gameObject.GetComponent<TextMeshProUGUI>();
         m_TMP_SetItemEffect_Content_SS_Soc_R = m_gPanel_SetItemEffect_Content_SS_Soc.transform.Find("TMP_SetItemEffect_Content_SS_Soc_R").gameObject.GetComponent<TextMeshProUGUI>();
 
-
-
         m_nList_SetItemEffect_Code = new List<int>();
     }
     // GUI 버튼 설정
@@ -264,114 +249,119 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
     {
         m_gPanel_Equipslot_Equip_Information.SetActive(false);
     }
+    
+    // (버튼) 장비아이템 정보 변경(L) 클릭 이벤트 함수
     void Set_BTN_ChangeInformationPageNumber_L()
     {
         switch (m_eInformationPage)
         {
-            case E_Equipslot_Equip_Information_PageNumber.EFFECT:
+            case E_Equipslot_Equip_Information_PageNumber.EFFECT: // 장비아이템 착용효과 -> 장비아이템 설명
                 {
-                    m_eInformationPage = E_Equipslot_Equip_Information_PageNumber.DESCRIPTION;
-                    m_gPanel_Equipslot_Equip_Information_Content_Effect.SetActive(false);
-                    m_gPanel_Equipslot_Equip_Information_Content_Condition.SetActive(false);
-                    m_gPanel_Equipslot_Equip_Information_Content_ItemDescription.SetActive(true);
-                    m_Scrollbar_Equipslot_Equip_Information_Content_ItemDescription_Content.value = 1;
-                    m_Scrollbar_SetItemEffect_Content_SS_Description.value = 1;
+                    m_eInformationPage = E_Equipslot_Equip_Information_PageNumber.DESCRIPTION;         // 아이템 정보 타입 = 설명
+                    m_gPanel_Equipslot_Equip_Information_Content_Effect.SetActive(false);              // 장비아이템 착용효과 정보 비활성화
+                    m_gPanel_Equipslot_Equip_Information_Content_Condition.SetActive(false);           // 장비아이템 착용조건 정보 비활성화
+                    m_gPanel_Equipslot_Equip_Information_Content_ItemDescription.SetActive(true);      // 장비아이템 설명 정보 활성화
+                    m_Scrollbar_Equipslot_Equip_Information_Content_ItemDescription_Content.value = 1; // (스크롤바) 장비아이템 설명 정보 초기화
+                    m_Scrollbar_SetItemEffect_Content_SS_Description.value = 1;                        // (스크롤바) 아이템 세트효과 정보 초기화
                 }
                 break;
-            case E_Equipslot_Equip_Information_PageNumber.CONDITION:
+            case E_Equipslot_Equip_Information_PageNumber.CONDITION: // 장비아이템 착용조건 -> 장비아이템 착용효과
                 {
-                    m_eInformationPage = E_Equipslot_Equip_Information_PageNumber.EFFECT;
-                    m_gPanel_Equipslot_Equip_Information_Content_Effect.SetActive(true);
-                    m_gPanel_Equipslot_Equip_Information_Content_Condition.SetActive(false);
-                    m_gPanel_Equipslot_Equip_Information_Content_ItemDescription.SetActive(false);
+                    m_eInformationPage = E_Equipslot_Equip_Information_PageNumber.EFFECT;          // 아이템 정보 타입 = 효과
+                    m_gPanel_Equipslot_Equip_Information_Content_Effect.SetActive(true);           // 장비아이템 착용효과 정보 활성화
+                    m_gPanel_Equipslot_Equip_Information_Content_Condition.SetActive(false);       // 장비아이템 착용효과 정보 비활성화
+                    m_gPanel_Equipslot_Equip_Information_Content_ItemDescription.SetActive(false); // 장비아이템 설명 정보 비활성화
                 }
                 break;
-            case E_Equipslot_Equip_Information_PageNumber.DESCRIPTION:
+            case E_Equipslot_Equip_Information_PageNumber.DESCRIPTION: // 장비아이템 설명 -> 장비아이템 착용조건
                 {
-                    m_eInformationPage = E_Equipslot_Equip_Information_PageNumber.CONDITION;
-                    m_gPanel_Equipslot_Equip_Information_Content_Effect.SetActive(false);
-                    m_gPanel_Equipslot_Equip_Information_Content_Condition.SetActive(true);
-                    m_gPanel_Equipslot_Equip_Information_Content_ItemDescription.SetActive(false);
+                    m_eInformationPage = E_Equipslot_Equip_Information_PageNumber.CONDITION;       // 아이템 정보 타입 = 조건
+                    m_gPanel_Equipslot_Equip_Information_Content_Effect.SetActive(false);          // 장비아이템 착용효과 정보 비활성화
+                    m_gPanel_Equipslot_Equip_Information_Content_Condition.SetActive(true);        // 장비아이템 착용효과 정보 활성화
+                    m_gPanel_Equipslot_Equip_Information_Content_ItemDescription.SetActive(false); // 장비아이템 설명 정보 비활성화
                 }
                 break;
         }
     }
+    // (버튼) 장비아이템 정보 변경(R) 클릭 이벤트 함수
     void Set_BTN_ChangeInformationPageNumber_R()
     {
         switch (m_eInformationPage)
         {
-            case E_Equipslot_Equip_Information_PageNumber.EFFECT:
+            case E_Equipslot_Equip_Information_PageNumber.EFFECT: // 장비아이템 착용효과 -> 장비아이템 착용조건
                 {
-                    m_eInformationPage = E_Equipslot_Equip_Information_PageNumber.CONDITION;
-                    m_gPanel_Equipslot_Equip_Information_Content_Effect.SetActive(false);
-                    m_gPanel_Equipslot_Equip_Information_Content_Condition.SetActive(true);
-                    m_gPanel_Equipslot_Equip_Information_Content_ItemDescription.SetActive(false);
+                    m_eInformationPage = E_Equipslot_Equip_Information_PageNumber.CONDITION;       // 아이템 정보 타입 = 조건
+                    m_gPanel_Equipslot_Equip_Information_Content_Effect.SetActive(false);          // 장비아이템 착용효과 정보 비활성화
+                    m_gPanel_Equipslot_Equip_Information_Content_Condition.SetActive(true);        // 장비아이템 착용효과 정보 활성화
+                    m_gPanel_Equipslot_Equip_Information_Content_ItemDescription.SetActive(false); // 장비아이템 설명 정보 비활성화
                 }
                 break;
-            case E_Equipslot_Equip_Information_PageNumber.CONDITION:
+            case E_Equipslot_Equip_Information_PageNumber.CONDITION: // 장비아이템 착용조건 -> 장비아이템 설명
                 {
-                    m_eInformationPage = E_Equipslot_Equip_Information_PageNumber.DESCRIPTION;
-                    m_gPanel_Equipslot_Equip_Information_Content_Effect.SetActive(false);
-                    m_gPanel_Equipslot_Equip_Information_Content_Condition.SetActive(false);
-                    m_gPanel_Equipslot_Equip_Information_Content_ItemDescription.SetActive(true);
-                    m_Scrollbar_Equipslot_Equip_Information_Content_ItemDescription_Content.value = 1;
-                    m_Scrollbar_SetItemEffect_Content_SS_Description.value = 1;
+                    m_eInformationPage = E_Equipslot_Equip_Information_PageNumber.DESCRIPTION;         // 아이템 정보 타입 = 설명
+                    m_gPanel_Equipslot_Equip_Information_Content_Effect.SetActive(false);              // 장비아이템 착용효과 정보 비활성화
+                    m_gPanel_Equipslot_Equip_Information_Content_Condition.SetActive(false);           // 장비아이템 착용효과 정보 비활성화
+                    m_gPanel_Equipslot_Equip_Information_Content_ItemDescription.SetActive(true);      // 장비아이템 설명 정보 활성화
+                    m_Scrollbar_Equipslot_Equip_Information_Content_ItemDescription_Content.value = 1; // (스크롤바) 장비아이템 설명 정보 초기화
+                    m_Scrollbar_SetItemEffect_Content_SS_Description.value = 1;                        // (스크롤바) 아이템 세트효과 정보 초기화
                 }
                 break;
-            case E_Equipslot_Equip_Information_PageNumber.DESCRIPTION:
+            case E_Equipslot_Equip_Information_PageNumber.DESCRIPTION: // 장비아이템 설명 -> 장비아이템 착용효과
                 {
-                    m_eInformationPage = E_Equipslot_Equip_Information_PageNumber.EFFECT;
-                    m_gPanel_Equipslot_Equip_Information_Content_Effect.SetActive(true);
-                    m_gPanel_Equipslot_Equip_Information_Content_Condition.SetActive(false);
-                    m_gPanel_Equipslot_Equip_Information_Content_ItemDescription.SetActive(false);
+                    m_eInformationPage = E_Equipslot_Equip_Information_PageNumber.EFFECT;          // 아이템 정보 타입 = 효과
+                    m_gPanel_Equipslot_Equip_Information_Content_Effect.SetActive(true);           // 장비아이템 착용효과 정보 활성화
+                    m_gPanel_Equipslot_Equip_Information_Content_Condition.SetActive(false);       // 장비아이템 착용효과 정보 비활성화
+                    m_gPanel_Equipslot_Equip_Information_Content_ItemDescription.SetActive(false); // 장비아이템 설명 정보 비활성화
                 }
                 break;
         }
     }
-    // 장비 해제.
-    void Set_BTN_Equip_Remove(int arynumber)
+    
+    // (버튼) 장비아이템 착용 해제 클릭 이벤트 함수
+    void Set_BTN_Equip_Remove(int arynumber) // arynumber : 장비창 슬롯 고유코드
     {
         switch(arynumber)
         {
             case 0:
                 {
-                    Player_Total.Instance.Remove_Item_Equip(Player_Equipment.m_gEquipment_Hat);
+                    Player_Total.Instance.Remove_Item_Equip(Player_Equipment.m_gEquipment_Hat); // 장비아이템(모자) 착용 해제 관련 함수
                 } break;
             case 1:
                 {
-                    Player_Total.Instance.Remove_Item_Equip(Player_Equipment.m_gEquipment_Top);
+                    Player_Total.Instance.Remove_Item_Equip(Player_Equipment.m_gEquipment_Top); // 장비아이템(상의) 착용 해제 관련 함수
                 }
                 break;
             case 2:
                 {
-                    Player_Total.Instance.Remove_Item_Equip(Player_Equipment.m_gEquipment_Bottoms);
+                    Player_Total.Instance.Remove_Item_Equip(Player_Equipment.m_gEquipment_Bottoms); // 장비아이템(하의) 착용 해제 관련 함수
                 }
                 break;
             case 3:
                 {
-                    Player_Total.Instance.Remove_Item_Equip(Player_Equipment.m_gEquipment_Shose);
+                    Player_Total.Instance.Remove_Item_Equip(Player_Equipment.m_gEquipment_Shose); // 장비아이템(신발) 착용 해제 관련 함수
                 }
                 break;
             case 4:
                 {
-                    Player_Total.Instance.Remove_Item_Equip(Player_Equipment.m_gEquipment_Gloves);
+                    Player_Total.Instance.Remove_Item_Equip(Player_Equipment.m_gEquipment_Gloves); // 장비아이템(장갑) 착용 해제 관련 함수
                 }
                 break;
             case 5:
                 {
-                    Player_Total.Instance.Remove_Item_Equip(Player_Equipment.m_gEquipment_Mainweapon);
+                    Player_Total.Instance.Remove_Item_Equip(Player_Equipment.m_gEquipment_Mainweapon); // 장비아이템(주무기) 착용 해제 관련 함수
                 }
                 break;
             case 6:
                 {
-                    Player_Total.Instance.Remove_Item_Equip(Player_Equipment.m_gEquipment_Subweapon);
+                    Player_Total.Instance.Remove_Item_Equip(Player_Equipment.m_gEquipment_Subweapon); // 장비아이템(보조무기) 착용 해제 관련 함수
                 }
                 break;
         }
 
-        m_gPanel_Equipslot_Equip_Information.SetActive(false);
+        m_gPanel_Equipslot_Equip_Information.SetActive(false); // 장비아이템 세부 정보 GUI 비활성화
     }
-    // 세트 아이템 효과 버튼 설정.
+    
+    // (버튼) 아이템 세트효과 단계별 정보 변경(L) 클릭 이벤트 함수
     void Set_BTN_SetItemEffect_UpBar_Left()
     {
         m_nSetItemEffect_List_Index -= 1;
@@ -380,6 +370,7 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
         UpdateItemEquipInformation_SetItemEffect_Content();
         UpdateItemEquipInformation_SetItemEffect_UpBar();
     }
+    // (버튼) 아이템 세트효과 단계별 정보 변경(R) 클릭 이벤트 함수
     void Set_BTN_SetItemEffect_UpBar_Right()
     {
         m_nSetItemEffect_List_Index += 1;
@@ -389,37 +380,42 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
         UpdateItemEquipInformation_SetItemEffect_UpBar();
     }
 
-    public void Display_GUI_Equipslot_Equip_Information(float fcoordination_x, float fcoordination_y)
+    // 장비아이템 세부 정보 GUI 활성화 함수
+    public void Display_GUI_Equipslot_Equip_Information(float fcoordination_x, float fcoordination_y) // fcoordination_x, y : 장비아이템 세부 정보 GUI 좌표(x, y)
     {
         m_gPanel_Equipslot_Equip_Information.SetActive(true);
         m_gPanel_Equipslot_Equip_Information.transform.SetAsLastSibling();
-        m_gPanel_Equipslot_Equip_Information.transform.position = new Vector2(fcoordination_x, fcoordination_y);
+        m_gPanel_Equipslot_Equip_Information.transform.position = new Vector2(fcoordination_x, fcoordination_y); // 장비아이템 세부 정보 GUI 좌표 설정
     }
+    // 장비아이템 세부 정보 GUI 비활성화 함수
     public void UnDisplay_GUI_Equipslot_Equip_Information()
     {
         m_gPanel_Equipslot_Equip_Information.SetActive(false);
     }
 
-    // 장비 아이템 설명 창 세부 설정.
-    public void UpdateItemEquipInformation(Item_Equip item, int arynumber)
+    // 장비아이템 세부 정보 GUI 업데이트
+    public void UpdateItemEquipInformation(Item_Equip item, int arynumber) // item : 장비아이템, arynumber : 장비창 슬롯 고유코드
     {
-        GUIManager_Total.Instance.m_GUI_Equipslot_Equip_Information.m_bEquip_Condition_Check = true;
-        m_Scrollbar_Equipslot_Equip_Information_Content_ItemDescription_Content.value = 1;
-        m_Scrollbar_SetItemEffect_Content_SS_Description.value = 1;
-        UpdateItemEquipInformation_UpBar(item);
-        UpdateItemEquipInformation_Content(item);
-        UpdateItemEquipInformation_EquipRemove(item, arynumber);
-        UpdateItemEquipInformation_SetItemEffect(item);
+        GUIManager_Total.Instance.m_GUI_Equipslot_Equip_Information.m_bEquip_Condition_Check = true; // 장비아이템 착용 가능
+        
+        m_Scrollbar_Equipslot_Equip_Information_Content_ItemDescription_Content.value = 1; // (스크롤바) 장비아이템 설명 정보 초기화
+        m_Scrollbar_SetItemEffect_Content_SS_Description.value = 1;                        // (스크롤바) 아이템 세트효과 정보 초기화
+        
+        UpdateItemEquipInformation_UpBar(item);                  // 장비아이템 세부 정보 GUI 업데이트 - 장비아이템 정보1
+        UpdateItemEquipInformation_Content(item);                // 장비아이템 세부 정보 GUI 업데이트 - 장비아이템 정보2
+        UpdateItemEquipInformation_EquipRemove(item, arynumber); // 장비아이템 세부 정보 GUI 업데이트 - 장비아이템 착용 해제
+        UpdateItemEquipInformation_SetItemEffect(item);          // 장비아이템 세부 정보 GUI 업데이트 - 아이템 세트효과 정보
     }
-
-    void UpdateItemEquipInformation_UpBar(Item_Equip item)
+    // 장비아이템 세부 정보 GUI 업데이트 - 장비아이템 정보1
+    void UpdateItemEquipInformation_UpBar(Item_Equip item) // item : 장비아이템
     {
         // 장비 아이템 이름, 강화 상태.
         m_TMP_Equipslot_Equip_Information_UpBar.text = item.m_sItemName;
         if (item.m_nReinforcementCount_Current > 0)
             m_TMP_Equipslot_Equip_Information_UpBar.text += " + " + item.m_nReinforcementCount_Current;
     }
-    void UpdateItemEquipInformation_Content(Item_Equip item)
+    // 장비아이템 세부 정보 GUI 업데이트 - 장비아이템 정보2
+    void UpdateItemEquipInformation_Content(Item_Equip item) // item : 장비아이템
     {
         // 장비 아이템 이미지.
         m_IMG_Equipslot_Equip_Information_Content_Image_ItemSprite.sprite = item.m_sp_Sprite;
@@ -608,13 +604,15 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
     //
     //
     // 아이템창이 가득 차있으면 장비해제 못하도록 코드 수정 필요.
-    void UpdateItemEquipInformation_EquipRemove(Item_Equip item, int arynumber)
+    // 장비아이템 세부 정보 GUI 업데이트 - 장비아이템 착용 해제
+    void UpdateItemEquipInformation_EquipRemove(Item_Equip item, int arynumber) // item : 장비아이템, arynumber : 장비창 슬롯 고유코드
     {
         m_TMP_Equipslot_Equip_Information_EquipPossibility.text = m_sColor_White + "장비해제" + m_sColor_End;
         m_BTN_Equipslot_Equip_Information_EquipPossibility.onClick.RemoveAllListeners();
         m_BTN_Equipslot_Equip_Information_EquipPossibility.onClick.AddListener(delegate { Set_BTN_Equip_Remove(arynumber); });
     }
-    void UpdateItemEquipInformation_SetItemEffect(Item_Equip item)
+    // 장비아이템 세부 정보 GUI 업데이트 - 아이템 세트효과 정보
+    void UpdateItemEquipInformation_SetItemEffect(Item_Equip item) // item : 장비아이템
     {
         m_nList_SetItemEffect_Code.Clear();
         int setitemeffectnumber = ItemSetEffectManager.instance.Return_SetItemEffect(item.m_nItemCode);
@@ -644,16 +642,17 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
             m_nSetItemEffect_Current = m_nList_SetItemEffect_Code[0];
             m_nSetItemEffect_List_Index = 0;
             m_TMP_SetItemEffect_Content_UpBar_Name.text = m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index].ToString() + "개 아이템 세트 효과";
-
-            UpdateItemEquipInformation_SetItemEffect_Content();
+            
+            UpdateItemEquipInformation_SetItemEffect_UpBar();   // 장비아이템 세부 정보 GUI 업데이트 - 아이템 세트효과 정보1
+            UpdateItemEquipInformation_SetItemEffect_Content(); // 장비아이템 세부 정보 GUI 업데이트 - 아이템 세트효과 정보2
 
             m_BTN_SetItemEffect_Content_UpBar_Left.onClick.RemoveAllListeners();
             m_BTN_SetItemEffect_Content_UpBar_Left.onClick.AddListener(delegate { Set_BTN_SetItemEffect_UpBar_Left(); });
             m_BTN_SetItemEffect_Content_UpBar_Right.onClick.RemoveAllListeners();
             m_BTN_SetItemEffect_Content_UpBar_Right.onClick.AddListener(delegate { Set_BTN_SetItemEffect_UpBar_Right(); });
-            UpdateItemEquipInformation_SetItemEffect_UpBar();
         }
     }
+    // 장비아이템 세부 정보 GUI 업데이트 - 아이템 세트효과 정보1
     void UpdateItemEquipInformation_SetItemEffect_UpBar()
     {
         if (m_nSetItemEffect_Current == m_nList_SetItemEffect_Code[0])
@@ -673,7 +672,7 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
             m_gBTN_SetItemEffect_Content_UpBar_Right.SetActive(true);
         }
     }
-
+    // 장비아이템 세부 정보 GUI 업데이트 - 아이템 세트효과 정보2
     void UpdateItemEquipInformation_SetItemEffect_Content()
     {
         m_TMP_SetItemEffect_Content_UpBar_Name.text = Refine_Condition(m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index].ToString() + "개 아이템 세트 효과");
