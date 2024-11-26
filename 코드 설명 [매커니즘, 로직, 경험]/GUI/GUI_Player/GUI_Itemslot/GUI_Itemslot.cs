@@ -194,58 +194,55 @@ public class GUI_Itemslot : MonoBehaviour
     {
         switch (m_eItemslot) // 인벤토리 타입
         {
-            // 인벤토리 _ 장비아이템
-            case E_ITEMSLOT.EQUIP:
+            case E_ITEMSLOT.EQUIP: // 인벤토리 _ 장비아이템
                 {
                     for (int i = 0; i < 60; i++)
                     {
-                        if (Player_Itemslot.m_nary_Itemslot_Equip_Count[i] != 0)
+                        if (Player_Itemslot.m_nary_Itemslot_Equip_Count[i] != 0) // 해당 인벤토리 슬롯에 장비아이템이 존재하는 경우
                         {
-                            m_gary_Itemslot[i].GetComponent<Itemslot>().SetItem_Equip(Player_Itemslot.m_gary_Itemslot_Equip[i], Player_Itemslot.m_nary_Itemslot_Equip_Count[i]);
+                            m_gary_Itemslot[i].GetComponent<Itemslot>().SetItem_Equip(Player_Itemslot.m_gary_Itemslot_Equip[i], Player_Itemslot.m_nary_Itemslot_Equip_Count[i]); // 인벤토리 슬롯 GUI 장비아이템 외형 표시
                             if (Player_Itemslot.m_nary_Itemslot_Equip_Count[i] == 0)
                             {
                                 Player_Itemslot.m_gary_Itemslot_Equip[i] = null;
                             }
                         }
-                        else
-                            m_gary_Itemslot[i].GetComponent<Itemslot>().SetNull();
+                        else // 해당 인벤토리 슬롯에 장비아이템이 존재하지 않는 경우
+                            m_gary_Itemslot[i].GetComponent<Itemslot>().SetNull(); // 인벤토리 슬롯 GUI 초기화
                     }
                 }
                 break;
-            case E_ITEMSLOT.USE:
+            case E_ITEMSLOT.USE: // 인벤토리 _ 소비아이템
                 {
                     for (int i = 0; i < 60; i++)
                     {
-                        if (Player_Itemslot.m_nary_Itemslot_Use_Count[i] != 0)
+                        if (Player_Itemslot.m_nary_Itemslot_Use_Count[i] != 0) // 해당 인벤토리 슬롯에 소비아이템이 존재하는 경우
                         {
-                            m_gary_Itemslot[i].GetComponent<Itemslot>().SetItem_Use(Player_Itemslot.m_gary_Itemslot_Use[i], Player_Itemslot.m_nary_Itemslot_Use_Count[i]);
+                            m_gary_Itemslot[i].GetComponent<Itemslot>().SetItem_Use(Player_Itemslot.m_gary_Itemslot_Use[i], Player_Itemslot.m_nary_Itemslot_Use_Count[i]); // 인벤토리 슬롯 GUI 소비아이템 외형 표시
                             if (Player_Itemslot.m_nary_Itemslot_Use_Count[i] == 0)
                             {
                                 Player_Itemslot.m_gary_Itemslot_Use[i] = null;
                             }
                         }
-                        else
-                            m_gary_Itemslot[i].GetComponent<Itemslot>().SetNull();
+                        else // 해당 인벤토리 슬롯에 소비아이템이 존재하지 않는 경우
+                            m_gary_Itemslot[i].GetComponent<Itemslot>().SetNull(); // 인벤토리 슬롯 GUI 초기화
                     }
                 }
                 break;
-            case E_ITEMSLOT.ETC:
+            case E_ITEMSLOT.ETC: // 인벤토리 _ 기타아이템
                 {
                     for (int i = 0; i < 60; i++)
                     {
-                        if (Player_Itemslot.m_nary_Itemslot_Etc_Count[i] != 0)
+                        if (Player_Itemslot.m_nary_Itemslot_Etc_Count[i] != 0) // 해당 인벤토리 슬롯에 기타아이템이 존재하는 경우
                         {
-                            m_gary_Itemslot[i].GetComponent<Itemslot>().SetItem_Etc(Player_Itemslot.m_gary_Itemslot_Etc[i], Player_Itemslot.m_nary_Itemslot_Etc_Count[i]);
+                            m_gary_Itemslot[i].GetComponent<Itemslot>().SetItem_Etc(Player_Itemslot.m_gary_Itemslot_Etc[i], Player_Itemslot.m_nary_Itemslot_Etc_Count[i]); // 인벤토리 슬롯 GUI 기타아이템 외형 표시
                             if (Player_Itemslot.m_nary_Itemslot_Etc_Count[i] == 0)
                             {
                                 Player_Itemslot.m_gary_Itemslot_Etc[i] = null;
                             }
-                            //Debug.Log("[" + i + "] != null");
                         }
-                        else
+                        else // 해당 인벤토리 슬롯에 기타아이템이 존재하지 않는 경우
                         {
-                            m_gary_Itemslot[i].GetComponent<Itemslot>().SetNull();
-                            //Debug.Log("[" + i + "] == null");
+                            m_gary_Itemslot[i].GetComponent<Itemslot>().SetNull(); // 인벤토리 슬롯 GUI 초기화
                         }
                     }
                 }
@@ -255,10 +252,7 @@ public class GUI_Itemslot : MonoBehaviour
     // 인벤토리 GUI 업데이트(골드(재화))
     public void UpdateItemslot_Gold()
     {
-        if (m_gPanel_Itemslot.activeSelf == true)
-        {
-            m_TMP_Itemslot_Content_Gold.text = Player_Total.Instance.m_pi_Itemslot.m_nGold.ToString();
-        }
+        m_TMP_Itemslot_Content_Gold.text = Player_Total.Instance.m_pi_Itemslot.m_nGold.ToString(); // 플레이어가 보유한 골드(재화) 표시
     }
 
     // 인벤토리 관련 GUI 업데이트(초기화)
