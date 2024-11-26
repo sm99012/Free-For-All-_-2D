@@ -5,16 +5,18 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 
+//
+// ※ 인벤토리 슬롯 GUI
+//    해당 GUI는 인벤토리GUI에 포함된 각각의 인벤토리 슬롯에 해당한다.
+//    보유한 장비아이템, 소비아이템, 기타아이템의 외형이 해당 GUI를 통해 표시되며, 마우스 이벤트 함수를 이용해 해당 GUI 클릭 시 아이템의 세부 정보를 확인할 수 있는 GUI가 활성화되는 기능을 구현했다.
+//
+
 public class Itemslot : MonoBehaviour, IPointerClickHandler
 {
-    // Itemslot 에서 아이템 확인 UI.
-    [SerializeField] Image m_IMG_ItemSprite;
-    [SerializeField] Image m_IMG_BackgroundSprite;
-
-    [SerializeField] TextMeshProUGUI m_TMP_ItemCount;
-
-    float m_fPanelCoordination_x;
-    float m_fPanelCoordination_y;
+    // GUI 오브젝트
+    [SerializeField] Image m_IMG_ItemSprite;          // (이미지) 아이템 외형
+    [SerializeField] Image m_IMG_BackgroundSprite;    // (이미지) 인벤토리 슬롯 GUI 배경
+    [SerializeField] TextMeshProUGUI m_TMP_ItemCount; // (텍스트) 아이템 보유 수량
 
     public int m_nAryNumber;
 
