@@ -95,6 +95,30 @@ public class GUI_Equipslot : MonoBehaviour
         GUIManager_Total.Instance.Delete_GUI_Priority(16); // GUI 우선순위 제거
     }
 
+    // 장비창(상태창) GUI 활성화 / 비활성화 함수
+    // return true : 장비창(상태창) GUI 활성화 / return false : 장비창(상태창) GUI 비활성화
+    public bool Display_GUI_Equipslot()
+    {
+        if (m_gPanel_Equipslot.activeSelf == true)
+        {
+            m_gPanel_ES.SetActive(false);
+            m_gPanel_Equipslot.SetActive(false);
+
+            return false;
+        }
+        else
+        {
+            m_BTN_Equipslot_Exit.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+            m_gPanel_ES.SetActive(true);
+            m_gPanel_Equipslot.SetActive(true);
+
+            m_gPanel_ES.transform.SetAsLastSibling();
+            m_gPanel_Equipslot.transform.SetAsLastSibling();
+
+            return true;
+        }
+    }
+
     // 장비창 GUI 업데이트
     public void UpdateEquipslot()
     {
@@ -202,30 +226,6 @@ public class GUI_Equipslot : MonoBehaviour
                 m_gary_Equipslot[6].GetComponent<Equipslot>().SetItem_Equip_NotApply(); // 착용 조건을 불충족한 장비아이템 마스크 적용(활성화)
                 GUIManager_Total.Instance.Display_GUI_Equipslot_Remove_Information(); // 장비아이템 해제 알림 GUI 활성화
             }
-        }
-    }
-
-    // 장비창(상태창) GUI 활성화 / 비활성화 함수
-    // return true : 장비창(상태창) GUI 활성화 / return false : 장비창(상태창) GUI 비활성화
-    public bool Display_GUI_Equipslot()
-    {
-        if (m_gPanel_Equipslot.activeSelf == true)
-        {
-            m_gPanel_ES.SetActive(false);
-            m_gPanel_Equipslot.SetActive(false);
-
-            return false;
-        }
-        else
-        {
-            m_BTN_Equipslot_Exit.GetComponent<Image>().color = new Color(1, 1, 1, 1);
-            m_gPanel_ES.SetActive(true);
-            m_gPanel_Equipslot.SetActive(true);
-
-            m_gPanel_ES.transform.SetAsLastSibling();
-            m_gPanel_Equipslot.transform.SetAsLastSibling();
-
-            return true;
         }
     }
 }
