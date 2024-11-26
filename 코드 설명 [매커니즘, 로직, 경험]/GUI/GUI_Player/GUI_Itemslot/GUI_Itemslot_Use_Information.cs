@@ -441,6 +441,7 @@ public class GUI_Itemslot_Use_Information : MonoBehaviour
     public void UnDisplay_GUI_Itemslot_Use_Information()
     {
         m_gPanel_Itemslot_Use_Information.SetActive(false);
+        m_Scrollbar_Itemslot_Use_Information_Content_ItemDescription_Content.value = 1;
     }
 
     // 소비 아이템 설명 창 세부 설정.
@@ -460,11 +461,6 @@ public class GUI_Itemslot_Use_Information : MonoBehaviour
     public void UseBan()
     {
         m_BTN_Itemslot_Use_Information_UsePossibility.onClick.RemoveAllListeners();
-    }
-    // 스크롤바 초기화.
-    public void Init_Scrollbar()
-    {
-        m_Scrollbar_Itemslot_Use_Information_Content_ItemDescription_Content.value = 1;
     }
     void UpdateItemUseInformation_UpBar(Item_Use item)
     {
