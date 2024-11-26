@@ -369,6 +369,10 @@ public class GUIManager_Total : MonoBehaviour
     {
         m_GUI_Quickslot_Signdown.Display_GUI_Quickslot_Signdown(number);
     }
+    public void UnDisplay_GUI_Quickslot_Signdown()
+    {
+        m_GUI_Quickslot_Signdown.UnDisplay_GUI_Quickslot_Signdown();
+    }
 
     public void Display_GUI_Quickslot_Information(string str)
     {
