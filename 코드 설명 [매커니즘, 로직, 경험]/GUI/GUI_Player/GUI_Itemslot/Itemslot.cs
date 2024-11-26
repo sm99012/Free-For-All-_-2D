@@ -69,108 +69,101 @@ public class Itemslot : MonoBehaviour, IPointerClickHandler
     // 마우스 우클릭 : 퀵슬롯 등록 GUI 활성화
     void IPointerClickHandler.OnPointerClick(PointerEventData eventData) // eventData : 마우스 우클릭, 좌클릭 구분에 사용
     {
-        if (eventData.button == PointerEventData.InputButton.Left)
+        if (eventData.button == PointerEventData.InputButton.Left) // 마우스 좌클릭
         {
             if (GUIManager_Total.Instance != null)
             {
-                if (GUIManager_Total.Instance.m_GUI_Itemslot.m_eItemslot == E_ITEMSLOT.EQUIP)
+                if (GUIManager_Total.Instance.m_GUI_Itemslot.m_eItemslot == E_ITEMSLOT.EQUIP) // 인벤토리 타입이 장비아이템인 경우
                 {
-                    if (Player_Itemslot.m_nary_Itemslot_Equip_Count[m_nAryNumber] != 0)
+                    if (Player_Itemslot.m_nary_Itemslot_Equip_Count[m_nAryNumber] != 0) // 인벤토리 슬롯에 장비아이템이 존재하는 경우
                     {
-                        GUIManager_Total.Instance.Update_Itemslot_Equip_Information(Player_Itemslot.m_gary_Itemslot_Equip[m_nAryNumber], m_nAryNumber);
-                        GUIManager_Total.Instance.Display_GUI_Itemslot_Equip_Information(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.y));
+                        GUIManager_Total.Instance.Update_Itemslot_Equip_Information(Player_Itemslot.m_gary_Itemslot_Equip[m_nAryNumber], m_nAryNumber); // 인벤토리 장비아이템 세부 정보 GUI 업데이트
+                        GUIManager_Total.Instance.Display_GUI_Itemslot_Equip_Information(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.y)); // 인벤토리 장비아이템 세부 정보 GUI 활성화
 
-                        GUIManager_Total.Instance.UnDisplay_GUI_Quickslot_Signup();
+                        GUIManager_Total.Instance.UnDisplay_GUI_Quickslot_Signup(); // 퀵슬롯 등록 GUI 비활성화
                     }
                     else
                     {
-                        GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Equip_Information();
+                        GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Equip_Information(); // 인벤토리 장비아이템 세부 정보 GUI 비활성화
                     }
                 }
-                else if (GUIManager_Total.Instance.m_GUI_Itemslot.m_eItemslot == E_ITEMSLOT.USE)
+                else if (GUIManager_Total.Instance.m_GUI_Itemslot.m_eItemslot == E_ITEMSLOT.USE) // 인벤토리 타입이 소비아이템인 경우
                 {
-                    if (Player_Itemslot.m_nary_Itemslot_Use_Count[m_nAryNumber] != 0)
+                    if (Player_Itemslot.m_nary_Itemslot_Use_Count[m_nAryNumber] != 0) // 인벤토리 슬롯에 소비아이템이 존재하는 경우
                     {
-                        GUIManager_Total.Instance.Update_Itemslot_Use_Information(Player_Itemslot.m_gary_Itemslot_Use[m_nAryNumber], m_nAryNumber);
-                        GUIManager_Total.Instance.Display_GUI_Itemslot_Use_Information(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.y));
+                        GUIManager_Total.Instance.Update_Itemslot_Use_Information(Player_Itemslot.m_gary_Itemslot_Use[m_nAryNumber], m_nAryNumber); // 인벤토리 소비아이템 세부 정보 GUI 업데이트
+                        GUIManager_Total.Instance.Display_GUI_Itemslot_Use_Information(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.y)); // 인벤토리 소비아이템 세부 정보 GUI 활성화
 
-                        GUIManager_Total.Instance.UnDisplay_GUI_Quickslot_Signup();
+                        GUIManager_Total.Instance.UnDisplay_GUI_Quickslot_Signup(); // 퀵슬롯 등록 GUI 비활성화
                     }
                     else
                     {
-                        GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Use_Information();
+                        GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Use_Information(); // 인벤토리 소비아이템 세부 정보 GUI 비활성화
                     }
                 }
-                else if (GUIManager_Total.Instance.m_GUI_Itemslot.m_eItemslot == E_ITEMSLOT.ETC)
+                else if (GUIManager_Total.Instance.m_GUI_Itemslot.m_eItemslot == E_ITEMSLOT.ETC) // 인벤토리 타입이 기타아이템인 경우
                 {
-                    if (Player_Itemslot.m_nary_Itemslot_Etc_Count[m_nAryNumber] != 0)
+                    if (Player_Itemslot.m_nary_Itemslot_Etc_Count[m_nAryNumber] != 0) // 인벤토리 슬롯에 기타아이템이 존재하는 경우
                     {
-                        GUIManager_Total.Instance.Update_Itemslot_Etc_Information(Player_Itemslot.m_gary_Itemslot_Etc[m_nAryNumber], m_nAryNumber);
+                        GUIManager_Total.Instance.Update_Itemslot_Etc_Information(Player_Itemslot.m_gary_Itemslot_Etc[m_nAryNumber], m_nAryNumber); // 인벤토리 기타아이템 세부 정보 GUI 업데이트
+                        GUIManager_Total.Instance.Display_GUI_Itemslot_Etc_Information(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.y)); // 인벤토리 기타아이템 세부 정보 GUI 활성화
 
-                        GUIManager_Total.Instance.Display_GUI_Itemslot_Etc_Information(Mathf.Round(this.gameObject.transform.position.x), Mathf.Round(this.gameObject.transform.position.y));
-
-                        GUIManager_Total.Instance.UnDisplay_GUI_Quickslot_Signup();
+                        GUIManager_Total.Instance.UnDisplay_GUI_Quickslot_Signup(); // 퀵슬롯 등록 GUI 비활성화
                     }
                     else
                     {
-                        GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Etc_Information();
+                        GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Etc_Information(); // 인벤토리 기타아이템 세부 정보 GUI 비활성화
                     }
                 }
             }
         }
-        if (eventData.button == PointerEventData.InputButton.Right)
+        if (eventData.button == PointerEventData.InputButton.Right) // 마우스 우클릭
         {
-            if (GUIManager_Total.Instance.m_GUI_Itemslot.m_eItemslot == E_ITEMSLOT.EQUIP)
-                if (Player_Itemslot.m_nary_Itemslot_Equip_Count[m_nAryNumber] != 0)
-                    if (GUIManager_Total.Instance != null && GUIManager_Total.Instance.m_GUI_Quickslot_Signup != null)
+            if (GUIManager_Total.Instance != null)
+            {
+                if (GUIManager_Total.Instance.m_GUI_Itemslot.m_eItemslot == E_ITEMSLOT.EQUIP) // 인벤토리 타입이 장비아이템인 경우
+                {
+                    if (Player_Itemslot.m_nary_Itemslot_Equip_Count[m_nAryNumber] != 0) // 인벤토리 슬롯에 장비아이템이 존재하는 경우
                     {
-                        if (Player_Itemslot.m_nary_Itemslot_Equip_Count[m_nAryNumber] != 0)
+                        if (Player_Itemslot.m_nary_Itemslot_Equip_Count[m_nAryNumber] != 0) // 인벤토리 슬롯에 장비아이템이 존재하는 경우
                         {
-                            GUIManager_Total.Instance.Display_GUI_Quickslot_Signup(E_QUICKSLOT_CATEGORY.EQUIP, m_nAryNumber, Mathf.Round(this.transform.position.x), Mathf.Round(this.transform.position.y));
-
-                            GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Equip_Information();
-                            GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Use_Information();
-                            GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Etc_Information();
+                            GUIManager_Total.Instance.Display_GUI_Quickslot_Signup(E_QUICKSLOT_CATEGORY.EQUIP, m_nAryNumber, Mathf.Round(this.transform.position.x), Mathf.Round(this.transform.position.y)); // 퀵슬롯 등록 GUI 활성화
+                            
+                            GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Equip_Information(); // 인벤토리 장비아이템 세부 정보 GUI 비활성화
+                            GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Use_Information();   // 인벤토리 소비아이템 세부 정보 GUI 비활성화
+                            GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Etc_Information();   // 인벤토리 기타아이템 세부 정보 GUI 비활성화
                         }
-                        //else
-                        //{
-                        //    GUIManager_Total.Instance.UnDisplay_GUI_Quickslot_Signup();
-                        //}
                     }
-            if (GUIManager_Total.Instance.m_GUI_Itemslot.m_eItemslot == E_ITEMSLOT.USE)
-                if (Player_Itemslot.m_nary_Itemslot_Use_Count[m_nAryNumber] != 0)
-                    if (GUIManager_Total.Instance != null && GUIManager_Total.Instance.m_GUI_Quickslot_Signup != null)
+                }
+                if (GUIManager_Total.Instance.m_GUI_Itemslot.m_eItemslot == E_ITEMSLOT.USE) // 인벤토리 타입이 소비아이템인 경우
+                {
+                    if (Player_Itemslot.m_nary_Itemslot_Use_Count[m_nAryNumber] != 0) // 인벤토리 슬롯에 소비아이템이 존재하는 경우
                     {
-                        if (Player_Itemslot.m_nary_Itemslot_Use_Count[m_nAryNumber] != 0)
+                        if (Player_Itemslot.m_nary_Itemslot_Use_Count[m_nAryNumber] != 0) // 인벤토리 슬롯에 소비아이템이 존재하는 경우
                         {
-                            GUIManager_Total.Instance.Display_GUI_Quickslot_Signup(E_QUICKSLOT_CATEGORY.USE, Player_Itemslot.m_gary_Itemslot_Use[m_nAryNumber].m_nItemCode, Mathf.Round(this.transform.position.x), Mathf.Round(this.transform.position.y));
+                            GUIManager_Total.Instance.Display_GUI_Quickslot_Signup(E_QUICKSLOT_CATEGORY.USE, Player_Itemslot.m_gary_Itemslot_Use[m_nAryNumber].m_nItemCode, Mathf.Round(this.transform.position.x), Mathf.Round(this.transform.position.y)); // 퀵슬롯 등록 GUI 활성화
 
-                            GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Equip_Information();
-                            GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Use_Information();
-                            GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Etc_Information();
+                            GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Equip_Information(); // 인벤토리 장비아이템 세부 정보 GUI 비활성화
+                            GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Use_Information();   // 인벤토리 소비아이템 세부 정보 GUI 비활성화
+                            GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Etc_Information();   // 인벤토리 기타아이템 세부 정보 GUI 비활성화
                         }
-                        //else
-                        //{
-                        //    GUIManager_Total.Instance.UnDisplay_GUI_Quickslot_Signup();
-                        //}
                     }
-            if (GUIManager_Total.Instance.m_GUI_Itemslot.m_eItemslot == E_ITEMSLOT.ETC)
-                if (Player_Itemslot.m_nary_Itemslot_Etc_Count[m_nAryNumber] != 0)
-                    if (GUIManager_Total.Instance != null && GUIManager_Total.Instance.m_GUI_Quickslot_Signup != null)
+                }
+                if (GUIManager_Total.Instance.m_GUI_Itemslot.m_eItemslot == E_ITEMSLOT.ETC) // 인벤토리 타입이 기타아이템인 경우
+                {
+                    if (Player_Itemslot.m_nary_Itemslot_Etc_Count[m_nAryNumber] != 0) // 인벤토리 슬롯에 기타아이템이 존재하는 경우
                     {
-                        if (Player_Itemslot.m_nary_Itemslot_Etc_Count[m_nAryNumber] != 0)
+                        if (Player_Itemslot.m_nary_Itemslot_Etc_Count[m_nAryNumber] != 0) // 인벤토리 슬롯에 기타아이템이 존재하는 경우
                         {
-                            GUIManager_Total.Instance.Display_GUI_Quickslot_Signup(E_QUICKSLOT_CATEGORY.ETC, Player_Itemslot.m_gary_Itemslot_Etc[m_nAryNumber].m_nItemCode, Mathf.Round(this.transform.position.x), Mathf.Round(this.transform.position.y));
+                            GUIManager_Total.Instance.Display_GUI_Quickslot_Signup(E_QUICKSLOT_CATEGORY.ETC, Player_Itemslot.m_gary_Itemslot_Etc[m_nAryNumber].m_nItemCode, Mathf.Round(this.transform.position.x), Mathf.Round(this.transform.position.y)); // 퀵슬롯 등록 GUI 활성화
 
-                            GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Equip_Information();
-                            GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Use_Information();
-                            GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Etc_Information();
+                            GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Equip_Information(); // 인벤토리 장비아이템 세부 정보 GUI 비활성화
+                            GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Use_Information();   // 인벤토리 소비아이템 세부 정보 GUI 비활성화
+                            GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Etc_Information();   // 인벤토리 기타아이템 세부 정보 GUI 비활성화
                         }
-                        //else
-                        //{
-                        //    GUIManager_Total.Instance.UnDisplay_GUI_Quickslot_Signup();
-                        //}
                     }
+                }
+            }
         }
     }
 }
