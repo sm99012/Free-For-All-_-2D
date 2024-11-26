@@ -32,11 +32,6 @@ public class GUI_Itemslot : MonoBehaviour
     [SerializeField] Button m_BTN_Itemslot_Content_Category_Use;
     [SerializeField] Button m_BTN_Itemslot_Content_Category_Etc;
     [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Content_Gold;
-    [Space(20)]
-    // 아이템 세부설명창
-    [SerializeField] GameObject m_gPanel_Itemslot_Equip_Information;
-    [SerializeField] GameObject m_gPanel_Itemslot_Use_Information;
-    [SerializeField] GameObject m_gPanel_Itemslot_Etc_Information;
 
     public E_ITEMSLOT m_eItemslot = E_ITEMSLOT.EQUIP;
 
@@ -82,9 +77,6 @@ public class GUI_Itemslot : MonoBehaviour
     void InitialSet_Object()
     {
         m_gPanel_Itemslot = GameObject.Find("Canvas_GUI").gameObject.transform.Find("Panel_Itemslot").gameObject;
-        m_gPanel_Itemslot_Equip_Information = GameObject.Find("Canvas_GUI").gameObject.transform.Find("Panel_Itemslot_Equip_Information").gameObject;
-        m_gPanel_Itemslot_Use_Information = GameObject.Find("Canvas_GUI").gameObject.transform.Find("Panel_Itemslot_Use_Information").gameObject;
-        m_gPanel_Itemslot_Etc_Information = GameObject.Find("Canvas_GUI").gameObject.transform.Find("Panel_Itemslot_Etc_Information").gameObject;
 
         m_gPanel_Itemslot_Bar = m_gPanel_Itemslot.transform.Find("Panel_Itemslot_Bar").gameObject;
         m_gPanel_Itemslot_Exit = m_gPanel_Itemslot.transform.Find("Panel_Itemslot_Exit").gameObject;
@@ -137,13 +129,13 @@ public class GUI_Itemslot : MonoBehaviour
         if (m_gPanel_Itemslot.activeSelf == true)
         {
             m_gPanel_Itemslot.SetActive(false);
-            GUIManager_Total.Instance.m_GUI_Quickslot_Signdown.m_gPanel_Quickslot_Signdown.SetActive(false);
-            GUIManager_Total.Instance.m_GUI_Itemslot_Equip_Information.Init_Scrollbar();
-            m_gPanel_Itemslot_Equip_Information.SetActive(false);
-            GUIManager_Total.Instance.m_GUI_Itemslot_Use_Information.Init_Scrollbar();
-            m_gPanel_Itemslot_Use_Information.SetActive(false);
-            GUIManager_Total.Instance.m_GUI_Itemslot_Etc_Information.Init_Scrollbar();
-            m_gPanel_Itemslot_Etc_Information.SetActive(false);
+        
+            GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Equip_Information();
+            GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Use_Information();
+            GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Etc_Information();
+
+            GUIManager_Total.Instance.UnDisplay_GUI_Quickslot_Signdown();
+
             m_TMP_Itemslot_Content_Gold.text = Player_Total.Instance.m_pi_Itemslot.m_nGold.ToString();
 
             return false;
