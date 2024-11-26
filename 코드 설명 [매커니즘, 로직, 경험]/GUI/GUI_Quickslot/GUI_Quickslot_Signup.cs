@@ -81,9 +81,11 @@ public class GUI_Quickslot_Signup : MonoBehaviour
         m_gPanel_Quickslot_Signup.SetActive(false);
     }
 
-    public void Display_GUI_Quickslot_Signup(E_QUICKSLOT_CATEGORY eqc, int number)
+    public void Display_GUI_Quickslot_Signup(E_QUICKSLOT_CATEGORY eqc, int number, float fcoordination_x, float fcoordination_y)
     {
+        m_gPanel_Quickslot_Signup.gameObject.transform.SetAsLastSibling();
         m_gPanel_Quickslot_Signup.SetActive(true);
+        m_gPanel_Quickslot_Signup.transform.position = new Vector2(fcoordination_x, fcoordination_y);
 
         m_eQuickslot_Category = eqc;
         if (m_eQuickslot_Category == E_QUICKSLOT_CATEGORY.EQUIP)
@@ -106,5 +108,9 @@ public class GUI_Quickslot_Signup : MonoBehaviour
         }
 
         Set_Button();
+    }
+    public void UnDisplay_GUI_Quickslot_Signup()
+    {
+        m_gPanel_Quickslot_Signup.SetActive(false);
     }
 }
