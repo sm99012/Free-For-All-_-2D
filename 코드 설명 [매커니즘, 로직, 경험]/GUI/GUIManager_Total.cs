@@ -204,7 +204,32 @@ public class GUIManager_Total : MonoBehaviour
         else
             Delete_GUI_Priority(8);
     }
-
+    
+    public void Display_GUI_Itemslot_Equip_Information(float fcoordination_x, float fcoordination_y)
+    {
+        m_GUI_Itemslot_Equip_Information.Display_GUI_Itemslot_Equip_Information(fcoordination_x, fcoordination_y);
+    }
+    public void UnDisplay_GUI_Itemslot_Equip_Information()
+    {
+        m_GUI_Itemslot_Equip_Information.UnDisplay_GUI_Itemslot_Equip_Information();
+    }
+    public void Display_GUI_Itemslot_Use_Information(float fcoordination_x, float fcoordination_y)
+    {
+        m_GUI_Itemslot_Use_Information.Display_GUI_Itemslot_Use_Information(fcoordination_x, fcoordination_y);
+    }
+    public void UnDisplay_GUI_Itemslot_Use_Information()
+    {
+        m_GUI_Itemslot_Use_Information.UnDisplay_GUI_Itemslot_Use_Information();
+    }
+    public void Display_GUI_Itemslot_Etc_Information(float fcoordination_x, float fcoordination_y)
+    {
+        m_GUI_Itemslot_Etc_Information.Display_GUI_Itemslot_Etc_Information(fcoordination_x, fcoordination_y);
+    }
+    public void UnDisplay_GUI_Itemslot_Etc_Information()
+    {
+        m_GUI_Itemslot_Etc_Information.UnDisplay_GUI_Itemslot_Etc_Information();
+    }
+    
     // Not Use
     public void Display_GUI_Equipslot()
     {
@@ -331,9 +356,13 @@ public class GUIManager_Total : MonoBehaviour
             Delete_GUI_Priority(29);
     }
 
-    public void Display_GUI_Quickslot_Signup(E_QUICKSLOT_CATEGORY eqc, int number)
+    public void Display_GUI_Quickslot_Signup(E_QUICKSLOT_CATEGORY eqc, int number, float fcoordination_x, float fcoordination_y)
     {
-        m_GUI_Quickslot_Signup.Display_GUI_Quickslot_Signup(eqc, number);
+        m_GUI_Quickslot_Signup.Display_GUI_Quickslot_Signup(eqc, number, fcoordination_x, fcoordination_y);
+    }
+    public void UnDisplay_GUI_Quickslot_Signup()
+    {
+        m_GUI_Quickslot_Signup.UnDisplay_GUI_Quickslot_Signup();
     }
 
     public void Display_GUI_Quickslot_Signdown(int number)
