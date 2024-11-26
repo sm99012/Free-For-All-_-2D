@@ -5,38 +5,47 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 
-public enum E_ITEMSLOT { EQUIP, USE, ETC }
+//
+// ※ 인벤토리 GUI
+//    해당 GUI를 활성화 하여 플레이어가 현재 보유한 장비아이템, 소비아이템, 기타아이템, 골드(재화)를 확인할 수 있다.
+//
 
 public class GUI_Itemslot : MonoBehaviour
 {
-    // Itemslot UI.
+    // GUI 오브젝트
     [SerializeField] GameObject m_gPanel_Itemslot;
 
     [SerializeField] GameObject m_gPanel_Itemslot_Bar;
     [SerializeField] GameObject m_gPanel_Itemslot_Exit;
-    [SerializeField] Button m_BTN_Itemslot_Exit;
-    [Space(20)]
+    [SerializeField] Button m_BTN_Itemslot_Exit; // (버튼) 인벤토리 GUI 비활성화
+
     [SerializeField] GameObject m_gPanel_Itemslot_Content;
+    
     [SerializeField] GameObject m_gPanel_Itemslot_Content_Category_Equip;
+    [SerializeField] Button m_BTN_Itemslot_Content_Category_Equip; // (버튼) 인벤토리_장비아이템
     [SerializeField] GameObject m_gPanel_Itemslot_Content_Category_Use;
+    [SerializeField] Button m_BTN_Itemslot_Content_Category_Use;   // (버튼) 인벤토리_소비아이템
     [SerializeField] GameObject m_gPanel_Itemslot_Content_Category_Etc;
+    [SerializeField] Button m_BTN_Itemslot_Content_Category_Etc;   // (버튼) 인벤토리_기타아이템
+        
     [SerializeField] GameObject m_gPanel_Itemslot_Content_Slot;
-    [SerializeField] GameObject m_gPanel_Itemslot_Content_Gold;
+    [SerializeField] GameObject m_gContent_Itemslot_Content_Slot;
     [SerializeField] GameObject m_gScrollView_Itemslot_Content_Slot;
     [SerializeField] GameObject m_gViewport_Itemslot_Content_Slot;
     [SerializeField] GameObject m_gScrollbarVertical_Itemslot_Content_Slot;
-    [SerializeField] RectTransform m_RectTransform_ScrollView;
-    [Space(20)]
-    [SerializeField] GameObject m_gContent_Itemslot_Content_Slot;
-    [SerializeField] Button m_BTN_Itemslot_Content_Category_Equip;
-    [SerializeField] Button m_BTN_Itemslot_Content_Category_Use;
-    [SerializeField] Button m_BTN_Itemslot_Content_Category_Etc;
-    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Content_Gold;
 
-    public E_ITEMSLOT m_eItemslot = E_ITEMSLOT.EQUIP;
+    [SerializeField] GameObject m_gPanel_Itemslot_Content_Gold;
+    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Content_Gold; // (텍스트) 골드(재화)
 
-    public GameObject[] m_gary_Itemslot;
+    // 인벤토리 타입 : { 인벤토리_장비아이템, 인벤토리_소비아이템, 인벤토리_기타아이템 }
+    public enum E_ITEMSLOT { EQUIP, USE, ETC }
+    public E_ITEMSLOT m_eItemslot = E_ITEMSLOT.EQUIP; // 인벤토리 타입
+                                                      // 인벤토리_장비아이템, 인벤토리_소비아이템, 인벤토리_기타아이템 마다 각각의 인벤토리 슬롯 GUI를 가지는것이 아니다.(만약 각각 인벤토리 슬롯 GUI를 가진다면 180개가 필요하다.)
+                                                      // 60개의 인벤토리 슬롯 GUI를 이용해 각각의 인벤토리 타입에 맞게 재활용한다.
 
+    public GameObject[] m_gary_Itemslot; // 인벤토리 슬롯 GUI 배열. 60개(0 ~ 59) 인벤토리 슬롯 GUI가 저장된다.
+
+    // GUI 초기 설정
     public void InitialSet()
     {
         InitialSet_Object();
@@ -45,33 +54,6 @@ public class GUI_Itemslot : MonoBehaviour
 
         m_gPanel_Itemslot.SetActive(false);
     }
-
-    //private void Update()
-    //{
-    //    if (Total_Manager.Instance.m_bStart == true)
-    //    {
-    //        //if (m_gPanel_Itemslot.activeSelf == true)
-    //        //{
-    //        //    m_TMP_Itemslot_Content_Gold.text = Player_Total.Instance.m_pi_Itemslot.m_nGold.ToString();
-    //        //}
-    //        //else
-    //        //{
-    //        //    m_gPanel_Itemslot_Equip_Information.SetActive(false);
-    //        //    m_gPanel_Itemslot_Use_Information.SetActive(false);
-    //        //    m_gPanel_Itemslot_Etc_Information.SetActive(false);
-    //        //}
-
-    //        if (GUIManager_Total.Instance.m_GUI_Reinforcement.m_gPanel_Reinforcement.activeSelf == true)
-    //        {
-    //            GUIManager_Total.Instance.m_GUI_Itemslot_Equip_Information.Init_Scrollbar();
-    //            GUIManager_Total.Instance.m_GUI_Itemslot_Equip_Information.m_gPanel_Itemslot_Equip_Information.SetActive(false);
-    //            GUIManager_Total.Instance.m_GUI_Itemslot_Use_Information.Init_Scrollbar();
-    //            GUIManager_Total.Instance.m_GUI_Itemslot_Use_Information.m_gPanel_Itemslot_Use_Information.SetActive(false);
-    //            GUIManager_Total.Instance.m_GUI_Itemslot_Etc_Information.Init_Scrollbar();
-    //            GUIManager_Total.Instance.m_GUI_Itemslot_Etc_Information.m_gPanel_Itemslot_Etc_Information.SetActive(false);
-    //        }
-    //    }
-    //}
 
     // 초기 Object 불러오기.
     void InitialSet_Object()
@@ -97,7 +79,6 @@ public class GUI_Itemslot : MonoBehaviour
         m_gScrollView_Itemslot_Content_Slot = m_gPanel_Itemslot_Content_Slot.transform.Find("ScrollView_Itemslot_Content_Slot").gameObject;
         m_gViewport_Itemslot_Content_Slot = m_gScrollView_Itemslot_Content_Slot.transform.Find("Viewport_Itemslot_Content_Slot").gameObject;
         m_gContent_Itemslot_Content_Slot = m_gViewport_Itemslot_Content_Slot.transform.Find("Content_Itemslot_Content_Slot").gameObject;
-        m_RectTransform_ScrollView = m_gContent_Itemslot_Content_Slot.GetComponent<RectTransform>();
 
         m_gPanel_Itemslot_Content_Gold = m_gPanel_Itemslot_Content.transform.Find("Panel_Itemslot_Content_Gold").gameObject;
         m_TMP_Itemslot_Content_Gold = m_gPanel_Itemslot_Content_Gold.transform.Find("TMP_Itemslot_Content_Gold").gameObject.GetComponent<TextMeshProUGUI>();
