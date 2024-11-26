@@ -117,11 +117,6 @@ public class GUI_Itemslot_Etc_Information : MonoBehaviour
         UpdateItemEtcInformation_UpBar(item);
         UpdateItemEtcInformation_Content(item);
     }
-    // 스크롤바 초기화.
-    public void Init_Scrollbar()
-    {
-        m_Scrollbar_Itemslot_Etc_Information_Content_ItemDescription_Content.value = 1;
-    }
     void UpdateItemEtcInformation_UpBar(Item_Etc item)
     {
         // 기타 아이템 이름.
