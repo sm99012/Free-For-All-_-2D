@@ -432,10 +432,24 @@ public class GUI_Itemslot_Use_Information : MonoBehaviour
         }
     }
 
+    public void Display_GUI_Itemslot_Use_Information(float fcoordination_x, float fcoordination_y)
+    {
+        m_gPanel_Itemslot_Use_Information.SetActive(true);
+        m_gPanel_Itemslot_Use_Information.transform.SetAsLastSibling();
+        m_gPanel_Itemslot_Use_Information.transform.position = new Vector2(fcoordination_x, fcoordination_y);
+    }
+    public void UnDisplay_GUI_Itemslot_Use_Information()
+    {
+        m_gPanel_Itemslot_Use_Information.SetActive(false);
+    }
+
     // 소비 아이템 설명 창 세부 설정.
     public void UpdateItemUseInformation(Item_Use item, int arynumber)
     {
+        m_bUse_Condition_Check = true;
+        
         m_Scrollbar_Itemslot_Use_Information_Content_ItemDescription_Content.value = 1;
+        
         UpdateItemUseInformation_UpBar(item);
         UpdateItemUseInformation_Content(item);
         UpdateItemUseInformation_UsePossibility(item, arynumber);
