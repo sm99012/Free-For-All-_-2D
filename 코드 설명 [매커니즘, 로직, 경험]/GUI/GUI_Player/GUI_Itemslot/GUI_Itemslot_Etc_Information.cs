@@ -106,6 +106,7 @@ public class GUI_Itemslot_Etc_Information : MonoBehaviour
     public void UnDisplay_GUI_Itemslot_Etc_Information()
     {
         m_gPanel_Itemslot_Etc_Information.SetActive(false);
+        m_Scrollbar_Itemslot_Etc_Information_Content_ItemDescription_Content.value = 1;
     }
 
     // 기타 아이템 설명 창 세부 설정.
