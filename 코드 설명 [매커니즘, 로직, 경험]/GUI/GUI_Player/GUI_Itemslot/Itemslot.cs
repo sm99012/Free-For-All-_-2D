@@ -18,14 +18,16 @@ public class Itemslot : MonoBehaviour, IPointerClickHandler
     [SerializeField] Image m_IMG_BackgroundSprite;    // (이미지) 인벤토리 슬롯 GUI 배경
     [SerializeField] TextMeshProUGUI m_TMP_ItemCount; // (텍스트) 아이템 보유 수량
 
-    public int m_nAryNumber;
+    public int m_nAryNumber; // 인벤토리 슬롯 고유코드. 해당 고유코드는 인벤토리 슬롯(배열) 번호를 의미하며, 중복된 값을 가질 수 없다.
+                             // 0 ~ 59 사이의 값을 가진다.
 
+    // GUI 초기 설정
     public void Awake()
     {
-        InitialSet_Object();
+        InitialSet_Object(); // GUI 오브젝트 초기 설정
     }
 
-    // 초기 Object 불러오기.
+    // GUI 오브젝트 초기 설정
     void InitialSet_Object()
     {
         m_IMG_ItemSprite = this.gameObject.transform.Find("Panel_ItemSprite").GetComponent<Image>();
@@ -33,24 +35,28 @@ public class Itemslot : MonoBehaviour, IPointerClickHandler
         m_TMP_ItemCount = this.gameObject.transform.Find("Text_Count").GetComponent<TextMeshProUGUI>();
     }
 
-    public void SetItem_Equip(Item_Equip item, int count)
+    // 인벤토리 슬롯 GUI 장비아이템 외형 표시
+    public void SetItem_Equip(Item_Equip item, int count) // item : 장비아이템, count : 장비아이템 개수(1고정)
     {
         m_IMG_ItemSprite.sprite = item.m_sp_Sprite;
         m_IMG_ItemSprite.color = new Color(1, 1, 1, 1);
         m_TMP_ItemCount.text = count.ToString();
     }
-    public void SetItem_Use(Item_Use item, int count)
+    // 인벤토리 슬롯 GUI 소비아이템 외형 표시
+    public void SetItem_Use(Item_Use item, int count) // item : 소비아이템, count : 소비아이템 개수
     {
         m_IMG_ItemSprite.sprite = item.m_sp_Sprite;
         m_IMG_ItemSprite.color = new Color(1, 1, 1, 1);
         m_TMP_ItemCount.text = count.ToString();
     }
-    public void SetItem_Etc(Item_Etc item, int count)
+    // 인벤토리 슬롯 GUI 기타아이템 외형 표시
+    public void SetItem_Etc(Item_Etc item, int count) // item : 기타아이템, count : 기타아이템 개수
     {
         m_IMG_ItemSprite.sprite = item.m_sp_Sprite;
         m_IMG_ItemSprite.color = new Color(1, 1, 1, 1);
         m_TMP_ItemCount.text = count.ToString();
     }
+    // 인벤토리 슬롯 GUI 초기화
     public void SetNull()
     {
         m_IMG_ItemSprite.color = new Color(1, 1, 1, 0);
@@ -58,11 +64,13 @@ public class Itemslot : MonoBehaviour, IPointerClickHandler
         m_TMP_ItemCount.text = null;
     }
 
-    void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
+    // 마우스 클릭 이벤트 함수
+    // 마우스 좌클릭 : 인벤토리 슬롯 GUI 클릭 시 아이템(장비아이템, 소비아이템, 기타아이템) 세부 정보 GUI 활성화
+    // 마우스 우클릭 : 퀵슬롯 등록 GUI 활성화
+    void IPointerClickHandler.OnPointerClick(PointerEventData eventData) // eventData : 마우스 우클릭, 좌클릭 구분에 사용
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            //if (GUIManager_Total.Instance != null && m_gPanel_Itemslot_Equip_Information != null)
             if (GUIManager_Total.Instance != null)
             {
                 if (GUIManager_Total.Instance.m_GUI_Itemslot.m_eItemslot == E_ITEMSLOT.EQUIP)
