@@ -48,14 +48,13 @@ public class GUI_Itemslot : MonoBehaviour
     // GUI 초기 설정
     public void InitialSet()
     {
-        InitialSet_Object();
-        InitialSet_Button();
-        InitialSet_Itemslot();
+        InitialSet_Object();   // GUI 오브젝트 초기 설정
+        InitialSet_Button();   // GUI 버튼 설정
+        InitialSet_Itemslot(); // 인벤토리 슬롯 GUI 초기 설정
 
         m_gPanel_Itemslot.SetActive(false);
     }
-
-    // 초기 Object 불러오기.
+    // GUI 오브젝트 초기 설정
     void InitialSet_Object()
     {
         m_gPanel_Itemslot = GameObject.Find("Canvas_GUI").gameObject.transform.Find("Panel_Itemslot").gameObject;
@@ -86,7 +85,7 @@ public class GUI_Itemslot : MonoBehaviour
         m_gScrollbarVertical_Itemslot_Content_Slot = m_gScrollView_Itemslot_Content_Slot.transform.Find("ScrollbarVertical_Itemslot_Content_Slot").gameObject;
 
     }
-    // 초기 Button 이벤트 설정.
+    // GUI 버튼 설정
     void InitialSet_Button()
     {
         m_BTN_Itemslot_Exit.GetComponent<Button>().onClick.AddListener(delegate { Btn_Press_Exit(); });
@@ -94,7 +93,7 @@ public class GUI_Itemslot : MonoBehaviour
         m_BTN_Itemslot_Content_Category_Use.GetComponent<Button>().onClick.AddListener(delegate { Btn_Press_Itemslot_Use(); });
         m_BTN_Itemslot_Content_Category_Etc.GetComponent<Button>().onClick.AddListener(delegate { Btn_Press_Itemslot_Etc(); });
     }
-    // Itemslot 초기 설정
+    // 인벤토리 슬롯 GUI 초기 설정
     public void InitialSet_Itemslot()
     {
         m_gary_Itemslot = new GameObject[60];
