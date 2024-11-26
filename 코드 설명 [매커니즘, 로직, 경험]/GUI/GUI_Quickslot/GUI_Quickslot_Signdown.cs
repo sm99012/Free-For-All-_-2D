@@ -51,4 +51,8 @@ public class GUI_Quickslot_Signdown : MonoBehaviour
         m_BTN_Quickslot_Signdown_Signdown.onClick.RemoveAllListeners();
         m_BTN_Quickslot_Signdown_Signdown.onClick.AddListener(delegate { Press_Btn_Signdown(n); });
     }
+    public void UnDisplay_GUI_Quickslot_Signdown()
+    {
+        m_gPanel_Quickslot_Signdown.SetActive(false);
+    }
 }
