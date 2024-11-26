@@ -90,6 +90,7 @@ public class GUI_Equipslot : MonoBehaviour
     public void Btn_Press_Exit()
     {
         m_BTN_Equipslot_Exit.GetComponent<Image>().color = new Color(.75f, .75f, .75f, 1);
+        
         GUIManager_Total.Instance.Display_GUI_ES(); // 상태창 GUI 비활성화
         GUIManager_Total.Instance.UnDisplay_GUI_Equipslot_Equip_Information(); // 장비아이템 세부 정보 GUI 비활성화
         GUIManager_Total.Instance.Delete_GUI_Priority(16); // GUI 우선순위 제거
@@ -104,13 +105,16 @@ public class GUI_Equipslot : MonoBehaviour
             m_gPanel_ES.SetActive(false);
             m_gPanel_Equipslot.SetActive(false);
 
+            GUIManager_Total.Instance.UnDisplay_GUI_Equipslot_Equip_Information();
+
             return false;
         }
         else
         {
-            m_BTN_Equipslot_Exit.GetComponent<Image>().color = new Color(1, 1, 1, 1);
             m_gPanel_ES.SetActive(true);
             m_gPanel_Equipslot.SetActive(true);
+
+            m_BTN_Equipslot_Exit.GetComponent<Image>().color = new Color(1, 1, 1, 1);
 
             m_gPanel_ES.transform.SetAsLastSibling();
             m_gPanel_Equipslot.transform.SetAsLastSibling();
