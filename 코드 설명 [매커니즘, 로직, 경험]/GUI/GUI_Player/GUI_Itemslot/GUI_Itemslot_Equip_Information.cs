@@ -452,8 +452,11 @@ public class GUI_Itemslot_Equip_Information : MonoBehaviour
     // 장비 아이템 설명 창 세부 설정.
     public void UpdateItemEquipInformation(Item_Equip item, int arynumber)
     {
+        m_bEquip_Condition_Check = true;
+        
         m_Scrollbar_Itemslot_Equip_Information_Content_ItemDescription_Content.value = 1;
         m_Scrollbar_SetItemEffect_Content_SS_Description.value = 1;
+        
         UpdateItemEquipInformation_UpBar(item);
         UpdateItemEquipInformation_Content(item);
         UpdateItemEquipInformation_EquipPossibility(item, arynumber);
