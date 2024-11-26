@@ -97,10 +97,22 @@ public class GUI_Itemslot_Etc_Information : MonoBehaviour
         m_gPanel_Itemslot_Etc_Information.SetActive(false);
     }
 
+    public void Display_GUI_Itemslot_Etc_Information(float fcoordination_x, float fcoordination_y)
+    {
+        m_gPanel_Itemslot_Etc_Information.SetActive(true);
+        m_gPanel_Itemslot_Etc_Information.transform.SetAsLastSibling();
+        m_gPanel_Itemslot_Etc_Information.transform.position = new Vector2(fcoordination_x, fcoordination_y);
+    }
+    public void UnDisplay_GUI_Itemslot_Etc_Information()
+    {
+        m_gPanel_Itemslot_Etc_Information.SetActive(false);
+    }
+
     // 기타 아이템 설명 창 세부 설정.
     public void UpdateItemEtcInformation(Item_Etc item, int arynumber)
     {
         m_Scrollbar_Itemslot_Etc_Information_Content_ItemDescription_Content.value = 1;
+        
         UpdateItemEtcInformation_UpBar(item);
         UpdateItemEtcInformation_Content(item);
     }
