@@ -260,11 +260,8 @@ public class GUI_Itemslot : MonoBehaviour
     {
         m_gScrollbarVertical_Itemslot_Content_Slot.GetComponent<Scrollbar>().value = 1;
         
-        GUIManager_Total.Instance.m_GUI_Itemslot_Equip_Information.Init_Scrollbar();
-        GUIManager_Total.Instance.m_GUI_Itemslot_Equip_Information.m_gPanel_Itemslot_Equip_Information.SetActive(false);
-        GUIManager_Total.Instance.m_GUI_Itemslot_Use_Information.Init_Scrollbar();
-        GUIManager_Total.Instance.m_GUI_Itemslot_Use_Information.m_gPanel_Itemslot_Use_Information.SetActive(false);
-        GUIManager_Total.Instance.m_GUI_Itemslot_Etc_Information.Init_Scrollbar();
-        GUIManager_Total.Instance.m_GUI_Itemslot_Etc_Information.m_gPanel_Itemslot_Etc_Information.SetActive(false);
+        GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Equip_Information(); // 인벤토리 장비아이템 세부 정보 GUI 비활성화
+        GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Use_Information();   // 인벤토리 소비아이템 세부 정보 GUI 비활성화
+        GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Etc_Information();   // 인벤토리 기타아이템 세부 정보 GUI 비활성화
     }
 }
