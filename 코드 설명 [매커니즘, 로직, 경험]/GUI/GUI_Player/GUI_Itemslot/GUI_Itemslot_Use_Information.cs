@@ -433,16 +433,11 @@ public class GUI_Itemslot_Use_Information : MonoBehaviour
     {
         m_bUse_Condition_Check = true; // 소비아이템 사용 가능
         
-        UpdateItemUseInformation_UpBar(item);
-        UpdateItemUseInformation_Content(item);
-        UpdateItemUseInformation_UsePossibility(item, arynumber);
-        UpdateItemUseInformation_Button(item.m_eItemUseType);
-        UpdateItemUse_GiftInformation(item);
-    }
-    // 착용 및 사용 금지.
-    public void UseBan()
-    {
-        m_BTN_Itemslot_Use_Information_UsePossibility.onClick.RemoveAllListeners();
+        UpdateItemUseInformation_UpBar(item);                     // 소비아이템 세부 정보 GUI 업데이트 - 소비아이템 이름
+        UpdateItemUseInformation_Content(item);                   // 소비아이템 세부 정보 GUI 업데이트 - 소비아이템 정보
+        UpdateItemUseInformation_UsePossibility(item, arynumber); // 소비아이템 세부 정보 GUI 업데이트 - 소비아이템 사용 가능 / 불가능
+        UpdateItemUseInformation_Button(item.m_eItemUseType);     // 소비아이템 세부 정보 GUI 업데이트 - (버튼) 소비아이템 정보 변경(L / R) 설정
+        UpdateItemUse_GiftInformation(item);                      // 소비아이템 세부 정보 GUI 업데이트 - 소비아이템(기프트) 정보
     }
     void UpdateItemUseInformation_UpBar(Item_Use item)
     {
@@ -869,6 +864,12 @@ public class GUI_Itemslot_Use_Information : MonoBehaviour
                 }
             }
         }
+    }
+
+    // (버튼) 소비아이템 사용 클릭 이벤트 함수 제거
+    public void UseBan()
+    {
+        m_BTN_Itemslot_Use_Information_UsePossibility.onClick.RemoveAllListeners();
     }
 
     // 착용조건에 대한 Text 문장 정제 함수.
