@@ -18,7 +18,7 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
     // GUI 오브젝트 - 장비아이템 세부 정보 GUI
     [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_UpBar;
     [SerializeField] TextMeshProUGUI m_TMP_Equipslot_Equip_Information_UpBar; // (텍스트) 장비아이템 이름, 강화 상태
-    [SerializeField] Button m_BTN_Equipslot_Equip_Information_UpBar_Exit;     // (버튼) 장비아이템 세부정보 GUI 비활성화
+    [SerializeField] Button m_BTN_Equipslot_Equip_Information_UpBar_Exit;     // (버튼) 장비아이템 세부 정보 GUI 비활성화
     
     [SerializeField] GameObject m_gPanel_Equipslot_Equip_Information_Content;
 
