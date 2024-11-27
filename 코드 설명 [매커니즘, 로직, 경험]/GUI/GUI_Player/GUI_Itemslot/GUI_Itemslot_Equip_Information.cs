@@ -415,72 +415,70 @@ public class GUI_Itemslot_Equip_Information : MonoBehaviour
     {
         GUIManager_Total.Instance.UpdateLog("장비아이템[" + Player_Itemslot.m_gary_Itemslot_Equip[arynumber].m_sItemName +  "]을 착용할 수 없습니다.");
     }
-    // 세트 아이템 효과 버튼 설정.
+    // (버튼) 아이템 세트효과 단계별 정보 변경(L) 클릭 이벤트 함수
     void Set_BTN_SetItemEffect_UpBar_Left()
     {
         m_nSetItemEffect_List_Index -= 1;
         m_nSetItemEffect_Current = m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index];
 
-        UpdateItemEquipInformation_SetItemEffect_Content();
-        UpdateItemEquipInformation_SetItemEffect_UpBar();
+        UpdateItemEquipInformation_SetItemEffect_UpBar();   // 아이템 세트효과 세부 정보 GUI 업데이트 - (버튼) 아이템 세트효과 단계별 정보 변경(L, R) 활성화 / 비활성화 여부 판단
+        UpdateItemEquipInformation_SetItemEffect_Content(); // 아이템 세트효과 세부 정보 GUI 업데이트 - 아이템 세트효과 정보
     }
+    // (버튼) 아이템 세트효과 단계별 정보 변경(R) 클릭 이벤트 함수
     void Set_BTN_SetItemEffect_UpBar_Right()
     {
         m_nSetItemEffect_List_Index += 1;
         m_nSetItemEffect_Current = m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index];
 
-        UpdateItemEquipInformation_SetItemEffect_Content();
-        UpdateItemEquipInformation_SetItemEffect_UpBar();
+        UpdateItemEquipInformation_SetItemEffect_UpBar();   // 아이템 세트효과 세부 정보 GUI 업데이트 - (버튼) 아이템 세트효과 단계별 정보 변경(L, R) 활성화 / 비활성화 여부 판단
+        UpdateItemEquipInformation_SetItemEffect_Content(); // 아이템 세트효과 세부 정보 GUI 업데이트 - 아이템 세트효과 정보
     }
 
-
-    public void Display_GUI_Itemslot_Equip_Information(float fcoordination_x, float fcoordination_y)
+    // 장비아이템 세부 정보 GUI 활성화 함수
+    public void Display_GUI_Itemslot_Equip_Information(float fcoordination_x, float fcoordination_y) // fcoordination_x, y : 장비아이템 세부 정보 GUI 좌표(x, y)
     {
         m_gPanel_Itemslot_Equip_Information.SetActive(true);
         m_gPanel_Itemslot_Equip_Information.transform.SetAsLastSibling();
-        m_gPanel_Itemslot_Equip_Information.transform.position = new Vector2(fcoordination_x, fcoordination_y);
+        m_gPanel_Itemslot_Equip_Information.transform.position = new Vector2(fcoordination_x, fcoordination_y); // 장비아이템 세부 정보 GUI 좌표 설정
     }
+    // 장비아이템 세부 정보 GUI 비활성화 함수
     public void UnDisplay_GUI_Itemslot_Equip_Information()
     {
         m_gPanel_Itemslot_Equip_Information.SetActive(false);
-        m_Scrollbar_Itemslot_Equip_Information_Content_ItemDescription_Content.value = 1;
     }
 
-    // 장비 아이템 설명 창 세부 설정.
-    public void UpdateItemEquipInformation(Item_Equip item, int arynumber)
+    // 장비아이템 세부 정보 GUI 업데이트
+    public void UpdateItemEquipInformation(Item_Equip item, int arynumber) // item : 장비아이템, arynumber : 인벤토리 슬롯 고유코드
     {
-        m_bEquip_Condition_Check = true;
+        m_bEquip_Condition_Check = true; // 장비아이템 착용 가능
         
-        m_Scrollbar_Itemslot_Equip_Information_Content_ItemDescription_Content.value = 1;
-        m_Scrollbar_SetItemEffect_Content_SS_Description.value = 1;
+        m_Scrollbar_Itemslot_Equip_Information_Content_ItemDescription_Content.value = 1; // (스크롤바) 장비아이템 설명 정보 초기화
+        m_Scrollbar_SetItemEffect_Content_SS_Description.value = 1;                       // (스크롤바) 아이템 세트효과 정보 초기화
         
-        UpdateItemEquipInformation_UpBar(item);
-        UpdateItemEquipInformation_Content(item);
-        UpdateItemEquipInformation_EquipPossibility(item, arynumber);
-        UpdateItemEquipInformation_SetItemEffect(item);
+        UpdateItemEquipInformation_UpBar(item);                       // 장비아이템 세부 정보 GUI 업데이트 - 장비아이템 이름, 강화 상태
+        UpdateItemEquipInformation_Content(item);                     // 장비아이템 세부 정보 GUI 업데이트 - 장비아이템 정보
+        UpdateItemEquipInformation_EquipPossibility(item, arynumber); // 장비아이템 세부 정보 GUI 업데이트 - 장비아이템 착용 가능 / 불가능
+        UpdateItemEquipInformation_SetItemEffect(item);               // 장비아이템 세부 정보 GUI 업데이트 - 아이템 세트효과 정보
     }
-    // 착용 및 사용 금지.
-    public void UseBan()
+    // 장비아이템 세부 정보 GUI 업데이트 - 장비아이템 이름, 강화 상태
+    void UpdateItemEquipInformation_UpBar(Item_Equip item) // item : 장비아이템
     {
-        m_BTN_Itemslot_Equip_Information_EquipPossibility.onClick.RemoveAllListeners();
-    }
-    void UpdateItemEquipInformation_UpBar(Item_Equip item)
-    {
-        // 장비 아이템 이름, 강화 상태.
         m_TMP_Itemslot_Equip_Information_UpBar.text = item.m_sItemName;
-        if (item.m_nReinforcementCount_Current > 0)
+        
+        if (item.m_nReinforcementCount_Current > 0) // 장비아이템이 강화된 경우(장비아이템 현재 강화 횟수 > 0)
             m_TMP_Itemslot_Equip_Information_UpBar.text += " + " + item.m_nReinforcementCount_Current;
     }
-    void UpdateItemEquipInformation_Content(Item_Equip item)
+    // 장비아이템 세부 정보 GUI 업데이트 - 장비아이템 정보
+    void UpdateItemEquipInformation_Content(Item_Equip item) // item : 장비아이템
     {
-        // 장비 아이템 이미지.
+        // 장비아이템 이미지 설정
         m_IMG_Itemslot_Equip_Information_Content_Image_ItemSprite.sprite = item.m_sp_Sprite;
         m_IMG_Itemslot_Equip_Information_Content_Image_ItemSprite.color = new Color(1, 1, 1, 0.75f);
-
-        // 장비 아이템 분류, 등급, 추가 옵션 등급, 강화 상태.
-        // 분류.
+        
         m_TMP_Itemslot_Equip_Information_Content_ItemInformation.text = "";
-        if (item.m_eItemEquipType == E_ITEM_EQUIP_TYPE.MAINWEAPON)
+        
+        // 장비아이템 분류 설정
+        if (item.m_eItemEquipType == E_ITEM_EQUIP_TYPE.MAINWEAPON) // 장비아이템 타입이 주무기인 경우
         {
             switch (item.m_eItemEquipMainWeaponType)
             {
@@ -501,7 +499,7 @@ public class GUI_Itemslot_Equip_Information : MonoBehaviour
                     break;
             }
         }
-        else
+        else // 장비아이템 타입이 주무기가 아닌 경우
         {
             switch (item.m_eItemEquipType)
             {
@@ -543,7 +541,8 @@ public class GUI_Itemslot_Equip_Information : MonoBehaviour
             }
         }
         m_TMP_Itemslot_Equip_Information_Content_ItemInformation.text += "분류: " + m_sBuffer + "\n";
-        // 등급.
+        
+        // 장비아이템 등급 설정
         switch (item.m_eItemGrade)
         {
             case E_ITEM_GRADE.NORMAL:
@@ -578,13 +577,18 @@ public class GUI_Itemslot_Equip_Information : MonoBehaviour
                 break;
         }
         m_TMP_Itemslot_Equip_Information_Content_ItemInformation.text += "등급: " + m_sBuffer + "\n";
-        // 추가 옵션 등급.
+        
+        // 장비아이템 추가 옵션 등급 설정
         m_TMP_Itemslot_Equip_Information_Content_ItemInformation.text += "추가 옵션 등급: " + item.m_eItemEquip_SpecialRatio_STATUS + " / " + item.m_eItemEquip_SpecialRatio_SOC + "\n";
-        // 강화 상태.
+        
+        // 장비아이템 강화 상태 설정
         m_TMP_Itemslot_Equip_Information_Content_ItemInformation.text += "강화 상태: " + item.m_nReinforcementCount_Current + " / " + item.m_nReinforcementCount_Max;
 
-        // 장비 아이템 효과.
-        // 장비 아이템 효과 Status.
+        // 장비아이템 설명 설정
+        m_TMP_Itemslot_Equip_Information_Content_ItemDescription_Content.text = "";
+        m_TMP_Itemslot_Equip_Information_Content_ItemDescription_Content.text += item.GetItemDescription();
+        
+        // 장비아이템 착용효과(스탯(능력치)) 설정
         m_TMP_Itemslot_Equip_Information_Content_Effect_Status_L.text = "";
         m_TMP_Itemslot_Equip_Information_Content_Effect_Status_L.text += Refine_Condition("레        벨:", item.m_sStatus_Effect.GetSTATUS_LV(), item.m_STATUS_AdditionalOption.GetSTATUS_LV(), item.m_STATUS_ReinforcementValue.GetSTATUS_LV());
         m_TMP_Itemslot_Equip_Information_Content_Effect_Status_L.text += Refine_Condition("\n체        력:", item.m_sStatus_Effect.GetSTATUS_HP_Max(), item.m_STATUS_AdditionalOption.GetSTATUS_HP_Max(), item.m_STATUS_ReinforcementValue.GetSTATUS_HP_Max());
@@ -594,8 +598,9 @@ public class GUI_Itemslot_Equip_Information : MonoBehaviour
         m_TMP_Itemslot_Equip_Information_Content_Effect_Status_R.text += "\n";
         m_TMP_Itemslot_Equip_Information_Content_Effect_Status_R.text += Refine_Condition("마        나:", item.m_sStatus_Effect.GetSTATUS_MP_Max(), item.m_STATUS_AdditionalOption.GetSTATUS_MP_Max(), item.m_STATUS_ReinforcementValue.GetSTATUS_MP_Max());
         m_TMP_Itemslot_Equip_Information_Content_Effect_Status_R.text += Refine_Condition("\n방  어  력:", item.m_sStatus_Effect.GetSTATUS_Defence_Physical(), item.m_STATUS_AdditionalOption.GetSTATUS_Defence_Physical(), item.m_STATUS_ReinforcementValue.GetSTATUS_Defence_Physical());
-        m_TMP_Itemslot_Equip_Information_Content_Effect_Status_R.text += Refine_Condition("\n공격속도:", item.m_sStatus_Effect.GetSTATUS_AttackSpeed(), item.m_STATUS_AdditionalOption.GetSTATUS_AttackSpeed(), item.m_STATUS_ReinforcementValue.GetSTATUS_AttackSpeed());
-        // 장비 아이템 효과 Soc.
+        m_TMP_Itemslot_Equip_Information_Content_Effect_Status_R.text += Refine_Condition("\n공격속도:", item.m_sStatus_Effect.GetSTATUS_AttackSpeed(), item.m_STATUS_AdditionalOption.GetSTATUS_AttackSpeed(), item.m_STATUS_ReinforcementValue.GetSTATUS_AttackSpeed());    
+        
+        // 장비아이템 착용효과(스탯(평판)) 설정
         m_TMP_Itemslot_Equip_Information_Content_Effect_Soc_L.text = "";
         m_TMP_Itemslot_Equip_Information_Content_Effect_Soc_L.text += Refine_Condition("명        예:", item.m_sSoc_Effect.GetSOC_Honor(), item.m_SOC_AdditionalOption.GetSOC_Honor(), item.m_SOC_ReinforcementValue.GetSOC_Honor());
         m_TMP_Itemslot_Equip_Information_Content_Effect_Soc_L.text += Refine_Condition("\n인        간:", item.m_sSoc_Effect.GetSOC_Human(), item.m_SOC_AdditionalOption.GetSOC_Human(), item.m_SOC_ReinforcementValue.GetSOC_Human());
@@ -609,134 +614,125 @@ public class GUI_Itemslot_Equip_Information : MonoBehaviour
         m_TMP_Itemslot_Equip_Information_Content_Effect_Soc_R.text += Refine_Condition("\n용        족:", item.m_sSoc_Effect.GetSOC_Dragon(), item.m_SOC_AdditionalOption.GetSOC_Dragon(), item.m_SOC_ReinforcementValue.GetSOC_Dragon());
         m_TMP_Itemslot_Equip_Information_Content_Effect_Soc_R.text += Refine_Condition("\n어        둠:", item.m_sSoc_Effect.GetSOC_Shadow(), item.m_SOC_AdditionalOption.GetSOC_Shadow(), item.m_SOC_ReinforcementValue.GetSOC_Shadow());
 
-        // 장비 아이템 착용 조건.
-        // 장비 아이템 착용 조건 Status.
+        // 장비아이템 착용조건(스탯(능력치)) 설정
         m_TMP_Itemslot_Equip_Information_Content_Condition_Status_L.text = "";
-        //m_TMP_Itemslot_Equip_Information_Content_Condition_Status_L.text += "레        벨: " + Refine_Condition(item.m_sStatus_Limit_Min.GetSTATUS_LV(), item.m_sStatus_Limit_Max.GetSTATUS_LV()) + "\n";
         m_TMP_Itemslot_Equip_Information_Content_Condition_Status_L.text += Refine_Condition("레        벨: ", "\n", item.m_sStatus_Limit_Min.GetSTATUS_LV(), item.m_sStatus_Limit_Max.GetSTATUS_LV(), player.m_sStatus.GetSTATUS_LV());
-        //m_TMP_Itemslot_Equip_Information_Content_Condition_Status_L.text += "체        력: " + Refine_Condition(item.m_sStatus_Limit_Min.GetSTATUS_HP_Max(), item.m_sStatus_Limit_Max.GetSTATUS_HP_Max()) + "\n";
         m_TMP_Itemslot_Equip_Information_Content_Condition_Status_L.text += Refine_Condition("체        력: ", "\n", item.m_sStatus_Limit_Min.GetSTATUS_HP_Max(), item.m_sStatus_Limit_Max.GetSTATUS_HP_Max(), player.m_sStatus.GetSTATUS_HP_Max());
-        //m_TMP_Itemslot_Equip_Information_Content_Condition_Status_L.text += "데  미  지: " + Refine_Condition(item.m_sStatus_Limit_Min.GetSTATUS_Damage_Total(), item.m_sStatus_Limit_Max.GetSTATUS_Damage_Total()) + "\n";
         m_TMP_Itemslot_Equip_Information_Content_Condition_Status_L.text += Refine_Condition("데  미  지: ", "\n", item.m_sStatus_Limit_Min.GetSTATUS_Damage_Total(), item.m_sStatus_Limit_Max.GetSTATUS_Damage_Total(), player.m_sStatus.GetSTATUS_Damage_Total());
-        //m_TMP_Itemslot_Equip_Information_Content_Condition_Status_L.text += "이동속도: " + Refine_Condition(item.m_sStatus_Limit_Min.GetSTATUS_Speed(), item.m_sStatus_Limit_Max.GetSTATUS_Speed());
         m_TMP_Itemslot_Equip_Information_Content_Condition_Status_L.text += Refine_Condition("이동속도: ", "", item.m_sStatus_Limit_Min.GetSTATUS_Speed(), item.m_sStatus_Limit_Max.GetSTATUS_Speed(), player.m_sStatus.GetSTATUS_Speed());
         m_TMP_Itemslot_Equip_Information_Content_Condition_Status_R.text = "";
         m_TMP_Itemslot_Equip_Information_Content_Condition_Status_R.text += "\n";
-        //m_TMP_Itemslot_Equip_Information_Content_Condition_Status_R.text += "마        나: " + Refine_Condition(item.m_sStatus_Limit_Min.GetSTATUS_MP_Max(), item.m_sStatus_Limit_Max.GetSTATUS_MP_Max()) + "\n";
         m_TMP_Itemslot_Equip_Information_Content_Condition_Status_R.text += Refine_Condition("마        나: ", "\n", item.m_sStatus_Limit_Min.GetSTATUS_MP_Max(), item.m_sStatus_Limit_Max.GetSTATUS_MP_Max(), player.m_sStatus.GetSTATUS_MP_Max());
-        //m_TMP_Itemslot_Equip_Information_Content_Condition_Status_R.text += "방  어  력: " + Refine_Condition(item.m_sStatus_Limit_Min.GetSTATUS_Defence_Physical(), item.m_sStatus_Limit_Max.GetSTATUS_Defence_Physical()) + "\n";
         m_TMP_Itemslot_Equip_Information_Content_Condition_Status_R.text += Refine_Condition("방  어  력: ", "\n", item.m_sStatus_Limit_Min.GetSTATUS_Defence_Physical(), item.m_sStatus_Limit_Max.GetSTATUS_Defence_Physical(), player.m_sStatus.GetSTATUS_Defence_Physical());
-        //m_TMP_Itemslot_Equip_Information_Content_Condition_Status_R.text += "공격속도: " + Refine_Condition(item.m_sStatus_Limit_Min.GetSTATUS_AttackSpeed(), item.m_sStatus_Limit_Max.GetSTATUS_AttackSpeed());
         m_TMP_Itemslot_Equip_Information_Content_Condition_Status_R.text += Refine_Condition("공격속도: ", "", item.m_sStatus_Limit_Min.GetSTATUS_AttackSpeed(), item.m_sStatus_Limit_Max.GetSTATUS_AttackSpeed(), player.m_sStatus.GetSTATUS_AttackSpeed());
-
-        // 장비 아이템 조건 Soc.
+        
+        // 장비아이템 착용조건(스탯(평판)) 설정
         m_TMP_Itemslot_Equip_Information_Content_Condition_Soc_L.text = "";
-        //m_TMP_Itemslot_Equip_Information_Content_Condition_Soc_L.text += "평        판: " + Refine_Condition(item.m_sSoc_Limit_Min.GetSOC_Honor(), item.m_sSoc_Limit_Max.GetSOC_Honor()) + "\n";
         m_TMP_Itemslot_Equip_Information_Content_Condition_Soc_L.text += Refine_Condition("명        예: ", "\n", item.m_sSoc_Limit_Min.GetSOC_Honor(), item.m_sSoc_Limit_Max.GetSOC_Honor(), player.m_sSoc.GetSOC_Honor());
-        //m_TMP_Itemslot_Equip_Information_Content_Condition_Soc_L.text += "인        간: " + Refine_Condition(item.m_sSoc_Limit_Min.GetSOC_Human(), item.m_sSoc_Limit_Max.GetSOC_Human()) + "\n";
         m_TMP_Itemslot_Equip_Information_Content_Condition_Soc_L.text += Refine_Condition("인        간: ", "\n", item.m_sSoc_Limit_Min.GetSOC_Human(), item.m_sSoc_Limit_Max.GetSOC_Human(), player.m_sSoc.GetSOC_Human());
-        //m_TMP_Itemslot_Equip_Information_Content_Condition_Soc_L.text += "동        물: " + Refine_Condition(item.m_sSoc_Limit_Min.GetSOC_Animal(), item.m_sSoc_Limit_Max.GetSOC_Animal()) + "\n";
         m_TMP_Itemslot_Equip_Information_Content_Condition_Soc_L.text += Refine_Condition("동        물: ", "\n", item.m_sSoc_Limit_Min.GetSOC_Animal(), item.m_sSoc_Limit_Max.GetSOC_Animal(), player.m_sSoc.GetSOC_Animal());
-        //m_TMP_Itemslot_Equip_Information_Content_Condition_Soc_L.text += "슬  라  임: " + Refine_Condition(item.m_sSoc_Limit_Min.GetSOC_Slime(), item.m_sSoc_Limit_Max.GetSOC_Slime()) + "\n";
         m_TMP_Itemslot_Equip_Information_Content_Condition_Soc_L.text += Refine_Condition("슬  라  임: ", "\n", item.m_sSoc_Limit_Min.GetSOC_Slime(), item.m_sSoc_Limit_Max.GetSOC_Slime(), player.m_sSoc.GetSOC_Slime());
-        //m_TMP_Itemslot_Equip_Information_Content_Condition_Soc_L.text += "스켈레톤: " + Refine_Condition(item.m_sSoc_Limit_Min.GetSOC_Skeleton(), item.m_sSoc_Limit_Max.GetSOC_Skeleton());
         m_TMP_Itemslot_Equip_Information_Content_Condition_Soc_L.text += Refine_Condition("스켈레톤: ", "", item.m_sSoc_Limit_Min.GetSOC_Skeleton(), item.m_sSoc_Limit_Max.GetSOC_Skeleton(), player.m_sSoc.GetSOC_Skeleton());
         m_TMP_Itemslot_Equip_Information_Content_Condition_Soc_R.text = "";
         m_TMP_Itemslot_Equip_Information_Content_Condition_Soc_R.text += "\n";
-        //m_TMP_Itemslot_Equip_Information_Content_Condition_Soc_R.text += "앤        트: " + Refine_Condition(item.m_sSoc_Limit_Min.GetSOC_Ents(), item.m_sSoc_Limit_Max.GetSOC_Ents()) + "\n";
         m_TMP_Itemslot_Equip_Information_Content_Condition_Soc_R.text += Refine_Condition("앤        트: ", "\n", item.m_sSoc_Limit_Min.GetSOC_Ents(), item.m_sSoc_Limit_Max.GetSOC_Ents(), player.m_sSoc.GetSOC_Ents());
-        //m_TMP_Itemslot_Equip_Information_Content_Condition_Soc_R.text += "마        족: " + Refine_Condition(item.m_sSoc_Limit_Min.GetSOC_Devil(), item.m_sSoc_Limit_Max.GetSOC_Devil()) + "\n";
         m_TMP_Itemslot_Equip_Information_Content_Condition_Soc_R.text += Refine_Condition("마        족: ", "\n", item.m_sSoc_Limit_Min.GetSOC_Devil(), item.m_sSoc_Limit_Max.GetSOC_Devil(), player.m_sSoc.GetSOC_Devil());
-        //m_TMP_Itemslot_Equip_Information_Content_Condition_Soc_R.text += "용        족: " + Refine_Condition(item.m_sSoc_Limit_Min.GetSOC_Dragon(), item.m_sSoc_Limit_Max.GetSOC_Dragon()) + "\n";
         m_TMP_Itemslot_Equip_Information_Content_Condition_Soc_R.text += Refine_Condition("용        족: ", "\n", item.m_sSoc_Limit_Min.GetSOC_Dragon(), item.m_sSoc_Limit_Max.GetSOC_Dragon(), player.m_sSoc.GetSOC_Dragon());
-        //m_TMP_Itemslot_Equip_Information_Content_Condition_Soc_R.text += "어        둠: " + Refine_Condition(item.m_sSoc_Limit_Min.GetSOC_Shadow(), item.m_sSoc_Limit_Max.GetSOC_Shadow());
         m_TMP_Itemslot_Equip_Information_Content_Condition_Soc_R.text += Refine_Condition("어        듬: ", "", item.m_sSoc_Limit_Min.GetSOC_Shadow(), item.m_sSoc_Limit_Max.GetSOC_Shadow(), player.m_sSoc.GetSOC_Shadow());
-
-        // 장비 아이템 설명.
-        m_TMP_Itemslot_Equip_Information_Content_ItemDescription_Content.text = "";
-        m_TMP_Itemslot_Equip_Information_Content_ItemDescription_Content.text += item.GetItemDescription();
     }
-    void UpdateItemEquipInformation_EquipPossibility(Item_Equip item, int arynumber)
+    // 장비아이템 세부 정보 GUI 업데이트 - 장비아이템 착용 가능 / 불가능
+    void UpdateItemEquipInformation_EquipPossibility(Item_Equip item, int arynumber) // item : 장비아이템, arynumber : 인벤토리 슬롯 고유코드
     {
-        if (m_bEquip_Condition_Check == true)
+        if (m_bEquip_Condition_Check == true) // 장비아이템 착용 가능
         {
             m_TMP_Itemslot_Equip_Information_EquipPossibility.text = m_sColor_White + "착용가능" + m_sColor_End;
+            // (버튼) 장비아이템 착용 클릭 이벤트 함수 - 장비아이템 착용 가능
             m_BTN_Itemslot_Equip_Information_EquipPossibility.onClick.RemoveAllListeners();
             m_BTN_Itemslot_Equip_Information_EquipPossibility.onClick.AddListener(delegate { Set_BTN_EquipPossibility_Possible(arynumber, item); });
         }
-        else
+        else // 장비아이템 착용 불가능
         {
             m_TMP_Itemslot_Equip_Information_EquipPossibility.text = m_sColor_Red + "착용불가능" + m_sColor_End;
+            // (버튼) 장비아이템 착용 클릭 이벤트 함수 - 장비아이템 착용 불가능
             m_BTN_Itemslot_Equip_Information_EquipPossibility.onClick.RemoveAllListeners();
             m_BTN_Itemslot_Equip_Information_EquipPossibility.onClick.AddListener(delegate { Set_BTN_EquipPossibility_ImPossible(); });
         }
     }
-    void UpdateItemEquipInformation_SetItemEffect(Item_Equip item)
+    // 장비아이템 세부 정보 GUI 업데이트 - 아이템 세트효과 정보
+    void UpdateItemEquipInformation_SetItemEffect(Item_Equip item) // item : 장비아이템
     {
-        m_nList_SetItemEffect_Code.Clear();
-        int setitemeffectnumber = ItemSetEffectManager.instance.Return_SetItemEffect(item.m_nItemCode);
-        if (setitemeffectnumber == 0)
+        m_nList_SetItemEffect_Code.Clear(); // 아이템 세트효과 순서 목록 초기화
+        int setitemeffectnumber = ItemSetEffectManager.instance.Return_SetItemEffect(item.m_nItemCode); // 아이템 세트효과 고유코드
+        if (setitemeffectnumber == 0) // 장비아이템의 아이템 세트효과가 존재하지 않는 경우
         {
-            m_gPanel_SetItemEffect.SetActive(false);
+            m_gPanel_SetItemEffect.SetActive(false); // 아이템 세트효과 세부 정보 GUI 비활성화
 
             m_ISE = null;
         }
-        else
+        else // 장비아이템의 아이템 세트효과가 존재하는 경우
         {
             m_gPanel_SetItemEffect.SetActive(true);
 
-            m_ISE = ItemSetEffectManager.m_Dictionary_ItemSetEffect[setitemeffectnumber];
+            m_ISE = ItemSetEffectManager.m_Dictionary_ItemSetEffect[setitemeffectnumber]; // 장비아이템의 아이템 세트효과 설정
 
             m_TMP_SetItemEffect_Name.text = m_ISE.m_sItemSetEffect_Name;
 
-            m_nSetItemEffect_Count = m_ISE.m_Dictionary_Item_Equip_Code.Count;
+            m_nSetItemEffect_Count = m_ISE.m_Dictionary_Item_Equip_Code.Count; // 아이템 세트효과 풀 세트 개수 설정
             for (int i = 0; i < m_nSetItemEffect_Count; i++)
             {
                 if (m_ISE.m_Dictionary_STATUS_Effect[i + 1].CheckIdentity(new STATUS(0)) == false ||
-                    m_ISE.m_Dictionary_SOC_Effect[i + 1].CheckIdentity(new SOC(0)) == false)
+                    m_ISE.m_Dictionary_SOC_Effect[i + 1].CheckIdentity(new SOC(0)) == false) // 아이템 세트효과가 존재하는 경우
                 {
-                    m_nList_SetItemEffect_Code.Add(i + 1);
+                    m_nList_SetItemEffect_Code.Add(i + 1); // 아이템 세트효과 순서 목록 추가(설정)
                 }
             }
+            
+            // 아이템 세트효과 세부 정보 GUI 초기 설정
             m_nSetItemEffect_Current = m_nList_SetItemEffect_Code[0];
             m_nSetItemEffect_List_Index = 0;
             m_TMP_SetItemEffect_Content_UpBar_Name.text = m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index].ToString() + "개 아이템 세트 효과";
 
-            UpdateItemEquipInformation_SetItemEffect_Content();
+            UpdateItemEquipInformation_SetItemEffect_UpBar();   // 아이템 세트효과 세부 정보 GUI 업데이트 - (버튼) 아이템 세트효과 단계별 정보 변경(L, R) 활성화 / 비활성화 여부 판단
+            UpdateItemEquipInformation_SetItemEffect_Content(); // 아이템 세트효과 세부 정보 GUI 업데이트 - 아이템 세트효과 정보
 
+            // (버튼) 아이템 세트효과 단계별 정보 변경(L) 클릭 이벤트 함수 설정
             m_BTN_SetItemEffect_Content_UpBar_Left.onClick.RemoveAllListeners();
             m_BTN_SetItemEffect_Content_UpBar_Left.onClick.AddListener(delegate { Set_BTN_SetItemEffect_UpBar_Left(); });
+            // (버튼) 아이템 세트효과 단계별 정보 변경(R) 클릭 이벤트 함수 설정
             m_BTN_SetItemEffect_Content_UpBar_Right.onClick.RemoveAllListeners();
             m_BTN_SetItemEffect_Content_UpBar_Right.onClick.AddListener(delegate { Set_BTN_SetItemEffect_UpBar_Right(); });
-            UpdateItemEquipInformation_SetItemEffect_UpBar();
         }
     }
+    // 아이템 세트효과 세부 정보 GUI 업데이트 - (버튼) 아이템 세트효과 단계별 정보 변경(L, R) 활성화 / 비활성화 여부 판단
     void UpdateItemEquipInformation_SetItemEffect_UpBar()
     {
-        if (m_nSetItemEffect_Current == m_nList_SetItemEffect_Code[0])
+        if (m_nSetItemEffect_Current == m_nList_SetItemEffect_Code[0]) // 이전 단계의 아이템 세트효과가 존재하지 않는 경우
         {
-            m_gBTN_SetItemEffect_Content_UpBar_Left.SetActive(false);
+            m_gBTN_SetItemEffect_Content_UpBar_Left.SetActive(false); // (버튼) 아이템 세트효과 단계별 정보 변경(L) 비활성화
         }
-        else
+        else // 이전 단계의 아이템 세트효과가 존재하는 경우
         {
-            m_gBTN_SetItemEffect_Content_UpBar_Left.SetActive(true);
+            m_gBTN_SetItemEffect_Content_UpBar_Left.SetActive(true); // (버튼) 아이템 세트효과 단계별 정보 변경(L) 활성화
         }
-        if (m_nSetItemEffect_Current == m_nList_SetItemEffect_Code[m_nList_SetItemEffect_Code.Count - 1])
+        if (m_nSetItemEffect_Current == m_nList_SetItemEffect_Code[m_nList_SetItemEffect_Code.Count - 1]) // 다음 단계의 아이템 세트효과가 존재하지 않는 경우
         {
-            m_gBTN_SetItemEffect_Content_UpBar_Right.SetActive(false);
+            m_gBTN_SetItemEffect_Content_UpBar_Right.SetActive(false); // (버튼) 아이템 세트효과 단계별 정보 변경(R) 비활성화
         }
-        else
+        else // 다음 단계의 아이템 세트효과가 존재하는 경우
         {
-            m_gBTN_SetItemEffect_Content_UpBar_Right.SetActive(true);
+            m_gBTN_SetItemEffect_Content_UpBar_Right.SetActive(true); // (버튼) 아이템 세트효과 단계별 정보 변경(R) 활성화
         }
     }
-
+    // 아이템 세트효과 세부 정보 GUI 업데이트 - 아이템 세트효과 정보
     void UpdateItemEquipInformation_SetItemEffect_Content()
     {
+        // 아이템 세트효과 이름 설정
         m_TMP_SetItemEffect_Content_UpBar_Name.text = Refine_Condition(m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index].ToString() + "개 아이템 세트 효과");
 
+        // 아이템 세트효과 설명 설정
         m_TMP_SetItemEffect_Content_SS_Description.text = Refine_Condition(m_ISE.m_Dictionary_Description[m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index]], false);
 
+        // 아이템 세트효과 효과(스탯(능력치)) 설정
         m_TMP_SetItemEffect_Content_SS_Status_L.text = Refine_Condition("레        벨:", m_ISE.m_Dictionary_STATUS_Effect[m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index]].GetSTATUS_LV());
         m_TMP_SetItemEffect_Content_SS_Status_L.text += Refine_Condition("\n체        력:", m_ISE.m_Dictionary_STATUS_Effect[m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index]].GetSTATUS_HP_Max());
         m_TMP_SetItemEffect_Content_SS_Status_L.text += Refine_Condition("\n데  미  지:", m_ISE.m_Dictionary_STATUS_Effect[m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index]].GetSTATUS_Damage_Total());
@@ -746,6 +742,7 @@ public class GUI_Itemslot_Equip_Information : MonoBehaviour
         m_TMP_SetItemEffect_Content_SS_Status_R.text += Refine_Condition("\n방  어  력:", m_ISE.m_Dictionary_STATUS_Effect[m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index]].GetSTATUS_Defence_Physical());
         m_TMP_SetItemEffect_Content_SS_Status_R.text += Refine_Condition("\n공격속도:", m_ISE.m_Dictionary_STATUS_Effect[m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index]].GetSTATUS_AttackSpeed());
 
+        // 아이템 세트효과 효과(스탯(평판)) 설정
         m_TMP_SetItemEffect_Content_SS_Soc_L.text = "";
         m_TMP_SetItemEffect_Content_SS_Soc_L.text += Refine_Condition("명        예:", m_ISE.m_Dictionary_SOC_Effect[m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index]].GetSOC_Honor());
         m_TMP_SetItemEffect_Content_SS_Soc_L.text += Refine_Condition("\n인        간:", m_ISE.m_Dictionary_SOC_Effect[m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index]].GetSOC_Human());
@@ -760,292 +757,278 @@ public class GUI_Itemslot_Equip_Information : MonoBehaviour
         m_TMP_SetItemEffect_Content_SS_Soc_R.text += Refine_Condition("\n어        듬:", m_ISE.m_Dictionary_SOC_Effect[m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index]].GetSOC_Shadow());
     }
 
-    // 착용조건에 대한 Text 문장 정제 함수.
-    // ex)
-    // 장비 아이템 A 의 착용조건에 LV 제한 '10 <= LV <= 19' 이 있을때 -> 레벨: 10 ~ 19 라고 Text 정제.
-    // 장비 아이템 A 의 착용조건에 LV 제한 '-10000 <= LV <= 19' 이 있을때 -> 레벨: ~ 19 라고 Text 정제.
-    // 장비 아이템 A 의 착용조건에 LV 제한 '10 <= LV <= 10000' 이 있을때 -> 레벨: 10 ~ 라고 Text 정제.
-    // -10000, 10000 은 최소, 최대 제한이 없다는것을 의미.
-    string Refine_Condition(float min, float max)
+     // (버튼) 장비아이템 착용 클릭 이벤트 함수 제거
+    public void UseBan()
     {
-        m_bRefine_Condition_Check = false;
-
-        if (min == -10000 && max == 10000)
-            m_bRefine_Condition_Check = false;
-        else
-            m_bRefine_Condition_Check = true;
-
-        m_sBuffer = "";
-        if (min != -10000)
-            m_sBuffer += min;
-        if (m_bRefine_Condition_Check == true)
-            m_sBuffer += " ~ ";
-        else
-            m_sBuffer = "X";
-        if (max != 10000)
-            m_sBuffer += max;
-
-        return m_sBuffer;
+        m_BTN_Itemslot_Equip_Information_EquipPossibility.onClick.RemoveAllListeners();
     }
-    string Refine_Condition(string beforesentence, string aftersentence, float condition_min, float condition_max, float current_condition)
+
+    // 텍스트(문자열) 정제 함수. 장비아이템 착용효과, 착용조건, 아이템 세트효과 등의 정보를 효율적으로 표시(강조)한다.
+    // ~(물결표)를 이용해 장비아이템의 착용조건을 표시한다. 스탯(능력치, 평판) 최대 상한(+10000)ㆍ최소 하한(-10000)은 표시하지 않는다.
+    
+    // 텍스트(문자열) 정제 함수 - 장비아이템 착용조건
+    string Refine_Condition(string beforesentence, string aftersentence, float condition_min, float condition_max, float current_condition) // beforesentence : 이전 문장, aftersentence : 이후 문장,
+                                                                                                                                            // condition_min : 장비아이템 착용조건 - 스탯(능력치, 평판) 하한,
+                                                                                                                                            // condition_max : 장비아이템 착용조건 - 스탯(능력치, 평판) 상한,
+                                                                                                                                            // current_condition : 플레이어 스탯(능력치, 평판)
     {
-        m_bRefine_Condition_Check = false;
+        if (condition_min == -10000 && condition_max == 10000) // 별도의 스탯(능력치, 평판) 효과, 조건 등이 존재하지 않는 경우
+            m_bRefine_Condition_Check = false; // 문자열 정제 불필요
+        else // 별도의 스탯(능력치, 평판) 효과, 조건 등이 존재하는 경우
+            m_bRefine_Condition_Check = true; // 문자열 정제 필요
 
-        if (condition_min == -10000 && condition_max == 10000)
-            m_bRefine_Condition_Check = false;
-        else
-            m_bRefine_Condition_Check = true;
-
-        m_sBuffer = "";
-        if (condition_min != -10000)
+        m_sBuffer = ""; // 문자열 임시 저장소 초기화
+        
+        if (condition_min != -10000) // 장비아이템 착용 조건 - 스탯(능력치, 평판) 하한이 존재하는 경우(!= 최소 하한)
             m_sBuffer += condition_min;
-        if (m_bRefine_Condition_Check == true)
+            
+        if (m_bRefine_Condition_Check == true) // 문자열 정제가 필요한 경우
             m_sBuffer += " ~ ";
         else
             m_sBuffer = "";
-        if (condition_max != 10000)
+            
+        if (condition_max != 10000) // 장비아이템 착용 조건 - 스탯(능력치, 평판) 상한이 존재하는 경우(!= 최대 상한)
             m_sBuffer += condition_max;
 
         m_sBuffer = beforesentence + m_sBuffer;
 
-        if (m_bRefine_Condition_Check == true)
+        if (m_bRefine_Condition_Check == true) // 문자열 정제가 필요한 경우
         {
-            if (condition_min <= current_condition && current_condition <= condition_max)
+            if (condition_min <= current_condition && current_condition <= condition_max) // 플레이어 스탯(능력치, 평판)이 장비아이템 착용조건 - 스탯(능력치, 평판)에 부합하는 경우
             {
-                m_sBuffer = m_sColor_White + m_sBuffer + m_sColor_End + aftersentence;
+                m_sBuffer = m_sColor_White + m_sBuffer + m_sColor_End + aftersentence; // 문자열 흰색 설정
             }
-            else
+            else // 플레이어 스탯(능력치, 평판)이 장비아이템 착용조건 - 스탯(능력치, 평판)에 미달하거나 초과하는 경우
             {
-                m_sBuffer = m_sColor_Red + m_sBuffer + m_sColor_End + aftersentence;
-                m_bEquip_Condition_Check = false;
+                m_sBuffer = m_sColor_Red + m_sBuffer + m_sColor_End + aftersentence; // 문자열 빨간색 설정
+                m_bEquip_Condition_Check = false; // 장비아이템 착용 불가능
             }
         }
-        else
+        else // 문자열 정제가 불필요한 경우
         {
-            m_sBuffer = m_sColor_Brown + m_sBuffer + m_sColor_End + aftersentence;
+            m_sBuffer = m_sColor_Brown + m_sBuffer + m_sColor_End + aftersentence; // 문자열 갈색 설정
         }
 
-        return m_sBuffer;
+        return m_sBuffer; // 문자열 임시 저장소 반환
     }
-    // 아이템 세트 효과 개수.
-    string Refine_Condition(string sentence, bool isname = true)
+    // 텍스트(문자열) 정제 함수 - 아이템 세트효과 이름, 설명(아이템 세트효과 개수)
+    string Refine_Condition(string sentence, bool isname = true) // sentence : 문장, isname : 아이템 세트효과 이름인지 판단
     {
-        m_nPlayerEquipment_SetItemEffect_Current = 0;
-        if (Player_Equipment.m_bEquipment_Hat == true)
+        m_nPlayerEquipment_SetItemEffect_Current = 0; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수
+
+        // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 판단
+        if (Player_Equipment.m_bEquipment_Hat == true) // 착용중인 장비아이템(모자)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Hat.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Hat.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(모자)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Hat() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Hat() == true) // 착용중인 장비아이템(모자) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Top == true)
+        if (Player_Equipment.m_bEquipment_Top == true) // 착용중인 장비아이템(상의)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Top.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Top.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(상의)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Top() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Top() == true) // 착용중인 장비아이템(상의) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Bottoms == true)
+        if (Player_Equipment.m_bEquipment_Bottoms == true) // 착용중인 장비아이템(하의)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Bottoms.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Bottoms.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(하의)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Bottoms() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Bottoms() == true) // 착용중인 장비아이템(하의) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Shose == true)
+        if (Player_Equipment.m_bEquipment_Shose == true) // 착용중인 장비아이템(신발)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Shose.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Shose.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(신발)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Shose() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Shose() == true) // 착용중인 장비아이템(신발) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Gloves == true)
+        if (Player_Equipment.m_bEquipment_Gloves == true) // 착용중인 장비아이템(장갑)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Gloves.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Gloves.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(장갑)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Gloves() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Gloves() == true) // 착용중인 장비아이템(장갑) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Mainweapon == true)
+        if (Player_Equipment.m_bEquipment_Mainweapon == true) // 착용중인 장비아이템(주무기)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Mainweapon.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Mainweapon.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(주무기)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_MainWeapon() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_MainWeapon() == true) // 착용중인 장비아이템(주무기) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Subweapon == true)
+        if (Player_Equipment.m_bEquipment_Subweapon == true) // 착용중인 장비아이템(보조무기)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Subweapon.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Subweapon.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(보조무기)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_SubWeapon() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_SubWeapon() == true) // 착용중인 장비아이템(보조무기) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
 
-        if (m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index] <= m_nPlayerEquipment_SetItemEffect_Current)
+        if (m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index] <= m_nPlayerEquipment_SetItemEffect_Current) // 해당 아이템 세트효과가 적용중인 경우
         {
-            if (isname == true)
-                return m_sColor_White + sentence + " 적용" + m_sColor_End;
-            else
-                return m_sColor_White + sentence + m_sColor_End;
+            if (isname == true) // 아이템 세트효과 이름인 경우
+                return m_sColor_White + sentence + " 적용" + m_sColor_End; // 문자열 흰색 설정 + "적용"
+            else // 아이템 세트효과 이름이 아닌 경우(아이템 세트효과 설명인 경우)
+                return m_sColor_White + sentence + m_sColor_End; // 문자열 흰색 설정
         }
-        else
+        else // 해당 아이템 세트효과가 적용중이지 않을 경우
         {
-            if (isname == true)
-                return m_sColor_Brown + sentence + " 미적용" + m_sColor_End;
-            else
-                return m_sColor_Brown + sentence + m_sColor_End;
+            if (isname == true) // 아이템 세트효과 이름인 경우
+                return m_sColor_Brown + sentence + " 미적용" + m_sColor_End; // 문자열 갈색 설정 + "적미용"
+            else // 아이템 세트효과 이름이 아닌 경우(아이템 세트효과 설명인 경우)
+                return m_sColor_Brown + sentence + m_sColor_End; // 문자열 갈색 설정
         }
     }
-    // 각각의 옵션.(고정된 아이템 세트 효과)
-    string Refine_Condition(string sentence, int number)
+    // 텍스트(문자열) 정제 함수 - 아이템 세트효과(int)
+    string Refine_Condition(string sentence, int number) // sentence : 문장, number : 아이템 세트효과 스탯(능력치, 평판)
     {
-        m_nPlayerEquipment_SetItemEffect_Current = 0;
-        if (Player_Equipment.m_bEquipment_Hat == true)
+        m_nPlayerEquipment_SetItemEffect_Current = 0; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수
+        
+        // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 판단
+        if (Player_Equipment.m_bEquipment_Hat == true) // 착용중인 장비아이템(모자)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Hat.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Hat.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(모자)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Hat() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Hat() == true) // 착용중인 장비아이템(모자) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Top == true)
+        if (Player_Equipment.m_bEquipment_Top == true) // 착용중인 장비아이템(상의)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Top.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Top.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(상의)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Top() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Top() == true) // 착용중인 장비아이템(상의) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Bottoms == true)
+        if (Player_Equipment.m_bEquipment_Bottoms == true) // 착용중인 장비아이템(하의)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Bottoms.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Bottoms.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(하의)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Bottoms() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Bottoms() == true) // 착용중인 장비아이템(하의) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Shose == true)
+        if (Player_Equipment.m_bEquipment_Shose == true) // 착용중인 장비아이템(신발)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Shose.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Shose.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(신발)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Shose() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Shose() == true) // 착용중인 장비아이템(신발) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Gloves == true)
+        if (Player_Equipment.m_bEquipment_Gloves == true) // 착용중인 장비아이템(장갑)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Gloves.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Gloves.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(장갑)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Gloves() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Gloves() == true) // 착용중인 장비아이템(장갑) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Mainweapon == true)
+        if (Player_Equipment.m_bEquipment_Mainweapon == true) // 착용중인 장비아이템(주무기)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Mainweapon.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Mainweapon.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(주무기)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_MainWeapon() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_MainWeapon() == true) // 착용중인 장비아이템(주무기) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
-        if (Player_Equipment.m_bEquipment_Subweapon == true)
+        if (Player_Equipment.m_bEquipment_Subweapon == true) // 착용중인 장비아이템(보조무기)이 존재하는 경우
         {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Subweapon.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Subweapon.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(보조무기)가 동일한 아이템 세트효과를 가지는 경우
             {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_SubWeapon() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
+                if (Player_Total.Instance.CheckCondition_Item_Equip_SubWeapon() == true) // 착용중인 장비아이템(보조무기) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
+            }
+        }
+
+        if (number > 0) // 이로운 효과(아이템 세트효과 스탯(능력치, 평판) > 0)
+            return m_sColor_White + sentence + " " + number.ToString() + m_sColor_End; // 문자열 흰색 + 아이템 세트효과 스탯(능력치, 평판)
+        else if (number < 0) // 해로운 효과(아이템 세트효과 스탯(능력치, 평판) < 0)
+            return m_sColor_WhiteGray + sentence + " " + number.ToString() + m_sColor_End; // 문자열 회색 + 아이템 세트효과 스탯(능력치, 평판)
+        else // 존재하지 않는 효과
+            return m_sColor_Brown + sentence + " " + number.ToString() + m_sColor_End; // 문자열 갈색 + 아이템 세트효과 스탯(능력치, 평판)
+    }
+    // 텍스트(문자열) 정제 함수 - 아이템 세트효과(float). 스탯(능력치(공격속도)) 전용
+    string Refine_Condition(string sentence, float number) // sentence : 문장, number : 아이템 세트효과 스탯(능력치, 평판)
+    {
+        m_nPlayerEquipment_SetItemEffect_Current = 0; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수
+        
+        if (Player_Equipment.m_bEquipment_Hat == true) // 착용중인 장비아이템(모자)이 존재하는 경우
+        {
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Hat.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(모자)가 동일한 아이템 세트효과를 가지는 경우
+            {
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Hat() == true) // 착용중인 장비아이템(모자) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
+            }
+        }
+        if (Player_Equipment.m_bEquipment_Top == true) // 착용중인 장비아이템(상의)이 존재하는 경우
+        {
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Top.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(상의)가 동일한 아이템 세트효과를 가지는 경우
+            {
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Top() == true) // 착용중인 장비아이템(상의) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
+            }
+        }
+        if (Player_Equipment.m_bEquipment_Bottoms == true) // 착용중인 장비아이템(하의)이 존재하는 경우
+        {
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Bottoms.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(하의)가 동일한 아이템 세트효과를 가지는 경우
+            {
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Bottoms() == true) // 착용중인 장비아이템(하의) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
+            }
+        }
+        if (Player_Equipment.m_bEquipment_Shose == true) // 착용중인 장비아이템(신발)이 존재하는 경우
+        {
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Shose.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(신발)가 동일한 아이템 세트효과를 가지는 경우
+            {
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Shose() == true) // 착용중인 장비아이템(신발) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
+            }
+        }
+        if (Player_Equipment.m_bEquipment_Gloves == true) // 착용중인 장비아이템(장갑)이 존재하는 경우
+        {
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Gloves.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(장갑)가 동일한 아이템 세트효과를 가지는 경우
+            {
+                if (Player_Total.Instance.CheckCondition_Item_Equip_Gloves() == true) // 착용중인 장비아이템(장갑) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
+            }
+        }
+        if (Player_Equipment.m_bEquipment_Mainweapon == true) // 착용중인 장비아이템(주무기)이 존재하는 경우
+        {
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Mainweapon.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(주무기)가 동일한 아이템 세트효과를 가지는 경우
+            {
+                if (Player_Total.Instance.CheckCondition_Item_Equip_MainWeapon() == true) // 착용중인 장비아이템(주무기) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
+            }
+        }
+        if (Player_Equipment.m_bEquipment_Subweapon == true) // 착용중인 장비아이템(보조무기)이 존재하는 경우
+        {
+            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Subweapon.m_nItemCode) == m_ISE.m_nItemSetEffect_Code) // 장비아이템(보조무기)가 동일한 아이템 세트효과를 가지는 경우
+            {
+                if (Player_Total.Instance.CheckCondition_Item_Equip_SubWeapon() == true) // 착용중인 장비아이템(보조무기) 착용 조건 판단 == ture
+                    m_nPlayerEquipment_SetItemEffect_Current += 1; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수 += 1
             }
         }
 
         //if (m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index] <= m_nPlayerEquipment_SetItemEffect_Current)
         //{
-            if (number > 0)
-                return m_sColor_White + sentence + " " + number.ToString() + m_sColor_End;
-            else if (number < 0)
-                return m_sColor_WhiteGray + sentence + " " + number.ToString() + m_sColor_End;
-            else
-                return m_sColor_Brown + sentence + " " + number.ToString() + m_sColor_End;
-        //}
-        //else
-        //{
-        //    return m_sColor_Brown + sentence + " " + number.ToString() + m_sColor_End;
-        //}
-    }
-    string Refine_Condition(string sentence, float number)
-    {
-        m_nPlayerEquipment_SetItemEffect_Current = 0;
-        if (Player_Equipment.m_bEquipment_Hat == true)
-        {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Hat.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
-            {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Hat() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
-            }
-        }
-        if (Player_Equipment.m_bEquipment_Top == true)
-        {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Top.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
-            {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Top() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
-            }
-        }
-        if (Player_Equipment.m_bEquipment_Bottoms == true)
-        {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Bottoms.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
-            {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Bottoms() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
-            }
-        }
-        if (Player_Equipment.m_bEquipment_Shose == true)
-        {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Shose.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
-            {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Shose() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
-            }
-        }
-        if (Player_Equipment.m_bEquipment_Gloves == true)
-        {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Gloves.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
-            {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_Gloves() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
-            }
-        }
-        if (Player_Equipment.m_bEquipment_Mainweapon == true)
-        {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Mainweapon.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
-            {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_MainWeapon() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
-            }
-        }
-        if (Player_Equipment.m_bEquipment_Subweapon == true)
-        {
-            if (ItemSetEffectManager.instance.Return_SetItemEffect(Player_Equipment.m_gEquipment_Subweapon.m_nItemCode) == m_ISE.m_nItemSetEffect_Code)
-            {
-                if (Player_Total.Instance.CheckCondition_Item_Equip_SubWeapon() == true)
-                    m_nPlayerEquipment_SetItemEffect_Current += 1;
-            }
-        }
-
-        //if (m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index] <= m_nPlayerEquipment_SetItemEffect_Current)
-        //{
-            if (number > 0)
-                return m_sColor_WhiteGray + sentence + " " + number.ToString() + m_sColor_End;
-            else if (number < 0)
-                return m_sColor_White + sentence + " " + number.ToString() + m_sColor_End;
-            else
-                return m_sColor_Brown + sentence + " " + number.ToString() + m_sColor_End;
+        if (number > 0) // 해로운 효과(아이템 세트효과 스탯(능력치, 평판) > 0)
+            return m_sColor_WhiteGray + sentence + " " + number.ToString() + m_sColor_End; // 문자열 흰색 + 아이템 세트효과 스탯(능력치, 평판)
+        else if (number < 0) // 이로운 효과(아이템 세트효과 스탯(능력치, 평판) < 0)
+            return m_sColor_White + sentence + " " + number.ToString() + m_sColor_End; // 문자열 회색 + 아이템 세트효과 스탯(능력치, 평판)
+        else // 존재하지 않는 효과
+            return m_sColor_Brown + sentence + " " + number.ToString() + m_sColor_End; // 문자열 갈색 + 아이템 세트효과 스탯(능력치, 평판)
         //}
         //else
         //{
