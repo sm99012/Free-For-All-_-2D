@@ -134,7 +134,7 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
     string m_sColor_Brown = "<color=#915446>";     // 갈색 - 존재하지 않는 효과, 조건
     string m_sColor_End = "</color>";              // 색상 문자열 끝
 
-    Player_Status player; // 플레이어 스탯(능력치, 평판) 변수
+    Player_Status player; // 플레이어 스탯(능력치, 평판) 변수. 장비아이템 착용 가능 여부 판단에 사용된다.(플레이어 관련 클래스는 싱글톤패턴으로 구현되어 있으나 해당 클래스에서 자주 사용되게에 편의를 위해 추가한 변수)
 
     // GUI 초기 설정
     public void InitialSet()
