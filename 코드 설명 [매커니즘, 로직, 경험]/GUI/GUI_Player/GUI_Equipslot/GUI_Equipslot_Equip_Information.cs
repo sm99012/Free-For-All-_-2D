@@ -740,7 +740,7 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
 
         return m_sBuffer; // 문자열 임시 저장소 반환
     }
-    // 텍스트(문자열) 정제 함수 - 아이템 세트효과 이름, 설명
+    // 텍스트(문자열) 정제 함수 - 아이템 세트효과 이름, 설명(아이템 세트효과 개수)
     string Refine_Condition(string sentence, bool isname = true) // sentence : 문장, isname : 아이템 세트효과 이름인지 판단
     {
         m_nPlayerEquipment_SetItemEffect_Current = 0; // 플레이어에게 적용중인 착용한 장비아이템과 동일한 아이템 세트효과 개수
