@@ -439,21 +439,21 @@ public class GUI_Itemslot_Use_Information : MonoBehaviour
         UpdateItemUseInformation_Button(item.m_eItemUseType);     // 소비아이템 세부 정보 GUI 업데이트 - (버튼) 소비아이템 정보 변경(L / R) 설정
         UpdateItemUse_GiftInformation(item);                      // 소비아이템 세부 정보 GUI 업데이트 - 소비아이템(기프트) 정보
     }
-    void UpdateItemUseInformation_UpBar(Item_Use item)
+    // 소비아이템 세부 정보 GUI 업데이트 - 소비아이템 이름
+    void UpdateItemUseInformation_UpBar(Item_Use item) // item : 소비아이템
     {
-        // 소비 아이템 이름, 강화 상태.
         m_TMP_Itemslot_Use_Information_UpBar.text = item.m_sItemName;
     }
-    void UpdateItemUseInformation_Content(Item_Use item)
+    // 소비아이템 세부 정보 GUI 업데이트 - 소비아이템 정보
+    void UpdateItemUseInformation_Content(Item_Use item) // item : 소비아이템
     {
-        // 소비 아이템 이미지.
+        // 소비아이템 이미지 설정
         m_IMG_Itemslot_Use_Information_Content_Image_ItemSprite.sprite = item.m_sp_Sprite;
         m_IMG_Itemslot_Use_Information_Content_Image_ItemSprite.color = new Color(1, 1, 1, 0.75f);
 
-        // 소비 아이템 분류, 등급, 추가 옵션 등급, 강화 상태.
-        // 분류.
         m_TMP_Itemslot_Use_Information_Content_ItemInformation.text = "";
 
+        // 소비아이템 분류 설정
         switch (item.m_eItemUseType)
         {
             case E_ITEM_USE_TYPE.RECOVERPOTION:
@@ -483,7 +483,8 @@ public class GUI_Itemslot_Use_Information : MonoBehaviour
                 break;
         }
         m_TMP_Itemslot_Use_Information_Content_ItemInformation.text += "분류: " + m_sBuffer + "\n";
-        // 등급.
+        
+        // 소비아이템 등급 설정
         switch (item.m_eItemGrade)
         {
             case E_ITEM_GRADE.NORMAL:
@@ -519,8 +520,11 @@ public class GUI_Itemslot_Use_Information : MonoBehaviour
         }
         m_TMP_Itemslot_Use_Information_Content_ItemInformation.text += "등급: " + m_sBuffer + "\n";
 
-        // 소비 아이템 효과.
-        // 소비 아이템 효과 Status.
+        // 소비아이템 설명 설정
+        m_TMP_Itemslot_Use_Information_Content_ItemDescription_Content.text = "";
+        m_TMP_Itemslot_Use_Information_Content_ItemDescription_Content.text += item.GetItemDescription();
+
+        // 소비아이템 사용효과(스탯(능력치)) 설정
         switch (item.m_eItemUseType)
         {
             case E_ITEM_USE_TYPE.RECOVERPOTION:
@@ -569,7 +573,8 @@ public class GUI_Itemslot_Use_Information : MonoBehaviour
                 }
                 break;
         }
-        // 소비 아이템 효과 Soc.
+       
+        // 소비아이템 사용효과(스탯(평판)) 설정
         if (item.m_eItemUseType == E_ITEM_USE_TYPE.REINFORCEMENT)
         {
             m_TMP_Itemslot_Use_Information_Content_Effect_Soc_L.text = "";
@@ -606,8 +611,7 @@ public class GUI_Itemslot_Use_Information : MonoBehaviour
             m_TMP_Itemslot_Use_Information_Content_Effect_Soc_R.text += Refine_Condition("\n어        둠:", item.m_sSoc_Effect.GetSOC_Shadow());
         }
 
-        // 소비 아이템 사용 조건.
-        // 소비 아이템 사용 조건 Status.
+        // 소비아이템 사용조건(스탯(능력치)) 설정
         m_TMP_Itemslot_Use_Information_Content_Condition_Status_L.text = "";
         //m_TMP_Itemslot_Use_Information_Content_Condition_Status_L.text += "레        벨: " + Refine_Condition(item.m_sStatus_Limit_Min.GetSTATUS_LV(), item.m_sStatus_Limit_Max.GetSTATUS_LV()) + "\n";
         m_TMP_Itemslot_Use_Information_Content_Condition_Status_L.text += Refine_Condition("레        벨: ", "\n", item.m_sStatus_Limit_Min.GetSTATUS_LV(), item.m_sStatus_Limit_Max.GetSTATUS_LV(), player.m_sStatus.GetSTATUS_LV());
@@ -626,7 +630,7 @@ public class GUI_Itemslot_Use_Information : MonoBehaviour
         //m_TMP_Itemslot_Use_Information_Content_Condition_Status_R.text += "공격속도: " + Refine_Condition(item.m_sStatus_Limit_Min.GetSTATUS_AttackSpeed(), item.m_sStatus_Limit_Max.GetSTATUS_AttackSpeed());
         m_TMP_Itemslot_Use_Information_Content_Condition_Status_R.text += Refine_Condition("공격속도: ", "", item.m_sStatus_Limit_Min.GetSTATUS_AttackSpeed(), item.m_sStatus_Limit_Max.GetSTATUS_AttackSpeed(), player.m_sStatus.GetSTATUS_AttackSpeed());
 
-        // 소비 아이템 사용 조건 Soc.
+        // 소비아이템 사용조건(스탯(평판)) 설정
         m_TMP_Itemslot_Use_Information_Content_Condition_Soc_L.text = "";
         //m_TMP_Itemslot_Use_Information_Content_Condition_Soc_L.text += "평        판: " + Refine_Condition(item.m_sSoc_Limit_Min.GetSOC_Honor(), item.m_sSoc_Limit_Max.GetSOC_Honor()) + "\n";
         m_TMP_Itemslot_Use_Information_Content_Condition_Soc_L.text += Refine_Condition("명        예: ", "\n", item.m_sSoc_Limit_Min.GetSOC_Honor(), item.m_sSoc_Limit_Max.GetSOC_Honor(), player.m_sSoc.GetSOC_Honor());
@@ -649,10 +653,6 @@ public class GUI_Itemslot_Use_Information : MonoBehaviour
         //m_TMP_Itemslot_Use_Information_Content_Condition_Soc_R.text += "어        둠: " + Refine_Condition(item.m_sSoc_Limit_Min.GetSOC_Shadow(), item.m_sSoc_Limit_Max.GetSOC_Shadow());
         m_TMP_Itemslot_Use_Information_Content_Condition_Soc_R.text += Refine_Condition("어        듬: ", "", item.m_sSoc_Limit_Min.GetSOC_Shadow(), item.m_sSoc_Limit_Max.GetSOC_Shadow(), player.m_sSoc.GetSOC_Shadow());
 
-        // 소비 아이템 설명.
-        m_TMP_Itemslot_Use_Information_Content_ItemDescription_Content.text = "";
-        m_TMP_Itemslot_Use_Information_Content_ItemDescription_Content.text += item.GetItemDescription();
-
         if (item.m_eItemUseType == E_ITEM_USE_TYPE.GIFT)
         { 
             if (item.m_bDisplay_Gift_Item == true)
@@ -668,7 +668,8 @@ public class GUI_Itemslot_Use_Information : MonoBehaviour
             }
         }
     }
-    void UpdateItemUseInformation_UsePossibility(Item_Use item, int arynumber)
+    // 소비아이템 세부 정보 GUI 업데이트 - 소비아이템 사용 가능 / 불가능
+    void UpdateItemUseInformation_UsePossibility(Item_Use item, int arynumber) // item : 소비아이템, arynumber : 인벤토리 슬롯 고유코드
     {
         if (m_bUse_Condition_Check == true)
         {
@@ -691,14 +692,16 @@ public class GUI_Itemslot_Use_Information : MonoBehaviour
         //    }
         //}
     }
-    void UpdateItemUseInformation_Button(E_ITEM_USE_TYPE eiut)
+    // 소비아이템 세부 정보 GUI 업데이트 - (버튼) 소비아이템 정보 변경(L / R) 설정
+    void UpdateItemUseInformation_Button(E_ITEM_USE_TYPE eiut) // eiut : 소비아이템 타입
     {
         m_BTN_Itemslot_Use_Information_Content_ChangeInformation_R.onClick.RemoveAllListeners();
         m_BTN_Itemslot_Use_Information_Content_ChangeInformation_R.onClick.AddListener(delegate { Set_BTN_ChangeInformationPageNumber_R(eiut); });
         m_BTN_Itemslot_Use_Information_Content_ChangeInformation_L.onClick.RemoveAllListeners();
         m_BTN_Itemslot_Use_Information_Content_ChangeInformation_L.onClick.AddListener(delegate { Set_BTN_ChangeInformationPageNumber_L(eiut); });
     }
-    void UpdateItemUse_GiftInformation(Item_Use item)
+    // 소비아이템 세부 정보 GUI 업데이트 - 소비아이템(기프트) 정보
+    void UpdateItemUse_GiftInformation(Item_Use item) // item : 소비아이템
     {
         m_Scrollbar_Gift_Info_Content_Description_Down.value = 1;
 
