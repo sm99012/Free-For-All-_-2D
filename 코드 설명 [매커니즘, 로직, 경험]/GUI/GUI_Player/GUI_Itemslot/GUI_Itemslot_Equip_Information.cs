@@ -72,7 +72,7 @@ public class GUI_Itemslot_Equip_Information : MonoBehaviour
 
 
 
-    // GUI 오브젝트 - 아이템 세트효과 세부 정보 GUI
+    // 아이템 세트효과 세부 정보 GUI
     [SerializeField] GameObject m_gPanel_SetItemEffect;
     [SerializeField] GameObject m_gPanel_SetItemEffect_Name;
     [SerializeField] TextMeshProUGUI m_TMP_SetItemEffect_Name; // (텍스트) 아이템 세트효과 이름
