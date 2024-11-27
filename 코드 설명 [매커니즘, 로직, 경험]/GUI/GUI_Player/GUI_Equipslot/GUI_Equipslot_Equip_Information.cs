@@ -385,6 +385,9 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
         m_gPanel_Equipslot_Equip_Information.SetActive(true);
         m_gPanel_Equipslot_Equip_Information.transform.SetAsLastSibling();
         m_gPanel_Equipslot_Equip_Information.transform.position = new Vector2(fcoordination_x, fcoordination_y); // 장비아이템 세부 정보 GUI 좌표 설정
+
+        m_Scrollbar_Equipslot_Equip_Information_Content_ItemDescription_Content.value = 1; // (스크롤바) 장비아이템 설명 정보 초기화
+        m_Scrollbar_SetItemEffect_Content_SS_Description.value = 1;                        // (스크롤바) 아이템 세트효과 정보 초기화
     }
     // 장비아이템 세부 정보 GUI 비활성화 함수
     public void UnDisplay_GUI_Equipslot_Equip_Information()
@@ -396,9 +399,6 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
     public void UpdateItemEquipInformation(Item_Equip item, int arynumber) // item : 장비아이템, arynumber : 장비창 슬롯 고유코드
     {
         m_bEquip_Condition_Check = true; // 장비아이템 착용 가능
-        
-        m_Scrollbar_Equipslot_Equip_Information_Content_ItemDescription_Content.value = 1; // (스크롤바) 장비아이템 설명 정보 초기화
-        m_Scrollbar_SetItemEffect_Content_SS_Description.value = 1;                        // (스크롤바) 아이템 세트효과 정보 초기화
         
         UpdateItemEquipInformation_UpBar(item);                  // 장비아이템 세부 정보 GUI 업데이트 - 장비아이템 이름, 강화 상태
         UpdateItemEquipInformation_Content(item);                // 장비아이템 세부 정보 GUI 업데이트 - 장비아이템 정보
