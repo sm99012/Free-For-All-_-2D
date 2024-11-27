@@ -4,78 +4,71 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+//
+// ※ 소비아이템 세부 정보 GUI(인벤토리)
+//    해당 GUI를 활성화 하여 플레이어가 현재 보유중인 소비아이템의 세부 정보를 확인할 수 있다.
+//
+
 public class GUI_Itemslot_Use_Information : MonoBehaviour
 {
-    [SerializeField] public GameObject m_gPanel_Itemslot_Use_Information;
-    [Space(20)]
+    // GUI 오브젝트
+    public GameObject m_gPanel_Itemslot_Use_Information;
 
     [SerializeField] GameObject m_gPanel_Itemslot_Use_Information_UpBar;
-    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_UpBar;
-    [SerializeField] Button m_BTN_Itemslot_Use_Information_UpBar_Exit;
-    [Space(20)]
+    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_UpBar; // (텍스트) 소비아이템 이름, 강화 상태
+    [SerializeField] Button m_BTN_Itemslot_Use_Information_UpBar_Exit;     // (버튼) 소비아이템 세부 정보 GUI 비활성화
 
     [SerializeField] GameObject m_gPanel_Itemslot_Use_Information_Content;
-    [Space(10)]
 
+    // 1. 소비아이템 이미지
     [SerializeField] GameObject m_gPanel_Itemslot_Use_Information_Content_Image;
     [SerializeField] GameObject m_gPanel_Itemslot_Use_Information_Content_Image_ItemSprite;
-    [SerializeField] Image m_IMG_Itemslot_Use_Information_Content_Image_ItemSprite;
-    [Space(10)]
+    [SerializeField] Image m_IMG_Itemslot_Use_Information_Content_Image_ItemSprite; // (이미지) 소비아이템 이미지
 
+    // 2. 소비아이템 분류, 등급, 추가 옵션 등급, 강화 상태
     [SerializeField] GameObject m_gPanel_Itemslot_Use_Information_Content_ItemInformation;
-    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_ItemInformation;
-    [Space(10)]
+    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_ItemInformation; // (텍스트) 소비아이템 분류, 등급, 추가 옵션 등급, 강화 상태
 
-    [SerializeField] GameObject m_gPanel_Itemslot_Use_Information_Content_Effect;
+    [SerializeField] Button m_BTN_Itemslot_Use_Information_Content_ChangeInformation_L; // (버튼) 소비아이템 정보 변경(L)
+    [SerializeField] Button m_BTN_Itemslot_Use_Information_Content_ChangeInformation_R; // (버튼) 소비아이템 정보 변경(R)
 
-    [SerializeField] GameObject m_gPanel_Itemslot_Use_Information_Content_Effect_Name;
-    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_Effect_Name;
-    [Space(5)]
-    [SerializeField] GameObject m_gPanel_Itemslot_Use_Information_Content_Effect_Status;
-    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_Effect_Status_L;
-    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_Effect_Status_R;
-    [Space(5)]
-    [SerializeField] GameObject m_gPanel_Itemslot_Use_Information_Content_Effect_Soc;
-    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_Effect_Soc_L;
-    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_Effect_Soc_R;
-    [Space(10)]
-
-    [SerializeField] GameObject m_gPanel_Itemslot_Use_Information_Content_Condition;
-
-    [SerializeField] GameObject m_gPanel_Itemslot_Use_Information_Content_Condition_Name;
-    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_Condition_Name;
-    [Space(5)]
-    [SerializeField] GameObject m_gPanel_Itemslot_Use_Information_Content_Condition_Status;
-    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_Condition_Status_L;
-    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_Condition_Status_R;
-    [Space(5)]
-    [SerializeField] GameObject m_gPanel_Itemslot_Use_Information_Content_Condition_Soc;
-    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_Condition_Soc_L;
-    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_Condition_Soc_R;
-    [Space(10)]
-
+    // 3. 소비아이템 정보 - 소비아이템 설명
     [SerializeField] GameObject m_gPanel_Itemslot_Use_Information_Content_ItemDescription;
-
     [SerializeField] GameObject m_gPanel_Itemslot_Use_Information_Content_ItemDescription_Name;
-    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_ItemDescription_Name;
-    [Space(5)]
+    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_ItemDescription_Name;     // (텍스트) "아이템 설명"
     [SerializeField] GameObject m_gPanel_Itemslot_Use_Information_Content_ItemDescription_Content;
     [SerializeField] GameObject m_gSV_Itemslot_Use_Information_Content_ItemDescription_Content;
     [SerializeField] GameObject m_gViewport_Itemslot_Use_Information_Content_ItemDescription_Content;
-    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_ItemDescription_Content;
-    [SerializeField] Scrollbar m_Scrollbar_Itemslot_Use_Information_Content_ItemDescription_Content;
-    [Space(10)]
+    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_ItemDescription_Content;  // (텍스트) 소비아이템 설명
+    [SerializeField] Scrollbar m_Scrollbar_Itemslot_Use_Information_Content_ItemDescription_Content;  // (스크롤바) 소비아이템 설명
 
-    [SerializeField] Button m_BTN_Itemslot_Use_Information_Content_ChangeInformation_R;
-    [SerializeField] Button m_BTN_Itemslot_Use_Information_Content_ChangeInformation_L;
-    [Space(20)]
+    // 4. 소비아이템 정보 - 소비아이템 사용효과
+    [SerializeField] GameObject m_gPanel_Itemslot_Use_Information_Content_Effect;
+    [SerializeField] GameObject m_gPanel_Itemslot_Use_Information_Content_Effect_Name;
+    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_Effect_Name;     // (텍스트) "사용효과"
+    [SerializeField] GameObject m_gPanel_Itemslot_Use_Information_Content_Effect_Status;
+    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_Effect_Status_L; // (텍스트) 소비아이템 사용효과(스탯(능력치))_L
+    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_Effect_Status_R; // (텍스트) 소비아이템 사용효과(스탯(능력치))_R
+    [SerializeField] GameObject m_gPanel_Itemslot_Use_Information_Content_Effect_Soc;
+    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_Effect_Soc_L;    // (텍스트) 소비아이템 사용효과(스탯(평판))_L
+    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_Effect_Soc_R;    // (텍스트) 소비아이템 사용효과(스탯(평판))_R
+
+    // 5. 소비아이템 정보 - 소비아이템 사용조건
+    [SerializeField] GameObject m_gPanel_Itemslot_Use_Information_Content_Condition;
+    [SerializeField] GameObject m_gPanel_Itemslot_Use_Information_Content_Condition_Name;
+    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_Condition_Name;     // (텍스트) "사용조건"
+    [SerializeField] GameObject m_gPanel_Itemslot_Use_Information_Content_Condition_Status;
+    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_Condition_Status_L; // (텍스트) 사용조건 착용조건(스탯(능력치))_L
+    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_Condition_Status_R; // (텍스트) 사용조건 착용조건(스탯(능력치))_R
+    [SerializeField] GameObject m_gPanel_Itemslot_Use_Information_Content_Condition_Soc;
+    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_Condition_Soc_L;
+    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_Content_Condition_Soc_R;
 
     [SerializeField] GameObject m_gPanel_Itemslot_Use_Information_UsePossibility;
-    [SerializeField] Button m_BTN_Itemslot_Use_Information_UsePossibility;
-    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_UsePossibility;
+    [SerializeField] Button m_BTN_Itemslot_Use_Information_UsePossibility;          // (버튼) 소비아이템 사용
+    [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_UsePossibility; // (텍스트) "사용가능 / 사용불가능"
 
-    // 기프트 관련.
-
+    // 소비아이템(기프트) 세부 정보 GUI
     [SerializeField] GameObject m_gPanel_Gift_Info;
 
     [SerializeField] GameObject m_gPanel_Gift_Info_Content;
