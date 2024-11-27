@@ -413,7 +413,7 @@ public class GUI_Itemslot_Equip_Information : MonoBehaviour
     // 장비아이템을 착용할 수 없는 경우 로그 GUI에 관련 알림을 출력한다.
     void Set_BTN_EquipPossibility_ImPossible()
     {
-        GUIManager_Total.Instance.UpdateLog("장비아이템을 착용할 수 없습니다.");
+        GUIManager_Total.Instance.UpdateLog("장비아이템[" + Player_Itemslot.m_gary_Itemslot_Equip[arynumber].m_sItemName +  "]을 착용할 수 없습니다.");
     }
     // 세트 아이템 효과 버튼 설정.
     void Set_BTN_SetItemEffect_UpBar_Left()
