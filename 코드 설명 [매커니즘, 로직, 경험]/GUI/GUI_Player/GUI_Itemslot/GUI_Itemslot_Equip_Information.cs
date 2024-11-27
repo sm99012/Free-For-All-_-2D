@@ -433,6 +433,7 @@ public class GUI_Itemslot_Equip_Information : MonoBehaviour
         UpdateItemEquipInformation_SetItemEffect_UpBar();
     }
 
+
     public void Display_GUI_Itemslot_Equip_Information(float fcoordination_x, float fcoordination_y)
     {
         m_gPanel_Itemslot_Equip_Information.SetActive(true);
