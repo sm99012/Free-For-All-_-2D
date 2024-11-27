@@ -251,7 +251,6 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
     {
         m_gPanel_Equipslot_Equip_Information.SetActive(false);
     }
-    
     // (버튼) 장비아이템 정보 변경(L) 클릭 이벤트 함수
     void Set_BTN_ChangeInformationPageNumber_L()
     {
@@ -318,7 +317,6 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
                 break;
         }
     }
-    
     // (버튼) 장비아이템 착용 해제 클릭 이벤트 함수
     void Set_BTN_Equip_Remove(int arynumber) // arynumber : 장비창 슬롯 고유코드
     {
@@ -362,7 +360,6 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
 
         m_gPanel_Equipslot_Equip_Information.SetActive(false); // 장비아이템 세부 정보 GUI 비활성화
     }
-    
     // (버튼) 아이템 세트효과 단계별 정보 변경(L) 클릭 이벤트 함수
     void Set_BTN_SetItemEffect_UpBar_Left()
     {
