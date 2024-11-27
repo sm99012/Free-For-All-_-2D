@@ -282,20 +282,20 @@ public class Player_Total : MonoBehaviour
             epms = m_pm_Move.Move(hInput, vInput, m_ps_Status.m_sStatus.GetSTATUS_Speed()); // 플레이어 이동 함수 실행. 플레이어 동작 FSM 상태 반환
 
         // 카메라 이동(카메라 중심점 설정)
-        if (epms != Player_Move.E_PLAYER_MOVE_STATE.NULL) // 플레이어 동작 FSM { NULL(플레이어 이동 불가 상태(기절, 속박 등의 상태이상)) } 상태가 아닐때
+        if (epms != Player_Move.E_PLAYER_MOVE_STATE.NULL) // 플레이어 동작 FSM이 NULL 상태가 아닌 경우
         {
             if (epms == Player_Move.E_PLAYER_MOVE_STATE.IDLE || epms == Player_Move.E_PLAYER_MOVE_STATE.RUN ||
-                epms == Player_Move.E_PLAYER_MOVE_STATE.ROLL || epms == Player_Move.E_PLAYER_MOVE_STATE.GOAWAY) // 플레이어 동작 FSM { IDEL(가만히 있기), RUN(달리기), ROLL(구르기), GOAWAY(놓아주기) } 상태일때
+                epms == Player_Move.E_PLAYER_MOVE_STATE.ROLL || epms == Player_Move.E_PLAYER_MOVE_STATE.GOAWAY) // 플레이어 동작 FSM이 가만히 있기, 달리기, 구르기, 놓아주기 상태인 경우
             {
                 switch (epms)
                 {
                     case Player_Move.E_PLAYER_MOVE_STATE.IDLE:
-                    case Player_Move.E_PLAYER_MOVE_STATE.RUN: // 플레이어 동작 FSM { IDEL(가만히 있기), RUN(달리기) } 상태일때
+                    case Player_Move.E_PLAYER_MOVE_STATE.RUN: // 플레이어 동작 FSM이 가만히 있기, 달리기 상태인 경우
                         {
                             CameraMove(this.gameObject.transform.position + (m_pm_Move.Get_MoveDir() * m_ps_Status.m_sStatus.GetSTATUS_Speed() * 0.05f * 0.01f * 1f));   // 카메라 이동에 기본 이동 계수(1f) 적용
                         }
                         break;
-                    case Player_Move.E_PLAYER_MOVE_STATE.ROLL: // 플레이어 동작 FSM { ROLL(구르기) } 상태일때
+                    case Player_Move.E_PLAYER_MOVE_STATE.ROLL: // 플레이어 동작 FSM이 구르기 상태인 경우
                         {
                             CameraMove(this.gameObject.transform.position + (m_pm_Move.Get_MoveDir() * m_ps_Status.m_sStatus.GetSTATUS_Speed() * 0.05f * 0.01f * 1.5f)); // 카메라 이동에 구르기 이동계수(1.5f) 적용
                         }
@@ -303,7 +303,7 @@ public class Player_Total : MonoBehaviour
                 }
             }
         }
-        else // 플레이어 동작 FSM { NULL(플레이어 이동 불가 상태(속박, 기절 등의 상태이상)) } 상태일때
+        else // 플레이어 동작 FSM이 NULL 상태인 경우
         {
             // 플레이어에게 상태이상(속박, 기절)이 적용되면 플레이어는 능동적으로 움직일 수 없다. 그렇기에 카메라 이동 또한 제한된다.
             // 이러한 경우 유일하게 플레이어가 움직일 수 있는 방법은 몬스터에게 피격당하는것이다. 이때 넉백이 일어나게 되는데 카메라는 넉백된 플레이어를 느리게 따라간다.
