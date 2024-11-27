@@ -952,9 +952,9 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
         }
 
         if (number > 0) // 해로운 효과(아이템 세트효과 스탯(능력치, 평판) > 0)
-            return m_sColor_White + sentence + " " + number.ToString() + m_sColor_End; // 문자열 흰색 + 아이템 세트효과 스탯(능력치, 평판)
+            return m_sColor_WhiteGray + sentence + " " + number.ToString() + m_sColor_End; // 문자열 흰색 + 아이템 세트효과 스탯(능력치, 평판)
         else if (number < 0) // 이로운 효과(아이템 세트효과 스탯(능력치, 평판) < 0)
-            return m_sColor_WhiteGray + sentence + " " + number.ToString() + m_sColor_End; // 문자열 회색 + 아이템 세트효과 스탯(능력치, 평판)
+            return m_sColor_White + sentence + " " + number.ToString() + m_sColor_End; // 문자열 회색 + 아이템 세트효과 스탯(능력치, 평판)
         else // 존재하지 않는 효과
             return m_sColor_Brown + sentence + " " + number.ToString() + m_sColor_End; // 문자열 갈색 + 아이템 세트효과 스탯(능력치, 평판)
     }
