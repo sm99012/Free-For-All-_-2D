@@ -107,12 +107,9 @@ public class GUI_Reinforcement : MonoBehaviour
             UpdateReinforcementslot(arynumber, item_reinforcement);
             m_gPanel_Reinforcement.SetActive(true);
             m_gPanel_Reinforcement.transform.SetAsLastSibling();
-            GUIManager_Total.Instance.m_GUI_Itemslot_Equip_Information.Init_Scrollbar();
-            GUIManager_Total.Instance.m_GUI_Itemslot_Equip_Information.m_gPanel_Itemslot_Equip_Information.SetActive(false);
-            GUIManager_Total.Instance.m_GUI_Itemslot_Use_Information.Init_Scrollbar();
-            GUIManager_Total.Instance.m_GUI_Itemslot_Use_Information.m_gPanel_Itemslot_Use_Information.SetActive(false);
-            GUIManager_Total.Instance.m_GUI_Itemslot_Etc_Information.Init_Scrollbar();
-            GUIManager_Total.Instance.m_GUI_Itemslot_Etc_Information.m_gPanel_Itemslot_Etc_Information.SetActive(false);
+            GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Equip_Information();
+            GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Use_Information();
+            GUIManager_Total.Instance.UnDisplay_GUI_Itemslot_Etc_Information();
 
             return true;
         }
