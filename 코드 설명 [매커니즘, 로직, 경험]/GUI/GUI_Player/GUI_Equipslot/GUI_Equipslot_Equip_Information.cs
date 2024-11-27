@@ -97,7 +97,6 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
     [SerializeField] GameObject m_gPanel_SetItemEffect_Content_SS_Status;
     [SerializeField] TextMeshProUGUI m_TMP_SetItemEffect_Content_SS_Status_L; // (텍스트) 아이템 세트효과(스탯(능력치))_L
     [SerializeField] TextMeshProUGUI m_TMP_SetItemEffect_Content_SS_Status_R; // (텍스트) 아이템 세트효과(스탯(능력치))_R
-    
     [SerializeField] GameObject m_gPanel_SetItemEffect_Content_SS_Soc;
     [SerializeField] TextMeshProUGUI m_TMP_SetItemEffect_Content_SS_Soc_L;    // (텍스트) 아이템 세트효과(스탯(평판))_L
     [SerializeField] TextMeshProUGUI m_TMP_SetItemEffect_Content_SS_Soc_R;    // (텍스트) 아이템 세트효과(스탯(평판))_R
@@ -217,6 +216,7 @@ public class GUI_Equipslot_Equip_Information : MonoBehaviour
         m_BTN_SetItemEffect_Content_UpBar_Right = m_gBTN_SetItemEffect_Content_UpBar_Right.GetComponent<Button>();
 
         m_gPanel_SetItemEffect_Content_SS = m_gPanel_SetItemEffect_Content.transform.Find("Panel_SetItemEffect_Content_SS").gameObject;
+        
         m_gPanel_SetItemEffect_Content_SS_Description = m_gPanel_SetItemEffect_Content_SS.transform.Find("Panel_SetItemEffect_Content_SS_Description").gameObject;
         m_gSV_SetItemEffect_Content_SS_Description = m_gPanel_SetItemEffect_Content_SS_Description.transform.Find("SV_SetItemEffect_Content_SS_Description").gameObject;
         m_gViewport_SetItemEffect_Content_SS_Description = m_gSV_SetItemEffect_Content_SS_Description.transform.Find("Viewport_SetItemEffect_Content_SS_Description").gameObject;
