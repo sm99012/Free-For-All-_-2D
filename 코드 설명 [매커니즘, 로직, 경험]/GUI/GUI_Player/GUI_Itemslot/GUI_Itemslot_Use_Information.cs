@@ -68,125 +68,112 @@ public class GUI_Itemslot_Use_Information : MonoBehaviour
     [SerializeField] Button m_BTN_Itemslot_Use_Information_UsePossibility;          // (버튼) 소비아이템 사용
     [SerializeField] TextMeshProUGUI m_TMP_Itemslot_Use_Information_UsePossibility; // (텍스트) "사용가능 / 사용불가능"
 
+
+
     // 소비아이템(기프트) 세부 정보 GUI
     [SerializeField] GameObject m_gPanel_Gift_Info;
 
     [SerializeField] GameObject m_gPanel_Gift_Info_Content;
 
     [SerializeField] GameObject m_gPanel_Gift_Info_Content_Type;
-    [SerializeField] TextMeshProUGUI m_TMP_Gift_Info_Content_Type_Name;
+    [SerializeField] TextMeshProUGUI m_TMP_Gift_Info_Content_Type_Name; // (텍스트) 소비아이템(기프트) 타입
 
     [SerializeField] GameObject m_gPanel_Gift_Info_Content_Description;
-
     [SerializeField] GameObject m_gPanel_Gift_Info_Content_Description_Up;
-    [SerializeField] TextMeshProUGUI m_TMP_Gift_Info_Content_Description_Up;
-
+    [SerializeField] TextMeshProUGUI m_TMP_Gift_Info_Content_Description_Up;   // (텍스트) 소비아이템(기프트) 설명
     [SerializeField] GameObject m_gPanel_Gift_Info_Content_Description_Down;
     [SerializeField] GameObject m_gSV_Gift_Info_Content_Description_Down;
     [SerializeField] GameObject m_gViewport_Gift_Info_Content_Description_Down;
     [SerializeField] GameObject m_gContent_Gift_Info_Content_Description_Down;
-    [SerializeField] Scrollbar m_Scrollbar_Gift_Info_Content_Description_Down;
+    [SerializeField] Scrollbar m_Scrollbar_Gift_Info_Content_Description_Down; // (스크롤바) 소비아이템(기프트) 사용 시 획득 가능한 아이템 목록
+    [SerializeField] GameObject m_gPanel_Gift_Info_Content_Description_X;      // (패널) 소비아이템(기프트) 사용 시 획득 가능한 아이템 목록 미표시용
 
-    [SerializeField] GameObject m_gPanel_Gift_Info_Content_Description_X;
+    List<GameObject> m_gList_Panel_ItemInfo; // 아이템 정보 GUI 배열. 소비아이템(기프트) 사용 시 획득 가능한 아이템 정보 GUI가 저장된다.
+    GameObject m_gPanel_ItemInfo; // 아이템 정보 GUI 오브젝트
 
-    [SerializeField] GameObject m_gPanel_ItemInfo;
-    List<GameObject> m_gList_Panel_ItemInfo;
 
-    // 기능.
+
+    // 아이템 정보 타입 : { 효과, 조건, 설명 }
     public enum E_Itemslot_Use_Information_PageNumber { EFFECT, CONDITION, DESCRIPTION }
-    public E_Itemslot_Use_Information_PageNumber m_eInformationPage;
+    public E_Itemslot_Use_Information_PageNumber m_eInformationPage; // 아이템 정보 타입
 
-    // Text 임시 저장소.
-    string m_sBuffer;
-    // Color.
-    string m_sColor_White = "<color=#ffffff>";
-    string m_sColor_WhiteGray = "<color=#808080>";
-    string m_sColor_Red = "<color=#FF0000>";
-    string m_sColor_Brown = "<color=#915446>";
-    string m_sColor_End = "</color>";
+    // 소비아이템 사용 조건 + 아이템 정보 문자열 색 표시 관련 변수 
+    public bool m_bUse_Condition_Check; // 소비아이템 사용 가능 여부
+                                        // m_bEquip_Condition_Check == true : 소비아이템 사용 가능
+                                        // m_bEquip_Condition_Check == false : 소비아이템 사용 불가능
+    bool m_bRefine_Condition_Check;     // 문자열 정제 관련 변수. 소비아이템 사용효과, 사용조건, 소비아이템(기프트) 등의 정보를 효율적으로 표시(강조)하기 위해 존재한다.
+                                        // m_bRefine_Condition_Check == true : 문자열 정제 필요
+                                        // m_bRefine_Condition_Check == false : 문자열 정제 불필요
+                                          
+    string m_sBuffer; // 문자열 임시 저장소. 표시할 정보가 많기에 임시 저장소를 사용한다.
+    // 색 문자열 정보
+    string m_sColor_White = "<color=#ffffff>";     // 흰색 - 이로운 효과, 부합한 조건
+    string m_sColor_WhiteGray = "<color=#808080>"; // 회색 - 해로운 효과
+    string m_sColor_Red = "<color=#FF0000>";       // 빨간색 - 부적합한 조건
+    string m_sColor_Brown = "<color=#915446>";     // 갈색 - 존재하지 않는 효과, 조건
+    string m_sColor_End = "</color>";              // 색상 문자열 끝
 
-    // Text 정제 관련 변수.
-    bool m_bRefine_Condition_Check;
-    // 아이템 사용 가능 여부.
-    public bool m_bUse_Condition_Check;
+    Player_Status player; // 플레이어 스탯(능력치, 평판) 변수. 장비아이템 착용 가능 여부 판단에 사용된다.(플레이어 관련 클래스는 싱글톤패턴으로 구현되어 있으나 해당 클래스에서 자주 사용되게에 편의를 위해 추가한 변수)
 
-    // Player 정보.
-    Player_Status player;
-
+    // GUI 초기 설정
     public void InitialSet()
     {
-        InitialSet_Object();
-        InitialSet_Button();
-        m_eInformationPage = E_Itemslot_Use_Information_PageNumber.DESCRIPTION;
-        player = Player_Total.Instance.m_ps_Status;
-    }
+        InitialSet_Object(); // GUI 오브젝트 초기 설정
+        InitialSet_Button(); // GUI 버튼 설정
 
-    // 초기 Object 불러오기.
+        m_eInformationPage = E_Itemslot_Use_Information_PageNumber.DESCRIPTION;
+        
+        player = Player_Total.Instance.m_ps_Status; // 플레이어 스탯(능력치, 평판) 설정
+    }
+     // GUI 오브젝트 초기 설정
     void InitialSet_Object()
     {
         m_gPanel_Itemslot_Use_Information = GameObject.Find("Canvas_GUI").transform.Find("Panel_Itemslot_Use_Information").gameObject;
-
 
         m_gPanel_Itemslot_Use_Information_UpBar = m_gPanel_Itemslot_Use_Information.transform.Find("Panel_Itemslot_Use_Information_UpBar").gameObject;
         m_TMP_Itemslot_Use_Information_UpBar = m_gPanel_Itemslot_Use_Information_UpBar.transform.Find("TMP_Itemslot_Use_Information_UpBar").gameObject.GetComponent<TextMeshProUGUI>();
         m_BTN_Itemslot_Use_Information_UpBar_Exit = m_gPanel_Itemslot_Use_Information_UpBar.transform.Find("BTN_Itemslot_Use_Information_UpBar_Exit").gameObject.GetComponent<Button>();
 
-
         m_gPanel_Itemslot_Use_Information_Content = m_gPanel_Itemslot_Use_Information.transform.Find("Panel_Itemslot_Use_Information_Content").gameObject;
-
 
         m_gPanel_Itemslot_Use_Information_Content_Image = m_gPanel_Itemslot_Use_Information_Content.transform.Find("Panel_Itemslot_Use_Information_Content_Image").gameObject;
         m_gPanel_Itemslot_Use_Information_Content_Image_ItemSprite = m_gPanel_Itemslot_Use_Information_Content_Image.transform.Find("Panel_Itemslot_Use_Information_Content_Image_ItemSprite").gameObject;
         m_IMG_Itemslot_Use_Information_Content_Image_ItemSprite = m_gPanel_Itemslot_Use_Information_Content_Image_ItemSprite.GetComponent<Image>();
 
-
         m_gPanel_Itemslot_Use_Information_Content_ItemInformation = m_gPanel_Itemslot_Use_Information_Content.transform.Find("Panel_Itemslot_Use_Information_Content_ItemInformation").gameObject;
         m_TMP_Itemslot_Use_Information_Content_ItemInformation = m_gPanel_Itemslot_Use_Information_Content_ItemInformation.transform.Find("TMP_Itemslot_Use_Information_Content_ItemInformation").gameObject.GetComponent<TextMeshProUGUI>();
 
-
-        m_gPanel_Itemslot_Use_Information_Content_Effect = m_gPanel_Itemslot_Use_Information_Content.transform.Find("Panel_Itemslot_Use_Information_Content_Effect").gameObject;
-
-        m_gPanel_Itemslot_Use_Information_Content_Effect_Name = m_gPanel_Itemslot_Use_Information_Content_Effect.transform.Find("Panel_Itemslot_Use_Information_Content_Effect_Name").gameObject;
-        m_TMP_Itemslot_Use_Information_Content_Effect_Name = m_gPanel_Itemslot_Use_Information_Content_Effect_Name.transform.Find("TMP_Itemslot_Use_Information_Content_Effect_Name").gameObject.GetComponent<TextMeshProUGUI>();
-
-        m_gPanel_Itemslot_Use_Information_Content_Effect_Status = m_gPanel_Itemslot_Use_Information_Content_Effect.transform.Find("Panel_Itemslot_Use_Information_Content_Effect_Status").gameObject;
-        m_TMP_Itemslot_Use_Information_Content_Effect_Status_L = m_gPanel_Itemslot_Use_Information_Content_Effect_Status.transform.Find("TMP_Itemslot_Use_Information_Content_Effect_Status_L").gameObject.GetComponent<TextMeshProUGUI>();
-        m_TMP_Itemslot_Use_Information_Content_Effect_Status_R = m_gPanel_Itemslot_Use_Information_Content_Effect_Status.transform.Find("TMP_Itemslot_Use_Information_Content_Effect_Status_R").gameObject.GetComponent<TextMeshProUGUI>();
-
-        m_gPanel_Itemslot_Use_Information_Content_Effect_Soc = m_gPanel_Itemslot_Use_Information_Content_Effect.transform.Find("Panel_Itemslot_Use_Information_Content_Effect_Soc").gameObject;
-        m_TMP_Itemslot_Use_Information_Content_Effect_Soc_L = m_gPanel_Itemslot_Use_Information_Content_Effect_Soc.transform.Find("TMP_Itemslot_Use_Information_Content_Effect_Soc_L").gameObject.GetComponent<TextMeshProUGUI>();
-        m_TMP_Itemslot_Use_Information_Content_Effect_Soc_R = m_gPanel_Itemslot_Use_Information_Content_Effect_Soc.transform.Find("TMP_Itemslot_Use_Information_Content_Effect_Soc_R").gameObject.GetComponent<TextMeshProUGUI>();
-
-
-        m_gPanel_Itemslot_Use_Information_Content_Condition = m_gPanel_Itemslot_Use_Information_Content.transform.Find("Panel_Itemslot_Use_Information_Content_Condition").gameObject;
-
-        m_gPanel_Itemslot_Use_Information_Content_Condition_Name = m_gPanel_Itemslot_Use_Information_Content_Condition.transform.Find("Panel_Itemslot_Use_Information_Content_Condition_Name").gameObject;
-        m_TMP_Itemslot_Use_Information_Content_Condition_Name = m_gPanel_Itemslot_Use_Information_Content_Condition_Name.transform.Find("TMP_Itemslot_Use_Information_Content_Condition_Name").gameObject.GetComponent<TextMeshProUGUI>();
-
-        m_gPanel_Itemslot_Use_Information_Content_Condition_Status = m_gPanel_Itemslot_Use_Information_Content_Condition.transform.Find("Panel_Itemslot_Use_Information_Content_Condition_Status").gameObject;
-        m_TMP_Itemslot_Use_Information_Content_Condition_Status_L = m_gPanel_Itemslot_Use_Information_Content_Condition_Status.transform.Find("TMP_Itemslot_Use_Information_Content_Condition_Status_L").gameObject.GetComponent<TextMeshProUGUI>();
-        m_TMP_Itemslot_Use_Information_Content_Condition_Status_R = m_gPanel_Itemslot_Use_Information_Content_Condition_Status.transform.Find("TMP_Itemslot_Use_Information_Content_Condition_Status_R").gameObject.GetComponent<TextMeshProUGUI>();
-
-        m_gPanel_Itemslot_Use_Information_Content_Condition_Soc = m_gPanel_Itemslot_Use_Information_Content_Condition.transform.Find("Panel_Itemslot_Use_Information_Content_Condition_Soc").gameObject;
-        m_TMP_Itemslot_Use_Information_Content_Condition_Soc_L = m_gPanel_Itemslot_Use_Information_Content_Condition_Soc.transform.Find("TMP_Itemslot_Use_Information_Content_Condition_Soc_L").gameObject.GetComponent<TextMeshProUGUI>();
-        m_TMP_Itemslot_Use_Information_Content_Condition_Soc_R = m_gPanel_Itemslot_Use_Information_Content_Condition_Soc.transform.Find("TMP_Itemslot_Use_Information_Content_Condition_Soc_R").gameObject.GetComponent<TextMeshProUGUI>();
-
-
+        m_BTN_Itemslot_Use_Information_Content_ChangeInformation_L = m_gPanel_Itemslot_Use_Information_Content.transform.Find("BTN_Itemslot_Use_Information_Content_ChangeInformation_L").gameObject.GetComponent<Button>();
+        m_BTN_Itemslot_Use_Information_Content_ChangeInformation_R = m_gPanel_Itemslot_Use_Information_Content.transform.Find("BTN_Itemslot_Use_Information_Content_ChangeInformation_R").gameObject.GetComponent<Button>();
+        
         m_gPanel_Itemslot_Use_Information_Content_ItemDescription = m_gPanel_Itemslot_Use_Information_Content.transform.Find("Panel_Itemslot_Use_Information_Content_ItemDescription").gameObject;
-
         m_gPanel_Itemslot_Use_Information_Content_ItemDescription_Name = m_gPanel_Itemslot_Use_Information_Content_ItemDescription.transform.Find("Panel_Itemslot_Use_Information_Content_ItemDescription_Name").gameObject;
         m_TMP_Itemslot_Use_Information_Content_ItemDescription_Name = m_gPanel_Itemslot_Use_Information_Content_ItemDescription_Name.transform.Find("TMP_Itemslot_Use_Information_Content_ItemDescription_Name").gameObject.GetComponent<TextMeshProUGUI>();
-
         m_gPanel_Itemslot_Use_Information_Content_ItemDescription_Content = m_gPanel_Itemslot_Use_Information_Content_ItemDescription.transform.Find("Panel_Itemslot_Use_Information_Content_ItemDescription_Content").gameObject;
         m_gSV_Itemslot_Use_Information_Content_ItemDescription_Content = m_gPanel_Itemslot_Use_Information_Content_ItemDescription_Content.transform.Find("SV_Itemslot_Use_Information_Content_ItemDescription_Content").gameObject;
         m_gViewport_Itemslot_Use_Information_Content_ItemDescription_Content = m_gSV_Itemslot_Use_Information_Content_ItemDescription_Content.transform.Find("Viewport_Itemslot_Use_Information_Content_ItemDescription_Content").gameObject;
         m_TMP_Itemslot_Use_Information_Content_ItemDescription_Content = m_gViewport_Itemslot_Use_Information_Content_ItemDescription_Content.transform.Find("TMP_Itemslot_Use_Information_Content_ItemDescription_Content").gameObject.GetComponent<TextMeshProUGUI>();
         m_Scrollbar_Itemslot_Use_Information_Content_ItemDescription_Content = m_gSV_Itemslot_Use_Information_Content_ItemDescription_Content.transform.Find("Scrollbar_Itemslot_Use_Information_Content_ItemDescription_Content").gameObject.GetComponent<Scrollbar>();
+        
+        m_gPanel_Itemslot_Use_Information_Content_Effect = m_gPanel_Itemslot_Use_Information_Content.transform.Find("Panel_Itemslot_Use_Information_Content_Effect").gameObject;
+        m_gPanel_Itemslot_Use_Information_Content_Effect_Name = m_gPanel_Itemslot_Use_Information_Content_Effect.transform.Find("Panel_Itemslot_Use_Information_Content_Effect_Name").gameObject;
+        m_TMP_Itemslot_Use_Information_Content_Effect_Name = m_gPanel_Itemslot_Use_Information_Content_Effect_Name.transform.Find("TMP_Itemslot_Use_Information_Content_Effect_Name").gameObject.GetComponent<TextMeshProUGUI>();
+        m_gPanel_Itemslot_Use_Information_Content_Effect_Status = m_gPanel_Itemslot_Use_Information_Content_Effect.transform.Find("Panel_Itemslot_Use_Information_Content_Effect_Status").gameObject;
+        m_TMP_Itemslot_Use_Information_Content_Effect_Status_L = m_gPanel_Itemslot_Use_Information_Content_Effect_Status.transform.Find("TMP_Itemslot_Use_Information_Content_Effect_Status_L").gameObject.GetComponent<TextMeshProUGUI>();
+        m_TMP_Itemslot_Use_Information_Content_Effect_Status_R = m_gPanel_Itemslot_Use_Information_Content_Effect_Status.transform.Find("TMP_Itemslot_Use_Information_Content_Effect_Status_R").gameObject.GetComponent<TextMeshProUGUI>();
+        m_gPanel_Itemslot_Use_Information_Content_Effect_Soc = m_gPanel_Itemslot_Use_Information_Content_Effect.transform.Find("Panel_Itemslot_Use_Information_Content_Effect_Soc").gameObject;
+        m_TMP_Itemslot_Use_Information_Content_Effect_Soc_L = m_gPanel_Itemslot_Use_Information_Content_Effect_Soc.transform.Find("TMP_Itemslot_Use_Information_Content_Effect_Soc_L").gameObject.GetComponent<TextMeshProUGUI>();
+        m_TMP_Itemslot_Use_Information_Content_Effect_Soc_R = m_gPanel_Itemslot_Use_Information_Content_Effect_Soc.transform.Find("TMP_Itemslot_Use_Information_Content_Effect_Soc_R").gameObject.GetComponent<TextMeshProUGUI>();
 
-
-        m_BTN_Itemslot_Use_Information_Content_ChangeInformation_R = m_gPanel_Itemslot_Use_Information_Content.transform.Find("BTN_Itemslot_Use_Information_Content_ChangeInformation_R").gameObject.GetComponent<Button>();
-        m_BTN_Itemslot_Use_Information_Content_ChangeInformation_L = m_gPanel_Itemslot_Use_Information_Content.transform.Find("BTN_Itemslot_Use_Information_Content_ChangeInformation_L").gameObject.GetComponent<Button>();
-
+        m_gPanel_Itemslot_Use_Information_Content_Condition = m_gPanel_Itemslot_Use_Information_Content.transform.Find("Panel_Itemslot_Use_Information_Content_Condition").gameObject;
+        m_gPanel_Itemslot_Use_Information_Content_Condition_Name = m_gPanel_Itemslot_Use_Information_Content_Condition.transform.Find("Panel_Itemslot_Use_Information_Content_Condition_Name").gameObject;
+        m_TMP_Itemslot_Use_Information_Content_Condition_Name = m_gPanel_Itemslot_Use_Information_Content_Condition_Name.transform.Find("TMP_Itemslot_Use_Information_Content_Condition_Name").gameObject.GetComponent<TextMeshProUGUI>();
+        m_gPanel_Itemslot_Use_Information_Content_Condition_Status = m_gPanel_Itemslot_Use_Information_Content_Condition.transform.Find("Panel_Itemslot_Use_Information_Content_Condition_Status").gameObject;
+        m_TMP_Itemslot_Use_Information_Content_Condition_Status_L = m_gPanel_Itemslot_Use_Information_Content_Condition_Status.transform.Find("TMP_Itemslot_Use_Information_Content_Condition_Status_L").gameObject.GetComponent<TextMeshProUGUI>();
+        m_TMP_Itemslot_Use_Information_Content_Condition_Status_R = m_gPanel_Itemslot_Use_Information_Content_Condition_Status.transform.Find("TMP_Itemslot_Use_Information_Content_Condition_Status_R").gameObject.GetComponent<TextMeshProUGUI>();
+        m_gPanel_Itemslot_Use_Information_Content_Condition_Soc = m_gPanel_Itemslot_Use_Information_Content_Condition.transform.Find("Panel_Itemslot_Use_Information_Content_Condition_Soc").gameObject;
+        m_TMP_Itemslot_Use_Information_Content_Condition_Soc_L = m_gPanel_Itemslot_Use_Information_Content_Condition_Soc.transform.Find("TMP_Itemslot_Use_Information_Content_Condition_Soc_L").gameObject.GetComponent<TextMeshProUGUI>();
+        m_TMP_Itemslot_Use_Information_Content_Condition_Soc_R = m_gPanel_Itemslot_Use_Information_Content_Condition_Soc.transform.Find("TMP_Itemslot_Use_Information_Content_Condition_Soc_R").gameObject.GetComponent<TextMeshProUGUI>();
 
         m_gPanel_Itemslot_Use_Information_UsePossibility = m_gPanel_Itemslot_Use_Information.transform.Find("Panel_Itemslot_Use_Information_UsePossibility").gameObject;
         m_BTN_Itemslot_Use_Information_UsePossibility = m_gPanel_Itemslot_Use_Information_UsePossibility.transform.Find("BTN_Itemslot_Use_Information_UsePossibility").gameObject.GetComponent<Button>();
@@ -202,247 +189,249 @@ public class GUI_Itemslot_Use_Information : MonoBehaviour
         m_TMP_Gift_Info_Content_Type_Name = m_gPanel_Gift_Info_Content_Type.transform.Find("TMP_Gift_Info_Content_Type_Name").gameObject.GetComponent<TextMeshProUGUI>();
 
         m_gPanel_Gift_Info_Content_Description = m_gPanel_Gift_Info_Content.transform.Find("Panel_Gift_Info_Content_Description").gameObject;
-
         m_gPanel_Gift_Info_Content_Description_Up = m_gPanel_Gift_Info_Content_Description.transform.Find("Panel_Gift_Info_Content_Description_Up").gameObject;
         m_TMP_Gift_Info_Content_Description_Up = m_gPanel_Gift_Info_Content_Description_Up.transform.Find("TMP_Gift_Info_Content_Description_Up").gameObject.GetComponent<TextMeshProUGUI>();
-
         m_gPanel_Gift_Info_Content_Description_Down = m_gPanel_Gift_Info_Content_Description.transform.Find("Panel_Gift_Info_Content_Description_Down").gameObject;
-
-        m_gPanel_Gift_Info_Content_Description_X = m_gPanel_Gift_Info_Content_Description_Down.transform.Find("Panel_Gift_Info_Content_Description_X").gameObject;
-
         m_gSV_Gift_Info_Content_Description_Down = m_gPanel_Gift_Info_Content_Description_Down.transform.Find("SV_Gift_Info_Content_Description_Down").gameObject;
         m_gViewport_Gift_Info_Content_Description_Down = m_gSV_Gift_Info_Content_Description_Down.transform.Find("Viewport_Gift_Info_Content_Description_Down").gameObject;
         m_gContent_Gift_Info_Content_Description_Down = m_gViewport_Gift_Info_Content_Description_Down.transform.Find("Content_Gift_Info_Content_Description_Down").gameObject;
         m_Scrollbar_Gift_Info_Content_Description_Down = m_gSV_Gift_Info_Content_Description_Down.transform.Find("Scrollbar_Gift_Info_Content_Description_Down").gameObject.GetComponent<Scrollbar>();
-
-
+        m_gPanel_Gift_Info_Content_Description_X = m_gPanel_Gift_Info_Content_Description_Down.transform.Find("Panel_Gift_Info_Content_Description_X").gameObject;
 
         m_gPanel_ItemInfo = Resources.Load("Prefab/GUI/Panel_ItemInfo") as GameObject;
         m_gList_Panel_ItemInfo = new List<GameObject>();
     }
-    // 초기 Button 이벤트 설정.
+    // GUI 버튼 설정
     void InitialSet_Button()
     {
+        // (버튼) 소비아이템 세부정보 GUI 비활성화 클릭 이벤트 함수 설정
         m_BTN_Itemslot_Use_Information_UpBar_Exit.onClick.RemoveAllListeners();
         m_BTN_Itemslot_Use_Information_UpBar_Exit.onClick.AddListener(delegate { Set_BTN_Exit(); });
     }
 
-    // Use Button 이벤트 설정.
-    // 소비 아이템 설명 창 페이지 변경.
+    // (버튼) 소비아이템 세부정보 GUI 비활성화 클릭 이벤트 함수 - 소비아이템 세부 정보 GUI를 비활성화한다.
     void Set_BTN_Exit()
     {
         m_gPanel_Itemslot_Use_Information.SetActive(false);
     }
-    void Set_BTN_ChangeInformationPageNumber_R(E_ITEM_USE_TYPE eiut)
+    // (버튼) 소비아이템 정보 변경(L) 클릭 이벤트 함수
+    void Set_BTN_ChangeInformationPageNumber_L(E_ITEM_USE_TYPE eiut) // eiut : 소비아이템 타입
     {
-        if (eiut == E_ITEM_USE_TYPE.GIFT)
+        if (eiut == E_ITEM_USE_TYPE.GIFT) // 소비아이템 타입이 기프트인 경우
+                                          // 소비아이템 사용효과가 존재하지 않음
         {
             switch (m_eInformationPage)
             {
-                case E_Itemslot_Use_Information_PageNumber.CONDITION:
+                case E_Itemslot_Use_Information_PageNumber.CONDITION: // 소비아이템 사용조건 -> 소비아이템 설명
                     {
-                        m_eInformationPage = E_Itemslot_Use_Information_PageNumber.DESCRIPTION;
-                        m_gPanel_Itemslot_Use_Information_Content_Effect.SetActive(false);
-                        m_gPanel_Itemslot_Use_Information_Content_Condition.SetActive(false);
-                        m_gPanel_Itemslot_Use_Information_Content_ItemDescription.SetActive(true);
-                        m_Scrollbar_Itemslot_Use_Information_Content_ItemDescription_Content.value = 1;
+                        m_eInformationPage = E_Itemslot_Use_Information_PageNumber.DESCRIPTION;         // 아이템 정보 타입 = 설명
+                        m_gPanel_Itemslot_Use_Information_Content_Effect.SetActive(false);              // 소비아이템 사용효과 정보 비활성화
+                        m_gPanel_Itemslot_Use_Information_Content_Condition.SetActive(false);           // 소비아이템 사용조건 정보 비활성화
+                        m_gPanel_Itemslot_Use_Information_Content_ItemDescription.SetActive(true);      // 소비아이템 설명 정보 활성화
+                        m_Scrollbar_Itemslot_Use_Information_Content_ItemDescription_Content.value = 1; // (스크롤바)소비아이템 설명 정보 초기화
                     }
                     break;
-                case E_Itemslot_Use_Information_PageNumber.DESCRIPTION:
+                case E_Itemslot_Use_Information_PageNumber.DESCRIPTION: // 소비아이템 설명 -> 소비아이템 사용조건
                     {
-                        m_eInformationPage = E_Itemslot_Use_Information_PageNumber.CONDITION;
-                        m_gPanel_Itemslot_Use_Information_Content_Effect.SetActive(false);
-                        m_gPanel_Itemslot_Use_Information_Content_Condition.SetActive(true);
-                        m_gPanel_Itemslot_Use_Information_Content_ItemDescription.SetActive(false);
+                        m_eInformationPage = E_Itemslot_Use_Information_PageNumber.CONDITION;       // 아이템 정보 타입 = 조건
+                        m_gPanel_Itemslot_Use_Information_Content_Effect.SetActive(false);          // 소비아이템 사용효과 정보 비활성화
+                        m_gPanel_Itemslot_Use_Information_Content_Condition.SetActive(true);        // 소비아이템 사용조건 정보 활성화
+                        m_gPanel_Itemslot_Use_Information_Content_ItemDescription.SetActive(false); // 소비아이템 설명 정보 비활성화
                     }
                     break;
             }
         }
-        else
+        else // 소비아이템 타입이 기프트가 아닌 경우(소비아이템 타입 = { 회복포션, 일시적 버프포션, 영구적 버프포션, 강화서 })
         {
             switch (m_eInformationPage)
             {
-                case E_Itemslot_Use_Information_PageNumber.EFFECT:
+                case E_Itemslot_Use_Information_PageNumber.EFFECT: // 소비아이템 사용효과 -> 소비아이템 설명
                     {
-                        m_eInformationPage = E_Itemslot_Use_Information_PageNumber.CONDITION;
-                        m_gPanel_Itemslot_Use_Information_Content_Effect.SetActive(false);
-                        m_gPanel_Itemslot_Use_Information_Content_Condition.SetActive(true);
-                        m_gPanel_Itemslot_Use_Information_Content_ItemDescription.SetActive(false);
+                        m_eInformationPage = E_Itemslot_Use_Information_PageNumber.DESCRIPTION;         // 아이템 정보 타입 = 설명
+                        m_gPanel_Itemslot_Use_Information_Content_Effect.SetActive(false);              // 소비아이템 사용효과 정보 비활성화
+                        m_gPanel_Itemslot_Use_Information_Content_Condition.SetActive(false);           // 소비아이템 사용조건 정보 비활성화
+                        m_gPanel_Itemslot_Use_Information_Content_ItemDescription.SetActive(true);      // 소비아이템 설명 정보 활성화
+                        m_Scrollbar_Itemslot_Use_Information_Content_ItemDescription_Content.value = 1; // (스크롤바)소비아이템 설명 정보 초기화
                     }
                     break;
-                case E_Itemslot_Use_Information_PageNumber.CONDITION:
+                case E_Itemslot_Use_Information_PageNumber.CONDITION: // 소비아이템 사용조건 -> 소비아이템 효과
                     {
-                        m_eInformationPage = E_Itemslot_Use_Information_PageNumber.DESCRIPTION;
-                        m_gPanel_Itemslot_Use_Information_Content_Effect.SetActive(false);
-                        m_gPanel_Itemslot_Use_Information_Content_Condition.SetActive(false);
-                        m_gPanel_Itemslot_Use_Information_Content_ItemDescription.SetActive(true);
-                        m_Scrollbar_Itemslot_Use_Information_Content_ItemDescription_Content.value = 1;
+                        m_eInformationPage = E_Itemslot_Use_Information_PageNumber.EFFECT;          // 아이템 정보 타입 = 효과
+                        m_gPanel_Itemslot_Use_Information_Content_Effect.SetActive(true);           // 소비아이템 사용효과 정보 활성화
+                        m_gPanel_Itemslot_Use_Information_Content_Condition.SetActive(false);       // 소비아이템 사용조건 정보 비활성화
+                        m_gPanel_Itemslot_Use_Information_Content_ItemDescription.SetActive(false); // 소비아이템 설명 정보 비활성화
                     }
                     break;
-                case E_Itemslot_Use_Information_PageNumber.DESCRIPTION:
+                case E_Itemslot_Use_Information_PageNumber.DESCRIPTION: // 소비아이템 설명 -> 소비아이템 사용조건
                     {
-                        m_eInformationPage = E_Itemslot_Use_Information_PageNumber.EFFECT;
-                        m_gPanel_Itemslot_Use_Information_Content_Effect.SetActive(true);
-                        m_gPanel_Itemslot_Use_Information_Content_Condition.SetActive(false);
-                        m_gPanel_Itemslot_Use_Information_Content_ItemDescription.SetActive(false);
+                        m_eInformationPage = E_Itemslot_Use_Information_PageNumber.CONDITION;       // 아이템 정보 타입 = 조건
+                        m_gPanel_Itemslot_Use_Information_Content_Effect.SetActive(false);          // 소비아이템 사용효과 정보 비활성화
+                        m_gPanel_Itemslot_Use_Information_Content_Condition.SetActive(true);        // 소비아이템 사용조건 정보 활성화
+                        m_gPanel_Itemslot_Use_Information_Content_ItemDescription.SetActive(false); // 소비아이템 설명 정보 비활성화
                     }
                     break;
             }
         }
     }
-    void Set_BTN_ChangeInformationPageNumber_L(E_ITEM_USE_TYPE eiut)
+    // (버튼) 소비아이템 정보 변경(R) 클릭 이벤트 함수
+    void Set_BTN_ChangeInformationPageNumber_R(E_ITEM_USE_TYPE eiut) // eiut : 소비아이템 타입
     {
-        if (eiut == E_ITEM_USE_TYPE.GIFT)
+        if (eiut == E_ITEM_USE_TYPE.GIFT) // 소비아이템 타입이 기프트인 경우
+                                          // 소비아이템 사용효과가 존재하지 않음
         {
             switch (m_eInformationPage)
             {
-                case E_Itemslot_Use_Information_PageNumber.CONDITION:
+                case E_Itemslot_Use_Information_PageNumber.CONDITION: // 소비아이템 사용조건 -> 소비아이템 설명
                     {
-                        m_eInformationPage = E_Itemslot_Use_Information_PageNumber.DESCRIPTION;
-                        m_gPanel_Itemslot_Use_Information_Content_Effect.SetActive(false);
-                        m_gPanel_Itemslot_Use_Information_Content_Condition.SetActive(false);
-                        m_gPanel_Itemslot_Use_Information_Content_ItemDescription.SetActive(true);
-                        m_Scrollbar_Itemslot_Use_Information_Content_ItemDescription_Content.value = 1;
+                        m_eInformationPage = E_Itemslot_Use_Information_PageNumber.DESCRIPTION;         // 아이템 정보 타입 = 설명
+                        m_gPanel_Itemslot_Use_Information_Content_Effect.SetActive(false);              // 소비아이템 사용효과 정보 비활성화
+                        m_gPanel_Itemslot_Use_Information_Content_Condition.SetActive(false);           // 소비아이템 사용조건 정보 비활성화
+                        m_gPanel_Itemslot_Use_Information_Content_ItemDescription.SetActive(true);      // 소비아이템 설명 정보 활성화
+                        m_Scrollbar_Itemslot_Use_Information_Content_ItemDescription_Content.value = 1; // (스크롤바)소비아이템 설명 정보 초기화
                     }
                     break;
-                case E_Itemslot_Use_Information_PageNumber.DESCRIPTION:
+                case E_Itemslot_Use_Information_PageNumber.DESCRIPTION: // 소비아이템 설명 -> 소비아이템 사용조건
                     {
-                        m_eInformationPage = E_Itemslot_Use_Information_PageNumber.CONDITION;
-                        m_gPanel_Itemslot_Use_Information_Content_Effect.SetActive(false);
-                        m_gPanel_Itemslot_Use_Information_Content_Condition.SetActive(true);
-                        m_gPanel_Itemslot_Use_Information_Content_ItemDescription.SetActive(false);
+                        m_eInformationPage = E_Itemslot_Use_Information_PageNumber.CONDITION;       // 아이템 정보 타입 = 조건
+                        m_gPanel_Itemslot_Use_Information_Content_Effect.SetActive(false);          // 소비아이템 사용효과 정보 비활성화
+                        m_gPanel_Itemslot_Use_Information_Content_Condition.SetActive(true);        // 소비아이템 사용조건 정보 활성화
+                        m_gPanel_Itemslot_Use_Information_Content_ItemDescription.SetActive(false); // 소비아이템 설명 정보 비활성화
                     }
                     break;
             }
         }
-        else
+        else // 소비아이템 타입이 기프트가 아닌 경우(소비아이템 타입 = { 회복포션, 일시적 버프포션, 영구적 버프포션, 강화서 })
         {
             switch (m_eInformationPage)
             {
-                case E_Itemslot_Use_Information_PageNumber.EFFECT:
+                case E_Itemslot_Use_Information_PageNumber.EFFECT: // 소비아이템 사용효과 -> 소비아이템 사용조건
                     {
-                        m_eInformationPage = E_Itemslot_Use_Information_PageNumber.DESCRIPTION;
-                        m_gPanel_Itemslot_Use_Information_Content_Effect.SetActive(false);
-                        m_gPanel_Itemslot_Use_Information_Content_Condition.SetActive(false);
-                        m_gPanel_Itemslot_Use_Information_Content_ItemDescription.SetActive(true);
-                        m_Scrollbar_Itemslot_Use_Information_Content_ItemDescription_Content.value = 1;
+                        m_eInformationPage = E_Itemslot_Use_Information_PageNumber.CONDITION;       // 아이템 정보 타입 = 조건
+                        m_gPanel_Itemslot_Use_Information_Content_Effect.SetActive(false);          // 소비아이템 사용효과 정보 비활성화
+                        m_gPanel_Itemslot_Use_Information_Content_Condition.SetActive(true);        // 소비아이템 사용조건 정보 활성화
+                        m_gPanel_Itemslot_Use_Information_Content_ItemDescription.SetActive(false); // 소비아이템 설명 정보 비활성화
                     }
                     break;
-                case E_Itemslot_Use_Information_PageNumber.CONDITION:
+                case E_Itemslot_Use_Information_PageNumber.CONDITION: // 소비아이템 사용조건 -> 소비아이템 설명
                     {
-                        m_eInformationPage = E_Itemslot_Use_Information_PageNumber.EFFECT;
-                        m_gPanel_Itemslot_Use_Information_Content_Effect.SetActive(true);
-                        m_gPanel_Itemslot_Use_Information_Content_Condition.SetActive(false);
-                        m_gPanel_Itemslot_Use_Information_Content_ItemDescription.SetActive(false);
+                        m_eInformationPage = E_Itemslot_Use_Information_PageNumber.DESCRIPTION;         // 아이템 정보 타입 = 설명
+                        m_gPanel_Itemslot_Use_Information_Content_Effect.SetActive(false);              // 소비아이템 사용효과 정보 비활성화
+                        m_gPanel_Itemslot_Use_Information_Content_Condition.SetActive(false);           // 소비아이템 사용조건 정보 비활성화
+                        m_gPanel_Itemslot_Use_Information_Content_ItemDescription.SetActive(true);      // 소비아이템 설명 정보 활성화
+                        m_Scrollbar_Itemslot_Use_Information_Content_ItemDescription_Content.value = 1; // (스크롤바)소비아이템 설명 정보 초기화
                     }
                     break;
-                case E_Itemslot_Use_Information_PageNumber.DESCRIPTION:
+                case E_Itemslot_Use_Information_PageNumber.DESCRIPTION: // 소비아이템 설명 -> 소비아이템 사용효과
                     {
-                        m_eInformationPage = E_Itemslot_Use_Information_PageNumber.CONDITION;
-                        m_gPanel_Itemslot_Use_Information_Content_Effect.SetActive(false);
-                        m_gPanel_Itemslot_Use_Information_Content_Condition.SetActive(true);
-                        m_gPanel_Itemslot_Use_Information_Content_ItemDescription.SetActive(false);
+                        m_eInformationPage = E_Itemslot_Use_Information_PageNumber.EFFECT;          // 아이템 정보 타입 = 효과
+                        m_gPanel_Itemslot_Use_Information_Content_Effect.SetActive(true);           // 소비아이템 사용효과 정보 활성화
+                        m_gPanel_Itemslot_Use_Information_Content_Condition.SetActive(false);       // 소비아이템 사용조건 정보 비활성화
+                        m_gPanel_Itemslot_Use_Information_Content_ItemDescription.SetActive(false); // 소비아이템 설명 정보 비활성화
                     }
                     break;
             }
         }
     }
-    // 소비 아이템 사용가능.
-    void Set_BTN_UsePossibility_Possible(int arynumber)
+    // (버튼) 소비아이템 사용 클릭 이벤트 함수
+    void Set_BTN_UsePossibility_Possible(int arynumber) // arynumber : 인벤토리 슬롯 고유코드
     {
-        int itemcode = Player_Itemslot.m_gary_Itemslot_Use[arynumber].m_nItemCode;
-        // 사용 조건 체크
-        if (Player_Total.Instance.m_pm_Move.m_ePlayerMoveState != Player_Move.E_PLAYER_MOVE_STATE.DEATH)
+        int itemcode = Player_Itemslot.m_gary_Itemslot_Use[arynumber].m_nItemCode; // 소비아이템 고유코드
+
+        if (Player_Total.Instance.m_pm_Move.m_ePlayerMoveState != Player_Move.E_PLAYER_MOVE_STATE.DEATH) // 플레이어 동작 FSM이 사망상태가 아닌 경우(플레이어 사망 상태가 아닐때)
         {
             if (Player_Itemslot.m_gary_Itemslot_Use[arynumber].m_eItemUseType == E_ITEM_USE_TYPE.RECOVERPOTION ||
             Player_Itemslot.m_gary_Itemslot_Use[arynumber].m_eItemUseType == E_ITEM_USE_TYPE.TEMPORARYBUFFPOTION ||
-            Player_Itemslot.m_gary_Itemslot_Use[arynumber].m_eItemUseType == E_ITEM_USE_TYPE.ETERNALBUFFPOTION)
+            Player_Itemslot.m_gary_Itemslot_Use[arynumber].m_eItemUseType == E_ITEM_USE_TYPE.ETERNALBUFFPOTION) // 사용할 소비아이템 타입이 회복포션, 일시적 버프포션, 영구적 버프포션인 경우
             {
-                int num_1;
-                num_1 = Player_Total.Instance.CheckCondition_Item_Use(Player_Itemslot.m_gary_Itemslot_Use[arynumber], arynumber);
+                // 플레이어 소비아이템 사용 관련 함수(소비아이템 사용 조건 판단 + 소비아이템 사용)
+                int num_1 = Player_Total.Instance.CheckCondition_Item_Use(Player_Itemslot.m_gary_Itemslot_Use[arynumber], arynumber);
 
-
-                if (num_1 == 0)
+                if (num_1 == 0) // 소비아이템 사용 성공
                 {
-                    Player_Itemslot.m_nary_Itemslot_Use_Count[arynumber] -= 1;
-                    //GUIManager_Total.Instance.UpdateLog("[소비아이템][" + Player_Itemslot.m_gary_Itemslot_Use[arynumber].m_sItemName + "] 사용.");
+                    Player_Itemslot.m_nary_Itemslot_Use_Count[arynumber] -= 1; // 사용한 소비아이템을 인벤토리에서 제거(-1)
                 }
-                else if (num_1 == 1)
+                else if (num_1 == 1) // 소비아이템 사용 실패
                 {
                     GUIManager_Total.Instance.UpdateLog("[소비아이템][" + Player_Itemslot.m_gary_Itemslot_Use[arynumber].m_sItemName + "] 사용 불가능.");
                 }
 
-                if (Player_Itemslot.m_nary_Itemslot_Use_Count[arynumber] == 0)
+                // 사용한 소비아이템을 인벤토리에서 제거
+                if (Player_Itemslot.m_nary_Itemslot_Use_Count[arynumber] == 0) // 해당 인벤토리 슬롯의 소비아이템을 모두 사용한 경우
                 {
                     Player_Itemslot.m_gary_Itemslot_Use[arynumber] = null;
-                    m_BTN_Itemslot_Use_Information_UsePossibility.GetComponent<Button>().onClick.RemoveAllListeners();
-                    m_gPanel_Itemslot_Use_Information.SetActive(false);
+                    
+                    m_gPanel_Itemslot_Use_Information.SetActive(false); // 소비아이템 세부 정보 GUI 비활성화
+                    
+                    m_BTN_Itemslot_Use_Information_UsePossibility.GetComponent<Button>().onClick.RemoveAllListeners(); // (버튼) 소비아이템 사용 클릭 이벤트 함수 제거
                 }
             }
-            else if (Player_Itemslot.m_gary_Itemslot_Use[arynumber].m_eItemUseType == E_ITEM_USE_TYPE.REINFORCEMENT)
+            else if (Player_Itemslot.m_gary_Itemslot_Use[arynumber].m_eItemUseType == E_ITEM_USE_TYPE.REINFORCEMENT) // 사용할 소비아이템 타입이 강화서인 경우
             {
-                int num_1;
-                num_1 = Player_Total.Instance.CheckCondition_Item_Use(Player_Itemslot.m_gary_Itemslot_Use[arynumber], arynumber);
+                // 플레이어 소비아이템 사용 관련 함수(소비아이템 사용 조건 판단 + 소비아이템 사용)
+                int num_1 = Player_Total.Instance.CheckCondition_Item_Use(Player_Itemslot.m_gary_Itemslot_Use[arynumber], arynumber);
 
-                if (num_1 == 0)
+                if (num_1 == 0) // 소비아이템 사용 성공
                 {
-                    //GUIManager_Total.Instance.UpdateLog("[소비아이템][" + Player_Itemslot.m_gary_Itemslot_Use[arynumber].m_sItemName + "] 사용 가능.");
+                    // 소비아이템(기프트)의 경우 사용 판단을 장비아이템 강화 GUI(강화서 GUI)에서 한다.
                 }
-                else if (num_1 == 1)
+                else if (num_1 == 1) // 소비아이템 사용 실패
                 {
                     GUIManager_Total.Instance.UpdateLog("[소비아이템][" + Player_Itemslot.m_gary_Itemslot_Use[arynumber].m_sItemName + "] 사용 불가능.");
                 }
             }
-            else if (Player_Itemslot.m_gary_Itemslot_Use[arynumber].m_eItemUseType == E_ITEM_USE_TYPE.GIFT)
+            else if (Player_Itemslot.m_gary_Itemslot_Use[arynumber].m_eItemUseType == E_ITEM_USE_TYPE.GIFT) // 사용할 소비아이템 타입이 기프트인 경우
             {
-                int num_1;
-                num_1 = Player_Total.Instance.CheckCondition_Item_Use(Player_Itemslot.m_gary_Itemslot_Use[arynumber], arynumber);
+                // 플레이어 소비아이템 사용 관련 함수(소비아이템 사용 조건 판단 + 소비아이템 사용)
+                int num_1 = Player_Total.Instance.CheckCondition_Item_Use(Player_Itemslot.m_gary_Itemslot_Use[arynumber], arynumber);
 
-                if (num_1 == 0)
+                if (num_1 == 0) // 소비아이템 사용 성공
                 {
-                    Player_Itemslot.m_nary_Itemslot_Use_Count[arynumber] -= 1;
-                    //GUIManager_Total.Instance.UpdateLog("[소비아이템][" + Player_Itemslot.m_gary_Itemslot_Use[arynumber].m_sItemName + "] 사용 가능.");
+                    Player_Itemslot.m_nary_Itemslot_Use_Count[arynumber] -= 1; // 사용한 소비아이템을 인벤토리에서 제거(-1)
 
-                    if (m_gPanel_Itemslot_Use_Information.activeSelf == true)
-                        m_gPanel_Itemslot_Use_Information.SetActive(false);
+                    m_gPanel_Itemslot_Use_Information.SetActive(false); // 소비아이템 세부 정보 GUI 비활성화
                 }
-                else if (num_1 == 1)
+                else if (num_1 == 1) // 소비아이템 사용 실패
                 {
                     GUIManager_Total.Instance.UpdateLog("[소비아이템][" + Player_Itemslot.m_gary_Itemslot_Use[arynumber].m_sItemName + "] 사용 불가능.");
                 }
 
-                if (Player_Itemslot.m_nary_Itemslot_Use_Count[arynumber] == 0)
+                // 사용한 소비아이템을 인벤토리에서 제거
+                if (Player_Itemslot.m_nary_Itemslot_Use_Count[arynumber] == 0) // 해당 인벤토리 슬롯의 소비아이템을 모두 사용한 경우
                 {
                     Player_Itemslot.m_gary_Itemslot_Use[arynumber] = null;
-                    m_BTN_Itemslot_Use_Information_UsePossibility.GetComponent<Button>().onClick.RemoveAllListeners();
-                    m_gPanel_Itemslot_Use_Information.SetActive(false);
+                    
+                    m_gPanel_Itemslot_Use_Information.SetActive(false); // 소비아이템 세부 정보 GUI 비활성화
+                    
+                    m_BTN_Itemslot_Use_Information_UsePossibility.GetComponent<Button>().onClick.RemoveAllListeners(); // (버튼) 소비아이템 사용 클릭 이벤트 함수 제거
                 }
             }
 
-            GUIManager_Total.Instance.Update_Itemslot();
-            GUIManager_Total.Instance.m_GUI_Quickslot.Update_Quickslot();
-            Player_Total.Instance.m_pq_Quest.QuestUpdate_Collect(ItemManager.instance.m_Dictionary_MonsterDrop_Use[itemcode]);
+            GUIManager_Total.Instance.Update_Itemslot(); // 인벤토리 GUI 업데이트
+            Player_Total.Instance.m_pq_Quest.QuestUpdate_Collect(ItemManager.instance.m_Dictionary_MonsterDrop_Use[itemcode]); // 진행중인 퀘스트(퀘스트 타입 : 수집) 현황 업데이트
+            GUIManager_Total.m_GUI_Quickslot.Update_Quickslot(); // 퀵슬롯 GUI 업데이트 
         }
     }
 
+    // 소비아이템 세부 정보 GUI 활성화 함수
     public void Display_GUI_Itemslot_Use_Information(float fcoordination_x, float fcoordination_y)
     {
         m_gPanel_Itemslot_Use_Information.SetActive(true);
         m_gPanel_Itemslot_Use_Information.transform.SetAsLastSibling();
-        m_gPanel_Itemslot_Use_Information.transform.position = new Vector2(fcoordination_x, fcoordination_y);
+        m_gPanel_Itemslot_Use_Information.transform.position = new Vector2(fcoordination_x, fcoordination_y); // 장비아이템 세부 정보 GUI 좌표 설정
+
+        m_Scrollbar_Itemslot_Use_Information_Content_ItemDescription_Content.value = 1; // (스크롤바) 소비아이템 설명 정보 초기화
+        m_Scrollbar_Gift_Info_Content_Description_Down.value = 1;                       // (스크롤바) 소비아이템(기프트) 사용 시 획득 가능한 아이템 목록 초기화
     }
+    // 소비아이템 세부 정보 GUI 비활성화 함수
     public void UnDisplay_GUI_Itemslot_Use_Information()
     {
         m_gPanel_Itemslot_Use_Information.SetActive(false);
-        m_Scrollbar_Itemslot_Use_Information_Content_ItemDescription_Content.value = 1;
     }
 
-    // 소비 아이템 설명 창 세부 설정.
-    public void UpdateItemUseInformation(Item_Use item, int arynumber)
+    // 소비아이템 세부 정보 GUI 업데이트
+    public void UpdateItemUseInformation(Item_Use item, int arynumber) // item : 소비아이템, arynumber : 인벤토리 슬롯 고유코드
     {
-        m_bUse_Condition_Check = true;
-        
-        m_Scrollbar_Itemslot_Use_Information_Content_ItemDescription_Content.value = 1;
+        m_bUse_Condition_Check = true; // 소비아이템 사용 가능
         
         UpdateItemUseInformation_UpBar(item);
         UpdateItemUseInformation_Content(item);
@@ -888,27 +877,6 @@ public class GUI_Itemslot_Use_Information : MonoBehaviour
     // 장비 아이템 A 의 착용조건에 LV 제한 '-10000 <= LV <= 19' 이 있을때 -> 레벨: ~ 19 라고 Text 정제.
     // 장비 아이템 A 의 착용조건에 LV 제한 '10 <= LV <= 10000' 이 있을때 -> 레벨: 10 ~ 라고 Text 정제.
     // -10000, 10000 은 최소, 최대 제한이 없다는것을 의미.
-    string Refine_Condition(float min, float max)
-    {
-        m_bRefine_Condition_Check = false;
-
-        if (min == -10000 && max == 10000)
-            m_bRefine_Condition_Check = false;
-        else
-            m_bRefine_Condition_Check = true;
-
-        m_sBuffer = "";
-        if (min != -10000)
-            m_sBuffer += min;
-        if (m_bRefine_Condition_Check == true)
-            m_sBuffer += " ~ ";
-        else
-            m_sBuffer = "X";
-        if (max != 10000)
-            m_sBuffer += max;
-
-        return m_sBuffer;
-    }
     string Refine_Condition(string beforesentence, string aftersentence, float condition_min, float condition_max, float current_condition)
     {
         m_bRefine_Condition_Check = false;
