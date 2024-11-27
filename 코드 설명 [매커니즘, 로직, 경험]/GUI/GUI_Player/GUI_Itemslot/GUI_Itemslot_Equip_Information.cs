@@ -1021,86 +1021,123 @@ public class GUI_Itemslot_Equip_Information : MonoBehaviour
             }
         }
 
-        //if (m_nList_SetItemEffect_Code[m_nSetItemEffect_List_Index] <= m_nPlayerEquipment_SetItemEffect_Current)
-        //{
         if (number > 0) // 해로운 효과(아이템 세트효과 스탯(능력치, 평판) > 0)
             return m_sColor_WhiteGray + sentence + " " + number.ToString() + m_sColor_End; // 문자열 흰색 + 아이템 세트효과 스탯(능력치, 평판)
         else if (number < 0) // 이로운 효과(아이템 세트효과 스탯(능력치, 평판) < 0)
             return m_sColor_White + sentence + " " + number.ToString() + m_sColor_End; // 문자열 회색 + 아이템 세트효과 스탯(능력치, 평판)
         else // 존재하지 않는 효과
             return m_sColor_Brown + sentence + " " + number.ToString() + m_sColor_End; // 문자열 갈색 + 아이템 세트효과 스탯(능력치, 평판)
-        //}
-        //else
-        //{
-        //    return m_sColor_Brown + sentence + " " + number.ToString() + m_sColor_End;
-        //}
+
     }
-    // 각각의 옵션.(유동적인 아이템 효과)
-    string Refine_Condition(string sentence, int option, int option_additional, int option_reinforcement)
+    // 텍스트(문자열) 정제 함수 - 장비아이템 착용효과(int)
+    string Refine_Condition(string sentence, int option, int option_additional, int option_reinforcement) // sentence : 문장,
+                                                                                                          // option : 장비아이템 스탯(능력치, 평판), 
+                                                                                                          // option_additional : 장비아이템 추가 옵셥 스탯(능력치, 평판), 
+                                                                                                          // option_reinforcement : 장비아이템 강화 스탯(능력치, 평판)
     {
-        if (option != 0)
+        if (option != 0) // 장비아이템 스탯(능력치, 평판) != 0
         {
-            if (option_additional + option_reinforcement != 0)
+            if (option_additional + option_reinforcement != 0) // 장비아이템 추가 옵셥 스탯(능력치, 평판) + 장비아이템 강화 스탯(능력치, 평판) != 0
             {
-                if (option > 0)
-                    return m_sColor_White + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End;
-                else
-                    return m_sColor_WhiteGray + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End;
+                if (option > 0) // 장비아이템 스탯(능력치, 평판) > 0
+                    return m_sColor_White + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End; // 문자열 흰색 설정 +
+                                                                                                                                                                   // 장비아이템 스탯(능력치, 평판) +
+                                                                                                                                                                   // 장비아이템 추가 옵셥 스탯(능력치, 평판) +
+                                                                                                                                                                   // 장비아이템 강화 스탯(능력치, 평판)
+                else // 장비아이템 스탯(능력치, 평판) <= 0
+                    return m_sColor_WhiteGray + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End; // 문자열 회색 설정 + 
+                                                                                                                                                                       // 장비아이템 스탯(능력치, 평판) +
+                                                                                                                                                                       // 장비아이템 추가 옵셥 스탯(능력치, 평판) +
+                                                                                                                                                                       // 장비아이템 강화 스탯(능력치, 평판)
             }
-            else
+            else // 장비아이템 추가 옵셥 스탯(능력치, 평판) + 장비아이템 강화 스탯(능력치, 평판) == 0
             {
-                if (option > 0)
-                    return m_sColor_White + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End;
-                else
-                    return m_sColor_WhiteGray + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End;
+                if (option > 0) // 장비아이템 스탯(능력치, 평판) > 0
+                    return m_sColor_White + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End; // 문자열 흰색 설정 + 
+                                                                                                                                                                   // 장비아이템 스탯(능력치, 평판) +
+                                                                                                                                                                   // 장비아이템 추가 옵셥 스탯(능력치, 평판) +
+                                                                                                                                                                   // 장비아이템 강화 스탯(능력치, 평판)
+                else // 장비아이템 스탯(능력치, 평판) <= 0
+                    return m_sColor_WhiteGray + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End; // 문자열 회색 설정 + 
+                                                                                                                                                                       // 장비아이템 스탯(능력치, 평판) +
+                                                                                                                                                                       // 장비아이템 추가 옵셥 스탯(능력치, 평판) +
+                                                                                                                                                                       // 장비아이템 강화 스탯(능력치, 평판)
             }
         }
-        else
+        else // 장비아이템 스탯(능력치, 평판) == 0
         {
-            if (option_additional + option_reinforcement != 0)
+            if (option_additional + option_reinforcement != 0) // 장비아이템 추가 옵셥 스탯(능력치, 평판) + 장비아이템 강화 스탯(능력치, 평판) != 0
             {
-                return m_sColor_Brown + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End;
+                return m_sColor_Brown + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End; // 문자열 갈색 설정 + 
+                                                                                                                                                               // 장비아이템 스탯(능력치, 평판) +
+                                                                                                                                                               // 장비아이템 추가 옵셥 스탯(능력치, 평판) +
+                                                                                                                                                               // 장비아이템 강화 스탯(능력치, 평판)
             }
-            else
+            else // 장비아이템 추가 옵셥 스탯(능력치, 평판) + 장비아이템 강화 스탯(능력치, 평판) == 0
             {
-                if (option_additional != 0 || option_reinforcement != 0)
-                    return m_sColor_Brown + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End;
-                else
-                    return m_sColor_Brown + sentence + " " + option.ToString() + m_sColor_End;
+                if (option_additional != 0 || option_reinforcement != 0) // 장비아이템 추가 옵셥 스탯(능력치, 평판) != 0 || 장비아이템 강화 스탯(능력치, 평판) != 0
+                    return m_sColor_Brown + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End; // 문자열 갈색 설정 + 
+                                                                                                                                                                   // 장비아이템 스탯(능력치, 평판) +
+                                                                                                                                                                   // 장비아이템 추가 옵셥 스탯(능력치, 평판) +
+                                                                                                                                                                   // 장비아이템 강화 스탯(능력치, 평판)
+                else // 장비아이템 추가 옵셥 스탯(능력치, 평판) == 0 && 장비아이템 강화 스탯(능력치, 평판) == 0
+                    return m_sColor_Brown + sentence + " " + option.ToString() + m_sColor_End; // 문자열 갈색 설정 + 장비아이템 스탯(능력치, 평판)
             }
         }
     }
-    string Refine_Condition(string sentence, float option, float option_additional, float option_reinforcement)
+    // 텍스트(문자열) 정제 함수 - 장비아이템 착용효과(float). 스탯(능력치(공격속도)) 전용
+    string Refine_Condition(string sentence, float option, float option_additional, float option_reinforcement) // sentence : 문장,
+                                                                                                                // option : 장비아이템 스탯(능력치, 평판), 
+                                                                                                                // option_additional : 장비아이템 추가 옵셥 스탯(능력치, 평판), 
+                                                                                                                // option_reinforcement : 장비아이템 강화 스탯(능력치, 평판)
     {
-        if (option != 0)
+        if (option != 0) // 장비아이템 스탯(능력치, 평판) != 0
         {
-            if (option_additional + option_reinforcement != 0)
+            if (option_additional + option_reinforcement != 0) // 장비아이템 추가 옵셥 스탯(능력치, 평판) + 장비아이템 강화 스탯(능력치, 평판) != 0
             {
-                if (option < 0)
-                    return m_sColor_White + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End;
-                else
-                    return m_sColor_WhiteGray + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End;
+                if (option < 0) // 장비아이템 스탯(능력치, 평판) < 0
+                    return m_sColor_White + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End; // 문자열 흰색 설정 +
+                                                                                                                                                                   // 장비아이템 스탯(능력치, 평판) +
+                                                                                                                                                                   // 장비아이템 추가 옵셥 스탯(능력치, 평판) +
+                                                                                                                                                                   // 장비아이템 강화 스탯(능력치, 평판)
+                else // 장비아이템 스탯(능력치, 평판) >= 0
+                    return m_sColor_WhiteGray + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End; // 문자열 회색 설정 + 
+                                                                                                                                                                       // 장비아이템 스탯(능력치, 평판) +
+                                                                                                                                                                       // 장비아이템 추가 옵셥 스탯(능력치, 평판) +
+                                                                                                                                                                       // 장비아이템 강화 스탯(능력치, 평판)
             }
-            else
+            else // 장비아이템 추가 옵셥 스탯(능력치, 평판) + 장비아이템 강화 스탯(능력치, 평판) == 0
             {
-                if (option < 0)
-                    return m_sColor_White + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End;
-                else
-                    return m_sColor_WhiteGray + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End;
+                if (option < 0) // 장비아이템 스탯(능력치, 평판) < 0
+                    return m_sColor_White + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End; // 문자열 흰색 설정 + 
+                                                                                                                                                                   // 장비아이템 스탯(능력치, 평판) +
+                                                                                                                                                                   // 장비아이템 추가 옵셥 스탯(능력치, 평판) +
+                                                                                                                                                                   // 장비아이템 강화 스탯(능력치, 평판)
+                else // 장비아이템 스탯(능력치, 평판) >= 0
+                    return m_sColor_WhiteGray + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End; // 문자열 회색 설정 + 
+                                                                                                                                                                       // 장비아이템 스탯(능력치, 평판) +
+                                                                                                                                                                       // 장비아이템 추가 옵셥 스탯(능력치, 평판) +
+                                                                                                                                                                       // 장비아이템 강화 스탯(능력치, 평판)
             }
         }
-        else
+        else // 장비아이템 스탯(능력치, 평판) == 0
         {
-            if (option_additional + option_reinforcement != 0)
+            if (option_additional + option_reinforcement != 0) // 장비아이템 추가 옵셥 스탯(능력치, 평판) + 장비아이템 강화 스탯(능력치, 평판) != 0
             {
-                return m_sColor_Brown + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End;
+                return m_sColor_Brown + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End; // 문자열 갈색 설정 + 
+                                                                                                                                                               // 장비아이템 스탯(능력치, 평판) +
+                                                                                                                                                               // 장비아이템 추가 옵셥 스탯(능력치, 평판) +
+                                                                                                                                                               // 장비아이템 강화 스탯(능력치, 평판)
             }
-            else
+            else // 장비아이템 추가 옵셥 스탯(능력치, 평판) + 장비아이템 강화 스탯(능력치, 평판) == 0
             {
-                if (option_additional != 0 || option_reinforcement != 0)
-                    return m_sColor_Brown + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End;
-                else
-                    return m_sColor_Brown + sentence + " " + option.ToString() + m_sColor_End;
+                if (option_additional != 0 || option_reinforcement != 0) // 장비아이템 추가 옵셥 스탯(능력치, 평판) != 0 || 장비아이템 강화 스탯(능력치, 평판) != 0
+                    return m_sColor_Brown + sentence + " " + option.ToString() + "(" + (option_additional + option_reinforcement).ToString() + ")" + m_sColor_End; // 문자열 갈색 설정 + 
+                                                                                                                                                                   // 장비아이템 스탯(능력치, 평판) +
+                                                                                                                                                                   // 장비아이템 추가 옵셥 스탯(능력치, 평판) +
+                                                                                                                                                                   // 장비아이템 강화 스탯(능력치, 평판)
+                else // 장비아이템 추가 옵셥 스탯(능력치, 평판) == 0 && 장비아이템 강화 스탯(능력치, 평판) == 0
+                    return m_sColor_Brown + sentence + " " + option.ToString() + m_sColor_End; // 문자열 갈색 설정 + 장비아이템 스탯(능력치, 평판)
             }
         }
     }
