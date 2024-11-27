@@ -120,8 +120,8 @@ public class GUI_Itemslot_Equip_Information : MonoBehaviour
 
     // 장비아이템 착용 조건 + 아이템 정보 문자열 색 표시 관련 변수 
     public bool m_bEquip_Condition_Check; // 장비아이템 착용 가능 여부
-                                          // m_bEquip_Condition_Check == true : 장비아이템 착용 불가능(장비아이템 착용 해제)
-                                          // m_bEquip_Condition_Check == false : 장비아이템 착용 가능. 빨간색으로 표시
+                                          // m_bEquip_Condition_Check == true : 장비아이템 착용 가능
+                                          // m_bEquip_Condition_Check == false : 장비아이템 착용 불가능. (장비아이템 착용 해제)
     bool m_bRefine_Condition_Check;       // 문자열 정제 관련 변수. 장비아이템 착용효과, 착용조건, 아이템 세트효과 등의 정보를 효율적으로 표시(강조)하기 위해 존재한다.
                                           // m_bRefine_Condition_Check == true : 문자열 정제 필요
                                           // m_bRefine_Condition_Check == false : 문자열 정제 불필요
